@@ -10,6 +10,7 @@ const StyledButton = withTheme(styled(Button)`
   padding: 1em 5.45em;
   border: 0;
   border-radius: 2em;
+  font-weight: 600;
 
   &:hover {
     background-color: ${(props) => props.theme.palette.secondary.main};

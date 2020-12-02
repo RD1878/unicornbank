@@ -3,14 +3,14 @@ import React from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link } from "@material-ui/core";
-import { Logo } from "../atoms";
+import { PrimaryButton, Logo } from "../atoms";
 
 const Container = withTheme(styled("div")`
   display: flex;
   justify-content: space-around;
   align-items: center;
   background-color: ${(props) => props.theme.palette.primary.main};
-  height: 80px;
+  height: 100px;
 `);
 
 const Header: React.FC<React.ReactNode> = ({ children }) => {
@@ -32,6 +32,7 @@ const Header: React.FC<React.ReactNode> = ({ children }) => {
       <Link href="#" color="textPrimary">
         Офисы и банкоматы
       </Link>
+      <PrimaryButton>Выйти</PrimaryButton>
     </Container>
   );
 };
