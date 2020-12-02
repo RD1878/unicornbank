@@ -2,14 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
 import logo from "../../assets/images/logo.png";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import IconButton from "@material-ui/core/IconButton";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { MaskedTextField, PrimaryButton, PasswordField } from "../../atoms";
 
 const darkBlue = "rgba(20, 33, 61, 0.5)";
 
@@ -31,7 +24,7 @@ const Logo = styled.div`
   height: 56px;
   position: absolute;
   top: 0;
-  left: ;
+  left: 3%;
 `;
 
 const FormAuth = styled.div`
@@ -40,7 +33,16 @@ const FormAuth = styled.div`
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
-  padding: 15rem 17rem;
+  align-items: center;
+  padding: 10rem 12rem;
+
+  .MuiTextField-root {
+    margin-bottom: 3em;
+  }
+
+  .MuiButton-root {
+    margin-top: 2em;
+  }
 `;
 
 const Title = styled.div`
@@ -57,33 +59,9 @@ export const Auth: React.FC = () => {
       <Logo></Logo>
       <FormAuth>
         <Title>Вход в личный кабинет</Title>
-        <TextField
-          id="outlined-basic"
-          label="Логин/телефон"
-          variant="outlined"
-        />
-        <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            // type={values.showPassword ? "text" : "password"}
-            // value={values.password}
-            // onChange={handleChange("password")}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  // onClick={handleClickShowPassword}
-                  // onMouseDown={handleMouseDownPassword}
-                  // edge="end"
-                >
-                  {true ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-            labelWidth={70}
-          />
-        </FormControl>
+        <MaskedTextField />
+        <PasswordField />
+        <PrimaryButton>Войти</PrimaryButton>
       </FormAuth>
     </BackGround>
   );
