@@ -3,11 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { StylesProvider } from "@material-ui/core";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StylesProvider injectFirst>
     <App />
-  </React.StrictMode>,
+  </StylesProvider>,
   document.getElementById("root")
 );
 
