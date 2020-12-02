@@ -17,5 +17,5 @@
 	  "sourceType": "module"
 	},
 	"plugins": ["react", "@typescript-eslint"],
-	"rules": { "no-console": 1 }
+  "rules": { "no-console": 1, "react/prop-types": 0 },
   }

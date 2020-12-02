@@ -1,10 +1,22 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
-const WHITE = "#ffffff";
+declare module "@material-ui/core/styles/createPalette" {
+  interface PaletteOptions {
+    textPrimary?: PaletteOptions["primary"];
+  }
+}
 
-const light = createMuiTheme({
+const WHITE = "#ffffff";
+const DARK_PRIMARY = "#14213D";
+const DARK_SECONDARY = "#2B3650";
+const YELLOW_PRIMARY = "#FCA311";
+
+const dark = createMuiTheme({
   palette: {
     type: "dark",
+    primary: { main: DARK_PRIMARY },
+    secondary: { main: YELLOW_PRIMARY },
+    textPrimary: { main: "#ffffffEE" },
   },
   overrides: {
     MuiTextField: {
@@ -34,7 +46,7 @@ const light = createMuiTheme({
   },
 });
 
-const dark = createMuiTheme({
+const light = createMuiTheme({
   palette: {
     type: "light",
   },
