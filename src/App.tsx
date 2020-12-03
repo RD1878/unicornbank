@@ -11,8 +11,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div>
-        <MainLayout />
-        {/* <Auth /> */}
+        {/* <MainLayout /> */}
+        <Auth />
         {/* 
         <PrimaryButton onClick={() => setTheme(appThemes.dark)}>
           cvtybnm ntvf

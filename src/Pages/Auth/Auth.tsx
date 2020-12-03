@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
-import logo from "../../assets/images/logo.png";
-import { MaskedTextField, PrimaryButton, PasswordField } from "../../atoms";
+import {
+  MaskedTextField,
+  PrimaryButton,
+  PasswordField,
+  Logo,
+} from "../../atoms";
 
 const darkBlue = "rgba(20, 33, 61, 0.5)";
 
@@ -18,12 +22,10 @@ const BackGround = styled.div`
   align-items: center;
 `;
 
-const Logo = styled.div`
-  background-image: url(${logo});
-  width: 127px;
-  height: 56px;
+const StyledLogo = styled.div`
+  display: block;
   position: absolute;
-  top: 0;
+  top: 30px;
   left: 3%;
 `;
 
@@ -56,12 +58,14 @@ const Title = styled.div`
 export const Auth: React.FC = () => {
   return (
     <BackGround>
-      <Logo></Logo>
+      <StyledLogo>
+        <Logo />
+      </StyledLogo>
       <FormAuth>
         <Title>Вход в личный кабинет</Title>
         <MaskedTextField />
         <PasswordField />
-        <PrimaryButton>Войти</PrimaryButton>
+        <PrimaryButton size="large">Войти</PrimaryButton>
       </FormAuth>
     </BackGround>
   );

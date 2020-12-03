@@ -1,20 +1,26 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
+import { withTheme } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+
+function getSize(size: string | undefined): string {
+  switch (size) {
+    case "large":
+      return "width: 180px; height: 50px";
+      break;
+
+    default:
+      return "width: 100px; height: 34px; font-size: 12px;";
+      break;
+  }
+}
 
 const StyledButton = withTheme(styled(Button)`
-  background-color: ${(props) => props.theme.palette.secondary.main};
   color: #fff;
   box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.25);
-  padding: 1em 5.45em;
-  border: 0;
   border-radius: 2em;
   font-weight: 600;
-
-  &:hover {
-    background-color: ${(props) => props.theme.palette.secondary.main};
-  }
+  ${(props) => getSize(props.size)};
 `);
 
 interface IPrimaryButton {
@@ -26,5 +32,7 @@ export const PrimaryButton = ({
   children,
   ...rest
 }: IPrimaryButton): React.ReactElement => (
-  <StyledButton {...rest}>{children}</StyledButton>
+  <StyledButton {...rest} variant="contained" color="secondary">
+    {children}
+  </StyledButton>
 );
