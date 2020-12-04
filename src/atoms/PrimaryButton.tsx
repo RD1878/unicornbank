@@ -25,7 +25,6 @@ const StyledButton = withTheme(styled(Button)`
 
 interface IPrimaryButton {
   children: string;
-  [x: string]: any;
 }
 
 export const PrimaryButton = ({
