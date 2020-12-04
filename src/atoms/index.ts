@@ -1,3 +1,3 @@
-export * from "./Button";
+export * from "./PrimaryButton";
 export * from "./PasswordField";
 export * from "./TextField";

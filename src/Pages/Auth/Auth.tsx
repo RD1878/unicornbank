@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
 import logo from "../../assets/images/logo.png";
@@ -20,28 +20,36 @@ const BackGround = styled.div`
 
 const Logo = styled.div`
   background-image: url(${logo});
-  width: 127px;
-  height: 56px;
+  background-repeat: no-repeat;
+  width: 130px;
+  height: 60px;
   position: absolute;
   top: 0;
   left: 3%;
 `;
 
 const FormAuth = styled.div`
-  min-width: 30vw;
   background-color: ${darkBlue};
   border-radius: 2rem;
   display: flex;
+  min-width: 35vw;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 10rem 12rem;
 
-  .MuiTextField-root {
-    margin-bottom: 3em;
-  }
+  & > div {
+    justify-content: center;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  .MuiButton-root {
-    margin-top: 2em;
+    & > div {
+      margin-bottom: 3em;
+      width: 100%;
+    }
   }
 `;
 
@@ -53,15 +61,19 @@ const Title = styled.div`
   font-size: 2rem;
 `;
 
-export const Auth: React.FC = () => {
+export const Auth: FC = () => {
   return (
     <BackGround>
       <Logo></Logo>
       <FormAuth>
-        <Title>Вход в личный кабинет</Title>
-        <MaskedTextField />
-        <PasswordField />
-        <PrimaryButton>Войти</PrimaryButton>
+        <div>
+          <Title>Вход в личный кабинет</Title>
+          <div>
+            <MaskedTextField />
+          </div>
+          <PasswordField />
+          <PrimaryButton>Войти</PrimaryButton>
+        </div>
       </FormAuth>
     </BackGround>
   );
