@@ -19,9 +19,16 @@ const dark = createMuiTheme({
     textPrimary: { main: "#ffffffEE" },
   },
   overrides: {
+    MuiOutlinedInput: {
+      root: {
+        borderRadius: 10,
+        "& fieldset": {
+          borderWidth: 2,
+        },
+      },
+    },
     MuiTextField: {
       root: {
-        width: "100%",
         "& .Mui-focused": {
           color: WHITE,
 
@@ -41,6 +48,7 @@ const dark = createMuiTheme({
             borderColor: `${WHITE} !important`,
           },
         },
+        "& label": { left: 10 },
       },
     },
   },

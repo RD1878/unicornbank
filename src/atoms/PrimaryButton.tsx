@@ -24,6 +24,7 @@ const StyledButton = withTheme(styled(Button)`
 `);
 
 interface IPrimaryButton {
+  size?: string;
   children: string;
 }
 

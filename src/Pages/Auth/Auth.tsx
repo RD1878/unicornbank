@@ -48,7 +48,7 @@ const FormAuth = styled.div`
     align-items: center;
 
     & > div {
-      margin-bottom: 3em;
+      margin-bottom: 2em;
       width: 100%;
     }
   }
@@ -56,7 +56,7 @@ const FormAuth = styled.div`
 
 const Title = styled.div`
   color: #ffffff;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
   text-align: center;
   line-height: 2rem;
   font-size: 2rem;
@@ -69,14 +69,12 @@ export const Auth: FC = () => {
         <Logo />
       </StyledLogo>
       <FormAuth>
+        <Title>Вход в личный кабинет</Title>
         <div>
-          <Title>Вход в личный кабинет</Title>
-          <div>
-            <MaskedTextField />
-          </div>
-          <PasswordField />
-          <PrimaryButton size="large">Войти</PrimaryButton>
+          <MaskedTextField />
         </div>
+        <PasswordField />
+        <PrimaryButton size="large">Войти</PrimaryButton>
       </FormAuth>
     </BackGround>
   );
