@@ -77,7 +77,7 @@ const light = createMuiTheme({
       dark: LIGHT_PRIMARY2,
     },
     secondary: { main: DARK_PRIMARY1 },
-    textPrimary: { main: "#ffffffEE" },
+    textPrimary: { main: DARK_PRIMARY1 },
   },
   overrides: {
     MuiOutlinedInput: {
