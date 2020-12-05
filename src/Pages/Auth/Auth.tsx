@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "@material-ui/core";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
 import {
@@ -68,6 +69,9 @@ export const Auth: FC = () => {
     <BackGround>
       <StyledLogo>
         <Logo />
+        <Link href="/main" color="textPrimary">
+          Главная
+        </Link>
       </StyledLogo>
       <FormAuth>
         <div>

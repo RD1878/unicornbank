@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -25,7 +25,7 @@ const StyledButton = withTheme(styled(Button)`
 
 interface IPrimaryButton {
   size?: string;
-  children: string;
+  children: string | ReactElement;
 }
 
 export const PrimaryButton = ({

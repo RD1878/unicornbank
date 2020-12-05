@@ -3,19 +3,22 @@ import { ThemeProvider } from "@material-ui/core";
 import { theme as appThemes } from "./theme";
 import { Auth } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main";
-// import { PrimaryButton } from "./atoms";
 
 const App: FC = () => {
   const [theme] = useState(appThemes.dark);
+  const path = window.location.pathname;
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div>
-        {/* <MainLayout /> */}
-        <Auth />
-      </div>
-    </ThemeProvider>
-  );
+  function routing() {
+    switch (path) {
+      case "/main":
+        return <MainLayout />;
+
+      default:
+        return <Auth />;
+    }
+  }
+
+  return <ThemeProvider theme={theme}>{routing()}</ThemeProvider>;
 };
 
 export default App;

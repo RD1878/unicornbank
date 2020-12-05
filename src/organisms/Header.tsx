@@ -32,7 +32,10 @@ const Header: React.FC<React.ReactNode> = ({ children }) => {
       <Link href="#" color="textPrimary">
         Офисы и банкоматы
       </Link>
-      <PrimaryButton>Выйти</PrimaryButton>
+
+      <Link href="/" color="textPrimary">
+        <PrimaryButton>Выйти</PrimaryButton>
+      </Link>
     </Container>
   );
 };
