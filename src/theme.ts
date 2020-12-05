@@ -1,6 +1,9 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
 const WHITE = "#ffffff";
+const DARK_BLUE_1 = "rgba(20, 33, 61, 1)";
+const DARK_BLUE_05 = "rgba(20, 33, 61, 0.5)";
+const ORANGE = "#FCA311";
 
 const light = createMuiTheme({
   palette: {
@@ -52,7 +55,16 @@ const dark = createMuiTheme({
   },
 });
 
-export const theme = {
+export const COLORS = {
+  ORANGE,
+  DARK_BLUE_05,
+  DARK_BLUE_1,
+  WHITE,
+};
+
+const theme = {
   light,
   dark,
 };
+
+export default theme;

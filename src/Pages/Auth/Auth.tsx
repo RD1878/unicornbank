@@ -2,9 +2,10 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
 import logo from "../../assets/images/logo.png";
-import { MaskedTextField, PrimaryButton, PasswordField } from "../../atoms";
-
-const darkBlue = "rgba(20, 33, 61, 0.5)";
+import PasswordField from "../../atoms/PasswordField";
+import PrimaryButton from "../../atoms/PrimaryButton";
+import { MaskedTextField } from "../../atoms/TextField";
+import { COLORS } from "../../theme";
 
 const BackGround = styled.div`
   background-image: url(${backGround});
@@ -29,7 +30,7 @@ const Logo = styled.div`
 `;
 
 const FormAuth = styled.div`
-  background-color: ${darkBlue};
+  background-color: ${COLORS.DARK_BLUE_05};
   border-radius: 2rem;
   display: flex;
   min-width: 35vw;
@@ -54,14 +55,14 @@ const FormAuth = styled.div`
 `;
 
 const Title = styled.div`
-  color: #ffffff;
+  color: ${COLORS.WHITE};
   margin-bottom: 5rem;
   text-align: center;
   line-height: 2rem;
   font-size: 2rem;
 `;
 
-export const Auth: FC = () => {
+const Auth: FC = () => {
   return (
     <BackGround>
       <Logo></Logo>
@@ -69,7 +70,7 @@ export const Auth: FC = () => {
         <div>
           <Title>Вход в личный кабинет</Title>
           <div>
-            <MaskedTextField />
+            <MaskedTextField mask="+7(999)-999-99-99" label="Номер телефона" />
           </div>
           <PasswordField />
           <PrimaryButton>Войти</PrimaryButton>
@@ -78,3 +79,5 @@ export const Auth: FC = () => {
     </BackGround>
   );
 };
+
+export default Auth;

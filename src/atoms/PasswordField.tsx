@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
-export const PasswordField: FC = () => (
+const PasswordField: FC = () => (
   <FormControl variant="outlined">
     <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
     <OutlinedInput
@@ -23,3 +23,5 @@ export const PasswordField: FC = () => (
     />
   </FormControl>
 );
+
+export default PasswordField;

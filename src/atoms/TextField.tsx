@@ -1,11 +1,24 @@
-import React, { FC } from "react";
+import React, { ReactElement } from "react";
 import InputMask from "react-input-mask";
-import MaterialTextField from "@material-ui/core/TextField";
+import MaterialTextField, { TextFieldProps } from "@material-ui/core/TextField";
 
-export const MaskedTextField: FC = () => (
-  <InputMask mask="+7(999)-999-99-99">
-    {() => <MaterialTextField variant="outlined" label="Номер телефона" />}
+interface IMaskedTextField {
+  mask: string;
+  label: string;
+}
+
+export const MaskedTextField = ({
+  mask,
+  label,
+  ...rest
+}: IMaskedTextField): ReactElement => (
+  <InputMask mask={mask}>
+    {() => <MaterialTextField variant="outlined" label={label} {...rest} />}
   </InputMask>
 );
 
-export const TextField: FC = () => <MaterialTextField variant="outlined" />;
+const TextField = ({ ...props }: TextFieldProps): ReactElement => (
+  <MaterialTextField variant="outlined" {...props} />
+);
+
+export default TextField;
