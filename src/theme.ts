@@ -26,6 +26,9 @@ const dark = createMuiTheme({
           borderWidth: 2,
         },
       },
+      input: {
+        padding: "15.5px 14px",
+      },
     },
     MuiTextField: {
       root: {
@@ -48,7 +51,10 @@ const dark = createMuiTheme({
             borderColor: `${WHITE} !important`,
           },
         },
-        "& label": { left: 10 },
+        "& label:not(.MuiInputLabel-shrink)": {
+          left: 10,
+          top: -2,
+        },
       },
     },
   },

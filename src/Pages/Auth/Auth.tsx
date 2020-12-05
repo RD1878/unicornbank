@@ -31,9 +31,10 @@ const StyledLogo = styled.div`
 
 const FormAuth = styled.div`
   background-color: ${darkBlue};
-  border-radius: 2rem;
+  border-radius: 20px;
   display: flex;
-  min-width: 35vw;
+  min-width: 55vw;
+  min-height: 40vw;
   padding-top: 2rem;
   padding-bottom: 2rem;
   flex-direction: column;
@@ -41,15 +42,15 @@ const FormAuth = styled.div`
   align-items: center;
 
   & > div {
-    justify-content: center;
-    width: 80%;
     display: flex;
+    justify-content: center;
     flex-direction: column;
     align-items: center;
 
     & > div {
+      width: 35vw;
+      max-width: 500px;
       margin-bottom: 2em;
-      width: 100%;
     }
   }
 `;
@@ -69,12 +70,12 @@ export const Auth: FC = () => {
         <Logo />
       </StyledLogo>
       <FormAuth>
-        <Title>Вход в личный кабинет</Title>
         <div>
+          <Title>Вход в личный кабинет</Title>
           <MaskedTextField />
+          <PasswordField />
+          <PrimaryButton size="large">Войти</PrimaryButton>
         </div>
-        <PasswordField />
-        <PrimaryButton size="large">Войти</PrimaryButton>
       </FormAuth>
     </BackGround>
   );
