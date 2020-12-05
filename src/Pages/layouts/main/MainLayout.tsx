@@ -2,7 +2,7 @@ import React, { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 
-import { Header, Sidebar } from "../../../organisms";
+import { Header, Sidebar, Footer } from "../../../organisms";
 
 interface IMainLayout {
   children?: ReactNode;
@@ -12,7 +12,6 @@ interface IMainLayout {
 const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
-  width: 100vw;
 `);
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
@@ -23,6 +22,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
         <Sidebar />
         {children}
       </ContentContainer>
+      <Footer />
     </>
   );
 };

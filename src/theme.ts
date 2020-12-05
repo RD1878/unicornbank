@@ -3,6 +3,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 declare module "@material-ui/core/styles/createPalette" {
   interface PaletteOptions {
     textPrimary?: PaletteOptions["primary"];
+    textSecondary?: PaletteOptions["primary"];
   }
 }
 
@@ -26,6 +27,7 @@ const dark = createMuiTheme({
     },
     secondary: { main: YELLOW_PRIMARY },
     textPrimary: { main: "#ffffffEE" },
+    textSecondary: { main: "#ffffff46" },
   },
   overrides: {
     MuiOutlinedInput: {

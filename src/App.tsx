@@ -5,7 +5,7 @@ import { Auth } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main";
 
 const App: FC = () => {
-  const [theme, setTheme] = useState(appThemes.light);
+  const [theme, setTheme] = useState(appThemes.dark);
 
   const toggleTheme = () => {
     const newTheme = theme.palette.type === "dark" ? "light" : "dark";
