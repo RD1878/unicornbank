@@ -1,16 +1,28 @@
-import React, { ReactNode } from "react";
-import { Header } from "../../../organisms";
+import React, { FC, ReactNode } from "react";
+import styled from "styled-components";
+import { withTheme } from "@material-ui/core/styles";
+
+import { Header, Sidebar } from "../../../organisms";
 
 interface IMainLayout {
   children?: ReactNode;
   onToggleTheme: () => void;
 }
 
-const MainLayout: React.FC<IMainLayout> = ({ children, onToggleTheme }) => {
+const ContentContainer = withTheme(styled("div")`
+  display: flex;
+  background-color: ${(props) => props.theme.palette.primary.light};
+  width: 100vw;
+`);
+
+const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
-      <div>{children}</div>
+      <ContentContainer>
+        <Sidebar />
+        {children}
+      </ContentContainer>
     </>
   );
 };
