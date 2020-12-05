@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Link } from "@material-ui/core";
+import { Link, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
 import {
@@ -38,30 +38,25 @@ const FormAuth = styled.div`
   background-color: ${darkBlue};
   border-radius: 20px;
   width: 55vw;
+  min-width: 300px;
   max-width: 800px;
   height: 45vw;
+  min-height: 350px;
   max-height: 640px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 1.75em;
+  }
 
   & > div {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-
-    & > div {
-      width: 35vw;
-      max-width: 500px;
-      margin-bottom: 2em;
-    }
+    width: 75%;
+    max-width: 500px;
+    margin-bottom: 2em;
   }
-`;
-
-const Title = styled.div`
-  color: #ffffff;
-  margin-bottom: 3rem;
-  text-align: center;
-  line-height: 2rem;
-  font-size: 2rem;
 `;
 
 export const Auth: FC = () => {
@@ -74,12 +69,12 @@ export const Auth: FC = () => {
         </Link>
       </StyledLogo>
       <FormAuth>
-        <div>
-          <Title>Вход в личный кабинет</Title>
-          <MaskedTextField />
-          <PasswordField />
-          <PrimaryButton size="large">Войти</PrimaryButton>
-        </div>
+        <Typography variant="h1" color="textPrimary" align="center">
+          Вход в личный кабинет
+        </Typography>
+        <MaskedTextField />
+        <PasswordField />
+        <PrimaryButton size="large">Войти</PrimaryButton>
       </FormAuth>
     </BackGround>
   );
