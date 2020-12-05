@@ -1,8 +1,9 @@
 /* eslint react/prop-types: 0 */
-import React from "react";
+import React, { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import { Link } from "@material-ui/core";
+import { theme as appThemes } from "../theme";
+import { Link, Switch } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 
 const Container = withTheme(styled("div")`
@@ -13,7 +14,12 @@ const Container = withTheme(styled("div")`
   height: 100px;
 `);
 
-const Header: React.FC<React.ReactNode> = ({ children }) => {
+interface IHeader {
+  children?: ReactNode;
+  onToggleTheme: () => void;
+}
+
+const Header: FC<IHeader> = ({ children, onToggleTheme }) => {
   return (
     <Container>
       <Logo />
@@ -36,6 +42,8 @@ const Header: React.FC<React.ReactNode> = ({ children }) => {
       <Link href="/" color="textPrimary">
         <PrimaryButton>Выйти</PrimaryButton>
       </Link>
+
+      <Switch onChange={onToggleTheme} />
     </Container>
   );
 };

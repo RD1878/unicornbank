@@ -1,10 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Header } from "../../../organisms";
 
-const MainLayout: React.FC<React.ReactNode> = ({ children }) => {
+interface IMainLayout {
+  children?: ReactNode;
+  onToggleTheme: () => void;
+}
+
+const MainLayout: React.FC<IMainLayout> = ({ children, onToggleTheme }) => {
   return (
     <>
-      <Header />
+      <Header onToggleTheme={onToggleTheme} />
       <div>{children}</div>
     </>
   );

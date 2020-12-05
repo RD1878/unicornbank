@@ -5,13 +5,19 @@ import { Auth } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main";
 
 const App: FC = () => {
-  const [theme] = useState(appThemes.dark);
+  const [theme, setTheme] = useState(appThemes.light);
+
+  const toggleTheme = () => {
+    const newTheme = theme.palette.type === "dark" ? "light" : "dark";
+    setTheme(appThemes[newTheme]);
+  };
+
   const path = window.location.pathname;
 
   function routing() {
     switch (path) {
       case "/main":
-        return <MainLayout />;
+        return <MainLayout onToggleTheme={toggleTheme} />;
 
       default:
         return <Auth />;
