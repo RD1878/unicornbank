@@ -15,7 +15,58 @@ const LIGHT_PRIMARY0 = "#F5F5F5";
 const LIGHT_PRIMARY1 = "#F8F3FE";
 // const LIGHT_PRIMARY2 = "#F8F3FE";
 const LIGHT_PRIMARY2 = "#F2E9E4";
+const WHITE_OPACITY = "#FFFFFF70";
 const YELLOW_PRIMARY = "#FCA311";
+
+const overrides = {
+  MuiTypography: {
+    root: {
+      fontFamily: "Segoe UI, sans-serif !important",
+    },
+    h1: {
+      fontSize: 32,
+      fontWeight: 500,
+      letterSpacing: 0.25,
+    },
+  },
+  MuiOutlinedInput: {
+    root: {
+      borderRadius: 10,
+      "& fieldset": {
+        borderWidth: 2,
+      },
+    },
+    input: {
+      padding: "15.5px 14px",
+    },
+  },
+  MuiTextField: {
+    root: {
+      "& .Mui-focused": {
+        color: WHITE,
+
+        "& fieldset": {
+          borderColor: `${WHITE} !important`,
+        },
+      },
+    },
+  },
+  MuiFormControl: {
+    root: {
+      "& .Mui-focused": {
+        color: `${WHITE} !important`,
+
+        "& fieldset": {
+          borderColor: `${WHITE} !important`,
+        },
+      },
+      "& label:not(.MuiInputLabel-shrink)": {
+        left: 10,
+        top: -2,
+      },
+    },
+  },
+};
 
 const dark = createMuiTheme({
   palette: {
@@ -29,45 +80,7 @@ const dark = createMuiTheme({
     textPrimary: { main: "#ffffffEE" },
     textSecondary: { main: "#ffffff46" },
   },
-  overrides: {
-    MuiOutlinedInput: {
-      root: {
-        borderRadius: 10,
-        "& fieldset": {
-          borderWidth: 2,
-        },
-      },
-      input: {
-        padding: "15.5px 14px",
-      },
-    },
-    MuiTextField: {
-      root: {
-        "& .Mui-focused": {
-          color: WHITE,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
-        },
-      },
-    },
-    MuiFormControl: {
-      root: {
-        "& .Mui-focused": {
-          color: `${WHITE} !important`,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
-        },
-        "& label:not(.MuiInputLabel-shrink)": {
-          left: 10,
-          top: -2,
-        },
-      },
-    },
-  },
+  overrides,
 });
 
 const light = createMuiTheme({
@@ -81,45 +94,7 @@ const light = createMuiTheme({
     secondary: { main: DARK_PRIMARY1 },
     textPrimary: { main: DARK_PRIMARY1 },
   },
-  overrides: {
-    MuiOutlinedInput: {
-      root: {
-        borderRadius: 10,
-        "& fieldset": {
-          borderWidth: 2,
-        },
-      },
-      input: {
-        padding: "15.5px 14px",
-      },
-    },
-    MuiTextField: {
-      root: {
-        "& .Mui-focused": {
-          color: WHITE,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
-        },
-      },
-    },
-    MuiFormControl: {
-      root: {
-        "& .Mui-focused": {
-          color: `${WHITE} !important`,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
-        },
-        "& label:not(.MuiInputLabel-shrink)": {
-          left: 10,
-          top: -2,
-        },
-      },
-    },
-  },
+  overrides,
 });
 
 export const theme = {
