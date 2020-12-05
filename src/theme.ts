@@ -7,15 +7,23 @@ declare module "@material-ui/core/styles/createPalette" {
 }
 
 const WHITE = "#ffffff";
-const DARK_PRIMARY = "#14213D";
-const DARK_SECONDARY = "#2B3650";
-const LIGHT_PRIMARY = "#F8F3FE";
+const DARK_PRIMARY0 = "#2B3650";
+const DARK_PRIMARY1 = "#14213D";
+const DARK_PRIMARY2 = "#0C121F";
+const LIGHT_PRIMARY0 = "#F5F5F5";
+const LIGHT_PRIMARY1 = "#F8F3FE";
+// const LIGHT_PRIMARY2 = "#F8F3FE";
+const LIGHT_PRIMARY2 = "#F2E9E4";
 const YELLOW_PRIMARY = "#FCA311";
 
 const dark = createMuiTheme({
   palette: {
     type: "dark",
-    primary: { main: DARK_PRIMARY, light: DARK_SECONDARY },
+    primary: {
+      light: DARK_PRIMARY0,
+      main: DARK_PRIMARY1,
+      dark: DARK_PRIMARY2,
+    },
     secondary: { main: YELLOW_PRIMARY },
     textPrimary: { main: "#ffffffEE" },
   },
@@ -63,8 +71,12 @@ const dark = createMuiTheme({
 const light = createMuiTheme({
   palette: {
     type: "light",
-    primary: { main: LIGHT_PRIMARY, light: DARK_SECONDARY },
-    secondary: { main: YELLOW_PRIMARY },
+    primary: {
+      light: LIGHT_PRIMARY0,
+      main: LIGHT_PRIMARY1,
+      dark: LIGHT_PRIMARY2,
+    },
+    secondary: { main: DARK_PRIMARY1 },
     textPrimary: { main: "#ffffffEE" },
   },
   overrides: {
