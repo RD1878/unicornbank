@@ -3,7 +3,7 @@ import React, { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link, Typography } from "@material-ui/core";
-import { PrimaryButton, Logo } from "../atoms";
+import { Logo } from "../atoms";
 
 const Container = withTheme(styled("div")`
   display: flex;

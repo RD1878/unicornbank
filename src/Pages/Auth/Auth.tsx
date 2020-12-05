@@ -1,6 +1,7 @@
 import React, { FC } from "react";
-import { Link, Typography } from "@material-ui/core";
 import styled from "styled-components";
+import { withTheme } from "@material-ui/core/styles";
+import { Link, Typography } from "@material-ui/core";
 import backGround from "../../assets/images/1-2.png";
 import {
   MaskedTextField,
@@ -8,8 +9,6 @@ import {
   PasswordField,
   Logo,
 } from "../../atoms";
-
-const darkBlue = "rgba(20, 33, 61, 0.5)";
 
 const BackGround = styled.div`
   background-image: url(${backGround});
@@ -30,12 +29,12 @@ const StyledLogo = styled.div`
   left: 3%;
 `;
 
-const FormAuth = styled.div`
+const FormAuth = withTheme(styled("div")`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${darkBlue};
+  background-color: ${(props) => `${props.theme.palette.primary.main}50`};
   border-radius: 20px;
   width: 55vw;
   min-width: 300px;
@@ -57,7 +56,7 @@ const FormAuth = styled.div`
     max-width: 500px;
     margin-bottom: 2em;
   }
-`;
+`);
 
 export const Auth: FC = () => {
   return (
