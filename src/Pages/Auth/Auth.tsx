@@ -36,8 +36,10 @@ const FormAuth = styled.div`
   align-items: center;
   background-color: ${darkBlue};
   border-radius: 20px;
-  min-width: 55vw;
-  min-height: 40vw;
+  width: 55vw;
+  max-width: 800px;
+  height: 45vw;
+  max-height: 640px;
 
   & > div {
     display: flex;
