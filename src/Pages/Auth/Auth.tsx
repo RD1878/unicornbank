@@ -30,16 +30,14 @@ const StyledLogo = styled.div`
 `;
 
 const FormAuth = styled.div`
-  background-color: ${darkBlue};
-  border-radius: 20px;
   display: flex;
-  min-width: 55vw;
-  min-height: 40vw;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${darkBlue};
+  border-radius: 20px;
+  min-width: 55vw;
+  min-height: 40vw;
 
   & > div {
     display: flex;
