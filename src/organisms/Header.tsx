@@ -2,17 +2,25 @@
 import React, { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import { theme as appThemes } from "../theme";
+import ArrowForwardRoundedIcon from "@material-ui/icons/ArrowForwardRounded";
 import { Link, Switch } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 
 const Container = withTheme(styled("div")`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  background-color: ${(props) => props.theme.palette.primary.main};
   height: 100px;
+  padding: 0px 30px 0px 50px;
+  background-color: ${(props) => props.theme.palette.primary.dark};
 `);
+
+const LinksContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-grow: 0.5;
+`;
 
 interface IHeader {
   children?: ReactNode;
@@ -22,26 +30,29 @@ interface IHeader {
 const Header: FC<IHeader> = ({ children, onToggleTheme }) => {
   return (
     <Container>
-      <Logo />
-      <Link href="#" color="textPrimary">
-        Главная
-      </Link>
-      <Link href="#" color="textPrimary">
-        История
-      </Link>
-      <Link href="#" color="textPrimary">
-        Чат
-      </Link>
-      <Link href="#" color="textPrimary">
-        Настройки
-      </Link>
-      <Link href="#" color="textPrimary">
-        Офисы и банкоматы
-      </Link>
+      <ArrowForwardRoundedIcon color="secondary" />
+      <LinksContainer>
+        <Logo />
+        <Link href="#" color="textPrimary">
+          Главная
+        </Link>
+        <Link href="#" color="textPrimary">
+          История
+        </Link>
+        <Link href="#" color="textPrimary">
+          Чат
+        </Link>
+        <Link href="#" color="textPrimary">
+          Настройки
+        </Link>
+        <Link href="#" color="textPrimary">
+          Офисы и банкоматы
+        </Link>
 
-      <Link href="/" color="textPrimary">
-        <PrimaryButton>Выйти</PrimaryButton>
-      </Link>
+        <Link href="/" color="textPrimary">
+          <PrimaryButton>Выйти</PrimaryButton>
+        </Link>
+      </LinksContainer>
 
       <Switch onChange={onToggleTheme} />
     </Container>

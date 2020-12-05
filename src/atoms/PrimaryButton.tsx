@@ -10,7 +10,7 @@ function getSize(size: string | undefined): string {
       break;
 
     default:
-      return "width: 100px; height: 34px; font-size: 12px;";
+      return "width: 100px; height: 34px; font-size: 12px";
       break;
   }
 }
