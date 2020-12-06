@@ -28,6 +28,10 @@ const overrides = {
       fontSize: 32,
       fontWeight: 500,
     },
+    h2: {
+      fontSize: 22,
+      fontWeight: 500,
+    },
     body1: {
       fontSize: 14,
     },

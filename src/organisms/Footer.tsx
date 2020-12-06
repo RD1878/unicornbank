@@ -2,8 +2,8 @@
 import React, { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import { Link, Typography } from "@material-ui/core";
-import { Logo } from "../atoms";
+import { Typography } from "@material-ui/core";
+import { Logo, PrimaryLink } from "../atoms";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -47,21 +47,11 @@ const Footer: FC<IFooter> = ({ children }) => {
       <LeftNavigation>
         <Logo />
         <LinksContainer>
-          <Link href="#" color="textPrimary">
-            Главная
-          </Link>
-          <Link href="#" color="textPrimary">
-            История
-          </Link>
-          <Link href="#" color="textPrimary">
-            Чат
-          </Link>
-          <Link href="#" color="textPrimary">
-            Настройки
-          </Link>
-          <Link href="#" color="textPrimary">
-            Офисы и банкоматы
-          </Link>
+          <PrimaryLink href="#">Главная</PrimaryLink>
+          <PrimaryLink href="#">История</PrimaryLink>
+          <PrimaryLink href="#">Чат</PrimaryLink>
+          <PrimaryLink href="#">Настройки</PrimaryLink>
+          <PrimaryLink href="#">Офисы и банкоматы</PrimaryLink>
         </LinksContainer>
         <Typography color="textSecondary">
           Россия, Республика Татарстан, г.Казань ул. Пушкина, 66
@@ -69,9 +59,13 @@ const Footer: FC<IFooter> = ({ children }) => {
       </LeftNavigation>
 
       <RightNavigation>
-        <Typography color="textPrimary">8 800 555-35-35</Typography>
+        <Typography color="textPrimary" variant="h1">
+          8 800 555-35-35
+        </Typography>
         <Typography color="textSecondary">Для звонков по России</Typography>
-        <Typography color="textPrimary">unicorn@email.com</Typography>
+        <Typography color="textPrimary" variant="h2">
+          unicorn@email.com
+        </Typography>
       </RightNavigation>
     </Container>
   );
