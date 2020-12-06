@@ -10,7 +10,7 @@ const Container = withTheme(styled("div")`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100px;
+  height: 85px;
   padding: 0px 30px 0px 50px;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);

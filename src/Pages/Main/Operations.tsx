@@ -1,15 +1,8 @@
 import React, { ChangeEvent, FC } from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import { PrimaryButton } from "../../atoms";
 import { OperationCard } from "../../molecules";
-import {
-  Box,
-  Container,
-  Paper,
-  Tabs,
-  Tab,
-  Typography,
-} from "@material-ui/core";
+import { Box, Tabs, Tab, Typography } from "@material-ui/core";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -24,8 +17,8 @@ function TabPanel(props: TabPanelProps) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -68,7 +61,7 @@ export const Operations: FC = () => {
         indicatorColor="secondary"
         textColor="secondary"
         variant="scrollable"
-        scrollButtons="auto"
+        scrollButtons="on"
         centered
       >
         <StyledTab label="Все" />
@@ -81,15 +74,21 @@ export const Operations: FC = () => {
 
       <TabPanel value={tab} index={0}>
         <OperationCard />
-        <OperationCard />
+        <OperationCard isIncome={true} />
         <OperationCard />
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        Item Two
+        <OperationCard isIncome={true} />
+        <OperationCard />
+        <OperationCard />
       </TabPanel>
       <TabPanel value={tab} index={2}>
-        Item Three
+        <OperationCard />
+        <OperationCard isIncome={true} />
+        <OperationCard isIncome={true} />
       </TabPanel>
+
+      <PrimaryButton>Подробнее</PrimaryButton>
     </Box>
   );
 };

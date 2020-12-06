@@ -62,7 +62,7 @@ export const Offers: FC = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" disableGutters={true}>
       <TabPanel value={tab} index={0} title="Процент выше">
         Item One
       </TabPanel>

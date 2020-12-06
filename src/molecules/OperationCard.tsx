@@ -1,7 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, ReactElement } from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
-import { Avatar, Box, Card, CardMedia, Typography } from "@material-ui/core";
+import { Avatar, Box, Card, Typography } from "@material-ui/core";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -10,9 +9,14 @@ const StyledCard = styled(Card)`
   padding: 20px 30px;
 `;
 
-export const OperationCard: FC = () => {
+interface IOperationCard {
+  children?: ReactElement;
+  isIncome?: boolean;
+}
+
+export const OperationCard: FC<IOperationCard> = ({ isIncome = false }) => {
   return (
-    <Box mt={3}>
+    <Box my={3}>
       <Typography variant="caption" color="textSecondary">
         23 августа, понедельник
       </Typography>
@@ -24,7 +28,9 @@ export const OperationCard: FC = () => {
             Получение перевода
           </Typography>
         </Box>
-        <Typography variant="h2">32 000, 22р</Typography>
+        <Typography variant="h2" color={isIncome ? "secondary" : "textPrimary"}>
+          {!isIncome && "-"}32 000, 22р
+        </Typography>
       </StyledCard>
     </Box>
   );
