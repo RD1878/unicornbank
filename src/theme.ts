@@ -22,11 +22,14 @@ const overrides = {
   MuiTypography: {
     root: {
       fontFamily: "Segoe UI, sans-serif !important",
+      letterSpacing: 0.25,
     },
     h1: {
       fontSize: 32,
       fontWeight: 500,
-      letterSpacing: 0.25,
+    },
+    body1: {
+      fontSize: 14,
     },
   },
   MuiOutlinedInput: {

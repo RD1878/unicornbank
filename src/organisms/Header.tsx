@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ArrowForwardRoundedIcon from "@material-ui/icons/ArrowForwardRounded";
 import { Link, Switch } from "@material-ui/core";
-import { PrimaryButton, Logo } from "../atoms";
+import { PrimaryButton, PrimaryLink, Logo } from "../atoms";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -33,21 +33,11 @@ const Header: FC<IHeader> = ({ children, onToggleTheme }) => {
       <ArrowForwardRoundedIcon color="secondary" />
       <LinksContainer>
         <Logo />
-        <Link href="#" color="textPrimary">
-          Главная
-        </Link>
-        <Link href="#" color="textPrimary">
-          История
-        </Link>
-        <Link href="#" color="textPrimary">
-          Чат
-        </Link>
-        <Link href="#" color="textPrimary">
-          Настройки
-        </Link>
-        <Link href="#" color="textPrimary">
-          Офисы и банкоматы
-        </Link>
+        <PrimaryLink href="#">Главная</PrimaryLink>
+        <PrimaryLink href="#">История</PrimaryLink>
+        <PrimaryLink href="#">Чат</PrimaryLink>
+        <PrimaryLink href="#">Настройки</PrimaryLink>
+        <PrimaryLink href="#">Офисы и банкоматы</PrimaryLink>
 
         <Link href="/" color="textPrimary">
           <PrimaryButton>Выйти</PrimaryButton>
