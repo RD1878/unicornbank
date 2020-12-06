@@ -28,6 +28,7 @@ const overrides = {
     h1: {
       fontSize: 32,
       fontWeight: 500,
+      marginBottom: "1.5rem",
     },
     h2: {
       fontSize: 22,
@@ -35,6 +36,9 @@ const overrides = {
     },
     body1: {
       fontSize: 14,
+    },
+    body2: {
+      fontSize: 20,
     },
     button: {
       letterSpacing: 1.25,

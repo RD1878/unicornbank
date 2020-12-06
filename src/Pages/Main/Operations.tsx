@@ -62,7 +62,6 @@ export const Operations: FC = () => {
         textColor="secondary"
         variant="scrollable"
         scrollButtons="on"
-        centered
       >
         <StyledTab label="Все" />
         <StyledTab label="Переводы" />
