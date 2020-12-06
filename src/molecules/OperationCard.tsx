@@ -7,13 +7,12 @@ const StyledCard = styled(Card)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 30vw;
   padding: 20px 30px;
 `;
 
 export const OperationCard: FC = () => {
   return (
-    <Box mt={3} px={3}>
+    <Box mt={3}>
       <Typography variant="caption" color="textSecondary">
         23 августа, понедельник
       </Typography>
