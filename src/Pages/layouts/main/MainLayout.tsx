@@ -14,13 +14,19 @@ const ContentContainer = withTheme(styled("div")`
   background-color: ${(props) => props.theme.palette.primary.light};
 `);
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 60px;
+`;
+
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
       <ContentContainer>
         <Sidebar />
-        {children}
+        <Container>{children}</Container>
       </ContentContainer>
       <Footer />
     </>

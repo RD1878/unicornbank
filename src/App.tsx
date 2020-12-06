@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
 import { theme as appThemes } from "./theme";
-import { Auth } from "./Pages";
+import { Auth, MainPage } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main";
 
 const App: FC = () => {
@@ -17,7 +17,11 @@ const App: FC = () => {
   function routing() {
     switch (path) {
       case "/main":
-        return <MainLayout onToggleTheme={toggleTheme} />;
+        return (
+          <MainLayout onToggleTheme={toggleTheme}>
+            <MainPage />
+          </MainLayout>
+        );
 
       default:
         return <Auth />;
