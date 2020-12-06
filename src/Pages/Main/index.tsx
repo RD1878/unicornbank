@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link, Typography } from "@material-ui/core";
 import { PrimaryButton, PrimaryLink } from "../../atoms";
+import { OperationCard } from "../../molecules";
 import { Offers } from "./Offers";
 
 const TabContainer = styled.div`
@@ -12,10 +13,6 @@ const TabContainer = styled.div`
 export const MainPage: FC = () => {
   return (
     <>
-      <Typography variant="h1" color="textPrimary">
-        Предложения для вас
-      </Typography>
-
       <Offers />
 
       <Typography variant="h1" color="textPrimary">
@@ -32,6 +29,10 @@ export const MainPage: FC = () => {
           Развлечения
         </PrimaryLink>
       </TabContainer>
+
+      <OperationCard />
+      <OperationCard />
+      <OperationCard />
     </>
   );
 };
