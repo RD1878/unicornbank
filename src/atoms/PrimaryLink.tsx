@@ -3,17 +3,14 @@ import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Link } from "@material-ui/core";
 
-interface IPrimaryLink {
-  children: string | ReactElement;
-  href: string;
-  active?: boolean;
-}
-
 const StyledLink = withTheme(styled(Link)`
   display: block;
   position: relative;
-  font-size: 14px;
-  font-weight: 500;
+  font-weight: ${
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    (props) => props.fontWeight
+  };
   padding: 5px;
 
   &::after {
@@ -23,7 +20,12 @@ const StyledLink = withTheme(styled(Link)`
     bottom: 0;
     width: 100%;
     height: 1px;
-    background: ${(props) => props.theme.palette.secondary.main};
+    background: ${(props) =>
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      props.active === true
+        ? props.theme.palette.active.main
+        : props.theme.palette.secondary.main};
     opacity: 0;
     transform: translateY(5px);
     transition: transform 0.3s, opacity 0.3s;
@@ -31,7 +33,7 @@ const StyledLink = withTheme(styled(Link)`
   }
 
   &.active {
-    color: ${(props) => props.theme.palette.secondary.main};
+    color: ${(props) => props.theme.palette.active.main};
 
     &::after {
       opacity: 1;
@@ -49,16 +51,29 @@ const StyledLink = withTheme(styled(Link)`
   }
 `);
 
+interface IPrimaryLink {
+  children: string | ReactElement;
+  href: string;
+  active?: boolean;
+  variant?: string;
+  fontWeight?: number;
+}
+
 export const PrimaryLink = ({
   children,
-  active,
+  active = false,
+  variant = "body1",
+  fontWeight = 400,
   ...rest
 }: IPrimaryLink): ReactElement => (
   <StyledLink
-    {...rest}
     color="textPrimary"
+    variant={variant}
+    active={active}
+    fontWeight={fontWeight}
     className={active ? "active" : null}
     underline="none"
+    {...rest}
   >
     {children}
   </StyledLink>

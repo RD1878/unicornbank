@@ -4,6 +4,7 @@ declare module "@material-ui/core/styles/createPalette" {
   interface PaletteOptions {
     textPrimary?: PaletteOptions["primary"];
     textSecondary?: PaletteOptions["primary"];
+    active?: PaletteOptions["primary"];
   }
 }
 
@@ -86,6 +87,7 @@ const dark = createMuiTheme({
     secondary: { main: YELLOW_PRIMARY },
     textPrimary: { main: "#ffffffEE" },
     textSecondary: { main: "#ffffff46" },
+    active: { main: YELLOW_PRIMARY },
   },
   overrides,
 });
@@ -100,6 +102,7 @@ const light = createMuiTheme({
     },
     secondary: { main: DARK_PRIMARY1 },
     textPrimary: { main: DARK_PRIMARY1 },
+    active: { main: YELLOW_PRIMARY },
   },
   overrides,
 });
