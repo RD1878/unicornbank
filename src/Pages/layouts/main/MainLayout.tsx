@@ -1,7 +1,6 @@
 import React, { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-
 import { Header, Sidebar, Footer } from "../../../organisms";
 
 interface IMainLayout {
@@ -18,6 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 60px;
+  width: 100%;
 `;
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {

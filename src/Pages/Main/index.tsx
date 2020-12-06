@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link, Typography } from "@material-ui/core";
 import { PrimaryButton, PrimaryLink } from "../../atoms";
+import { Offers } from "./Offers";
 
 const TabContainer = styled.div`
   display: flex;
@@ -14,6 +15,8 @@ export const MainPage: FC = () => {
       <Typography variant="h1" color="textPrimary">
         Предложения для вас
       </Typography>
+
+      <Offers />
 
       <Typography variant="h1" color="textPrimary">
         Последние операции
