@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { Link } from "@material-ui/core";
 
 interface IPrimaryLink {
-  href: string;
   children: string | ReactElement;
+  href: string;
+  active?: boolean;
 }
 
 const StyledLink = withTheme(styled(Link)`
@@ -29,6 +30,15 @@ const StyledLink = withTheme(styled(Link)`
     pointer-events: none;
   }
 
+  &.active {
+    color: ${(props) => props.theme.palette.secondary.main};
+
+    &::after {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
   &:hover {
     color: ${(props) => props.theme.palette.secondary.main};
 
@@ -41,9 +51,15 @@ const StyledLink = withTheme(styled(Link)`
 
 export const PrimaryLink = ({
   children,
+  active,
   ...rest
 }: IPrimaryLink): ReactElement => (
-  <StyledLink {...rest} color="textPrimary" underline="none">
+  <StyledLink
+    {...rest}
+    color="textPrimary"
+    className={active ? "active" : null}
+    underline="none"
+  >
     {children}
   </StyledLink>
 );

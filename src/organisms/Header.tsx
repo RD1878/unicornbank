@@ -22,6 +22,8 @@ const LinksContainer = styled.div`
   flex-grow: 0.5;
 `;
 
+const path = window.location.pathname;
+
 interface IHeader {
   children?: ReactNode;
   onToggleTheme: () => void;
@@ -33,7 +35,9 @@ const Header: FC<IHeader> = ({ children, onToggleTheme }) => {
       <ArrowForwardRoundedIcon color="secondary" />
       <LinksContainer>
         <Logo />
-        <PrimaryLink href="#">Главная</PrimaryLink>
+        <PrimaryLink href="#" active={path === "/main" ? true : false}>
+          Главная
+        </PrimaryLink>
         <PrimaryLink href="#">История</PrimaryLink>
         <PrimaryLink href="#">Чат</PrimaryLink>
         <PrimaryLink href="#">Настройки</PrimaryLink>
