@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { Button, Typography } from "@material-ui/core";
 
 function getSize(size: string | undefined): string {
   switch (size) {
@@ -10,22 +10,23 @@ function getSize(size: string | undefined): string {
       break;
 
     default:
-      return "width: 100px; height: 34px; font-size: 12px";
+      return "height: 36px; font-size: 12px";
       break;
   }
 }
 
 const StyledButton = withTheme(styled(Button)`
   color: #fff;
-  box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.25);
-  border-radius: 2em;
   font-weight: 600;
+  padding: 5px 30px;
+  border-radius: 2em;
+  box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.25);
   ${(props) => getSize(props.size)};
 `);
 
 interface IPrimaryButton {
-  size?: string;
   children: string | ReactElement;
+  size?: string;
 }
 
 export const PrimaryButton = ({
@@ -33,6 +34,6 @@ export const PrimaryButton = ({
   ...rest
 }: IPrimaryButton): React.ReactElement => (
   <StyledButton {...rest} variant="contained" color="secondary">
-    {children}
+    <Typography variant="button">{children}</Typography>
   </StyledButton>
 );

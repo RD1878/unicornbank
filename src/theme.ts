@@ -36,6 +36,10 @@ const overrides = {
     body1: {
       fontSize: 14,
     },
+    button: {
+      letterSpacing: 1.25,
+      fontWeight: 600,
+    },
   },
   MuiOutlinedInput: {
     root: {
