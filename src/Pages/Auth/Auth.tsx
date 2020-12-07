@@ -4,7 +4,7 @@ import backGround from "../../assets/images/1-2.png";
 import logo from "../../assets/images/logo.png";
 import PasswordField from "../../atoms/PasswordField";
 import PrimaryButton from "../../atoms/PrimaryButton";
-import { MaskedTextField } from "../../atoms/TextField";
+import TextField from "../../atoms/TextField";
 import { COLORS } from "../../theme";
 
 const BackGround = styled.div`
@@ -70,7 +70,7 @@ const Auth: FC = () => {
         <div>
           <Title>Вход в личный кабинет</Title>
           <div>
-            <MaskedTextField mask="+7(999)-999-99-99" label="Номер телефона" />
+            <TextField label="Почта" />
           </div>
           <PasswordField />
           <PrimaryButton>Войти</PrimaryButton>

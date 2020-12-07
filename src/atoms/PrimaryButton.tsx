@@ -1,5 +1,5 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
+import React, { FC } from "react";
+import Button, { ButtonProps } from "@material-ui/core/Button";
 import styled from "styled-components";
 import { COLORS } from "../theme";
 
@@ -16,15 +16,6 @@ const StyledButton = styled(Button)`
   }
 `;
 
-interface IPrimaryButton {
-  children: string;
-}
-
-const PrimaryButton = ({
-  children,
-  ...rest
-}: IPrimaryButton): React.ReactElement => (
-  <StyledButton {...rest}>{children}</StyledButton>
-);
+const PrimaryButton: FC<ButtonProps> = (props) => <StyledButton {...props} />;
 
 export default PrimaryButton;
