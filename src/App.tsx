@@ -1,24 +1,18 @@
-import React from "react";
-import "./App.css";
+import React, { FC, useState } from "react";
+import { ThemeProvider } from "@material-ui/core";
+import appThemes from "./theme";
+import Auth from "./Pages/Auth";
 
-function App() {
+const App: FC = () => {
+  const [theme] = useState(appThemes.dark);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div>
+        <Auth />
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
