@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -28,11 +28,10 @@ interface IPrimaryButton {
   children: string;
 }
 
-export const PrimaryButton = ({
-  children,
-  ...rest
-}: IPrimaryButton): React.ReactElement => (
+const PrimaryButton = ({ children, ...rest }: IPrimaryButton): ReactElement => (
   <StyledButton {...rest} variant="contained" color="secondary">
     {children}
   </StyledButton>
 );
+
+export default PrimaryButton;

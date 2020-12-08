@@ -21,9 +21,14 @@ const dark = createMuiTheme({
   overrides: {
     MuiOutlinedInput: {
       root: {
+        width: "100%",
         borderRadius: 10,
         "& fieldset": {
           borderWidth: 2,
+        },
+        "&$focused $notchedOutline": {
+          color: WHITE,
+          borderColor: `${WHITE}`,
         },
       },
       input: {
@@ -34,24 +39,24 @@ const dark = createMuiTheme({
       root: {
         "& .Mui-focused": {
           color: WHITE,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
+          borderColor: `${WHITE}`,
         },
       },
     },
     MuiFormControl: {
       root: {
         width: "100%",
-        "& .Mui-focused": {
-          color: `${WHITE} !important`,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
+        "&$focused": {
+          color: `${WHITE}`,
         },
-        "& label:not(.MuiInputLabel-shrink)": {
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        "&$focused": {
+          color: `${WHITE}`,
+        },
+        "&:not(.MuiInputLabel-shrink)": {
           left: 10,
           top: -2,
         },
@@ -82,3 +87,5 @@ export const theme = {
   light,
   dark,
 };
+
+export default theme;

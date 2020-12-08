@@ -5,7 +5,7 @@ interface ILogo {
   width?: string;
 }
 
-export const Logo = ({ width }: ILogo): React.ReactElement => (
+const Logo = ({ width }: ILogo): React.ReactElement => (
   <div>
     <svg
       width={width || 100}
@@ -45,3 +45,5 @@ export const Logo = ({ width }: ILogo): React.ReactElement => (
     </svg>
   </div>
 );
+
+export default Logo;

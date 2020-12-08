@@ -1,4 +1,6 @@
-export * from "./PrimaryButton";
-export * from "./PasswordField";
-export * from "./TextField";
-export * from "./Logo";
+import PrimaryButton from "./PrimaryButton";
+import PasswordField from "./PasswordField";
+import TextField from "./TextField";
+import Logo from "./Logo";
+
+export { PrimaryButton, PasswordField, TextField, Logo };

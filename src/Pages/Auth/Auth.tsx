@@ -1,14 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import backGround from "../../assets/images/1-2.png";
-import {
-  MaskedTextField,
-  PrimaryButton,
-  PasswordField,
-  Logo,
-} from "../../atoms";
-
-const darkBlue = "rgba(20, 33, 61, 0.5)";
+import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 
 const BackGround = styled.div`
   background-image: url(${backGround});
@@ -34,7 +27,7 @@ const FormAuth = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${darkBlue};
+  background-color: rgba(20, 33, 61, 0.5);
   border-radius: 20px;
   width: 55vw;
   max-width: 800px;
@@ -63,7 +56,7 @@ const Title = styled.div`
   font-size: 2rem;
 `;
 
-export const Auth: FC = () => {
+const Auth: FC = () => {
   return (
     <BackGround>
       <StyledLogo>
@@ -72,7 +65,7 @@ export const Auth: FC = () => {
       <FormAuth>
         <div>
           <Title>Вход в личный кабинет</Title>
-          <MaskedTextField />
+          <TextField label="Почта" />
           <PasswordField />
           <PrimaryButton size="large">Войти</PrimaryButton>
         </div>
@@ -80,3 +73,5 @@ export const Auth: FC = () => {
     </BackGround>
   );
 };
+
+export default Auth;
