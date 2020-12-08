@@ -10,27 +10,27 @@ const light = createMuiTheme({
     type: "dark",
   },
   overrides: {
-    MuiTextField: {
+    MuiOutlinedInput: {
       root: {
         width: "100%",
-        "& .Mui-focused": {
+        "&$focused $notchedOutline": {
           color: WHITE,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
+          borderColor: `${WHITE}`,
         },
       },
     },
     MuiFormControl: {
       root: {
         width: "100%",
-        "& .Mui-focused": {
-          color: `${WHITE} !important`,
-
-          "& fieldset": {
-            borderColor: `${WHITE} !important`,
-          },
+        "&$focused": {
+          color: `${WHITE}`,
+        },
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        "&$focused": {
+          color: `${WHITE}`,
         },
       },
     },
