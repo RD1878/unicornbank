@@ -7,7 +7,7 @@ const ORANGE = "#FCA311";
 
 const light = createMuiTheme({
   palette: {
-    type: "dark",
+    type: "light",
   },
   overrides: {
     MuiOutlinedInput: {
@@ -39,7 +39,7 @@ const light = createMuiTheme({
 
 const dark = createMuiTheme({
   palette: {
-    type: "light",
+    type: "dark",
   },
   overrides: {
     MuiTextField: {

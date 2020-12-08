@@ -48,7 +48,7 @@ const FormAuth = styled.div`
     align-items: center;
 
     & > div {
-      margin-bottom: 3em;
+      margin-bottom: 2em;
       width: 100%;
     }
   }
@@ -56,7 +56,6 @@ const FormAuth = styled.div`
 
 const Title = styled.div`
   color: ${COLORS.WHITE};
-  margin-bottom: 5rem;
   text-align: center;
   line-height: 2rem;
   font-size: 2rem;
