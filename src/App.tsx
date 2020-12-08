@@ -4,7 +4,7 @@ import appThemes from "./theme";
 import Auth from "./Pages/Auth";
 
 const App: FC = () => {
-  const [theme] = useState(appThemes.light);
+  const [theme] = useState(appThemes.dark);
 
   return (
     <ThemeProvider theme={theme}>

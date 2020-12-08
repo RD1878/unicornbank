@@ -5,9 +5,9 @@ const DARK_BLUE_1 = "rgba(20, 33, 61, 1)";
 const DARK_BLUE_05 = "rgba(20, 33, 61, 0.5)";
 const ORANGE = "#FCA311";
 
-const light = createMuiTheme({
+const dark = createMuiTheme({
   palette: {
-    type: "light",
+    type: "dark",
   },
   overrides: {
     MuiOutlinedInput: {
@@ -37,9 +37,9 @@ const light = createMuiTheme({
   },
 });
 
-const dark = createMuiTheme({
+const light = createMuiTheme({
   palette: {
-    type: "dark",
+    type: "light",
   },
   overrides: {
     MuiTextField: {
