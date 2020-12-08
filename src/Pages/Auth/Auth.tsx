@@ -3,12 +3,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link, Typography } from "@material-ui/core";
 import backGround from "../../assets/images/1-2.png";
-import {
-  MaskedTextField,
-  PrimaryButton,
-  PasswordField,
-  Logo,
-} from "../../atoms";
+import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 
 const BackGround = styled.div`
   background-image: url(${backGround});
@@ -71,7 +66,7 @@ export const Auth: FC = () => {
         <Typography variant="h1" color="textPrimary" align="center">
           Вход в личный кабинет
         </Typography>
-        <MaskedTextField />
+        <TextField label="Почта" />
         <PasswordField />
         <PrimaryButton size="large">Войти</PrimaryButton>
       </FormAuth>
