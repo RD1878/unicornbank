@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link } from "@material-ui/core";
@@ -13,7 +13,7 @@ const Container = withTheme(styled("div")`
   height: 100px;
 `);
 
-const Header: React.FC<React.ReactNode> = ({ children }) => {
+const Header: FC = () => {
   return (
     <Container>
       <Logo />
@@ -37,4 +37,4 @@ const Header: React.FC<React.ReactNode> = ({ children }) => {
   );
 };
 
-export { Header };
+export default Header;

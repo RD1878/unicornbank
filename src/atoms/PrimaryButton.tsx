@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Button, Typography } from "@material-ui/core";
@@ -25,11 +25,10 @@ const StyledButton = withTheme(styled(Button)`
 `);
 
 interface IPrimaryButton {
-  children: string | ReactElement;
   size?: string;
 }
 
-const PrimaryButton = ({ children, ...rest }: IPrimaryButton): ReactElement => (
+const PrimaryButton: FC<IPrimaryButton> = ({ children, ...rest }) => (
   <StyledButton {...rest} variant="contained" color="secondary">
     <Typography variant="button">{children}</Typography>
   </StyledButton>
