@@ -64,22 +64,12 @@ const Title = styled.div`
   font-size: 2rem;
 `;
 
-const Auth: FC = () => {
+const Register: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [hasAccount, setHasAccount] = useState(false);
+  const [verifyPassword, setVerifyPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const db = firebase.database();
-
-  useEffect(() => {
-    db.ref("/offers") /// получение данных с бд
-      .once("value")
-      .then((el) => {
-        const offer = el.val();
-        console.log(offer);
-      });
-  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -92,18 +82,25 @@ const Auth: FC = () => {
     if (name === "password") {
       setPassword(value);
     }
+    if (name === "verifyPassword") {
+      setVerifyPassword(value);
+    }
   };
 
   const createAccount = (): void => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
-      .then(() => setHasAccount(true))
-      .catch(({ message }) => {
-        console.error(message);
-        setError(true);
-        setErrorMessage(message);
-      });
+    if (verifyPassword === password) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password) //создание аккаунта
+        .catch(({ message }) => {
+          console.error(message);
+          setError(true);
+          setErrorMessage(message);
+        });
+    } else {
+      setError(true);
+      setErrorMessage("Пароли не совпадают");
+    }
   };
 
   return (
@@ -111,7 +108,7 @@ const Auth: FC = () => {
       <Logo></Logo>
       <FormAuth>
         <div>
-          <Title>Вход в личный кабинет</Title>
+          <Title>Регистрация</Title>
           <div>
             <TextField
               error={error}
@@ -130,11 +127,21 @@ const Auth: FC = () => {
             helperText={errorMessage}
             label="Введите пароль"
           />
-          <PrimaryButton onClick={createAccount}>Войти</PrimaryButton>
+          <PasswordField
+            error={error}
+            name="verifyPassword"
+            value={verifyPassword}
+            onChange={handleChange}
+            helperText={errorMessage}
+            label="Повторите пароль"
+          />
+          <PrimaryButton onClick={createAccount}>
+            Зарегистрироваться
+          </PrimaryButton>
         </div>
       </FormAuth>
     </BackGround>
   );
 };
 
-export default Auth;
+export default Register;
