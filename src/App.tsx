@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
-import { theme as appThemes } from "./theme";
+import appThemes from "./theme/theme";
 import { Auth, MainPage } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main";
 

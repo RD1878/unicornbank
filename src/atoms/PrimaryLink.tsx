@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { FC, ReactChild } from "react";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Link } from "@material-ui/core";
@@ -52,20 +52,20 @@ const StyledLink = withTheme(styled(Link)`
 `);
 
 interface IPrimaryLink {
-  children: string | ReactElement;
+  children: ReactChild;
   href: string;
   active?: boolean;
   variant?: string;
   fontWeight?: number;
 }
 
-export const PrimaryLink = ({
+const PrimaryLink: FC<IPrimaryLink> = ({
   children,
   active = false,
   variant = "body1",
   fontWeight = 400,
   ...rest
-}: IPrimaryLink): ReactElement => (
+}) => (
   <StyledLink
     color="textPrimary"
     variant={variant}
@@ -78,3 +78,5 @@ export const PrimaryLink = ({
     {children}
   </StyledLink>
 );
+
+export default PrimaryLink;
