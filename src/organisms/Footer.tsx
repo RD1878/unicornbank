@@ -71,4 +71,4 @@ const Footer: FC<IFooter> = ({ children }) => {
   );
 };
 
-export { Footer };
+export default Footer;

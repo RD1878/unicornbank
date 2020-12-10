@@ -2,11 +2,11 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Link, Typography } from "@material-ui/core";
-import backGround from "../../assets/images/1-2.png";
+import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 
 const BackGround = styled.div`
-  background-image: url(${backGround});
+  background-image: url(${background});
   min-height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
@@ -53,7 +53,7 @@ const FormAuth = withTheme(styled("div")`
   }
 `);
 
-export const Auth: FC = () => {
+const Auth: FC = () => {
   return (
     <BackGround>
       <StyledLogo>
@@ -73,3 +73,5 @@ export const Auth: FC = () => {
     </BackGround>
   );
 };
+
+export default Auth;

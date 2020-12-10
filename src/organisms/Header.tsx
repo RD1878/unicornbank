@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ArrowForwardRoundedIcon from "@material-ui/icons/ArrowForwardRounded";
@@ -25,11 +25,10 @@ const LinksContainer = styled.div`
 const path = window.location.pathname;
 
 interface IHeader {
-  children?: ReactNode;
   onToggleTheme: () => void;
 }
 
-const Header: FC<IHeader> = ({ children, onToggleTheme }) => {
+const Header: FC<IHeader> = ({ onToggleTheme }) => {
   return (
     <Container>
       <ArrowForwardRoundedIcon color="secondary" />
@@ -53,4 +52,4 @@ const Header: FC<IHeader> = ({ children, onToggleTheme }) => {
   );
 };
 
-export { Header };
+export default Header;

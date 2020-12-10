@@ -4,7 +4,7 @@ import { Offers } from "./Offers";
 import { Operations } from "./Operations";
 import { CurrencyRate } from "./CurrencyRate";
 
-export const MainPage: FC = () => {
+const MainPage: FC = () => {
   return (
     <>
       <Offers />
@@ -18,3 +18,5 @@ export const MainPage: FC = () => {
     </>
   );
 };
+
+export default MainPage;

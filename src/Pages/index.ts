@@ -1,2 +1,4 @@
-export * from "./Auth";
-export * from "./Main";
+import Auth from "./Auth";
+import MainPage from "./Main";
+
+export { Auth, MainPage };

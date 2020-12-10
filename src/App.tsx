@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import { Auth, MainPage } from "./Pages";
-import { MainLayout } from "./Pages/layouts/main";
+import { MainLayout } from "./Pages/layouts/main/MainLayout";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);

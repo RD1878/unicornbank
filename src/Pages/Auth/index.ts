@@ -1,1 +1,3 @@
-export * from "./Auth";
+import Auth from "./Auth";
+
+export default Auth;

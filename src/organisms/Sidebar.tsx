@@ -20,4 +20,4 @@ const Sidebar: FC<ISidebar> = ({ children }) => {
   return <Container></Container>;
 };
 
-export { Sidebar };
+export default Sidebar;
