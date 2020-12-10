@@ -1,1 +1,3 @@
-export * from "./OperationCard";
+import OperationCard from "./OperationCard";
+
+export { OperationCard };

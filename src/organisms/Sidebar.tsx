@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 
@@ -12,11 +12,7 @@ const Container = withTheme(styled("div")`
   background-color: ${(props) => props.theme.palette.primary.main};
 `);
 
-interface ISidebar {
-  children?: ReactNode;
-}
-
-const Sidebar: FC<ISidebar> = ({ children }) => {
+const Sidebar: FC = () => {
   return <Container></Container>;
 };
 

@@ -2,15 +2,20 @@ import React, { FC, ReactChild } from "react";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Link } from "@material-ui/core";
+import { LinkProps } from "@material-ui/core/Link";
+
+interface IPrimaryLink {
+  children: ReactChild;
+  href: string;
+  active?: boolean;
+  variant?: string;
+  fontWeight?: number;
+}
 
 const StyledLink = withTheme(styled(Link)`
   display: block;
   position: relative;
-  font-weight: ${
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    (props) => props.fontWeight
-  };
+  font-weight: ${(props: IPrimaryLink) => props.fontWeight};
   padding: 5px;
 
   &::after {
@@ -21,8 +26,6 @@ const StyledLink = withTheme(styled(Link)`
     width: 100%;
     height: 1px;
     background: ${(props) =>
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       props.active === true
         ? props.theme.palette.active.main
         : props.theme.palette.secondary.main};
@@ -51,29 +54,21 @@ const StyledLink = withTheme(styled(Link)`
   }
 `);
 
-interface IPrimaryLink {
-  children: ReactChild;
-  href: string;
-  active?: boolean;
-  variant?: string;
-  fontWeight?: number;
-}
-
-const PrimaryLink: FC<IPrimaryLink> = ({
+const PrimaryLink: FC<IPrimaryLink & LinkProps> = ({
   children,
   active = false,
   variant = "body1",
   fontWeight = 400,
-  ...rest
+  ...LinkProps
 }) => (
   <StyledLink
     color="textPrimary"
     variant={variant}
-    active={active}
+    active={active ? 1 : 0}
     fontWeight={fontWeight}
     className={active ? "active" : null}
     underline="none"
-    {...rest}
+    {...LinkProps}
   >
     {children}
   </StyledLink>

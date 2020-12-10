@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -37,11 +37,7 @@ const RightNavigation = withTheme(styled("div")`
   justify-content: center;
 `);
 
-interface IFooter {
-  children?: ReactNode;
-}
-
-const Footer: FC<IFooter> = ({ children }) => {
+const Footer: FC = () => {
   return (
     <Container>
       <LeftNavigation>

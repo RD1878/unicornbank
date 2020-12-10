@@ -14,7 +14,7 @@ interface IOperationCard {
   isIncome?: boolean;
 }
 
-export const OperationCard: FC<IOperationCard> = ({ isIncome = false }) => {
+const OperationCard: FC<IOperationCard> = ({ isIncome = false }) => {
   return (
     <Box my={3}>
       <Typography variant="caption" color="textSecondary">
@@ -35,3 +35,5 @@ export const OperationCard: FC<IOperationCard> = ({ isIncome = false }) => {
     </Box>
   );
 };
+
+export default OperationCard;

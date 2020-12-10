@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../../atoms";
 import { OperationCard } from "../../molecules";
-import { Box, Tabs, Tab, Typography } from "@material-ui/core";
+import { Box, Tabs, Tab } from "@material-ui/core";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,13 +21,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`scrollable-force-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box>
-          <Typography variant="body1" color="textSecondary">
-            {children}
-          </Typography>
-        </Box>
-      )}
+      {value === index && <Box>{children}</Box>}
     </div>
   );
 }
