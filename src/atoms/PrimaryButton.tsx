@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Button, Typography } from "@material-ui/core";
+import { ButtonProps } from "@material-ui/core/Button";
 
 function getSize(size: string | undefined): string {
   switch (size) {
@@ -24,11 +25,7 @@ const StyledButton = withTheme(styled(Button)`
   ${(props) => getSize(props.size)};
 `);
 
-interface IPrimaryButton {
-  size?: string;
-}
-
-const PrimaryButton: FC<IPrimaryButton> = ({ children, ...rest }) => (
+const PrimaryButton: FC<ButtonProps> = ({ children, ...rest }) => (
   <StyledButton {...rest} variant="contained" color="secondary">
     <Typography variant="button">{children}</Typography>
   </StyledButton>
