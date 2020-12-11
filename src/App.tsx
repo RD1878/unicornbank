@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
-import appThemes from "./theme";
+import appThemes from "./theme/theme";
 import Auth from "./Pages/Auth";
 import Register from "./Pages/Register";
 
