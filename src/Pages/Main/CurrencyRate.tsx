@@ -12,14 +12,8 @@ import {
   Typography,
 } from "@material-ui/core";
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
+function createData(name: string, buy: number, sell: number) {
+  return { name, buy, sell };
 }
 
 const StyledContainer = withTheme(styled(TableContainer)`
@@ -27,11 +21,10 @@ const StyledContainer = withTheme(styled(TableContainer)`
 `);
 
 const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Доллар (USD)", 159, 6.0),
+  createData("Евро", 237, 9.0),
+  createData("Йена", 262, 16.0),
+  createData("Юань", 262, 16.0),
 ];
 
 export const CurrencyRate: FC = () => {
@@ -44,9 +37,9 @@ export const CurrencyRate: FC = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
+              <TableCell>Валюта</TableCell>
+              <TableCell align="center">Покупка</TableCell>
+              <TableCell align="center">Продажа</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -55,8 +48,8 @@ export const CurrencyRate: FC = () => {
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
+                <TableCell align="center">{row.buy}</TableCell>
+                <TableCell align="center">{row.sell}</TableCell>
               </TableRow>
             ))}
           </TableBody>
