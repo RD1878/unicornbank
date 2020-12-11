@@ -1,14 +1,12 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import backGround from "../../assets/images/1-2.png";
-import logo from "../../assets/images/logo.png";
-import PasswordField from "../../atoms/PasswordField";
-import PrimaryButton from "../../atoms/PrimaryButton";
-import TextField from "../../atoms/TextField";
-import { COLORS } from "../../theme";
+import { withTheme } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
+import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
+import background from "../../assets/images/1-2.png";
 
 const BackGround = styled.div`
-  background-image: url(${backGround});
+  background-image: url(${background});
   min-height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
@@ -19,61 +17,55 @@ const BackGround = styled.div`
   align-items: center;
 `;
 
-const Logo = styled.div`
-  background-image: url(${logo});
-  background-repeat: no-repeat;
-  width: 130px;
-  height: 60px;
+const StyledLogo = styled.div`
+  display: block;
   position: absolute;
-  top: 0;
+  top: 30px;
   left: 3%;
 `;
 
-const FormAuth = styled.div`
-  background-color: ${COLORS.DARK_BLUE_05};
-  border-radius: 2rem;
+const FormAuth = withTheme(styled("div")`
   display: flex;
-  min-width: 35vw;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${(props) => `${props.theme.palette.primary.main}50`};
+  border-radius: 20px;
+  width: 55vw;
+  min-width: 300px;
+  max-width: 800px;
+  height: 45vw;
+  min-height: 350px;
+  max-height: 640px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 1.75em;
+  }
 
   & > div {
-    justify-content: center;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    & > div {
-      margin-bottom: 2em;
-      width: 100%;
-    }
+    width: 75%;
+    max-width: 500px;
+    margin-bottom: 2em;
   }
-`;
-
-const Title = styled.div`
-  color: ${COLORS.WHITE};
-  text-align: center;
-  line-height: 2rem;
-  font-size: 2rem;
-`;
+`);
 
 const Auth: FC = () => {
   return (
     <BackGround>
-      <Logo></Logo>
+      <StyledLogo>
+        <Logo />
+      </StyledLogo>
       <FormAuth>
-        <div>
-          <Title>Вход в личный кабинет</Title>
-          <div>
-            <TextField label="Почта" />
-          </div>
-          <PasswordField />
-          <PrimaryButton>Войти</PrimaryButton>
-        </div>
+        <Typography variant="h1" color="textPrimary" align="center">
+          Вход в личный кабинет
+        </Typography>
+        <TextField label="Почта" />
+        <PasswordField />
+        <PrimaryButton size="large">Войти</PrimaryButton>
       </FormAuth>
     </BackGround>
   );

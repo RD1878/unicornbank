@@ -17,5 +17,13 @@
 	  "sourceType": "module"
 	},
 	"plugins": ["react", "@typescript-eslint"],
-	"rules": { "no-console": 1 }
-  }
+  "rules": { "no-console": 1 },
+  "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "rules": {
+        "react/prop-types": "off"
+      }
+    }
+  ]
+}
