@@ -1,3 +1,4 @@
 import OperationCard from "./OperationCard";
+import TabPanel from "./TabPanel";
 
-export { OperationCard };
+export { OperationCard, TabPanel };
