@@ -4,6 +4,7 @@ import { withTheme } from "@material-ui/core/styles";
 import ArrowForwardRoundedIcon from "@material-ui/icons/ArrowForwardRounded";
 import { Link, Switch } from "@material-ui/core";
 import { PrimaryButton, PrimaryLink, Logo } from "../atoms";
+import { navigation } from "../routes";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -21,7 +22,7 @@ const LinksContainer = styled.div`
   flex-grow: 0.5;
 `;
 
-const path = window.location.pathname;
+const currentPath = window.location.pathname;
 
 interface IHeader {
   onToggleTheme: () => void;
@@ -33,13 +34,16 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
       <ArrowForwardRoundedIcon color="secondary" />
       <LinksContainer>
         <Logo />
-        <PrimaryLink href="#" active={path === "/main" ? true : false}>
-          Главная
-        </PrimaryLink>
-        <PrimaryLink href="#">История</PrimaryLink>
-        <PrimaryLink href="#">Чат</PrimaryLink>
-        <PrimaryLink href="#">Настройки</PrimaryLink>
-        <PrimaryLink href="#">Офисы и банкоматы</PrimaryLink>
+
+        {navigation.map((item) => (
+          <PrimaryLink
+            href={item.path}
+            key={item.path}
+            active={currentPath === item.path}
+          >
+            {item.name}
+          </PrimaryLink>
+        ))}
 
         <Link href="/" color="textPrimary">
           <PrimaryButton>Выйти</PrimaryButton>
