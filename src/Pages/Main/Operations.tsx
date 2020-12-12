@@ -47,6 +47,39 @@ export const Operations: FC = () => {
     setTab(newVal);
   };
 
+  const categories: string[] = [
+    "Все",
+    "Переводы",
+    "Пополнения",
+    "Товары и услуги",
+    "Развлечения",
+  ];
+
+  const operations = [
+    {
+      id: 0,
+      accountId: 0,
+      date: "2020-12-03T14:43:09.926Z",
+      name: "ООО Додо",
+      description: "Получение заработной платы",
+      type: "income",
+      amount: 32000,
+      category: "income",
+      currency: "₽",
+    },
+    {
+      id: 1,
+      accountId: 1,
+      date: "2019-10-02T14:43:09.926Z",
+      name: "Uber",
+      description: "Оплата такси",
+      type: "expense",
+      amount: 1.7,
+      category: "service",
+      currency: "$",
+    },
+  ];
+
   return (
     <Box mt={3} width={500}>
       <Tabs
@@ -57,29 +90,18 @@ export const Operations: FC = () => {
         variant="scrollable"
         scrollButtons="on"
       >
-        <StyledTab label="Все" />
-        <StyledTab label="Переводы" />
-        <StyledTab label="Пополнения" />
-        <StyledTab label="Товары и услуги" />
-        <StyledTab label="Штрафы, комиссии" />
-        <StyledTab label="Развлечения" />
+        {categories.map((item) => (
+          <StyledTab label={item} key={item} />
+        ))}
       </Tabs>
 
       <TabPanel value={tab} index={0}>
-        <OperationCard />
-        <OperationCard isIncome={true} />
-        <OperationCard />
+        <OperationCard operation={operations[0]} />
+        <OperationCard operation={operations[1]} />
+        <OperationCard operation={operations[0]} />
       </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <OperationCard isIncome={true} />
-        <OperationCard />
-        <OperationCard />
-      </TabPanel>
-      <TabPanel value={tab} index={2}>
-        <OperationCard />
-        <OperationCard isIncome={true} />
-        <OperationCard isIncome={true} />
-      </TabPanel>
+      <TabPanel value={tab} index={1}></TabPanel>
+      <TabPanel value={tab} index={2}></TabPanel>
 
       <PrimaryButton>Подробнее</PrimaryButton>
     </Box>
