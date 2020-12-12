@@ -27,34 +27,32 @@ const rows = [
   createData("Юань", 262, 16.0),
 ];
 
-export const CurrencyRate: FC = () => {
-  return (
-    <Box mt={7}>
-      <Typography variant="h1" color="textPrimary">
-        Курсы валют
-      </Typography>
-      <StyledContainer>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Валюта</TableCell>
-              <TableCell align="center">Покупка</TableCell>
-              <TableCell align="center">Продажа</TableCell>
+export const CurrencyRate: FC = () => (
+  <Box mt={7}>
+    <Typography variant="h1" color="textPrimary">
+      Курсы валют
+    </Typography>
+    <StyledContainer>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Валюта</TableCell>
+            <TableCell align="center">Покупка</TableCell>
+            <TableCell align="center">Продажа</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="center">{row.buy}</TableCell>
+              <TableCell align="center">{row.sell}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="center">{row.buy}</TableCell>
-                <TableCell align="center">{row.sell}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </StyledContainer>
-    </Box>
-  );
-};
+          ))}
+        </TableBody>
+      </Table>
+    </StyledContainer>
+  </Box>
+);

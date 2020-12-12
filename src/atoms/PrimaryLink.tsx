@@ -1,11 +1,10 @@
-import React, { FC, ReactChild } from "react";
+import React, { FC } from "react";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Link } from "@material-ui/core";
 import { LinkProps } from "@material-ui/core/Link";
 
 interface IPrimaryLink {
-  children: ReactChild;
   href: string;
   active?: boolean;
   variant?: string;
@@ -25,10 +24,7 @@ const StyledLink = withTheme(styled(Link)`
     bottom: 0;
     width: 100%;
     height: 1px;
-    background: ${(props) =>
-      props.active === true
-        ? props.theme.palette.active.main
-        : props.theme.palette.secondary.main};
+    background: ${(props) => props.theme.palette.active.main};
     opacity: 0;
     transform: translateY(5px);
     transition: transform 0.3s, opacity 0.3s;

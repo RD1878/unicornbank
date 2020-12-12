@@ -17,7 +17,7 @@ function getSize(size: string | undefined): string {
 }
 
 const StyledButton = withTheme(styled(Button)`
-  color: #fff;
+  color: ${(props) => props.theme.palette.white.main};
   font-weight: 600;
   padding: 5px 30px;
   border-radius: 2em;

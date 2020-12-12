@@ -1,4 +1,3 @@
-/* eslint react/prop-types: 0 */
 import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
