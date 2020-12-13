@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../../atoms";
 import { OperationCard, TabPanel } from "../../molecules";
-import { Box, Tabs, Tab } from "@material-ui/core";
+import { Box, Tabs, Tab, Typography } from "@material-ui/core";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -61,26 +61,32 @@ export const Operations: FC = () => {
   };
 
   return (
-    <Box mt={3} width={500}>
-      <Tabs
-        value={tab}
-        onChange={handleChange}
-        indicatorColor="secondary"
-        textColor="secondary"
-        variant="scrollable"
-        scrollButtons="on"
-      >
-        {categories.map((item) => (
-          <StyledTab label={item} key={item} />
-        ))}
-      </Tabs>
+    <>
+      <Typography variant="h1" color="textPrimary">
+        Последние операции
+      </Typography>
 
-      <TabPanel type="scrollable-force" value={tab} index={0}>
-        <OperationCard operation={operations[0]} />
-        <OperationCard operation={operations[1]} />
-      </TabPanel>
+      <Box mt={2} maxWidth={800}>
+        <Tabs
+          value={tab}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          textColor="secondary"
+          variant="fullWidth"
+          scrollButtons="on"
+        >
+          {categories.map((item) => (
+            <StyledTab label={item} key={item} />
+          ))}
+        </Tabs>
 
-      <PrimaryButton>Подробнее</PrimaryButton>
-    </Box>
+        <TabPanel type="scrollable-force" value={tab} index={0}>
+          <OperationCard operation={operations[0]} />
+          <OperationCard operation={operations[1]} />
+        </TabPanel>
+
+        <PrimaryButton>Подробнее</PrimaryButton>
+      </Box>
+    </>
   );
 };

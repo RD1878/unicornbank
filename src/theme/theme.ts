@@ -15,7 +15,6 @@ const BLUE800 = "#0C121F";
 const WHITE50 = "#F8F3FE";
 const WHITE100 = "#F2E9E4";
 const WHITE200 = "#F5F5F5";
-const WHITE_OPACITY = "#FFFFFF70";
 const YELLOW500 = "#FCA311";
 
 const overrides = {
@@ -27,7 +26,7 @@ const overrides = {
     h1: {
       fontSize: 32,
       fontWeight: 500,
-      marginBottom: "1.5rem",
+      marginBottom: "0.5rem",
     },
     h2: {
       fontSize: 22,

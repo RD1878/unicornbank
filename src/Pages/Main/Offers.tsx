@@ -19,7 +19,7 @@ interface TabPanelProps {
 function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   return (
     <TabPanel type="vertical-tabpanel" value={value} index={index}>
-      <Box p={5} mt={3}>
+      <Box p={5}>
         <Typography variant="h1" color="textPrimary">
           {title}
         </Typography>
@@ -74,7 +74,7 @@ export const Offers: FC = () => {
         />
       ))}
 
-      <Box mb={5}>
+      <Box my={7}>
         <Paper>
           <Tabs
             value={tab}
