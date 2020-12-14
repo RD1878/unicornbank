@@ -52,7 +52,14 @@ const FormAuth = withTheme(styled("div")`
   & > div {
     width: 75%;
     max-width: 500px;
-    margin-bottom: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & > div {
+      width: 100%;
+      margin-bottom: 2em;
+    }
   }
 `);
 
@@ -110,6 +117,7 @@ const Auth: FC = () => {
           </Typography>
           <div>
             <TextField
+              fullWidth
               error={error}
               label="Почта"
               name="email"

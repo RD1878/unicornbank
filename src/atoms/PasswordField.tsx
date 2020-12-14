@@ -13,18 +13,20 @@ interface IPasswordField extends OutlinedInputProps {
   error: boolean;
   helperText: string;
   label: string;
+  fullWidth?: boolean;
 }
 
 const PasswordField: FC<IPasswordField> = ({
   label,
   error,
   helperText,
+  fullWidth,
   ...rest
 }: IPasswordField) => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <FormControl error={error} variant="outlined">
+    <FormControl fullWidth={fullWidth} error={error} variant="outlined">
       <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
       <OutlinedInput
         label={label}

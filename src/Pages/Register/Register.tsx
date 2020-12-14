@@ -1,17 +1,15 @@
 import React, { FC, useEffect, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import backGround from "../../assets/images/1-2.png";
-import logo from "../../assets/images/logo.png";
-import PasswordField from "../../atoms/PasswordField";
-import PrimaryButton from "../../atoms/PrimaryButton";
-import TextField from "../../atoms/TextField";
-import { COLORS } from "../../theme";
 import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
+import { withTheme } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
+import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
+import background from "../../assets/images/1-2.png";
 
 const BackGround = styled.div`
-  background-image: url(${backGround});
+  background-image: url(${background});
   min-height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
@@ -22,47 +20,48 @@ const BackGround = styled.div`
   align-items: center;
 `;
 
-const Logo = styled.div`
-  background-image: url(${logo});
-  background-repeat: no-repeat;
-  width: 130px;
-  height: 60px;
+const StyledLogo = styled.div`
+  display: block;
   position: absolute;
-  top: 0;
+  top: 30px;
   left: 3%;
 `;
 
-const FormAuth = styled.div`
-  background-color: ${COLORS.DARK_BLUE_05};
-  border-radius: 2rem;
+const FormAuth = withTheme(styled("div")`
   display: flex;
-  min-width: 35vw;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${(props) => `${props.theme.palette.primary.main}50`};
+  border-radius: 20px;
+  width: 55vw;
+  min-width: 300px;
+  max-width: 800px;
+  height: 45vw;
+  min-height: 350px;
+  max-height: 640px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 1.75em;
+  }
 
   & > div {
-    justify-content: center;
-    width: 80%;
+    width: 75%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     & > div {
-      margin-bottom: 2em;
       width: 100%;
+      margin-bottom: 2em;
     }
   }
-`;
-
-const Title = styled.div`
-  color: ${COLORS.WHITE};
-  text-align: center;
-  line-height: 2rem;
-  font-size: 2rem;
-`;
+`);
 
 const Register: FC = () => {
   const [email, setEmail] = useState("");
@@ -105,12 +104,17 @@ const Register: FC = () => {
 
   return (
     <BackGround>
-      <Logo></Logo>
+      <StyledLogo>
+        <Logo />
+      </StyledLogo>
       <FormAuth>
         <div>
-          <Title>Регистрация</Title>
+          <Typography variant="h1" color="textPrimary" align="center">
+            Регистрация
+          </Typography>
           <div>
             <TextField
+              fullWidth
               error={error}
               label="Почта"
               name="email"
@@ -120,6 +124,7 @@ const Register: FC = () => {
             />
           </div>
           <PasswordField
+            fullWidth
             error={error}
             name="password"
             value={password}
@@ -128,6 +133,7 @@ const Register: FC = () => {
             label="Введите пароль"
           />
           <PasswordField
+            fullWidth
             error={error}
             name="verifyPassword"
             value={verifyPassword}
@@ -135,7 +141,7 @@ const Register: FC = () => {
             helperText={errorMessage}
             label="Повторите пароль"
           />
-          <PrimaryButton onClick={createAccount}>
+          <PrimaryButton onClick={createAccount} size="large">
             Зарегистрироваться
           </PrimaryButton>
         </div>
