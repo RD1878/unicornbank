@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../../atoms";
 import { OperationCard, TabPanel } from "../../molecules";
@@ -51,7 +51,7 @@ const operations = [
 ];
 
 export const Operations: FC = () => {
-  const [tab, setTab] = React.useState(0);
+  const [tab, setTab] = useState(0);
 
   const handleChange = (
     e: ChangeEvent<Record<string, unknown>>,
@@ -81,8 +81,9 @@ export const Operations: FC = () => {
         </Tabs>
 
         <TabPanel type="scrollable-force" value={tab} index={0}>
-          <OperationCard operation={operations[0]} />
-          <OperationCard operation={operations[1]} />
+          {operations.map((item) => (
+            <OperationCard operation={item} key={item.id} />
+          ))}
         </TabPanel>
 
         <PrimaryButton>Подробнее</PrimaryButton>
