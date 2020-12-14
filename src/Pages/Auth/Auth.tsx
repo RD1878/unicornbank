@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
-import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
+import { Link, Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
+import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -58,6 +58,9 @@ const Auth: FC = () => {
     <BackGround>
       <StyledLogo>
         <Logo />
+        <Link href="/main" color="textPrimary">
+          Главная
+        </Link>
       </StyledLogo>
       <FormAuth>
         <Typography variant="h1" color="textPrimary" align="center">
