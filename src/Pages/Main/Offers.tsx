@@ -1,4 +1,12 @@
-import React, { FC, ChangeEvent, useState } from "react";
+import React, {
+  FC,
+  ChangeEvent,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import firebase from "firebase/app";
 import { TabPanel } from "../../molecules";
 import {
   Box,
@@ -18,8 +26,13 @@ interface TabPanelProps {
 
 function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   return (
-    <TabPanel type="vertical-tabpanel" value={value} index={index}>
-      <Box p={5}>
+    <TabPanel
+      type="vertical-tabpanel"
+      value={value}
+      index={index}
+      imagesrc={`img1`}
+    >
+      <Box p={5} minHeight={200}>
         <Typography variant="h1" color="textPrimary">
           {title}
         </Typography>
@@ -31,29 +44,25 @@ function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   );
 }
 
-const offers = [
-  {
-    id: 1,
-    title: "Процент выше",
-    subtitle: "По вкладу 'Семейный'",
-    type: "deposit",
-  },
-  {
-    id: 2,
-    title: "Еще больше выгоды",
-    subtitle: "Проценты снижены",
-    type: "loan",
-  },
-  {
-    id: 3,
-    title: "Новые возможности",
-    subtitle: "Для вас и вашего бизнеса",
-    type: "business",
-  },
-];
+interface IOffer {
+  id: number;
+  title: string;
+  subtitle: string;
+  type: string;
+}
 
 export const Offers: FC = () => {
+  // offers tab state
   const [tab, setTab] = useState(0);
+  useEffect(() => {
+    firebase
+      .database()
+      .ref("/offers")
+      .once("value")
+      .then((snapshot) => {
+        setOffers(snapshot.val());
+      });
+  }, []);
 
   const handleChange = (
     e: ChangeEvent<Record<string, unknown>>,
@@ -62,19 +71,26 @@ export const Offers: FC = () => {
     setTab(newVal);
   };
 
+  // offers from db state
+  const [offers, setOffers]: [
+    IOffer[],
+    Dispatch<SetStateAction<never[]>>
+  ] = useState([]);
+
   return (
     <Container maxWidth="lg" disableGutters={true}>
-      {offers.map((item, index) => (
-        <TabPanelWrapper
-          value={tab}
-          index={index}
-          key={item.id}
-          title={item.title}
-          subtitle={item.subtitle}
-        />
-      ))}
+      {offers.length &&
+        offers.map((item, index) => (
+          <TabPanelWrapper
+            value={tab}
+            index={index}
+            key={item.id}
+            title={item.title}
+            subtitle={item.subtitle}
+          />
+        ))}
 
-      <Box my={7}>
+      <Box mb={7}>
         <Paper>
           <Tabs
             value={tab}
