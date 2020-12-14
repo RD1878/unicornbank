@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import firebase from "firebase/app";
 import "firebase/database";
@@ -7,6 +7,7 @@ import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
+import { Link } from "@material-ui/core";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -92,7 +93,6 @@ const Register: FC = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password) //создание аккаунта
         .catch(({ message }) => {
-          console.error(message);
           setError(true);
           setErrorMessage(message);
         });
@@ -144,6 +144,11 @@ const Register: FC = () => {
           <PrimaryButton onClick={createAccount} size="large">
             Зарегистрироваться
           </PrimaryButton>
+          <Link href="/auth" color="textPrimary">
+            <Typography variant="body2" color="textPrimary" align="center">
+              У вас уже есть аккаунт?
+            </Typography>
+          </Link>
         </div>
       </FormAuth>
     </BackGround>

@@ -66,7 +66,6 @@ const FormAuth = withTheme(styled("div")`
 const Auth: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [hasAccount, setHasAccount] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const db = firebase.database();
@@ -76,7 +75,7 @@ const Auth: FC = () => {
       .once("value")
       .then((el) => {
         const offer = el.val();
-        console.log(offer);
+        return offer;
       });
   }, []);
 
@@ -97,9 +96,12 @@ const Auth: FC = () => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
-      .then(() => setHasAccount(true))
+      .then(() => {
+        const link = document.createElement("a");
+        link.href = "/";
+        link.click();
+      })
       .catch(({ message }) => {
-        console.error(message);
         setError(true);
         setErrorMessage(message);
       });
