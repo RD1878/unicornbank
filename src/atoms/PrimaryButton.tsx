@@ -7,7 +7,7 @@ import { ButtonProps } from "@material-ui/core/Button";
 function getSize(size: string | undefined): string {
   switch (size) {
     case "large":
-      return "width: 180px; height: 48px";
+      return "height: 48px";
       break;
 
     default:

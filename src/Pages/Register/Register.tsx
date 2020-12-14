@@ -1,12 +1,13 @@
-import React, { FC, useEffect, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
 import { withTheme } from "@material-ui/core/styles";
-import { Link, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
-import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
+import { Link } from "@material-ui/core";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -63,21 +64,12 @@ const FormAuth = withTheme(styled("div")`
   }
 `);
 
-const Auth: FC = () => {
+const Register: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [verifyPassword, setVerifyPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const db = firebase.database();
-
-  useEffect(() => {
-    db.ref("/offers") /// получение данных с бд
-      .once("value")
-      .then((el) => {
-        const offer = el.val();
-        return offer;
-      });
-  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -90,35 +82,35 @@ const Auth: FC = () => {
     if (name === "password") {
       setPassword(value);
     }
+    if (name === "verifyPassword") {
+      setVerifyPassword(value);
+    }
   };
 
   const createAccount = (): void => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
-      .then(() => {
-        const link = document.createElement("a");
-        link.href = "/";
-        link.click();
-      })
-      .catch(({ message }) => {
-        setError(true);
-        setErrorMessage(message);
-      });
+    if (verifyPassword === password) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password) //создание аккаунта
+        .catch(({ message }) => {
+          setError(true);
+          setErrorMessage(message);
+        });
+    } else {
+      setError(true);
+      setErrorMessage("Пароли не совпадают");
+    }
   };
 
   return (
     <BackGround>
       <StyledLogo>
         <Logo />
-        <Link href="/main" color="textPrimary">
-          Главная
-        </Link>
       </StyledLogo>
       <FormAuth>
         <div>
           <Typography variant="h1" color="textPrimary" align="center">
-            Вход в личный кабинет
+            Регистрация
           </Typography>
           <div>
             <TextField
@@ -132,6 +124,7 @@ const Auth: FC = () => {
             />
           </div>
           <PasswordField
+            fullWidth
             error={error}
             name="password"
             value={password}
@@ -139,13 +132,27 @@ const Auth: FC = () => {
             helperText={errorMessage}
             label="Введите пароль"
           />
+          <PasswordField
+            fullWidth
+            error={error}
+            name="verifyPassword"
+            value={verifyPassword}
+            onChange={handleChange}
+            helperText={errorMessage}
+            label="Повторите пароль"
+          />
           <PrimaryButton onClick={createAccount} size="large">
-            Войти
+            Зарегистрироваться
           </PrimaryButton>
+          <Link href="/auth" color="textPrimary">
+            <Typography variant="body2" color="textPrimary" align="center">
+              У вас уже есть аккаунт?
+            </Typography>
+          </Link>
         </div>
       </FormAuth>
     </BackGround>
   );
 };
 
-export default Auth;
+export default Register;
