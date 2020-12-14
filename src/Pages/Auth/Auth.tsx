@@ -4,9 +4,9 @@ import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
-import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
+import { Link, Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
+import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -109,6 +109,9 @@ const Auth: FC = () => {
     <BackGround>
       <StyledLogo>
         <Logo />
+        <Link href="/main" color="textPrimary">
+          Главная
+        </Link>
       </StyledLogo>
       <FormAuth>
         <div>

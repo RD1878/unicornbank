@@ -1,19 +1,34 @@
 import React, { FC, useEffect, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
-import Auth from "./Pages/Auth";
-import Register from "./Pages/Register";
+import { Auth, MainPage } from "./Pages";
+import { MainLayout } from "./Pages/layouts/main/MainLayout";
 
 const App: FC = () => {
-  const [theme] = useState(appThemes.dark);
+  const [theme, setTheme] = useState(appThemes.dark);
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div>
-        <Auth />
-      </div>
-    </ThemeProvider>
-  );
+  const toggleTheme = () => {
+    const newTheme = theme.palette.type === "dark" ? "light" : "dark";
+    setTheme(appThemes[newTheme]);
+  };
+
+  const path = window.location.pathname;
+
+  function routing() {
+    switch (path) {
+      case "/main":
+        return (
+          <MainLayout onToggleTheme={toggleTheme}>
+            <MainPage />
+          </MainLayout>
+        );
+
+      default:
+        return <Auth />;
+    }
+  }
+
+  return <ThemeProvider theme={theme}>{routing()}</ThemeProvider>;
 };
 
 export default App;
