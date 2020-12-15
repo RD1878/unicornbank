@@ -47,12 +47,11 @@ const filterCurrencies = (data: { string: ISingleCurrency }) => {
 };
 
 export const CurrencyRate: FC = () => {
-  const [currencyRates, setRates] = useState<
-    ICurrencyInfo | Record<string, never>
-  >({});
+  const [currencyRates, setRates] = useState<ICurrencyInfo>(
+    {} as ICurrencyInfo
+  );
   useEffect(() => {
-    // API used https://www.cbr-xml-daily.ru/daily_json.js
-    fetch("./data/rates.json")
+    fetch("https://www.cbr-xml-daily.ru/daily_json.js")
       .then((res) => res.json())
       .then((res) => {
         const data = { rates: filterCurrencies(res.Valute), date: res.Date };
