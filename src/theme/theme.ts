@@ -66,7 +66,7 @@ const overrides = {
       "&$focused": {
         color: `${WHITE50}`,
       },
-      "&:not($focused)": {
+      "&:not(.MuiInputLabel-shrink)": {
         left: 10,
         top: -2,
       },
