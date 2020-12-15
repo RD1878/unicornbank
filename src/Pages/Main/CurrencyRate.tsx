@@ -12,6 +12,8 @@ import {
   Typography,
 } from "@material-ui/core";
 
+const APIURL = "https://www.cbr-xml-daily.ru/daily_json.js";
+
 const StyledContainer = withTheme(styled(TableContainer)`
   background-color: ${(props) => `${props.theme.palette.primary.main}50`};
   margin-top: 1.5rem;
@@ -51,7 +53,7 @@ export const CurrencyRate: FC = () => {
     {} as ICurrencyInfo
   );
   useEffect(() => {
-    fetch("https://www.cbr-xml-daily.ru/daily_json.js")
+    fetch(APIURL)
       .then((res) => res.json())
       .then((res) => {
         const data = { rates: filterCurrencies(res.Valute), date: res.Date };
