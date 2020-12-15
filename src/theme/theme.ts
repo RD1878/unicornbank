@@ -6,6 +6,7 @@ declare module "@material-ui/core/styles/createPalette" {
     textSecondary?: PaletteOptions["primary"];
     active?: PaletteOptions["primary"];
     white?: PaletteOptions["primary"];
+    initial?: PaletteOptions["primary"];
   }
 }
 
@@ -27,6 +28,7 @@ const overrides = {
       fontSize: 32,
       fontWeight: 500,
       marginBottom: "0.5rem",
+      textShadow: "1px 1px 2px #0C121FBB",
     },
     h2: {
       fontSize: 22,
@@ -83,6 +85,7 @@ const dark = createMuiTheme({
     secondary: { main: YELLOW500 },
     textPrimary: { main: WHITE50 },
     textSecondary: { main: `${WHITE50}50` },
+    initial: { main: WHITE50 },
     active: { main: YELLOW500 },
     white: { main: WHITE50 },
   },
@@ -100,6 +103,7 @@ const light = createMuiTheme({
     secondary: { main: BLUE500 },
     textPrimary: { main: BLUE500 },
     textSecondary: { main: `${WHITE50}50` },
+    initial: { main: WHITE50 },
     active: { main: YELLOW500 },
     white: { main: WHITE50 },
   },

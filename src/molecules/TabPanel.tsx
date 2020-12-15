@@ -9,15 +9,31 @@ interface TabPanelProps {
   type: string;
   value: number;
   index: number;
-  imagesrc?: string;
+  imagesrc?: number;
 }
 
 interface IContainer extends BoxProps {
-  imagesrc?: string;
+  imagesrc?: number;
 }
 
 const StyledContainer = styled(Box)`
-  background-image: url(${(props: IContainer) => props.imagesrc});
+  background-image: ${(props) =>
+      props.imagesrc
+        ? "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))"
+        : "none"},
+    url(${(props: IContainer) => {
+      switch (props.imagesrc) {
+        case 1:
+          return img1;
+          break;
+        case 2:
+          return img2;
+        case 3:
+          return img3;
+        default:
+          break;
+      }
+    }});
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

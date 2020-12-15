@@ -30,7 +30,7 @@ function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
       type="vertical-tabpanel"
       value={value}
       index={index}
-      imagesrc={`img1`}
+      imagesrc={index + 1}
     >
       <Box p={5} minHeight={200}>
         <Typography variant="h1" color="textPrimary">
