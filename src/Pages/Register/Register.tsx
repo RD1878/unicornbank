@@ -62,10 +62,12 @@ const FormAuth = withTheme(styled("div")`
       width: 100%;
       margin-bottom: 2em;
     }
-  }
 
-  p {
-    margin-top: 30px;
+    & > a {
+      & > p {
+        margin-top: 30px;
+      }
+    }
   }
 `);
 
@@ -127,46 +129,48 @@ const Register: FC = () => {
         <Logo />
       </StyledLogo>
       <FormAuth>
-        <Typography variant="h1" color="textPrimary" align="center">
-          Регистрация
-        </Typography>
         <div>
-          <TextField
+          <Typography variant="h1" color="textPrimary" align="center">
+            Регистрация
+          </Typography>
+          <div>
+            <TextField
+              fullWidth
+              error={error}
+              label="Почта"
+              name="email"
+              value={email}
+              onChange={handleChange}
+              helperText={errorMessage}
+            />
+          </div>
+          <PasswordField
             fullWidth
             error={error}
-            label="Почта"
-            name="email"
-            value={email}
+            name="password"
+            value={password}
             onChange={handleChange}
             helperText={errorMessage}
+            label="Введите пароль"
           />
+          <PasswordField
+            fullWidth
+            error={error}
+            name="verifyPassword"
+            value={verifyPassword}
+            onChange={handleChange}
+            helperText={errorMessage}
+            label="Повторите пароль"
+          />
+          <PrimaryButton onClick={createAccount} size="large">
+            Зарегистрироваться
+          </PrimaryButton>
+          <Link href={routes.auth} color="textPrimary">
+            <Typography variant="body2" color="textPrimary" align="center">
+              У вас уже есть аккаунт?
+            </Typography>
+          </Link>
         </div>
-        <PasswordField
-          fullWidth
-          error={error}
-          name="password"
-          value={password}
-          onChange={handleChange}
-          helperText={errorMessage}
-          label="Введите пароль"
-        />
-        <PasswordField
-          fullWidth
-          error={error}
-          name="verifyPassword"
-          value={verifyPassword}
-          onChange={handleChange}
-          helperText={errorMessage}
-          label="Повторите пароль"
-        />
-        <PrimaryButton onClick={createAccount} size="large">
-          Зарегистрироваться
-        </PrimaryButton>
-        <Link href={routes.auth} color="textPrimary">
-          <Typography variant="body2" color="textPrimary" align="center">
-            У вас уже есть аккаунт?
-          </Typography>
-        </Link>
       </FormAuth>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert severity="success" onClose={handleClose}>
