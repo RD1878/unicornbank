@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
 import { withTheme } from "@material-ui/core/styles";
-import { Link, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 
@@ -48,18 +48,10 @@ const FormAuth = withTheme(styled("div")`
   h1 {
     margin-bottom: 1.75em;
   }
-
   & > div {
     width: 75%;
     max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    & > div {
-      width: 100%;
-      margin-bottom: 2em;
-    }
+    margin-bottom: 2em;
   }
 `);
 
@@ -68,16 +60,6 @@ const Auth: FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const db = firebase.database();
-
-  useEffect(() => {
-    db.ref("/offers") /// получение данных с бд
-      .once("value")
-      .then((el) => {
-        const offer = el.val();
-        return offer;
-      });
-  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -97,13 +79,11 @@ const Auth: FC = () => {
       .auth()
       .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
       .then(() => {
-        const link = document.createElement("a");
-        link.href = "/";
-        link.click();
+        location.href = "/";
       })
-      .catch(({ message }) => {
+      .catch((error: Error) => {
         setError(true);
-        setErrorMessage(message);
+        setErrorMessage(error.message);
       });
   };
 
@@ -111,38 +91,31 @@ const Auth: FC = () => {
     <BackGround>
       <StyledLogo>
         <Logo />
-        <Link href="/main" color="textPrimary">
-          Главная
-        </Link>
       </StyledLogo>
       <FormAuth>
-        <div>
-          <Typography variant="h1" color="textPrimary" align="center">
-            Вход в личный кабинет
-          </Typography>
-          <div>
-            <TextField
-              fullWidth
-              error={error}
-              label="Почта"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              helperText={errorMessage}
-            />
-          </div>
-          <PasswordField
-            error={error}
-            name="password"
-            value={password}
-            onChange={handleChange}
-            helperText={errorMessage}
-            label="Введите пароль"
-          />
-          <PrimaryButton onClick={createAccount} size="large">
-            Войти
-          </PrimaryButton>
-        </div>
+        <Typography variant="h1" color="textPrimary" align="center">
+          Вход в личный кабинет
+        </Typography>
+        <TextField
+          fullWidth
+          error={error}
+          label="Почта"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          helperText={errorMessage}
+        />
+        <PasswordField
+          error={error}
+          name="password"
+          value={password}
+          onChange={handleChange}
+          helperText={errorMessage}
+          label="Введите пароль"
+        />
+        <PrimaryButton onClick={createAccount} size="large">
+          Войти
+        </PrimaryButton>
       </FormAuth>
     </BackGround>
   );

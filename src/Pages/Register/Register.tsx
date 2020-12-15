@@ -4,10 +4,11 @@ import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
 import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
-import { Link } from "@material-ui/core";
+import { Snackbar, Link, Typography } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import { routes } from "../../routes";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -62,6 +63,10 @@ const FormAuth = withTheme(styled("div")`
       margin-bottom: 2em;
     }
   }
+
+  p {
+    margin-top: 30px;
+  }
 `);
 
 const Register: FC = () => {
@@ -70,20 +75,20 @@ const Register: FC = () => {
   const [verifyPassword, setVerifyPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [open, setOpen] = React.useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setError(false);
     setErrorMessage("");
 
-    if (name === "email") {
-      setEmail(value);
-    }
-    if (name === "password") {
-      setPassword(value);
-    }
-    if (name === "verifyPassword") {
-      setVerifyPassword(value);
+    switch (name) {
+      case "email":
+        return setEmail(value);
+      case "password":
+        return setPassword(value);
+      default:
+        return setVerifyPassword(value);
     }
   };
 
@@ -92,14 +97,28 @@ const Register: FC = () => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password) //создание аккаунта
-        .catch(({ message }) => {
+        .then(() => {
+          setOpen(true);
+          setTimeout(() => {
+            location.href = "/";
+          }, 2000);
+        })
+        .catch((error: Error) => {
           setError(true);
-          setErrorMessage(message);
+          setErrorMessage(error.message);
         });
     } else {
       setError(true);
       setErrorMessage("Пароли не совпадают");
     }
+  };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -108,49 +127,52 @@ const Register: FC = () => {
         <Logo />
       </StyledLogo>
       <FormAuth>
+        <Typography variant="h1" color="textPrimary" align="center">
+          Регистрация
+        </Typography>
         <div>
-          <Typography variant="h1" color="textPrimary" align="center">
-            Регистрация
-          </Typography>
-          <div>
-            <TextField
-              fullWidth
-              error={error}
-              label="Почта"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              helperText={errorMessage}
-            />
-          </div>
-          <PasswordField
+          <TextField
             fullWidth
             error={error}
-            name="password"
-            value={password}
+            label="Почта"
+            name="email"
+            value={email}
             onChange={handleChange}
             helperText={errorMessage}
-            label="Введите пароль"
           />
-          <PasswordField
-            fullWidth
-            error={error}
-            name="verifyPassword"
-            value={verifyPassword}
-            onChange={handleChange}
-            helperText={errorMessage}
-            label="Повторите пароль"
-          />
-          <PrimaryButton onClick={createAccount} size="large">
-            Зарегистрироваться
-          </PrimaryButton>
-          <Link href="/auth" color="textPrimary">
-            <Typography variant="body2" color="textPrimary" align="center">
-              У вас уже есть аккаунт?
-            </Typography>
-          </Link>
         </div>
+        <PasswordField
+          fullWidth
+          error={error}
+          name="password"
+          value={password}
+          onChange={handleChange}
+          helperText={errorMessage}
+          label="Введите пароль"
+        />
+        <PasswordField
+          fullWidth
+          error={error}
+          name="verifyPassword"
+          value={verifyPassword}
+          onChange={handleChange}
+          helperText={errorMessage}
+          label="Повторите пароль"
+        />
+        <PrimaryButton onClick={createAccount} size="large">
+          Зарегистрироваться
+        </PrimaryButton>
+        <Link href={routes.auth} color="textPrimary">
+          <Typography variant="body2" color="textPrimary" align="center">
+            У вас уже есть аккаунт?
+          </Typography>
+        </Link>
       </FormAuth>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert severity="success" onClose={handleClose}>
+          Вы успешно зарегистрированы!
+        </Alert>
+      </Snackbar>
     </BackGround>
   );
 };
