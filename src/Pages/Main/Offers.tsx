@@ -54,6 +54,16 @@ interface IOffer {
 export const Offers: FC = () => {
   // offers tab state
   const [tab, setTab] = useState(0);
+  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
+    setTab(newVal);
+  };
+
+  // offers from db state
+  const [offers, setOffers]: [
+    IOffer[],
+    Dispatch<SetStateAction<never[]>>
+  ] = useState([]);
+
   useEffect(() => {
     firebase
       .database()
@@ -63,19 +73,6 @@ export const Offers: FC = () => {
         setOffers(snapshot.val());
       });
   }, []);
-
-  const handleChange = (
-    e: ChangeEvent<Record<string, unknown>>,
-    newVal: number
-  ) => {
-    setTab(newVal);
-  };
-
-  // offers from db state
-  const [offers, setOffers]: [
-    IOffer[],
-    Dispatch<SetStateAction<never[]>>
-  ] = useState([]);
 
   return (
     <Container maxWidth="lg" disableGutters={true}>

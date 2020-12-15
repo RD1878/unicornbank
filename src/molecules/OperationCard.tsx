@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import { IOperation } from "../interfaces/main";
 import { Avatar, Box, Card, Typography } from "@material-ui/core";
 
 const StyledCard = styled(Card)`
@@ -7,18 +8,6 @@ const StyledCard = styled(Card)`
   align-items: center;
   padding: 20px 30px;
 `;
-
-interface IOperation {
-  id: number;
-  accountId: number;
-  date: string;
-  name: string;
-  description?: string;
-  type?: string;
-  amount: number;
-  currency: string;
-  category?: string;
-}
 
 interface IOperationCard {
   operation: IOperation;
