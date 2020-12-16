@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { IOperation } from "../../interfaces/main";
 import { PrimaryButton } from "../../atoms";
 import { OperationCard, TabPanel } from "../../molecules";
-import { Box, Tabs, Tab, Typography } from "@material-ui/core";
+import { Box, Tabs, Tab, Typography, LinearProgress } from "@material-ui/core";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -41,6 +41,8 @@ export const Operations: FC = () => {
     setTab(newVal);
   };
 
+  const [loaded, setLoaded] = useState(false);
+
   // operations from db state
   const [operations, setOperations]: [
     IOperation[],
@@ -54,6 +56,7 @@ export const Operations: FC = () => {
       .once("value")
       .then((snapshot) => {
         setOperations(snapshot.val());
+        setLoaded(true);
       });
   }, []);
 
@@ -68,50 +71,55 @@ export const Operations: FC = () => {
       </Typography>
 
       <Box mt={2} maxWidth={800}>
-        <Tabs
-          value={tab}
-          onChange={handleChange}
-          indicatorColor="secondary"
-          textColor="secondary"
-          variant="fullWidth"
-          scrollButtons="on"
-        >
-          {categories.map((item) => (
-            <StyledTab label={item.name} key={item.type} />
-          ))}
-        </Tabs>
+        {loaded ? (
+          <>
+            <Tabs
+              value={tab}
+              onChange={handleChange}
+              indicatorColor="secondary"
+              textColor="secondary"
+              variant="fullWidth"
+              scrollButtons="on"
+            >
+              {categories.map((item) => (
+                <StyledTab label={item.name} key={item.type} />
+              ))}
+            </Tabs>
+            <TabPanel type="scrollable-force" value={tab} index={0}>
+              {operations.map((item) => (
+                <OperationCard operation={item} key={item.id} />
+              ))}
+            </TabPanel>
 
-        <TabPanel type="scrollable-force" value={tab} index={0}>
-          {operations.map((item) => (
-            <OperationCard operation={item} key={item.id} />
-          ))}
-        </TabPanel>
+            {categories.map(
+              (category, index) =>
+                category.type !== "all" && (
+                  <TabPanel
+                    type="scrollable-force"
+                    value={tab}
+                    index={index}
+                    key={index}
+                  >
+                    {filteredByType(category.type).length ? (
+                      filteredByType(category.type).map((item) => (
+                        <OperationCard operation={item} key={item.id} />
+                      ))
+                    ) : (
+                      <Box p={4}>
+                        <Typography variant="body1" color="textPrimary">
+                          Не найдено
+                        </Typography>
+                      </Box>
+                    )}
+                  </TabPanel>
+                )
+            )}
 
-        {categories.map(
-          (category, index) =>
-            category.type !== "all" && (
-              <TabPanel
-                type="scrollable-force"
-                value={tab}
-                index={index}
-                key={index}
-              >
-                {filteredByType(category.type).length ? (
-                  filteredByType(category.type).map((item) => (
-                    <OperationCard operation={item} key={item.id} />
-                  ))
-                ) : (
-                  <Box p={4}>
-                    <Typography variant="body1" color="textPrimary">
-                      Не найдено
-                    </Typography>
-                  </Box>
-                )}
-              </TabPanel>
-            )
+            <PrimaryButton>Подробнее</PrimaryButton>
+          </>
+        ) : (
+          <LinearProgress color="secondary" />
         )}
-
-        <PrimaryButton>Подробнее</PrimaryButton>
       </Box>
     </>
   );

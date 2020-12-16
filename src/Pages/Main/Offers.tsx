@@ -15,6 +15,7 @@ import {
   Tabs,
   Tab,
   Typography,
+  LinearProgress,
 } from "@material-ui/core";
 
 interface TabPanelProps {
@@ -58,6 +59,8 @@ export const Offers: FC = () => {
     setTab(newVal);
   };
 
+  const [loaded, setLoaded] = useState(false);
+
   // offers from db state
   const [offers, setOffers]: [
     IOffer[],
@@ -71,12 +74,13 @@ export const Offers: FC = () => {
       .once("value")
       .then((snapshot) => {
         setOffers(snapshot.val());
+        setLoaded(true);
       });
   }, []);
 
   return (
     <Container maxWidth="lg" disableGutters={true}>
-      {offers.length &&
+      {offers.length ? (
         offers.map((item, index) => (
           <TabPanelWrapper
             value={tab}
@@ -85,8 +89,15 @@ export const Offers: FC = () => {
             title={item.title}
             subtitle={item.subtitle}
           />
-        ))}
-
+        ))
+      ) : (
+        <Box p={8}>
+          <Typography variant="h2" color="textPrimary">
+            Загрузка персональных предложений
+          </Typography>
+        </Box>
+      )}
+      {!loaded && <LinearProgress color="secondary" />}
       <Box mb={7}>
         <Paper>
           <Tabs
