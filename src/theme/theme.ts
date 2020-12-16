@@ -55,6 +55,9 @@ const overrides = {
         borderColor: `${WHITE50}`,
       },
     },
+    input: {
+      padding: "15.5px 14px",
+    },
     notchedOutline: {
       borderWidth: 2,
     },
