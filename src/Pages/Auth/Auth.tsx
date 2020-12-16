@@ -1,7 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
+import firebase from "firebase/app";
+import "firebase/database";
+import "firebase/auth";
 import { withTheme } from "@material-ui/core/styles";
-import { Link, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 
@@ -45,7 +48,6 @@ const FormAuth = withTheme(styled("div")`
   h1 {
     margin-bottom: 1.75em;
   }
-
   & > div {
     width: 75%;
     max-width: 500px;
@@ -54,21 +56,66 @@ const FormAuth = withTheme(styled("div")`
 `);
 
 const Auth: FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setError(false);
+    setErrorMessage("");
+
+    if (name === "email") {
+      setEmail(value);
+    }
+    if (name === "password") {
+      setPassword(value);
+    }
+  };
+
+  const createAccount = (): void => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
+      .then(() => {
+        location.href = "/";
+      })
+      .catch((error: Error) => {
+        setError(true);
+        setErrorMessage(error.message);
+      });
+  };
+
   return (
     <BackGround>
       <StyledLogo>
         <Logo />
-        <Link href="/main" color="textPrimary">
-          Главная
-        </Link>
       </StyledLogo>
       <FormAuth>
         <Typography variant="h1" color="textPrimary" align="center">
           Вход в личный кабинет
         </Typography>
-        <TextField label="Почта" />
-        <PasswordField />
-        <PrimaryButton size="large">Войти</PrimaryButton>
+        <TextField
+          fullWidth
+          error={error}
+          label="Почта"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          helperText={errorMessage}
+        />
+        <PasswordField
+          error={error}
+          name="password"
+          value={password}
+          onChange={handleChange}
+          helperText={errorMessage}
+          label="Введите пароль"
+        />
+        <PrimaryButton onClick={createAccount} size="large">
+          Войти
+        </PrimaryButton>
       </FormAuth>
     </BackGround>
   );

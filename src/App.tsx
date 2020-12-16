@@ -3,6 +3,8 @@ import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import { Auth, MainPage } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
+import Register from "./Pages/Register/Register";
+import { routes } from "./routes";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -16,15 +18,18 @@ const App: FC = () => {
 
   function routing() {
     switch (path) {
-      case "/main":
+      case routes.main:
         return (
           <MainLayout onToggleTheme={toggleTheme}>
             <MainPage />
           </MainLayout>
         );
 
-      default:
+      case routes.auth:
         return <Auth />;
+
+      default:
+        return <Register />;
     }
   }
 

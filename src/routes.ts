@@ -1,6 +1,7 @@
 enum routes {
-  auth = "/",
-  main = "/main",
+  register = "/register",
+  auth = "/auth",
+  main = "/",
   history = "/history",
   chat = "/chat",
   settings = "/settings",

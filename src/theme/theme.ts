@@ -1,6 +1,7 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
 declare module "@material-ui/core/styles/createPalette" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface PaletteOptions {
     textPrimary?: PaletteOptions["primary"];
     textSecondary?: PaletteOptions["primary"];
@@ -52,9 +53,6 @@ const overrides = {
         borderColor: `${WHITE50}`,
       },
     },
-    input: {
-      padding: "15.5px 14px",
-    },
     notchedOutline: {
       borderWidth: 2,
     },
@@ -63,10 +61,6 @@ const overrides = {
     root: {
       "&$focused": {
         color: `${WHITE50}`,
-      },
-      "&:not($focused)": {
-        left: 10,
-        top: -2,
       },
     },
   },
