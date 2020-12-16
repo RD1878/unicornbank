@@ -17,10 +17,8 @@ import CreateIcon from "@material-ui/icons/Create";
 const StyledDrawer = withTheme(styled(Drawer)`
   & > div {
     position: relative;
-    /* display: flex;
-    flex-direction: column; */
     overflow-y: unset;
-    max-width: 300px;
+    max-width: 350px;
     background-color: ${(props) => props.theme.palette.primary.main};
 
     & > div {
@@ -50,6 +48,16 @@ const StyledAvatar = withTheme(styled(Avatar)`
   margin-bottom: 20px;
 `);
 
+const StyledLink = withTheme(styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    margin-left: 10px;
+  }
+`);
+
 const Sidebar: FC = () => {
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -65,18 +73,15 @@ const Sidebar: FC = () => {
         <StyledBox>
           <StyledAvatar sizes="large">H</StyledAvatar>
           <Typography variant="h2" color="textPrimary" align="center">
-            Иванов Иван Иванович
+            Константинопальский Константин Константинович
           </Typography>
         </StyledBox>
-        <Link>
+        <StyledLink>
+          <CreateIcon color="secondary" />
           <Typography variant="body1" color="textSecondary" align="center">
-            <CreateIcon />
             Редактировать профиль
           </Typography>
-        </Link>
-        <div>
-          <IconButton onClick={handleDrawerClose}></IconButton>
-        </div>
+        </StyledLink>
         <List>
           <ListItem button>
             <ListItemText>
