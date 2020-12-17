@@ -42,9 +42,6 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
     <Container>
       <SidebarHeader>
         <ArrowBackRoundedIcon color="secondary" />
-        <Link href="/" color="textPrimary" variant="body2">
-          Главная
-        </Link>
       </SidebarHeader>
       <LinksContainer>
         <Logo />
