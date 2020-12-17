@@ -29,7 +29,7 @@ const overrides = {
       fontSize: 32,
       fontWeight: 500,
       marginBottom: "0.5rem",
-      textShadow: "1px 1px 2px #0C121FBB",
+      textShadow: `1px 1px 2px ${BLUE800}BB`,
     },
     h2: {
       fontSize: 22,
@@ -52,7 +52,7 @@ const overrides = {
       borderRadius: 10,
       "&$focused $notchedOutline": {
         color: WHITE50,
-        borderColor: `${WHITE50}`,
+        borderColor: WHITE50,
       },
     },
     input: {
@@ -65,12 +65,13 @@ const overrides = {
   MuiFormLabel: {
     root: {
       "&$focused": {
-        color: `${WHITE50}`,
+        color: WHITE50,
       },
-      "&:not(.MuiInputLabel-shrink)": {
-        left: 10,
-        top: -2,
-      },
+    },
+  },
+  MuiInputLabel: {
+    outlined: {
+      transform: "translate(18px, 18px)",
     },
   },
 };

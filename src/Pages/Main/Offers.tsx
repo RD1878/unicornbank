@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  ChangeEvent,
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import React, { FC, ChangeEvent, useState, useEffect } from "react";
 import firebase from "firebase/app";
 import { TabPanel } from "../../molecules";
 import {
@@ -53,19 +46,13 @@ interface IOffer {
 }
 
 export const Offers: FC = () => {
-  // offers tab state
-  const [tab, setTab] = useState(0);
-  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
-    setTab(newVal);
-  };
-
+  const [offerTab, setOfferTab] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [offers, setOffers] = useState<IOffer[]>([]);
 
-  // offers from db state
-  const [offers, setOffers]: [
-    IOffer[],
-    Dispatch<SetStateAction<never[]>>
-  ] = useState([]);
+  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
+    setOfferTab(newVal);
+  };
 
   useEffect(() => {
     firebase
@@ -83,7 +70,7 @@ export const Offers: FC = () => {
       {offers.length ? (
         offers.map((item, index) => (
           <TabPanelWrapper
-            value={tab}
+            value={offerTab}
             index={index}
             key={item.id}
             title={item.title}
@@ -101,7 +88,7 @@ export const Offers: FC = () => {
       <Box mb={7}>
         <Paper>
           <Tabs
-            value={tab}
+            value={offerTab}
             onChange={handleChange}
             indicatorColor="secondary"
             textColor="secondary"

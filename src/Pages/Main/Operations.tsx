@@ -1,11 +1,4 @@
-import React, {
-  ChangeEvent,
-  FC,
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import React, { ChangeEvent, FC, useState, useEffect } from "react";
 import firebase from "firebase/app";
 import styled from "styled-components";
 import { IOperation } from "../../interfaces/main";
@@ -37,17 +30,12 @@ const categories: { type: string; name: string }[] = [
 
 export const Operations: FC = () => {
   const [tab, setTab] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [operations, setOperations] = useState<IOperation[]>([]);
+
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
   };
-
-  const [loaded, setLoaded] = useState(false);
-
-  // operations from db state
-  const [operations, setOperations]: [
-    IOperation[],
-    Dispatch<SetStateAction<never[]>>
-  ] = useState([]);
 
   useEffect(() => {
     firebase
@@ -60,8 +48,21 @@ export const Operations: FC = () => {
       });
   }, []);
 
-  const filteredByType = (type: string): IOperation[] => {
-    return operations.filter((item) => item.category === type);
+  const filteredOperationsByType = (type: string) => {
+    const filtered = operations.filter((item) => item.category === type);
+
+    if (filtered.length) {
+      return filtered.map((item) => (
+        <OperationCard operation={item} key={item.id} />
+      ));
+    } else
+      return (
+        <Box p={4}>
+          <Typography variant="body1" color="textPrimary">
+            Не найдено
+          </Typography>
+        </Box>
+      );
   };
 
   return (
@@ -85,12 +86,12 @@ export const Operations: FC = () => {
                 <StyledTab label={item.name} key={item.type} />
               ))}
             </Tabs>
+
             <TabPanel type="scrollable-force" value={tab} index={0}>
               {operations.map((item) => (
                 <OperationCard operation={item} key={item.id} />
               ))}
             </TabPanel>
-
             {categories.map(
               (category, index) =>
                 category.type !== "all" && (
@@ -100,21 +101,10 @@ export const Operations: FC = () => {
                     index={index}
                     key={index}
                   >
-                    {filteredByType(category.type).length ? (
-                      filteredByType(category.type).map((item) => (
-                        <OperationCard operation={item} key={item.id} />
-                      ))
-                    ) : (
-                      <Box p={4}>
-                        <Typography variant="body1" color="textPrimary">
-                          Не найдено
-                        </Typography>
-                      </Box>
-                    )}
+                    {filteredOperationsByType(category.type)}
                   </TabPanel>
                 )
             )}
-
             <PrimaryButton>Подробнее</PrimaryButton>
           </>
         ) : (
