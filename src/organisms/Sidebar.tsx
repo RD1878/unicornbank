@@ -4,7 +4,6 @@ import { withTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -58,93 +57,83 @@ const StyledLink = withTheme(styled(Link)`
   }
 `);
 
-const Sidebar: FC = () => {
-  const [open, setOpen] = React.useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  return (
-    <StyledDrawer variant="permanent">
-      <div>
-        <StyledBox>
-          <StyledAvatar sizes="large">H</StyledAvatar>
-          <Typography variant="h2" color="textPrimary" align="center">
-            Константинопальский Константин Константинович
-          </Typography>
-        </StyledBox>
-        <StyledLink>
-          <CreateIcon color="secondary" />
-          <Typography variant="body1" color="textSecondary" align="center">
-            Редактировать профиль
-          </Typography>
-        </StyledLink>
-        <List>
-          <ListItem button>
-            <ListItemText>
-              <div>
-                <StyledRow>
-                  <Typography variant="body2" color="textPrimary" align="left">
-                    1000, 45р
-                  </Typography>
-                  <PaymentRoundedIcon color="secondary" />
-                </StyledRow>
-                <Typography variant="body1" color="textSecondary" align="left">
-                  Счет кредитной карты **34
+const Sidebar: FC = () => (
+  <StyledDrawer variant="permanent">
+    <div>
+      <StyledBox>
+        <StyledAvatar sizes="large">H</StyledAvatar>
+        <Typography variant="h2" color="textPrimary" align="center">
+          Константинопальский Константин Константинович
+        </Typography>
+      </StyledBox>
+      <StyledLink>
+        <CreateIcon color="secondary" />
+        <Typography variant="body1" color="textSecondary" align="center">
+          Редактировать профиль
+        </Typography>
+      </StyledLink>
+      <List>
+        <ListItem button>
+          <ListItemText>
+            <div>
+              <StyledRow>
+                <Typography variant="body2" color="textPrimary" align="left">
+                  1000, 45р
                 </Typography>
-              </div>
-            </ListItemText>
-            <ListItemIcon>
-              <PieChartOutlinedIcon />
-            </ListItemIcon>
-          </ListItem>
-        </List>
-        <List>
-          <ListItem button>
-            <ListItemText>
-              <div>
-                <StyledRow>
-                  <Typography variant="body2" color="textPrimary" align="left">
-                    1000, 45р
-                  </Typography>
-                  <PaymentRoundedIcon color="secondary" />
-                </StyledRow>
-                <Typography variant="body1" color="textSecondary" align="left">
-                  Текущий счет **78
+                <PaymentRoundedIcon color="secondary" />
+              </StyledRow>
+              <Typography variant="body1" color="textSecondary" align="left">
+                Счет кредитной карты **34
+              </Typography>
+            </div>
+          </ListItemText>
+          <ListItemIcon>
+            <PieChartOutlinedIcon />
+          </ListItemIcon>
+        </ListItem>
+      </List>
+      <List>
+        <ListItem button>
+          <ListItemText>
+            <div>
+              <StyledRow>
+                <Typography variant="body2" color="textPrimary" align="left">
+                  1000, 45р
                 </Typography>
-              </div>
-            </ListItemText>
-            <ListItemIcon>
-              <PieChartOutlinedIcon />
-            </ListItemIcon>
-          </ListItem>
-        </List>
-        <List>
-          <ListItem button>
-            <ListItemText>
-              <div>
-                <StyledRow>
-                  <Typography variant="body2" color="textPrimary" align="left">
-                    199990, 45р
-                  </Typography>
-                  <PaymentRoundedIcon color="secondary" />
-                </StyledRow>
-                <Typography variant="body1" color="textSecondary" align="left">
-                  Накопительный счет **77
+                <PaymentRoundedIcon color="secondary" />
+              </StyledRow>
+              <Typography variant="body1" color="textSecondary" align="left">
+                Текущий счет **78
+              </Typography>
+            </div>
+          </ListItemText>
+          <ListItemIcon>
+            <PieChartOutlinedIcon />
+          </ListItemIcon>
+        </ListItem>
+      </List>
+      <List>
+        <ListItem button>
+          <ListItemText>
+            <div>
+              <StyledRow>
+                <Typography variant="body2" color="textPrimary" align="left">
+                  199990, 45р
                 </Typography>
-              </div>
-            </ListItemText>
-            <ListItemIcon>
-              <PieChartOutlinedIcon />
-            </ListItemIcon>
-          </ListItem>
-        </List>
-      </div>
-    </StyledDrawer>
-  );
-};
+                <PaymentRoundedIcon color="secondary" />
+              </StyledRow>
+              <Typography variant="body1" color="textSecondary" align="left">
+                Накопительный счет **77
+              </Typography>
+            </div>
+          </ListItemText>
+          <ListItemIcon>
+            <PieChartOutlinedIcon />
+          </ListItemIcon>
+        </ListItem>
+      </List>
+    </div>
+  </StyledDrawer>
+);
 
 export default Sidebar;
