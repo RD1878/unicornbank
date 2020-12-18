@@ -6,6 +6,7 @@ enum routes {
   chat = "/chat",
   settings = "/settings",
   offices = "/offices",
+  profile = "/profile",
 }
 
 const navigation = [

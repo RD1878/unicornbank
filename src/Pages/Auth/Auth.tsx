@@ -1,8 +1,6 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import firebase from "firebase/app";
-import "firebase/database";
-import "firebase/auth";
+import { firebaseAuth } from "../../firebase/firebaseAuth";
 import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
@@ -75,8 +73,7 @@ const Auth: FC = () => {
   };
 
   const createAccount = (): void => {
-    firebase
-      .auth()
+    firebaseAuth
       .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
       .then(() => {
         location.href = "/";

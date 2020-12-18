@@ -13,6 +13,7 @@ import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import { Box, Avatar } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import CreateIcon from "@material-ui/icons/Create";
+import { routes } from "../routes";
 
 const StyledDrawer = withTheme(styled(Drawer)`
   & > div {
@@ -76,7 +77,7 @@ const Sidebar: FC = () => {
             Константинопальский Константин Константинович
           </Typography>
         </StyledBox>
-        <StyledLink>
+        <StyledLink href={routes.profile}>
           <CreateIcon color="secondary" />
           <Typography variant="body1" color="textSecondary" align="center">
             Редактировать профиль

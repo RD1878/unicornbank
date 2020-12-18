@@ -1,8 +1,6 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import firebase from "firebase/app";
-import "firebase/database";
-import "firebase/auth";
+import { firebaseAuth } from "../../firebase/firebaseAuth";
 import { withTheme } from "@material-ui/core/styles";
 import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
@@ -77,7 +75,7 @@ const Register: FC = () => {
   const [verifyPassword, setVerifyPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -96,8 +94,7 @@ const Register: FC = () => {
 
   const createAccount = (): void => {
     if (verifyPassword === password) {
-      firebase
-        .auth()
+      firebaseAuth
         .createUserWithEmailAndPassword(email, password) //создание аккаунта
         .then(() => {
           setOpen(true);
