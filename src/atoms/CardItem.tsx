@@ -3,10 +3,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
-import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
 
 interface ICardItem {
@@ -15,56 +12,46 @@ interface ICardItem {
   open: boolean;
 }
 
-const StyledListItem = withTheme(styled(ListItem)`
+const StyledListItem = withTheme(styled(ListItem)<ICardItem>`
   padding-left: 18px;
   padding-right: 18px;
-`);
-
-const StyledListItemIcon = withTheme(styled(ListItemIcon)`
-  min-width: 0px;
-`);
-
-const StyledRow = withTheme(styled("div")<ICardItem>`
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-direction: ${(props) => (props.open ? "row" : "column")};
-  align-items: ${(props) => (props.open ? "left" : "center")};
+`);
+
+const StyledColumn = withTheme(styled("div")<ICardItem>`
   p {
-    margin-right: ${(props) => (props.open ? "30px" : "0")};
+    margin-right: ${(props) => (props.open ? "20px" : "0")};
     text-align: ${(props) => (props.open ? "left" : "center")};
   }
 `);
 
 const CardItem: FC<ICardItem> = ({ title, value, open }) => {
   return (
-    <StyledListItem button>
-      <ListItemText>
-        <Tooltip title={title} arrow>
-          <StyledRow open={open}>
-            <Typography
-              variant={open ? "body2" : "body1"}
-              color="textPrimary"
-              align="left"
-            >
-              {value}
-            </Typography>
-            <PaymentRoundedIcon
-              color="secondary"
-              fontSize={open ? "default" : "large"}
-            />
-          </StyledRow>
-        </Tooltip>
-        {open && (
-          <Typography variant="body1" color="textSecondary" align="left">
-            {title}
+    <Tooltip title={title} arrow>
+      <StyledListItem button open={open}>
+        <StyledColumn open={open}>
+          <Typography
+            variant={open ? "body2" : "body1"}
+            color="textPrimary"
+            align="left"
+          >
+            {value}
           </Typography>
-        )}
-      </ListItemText>
-      {open && (
-        <StyledListItemIcon>
-          <PieChartOutlinedIcon color="disabled" />
-        </StyledListItemIcon>
-      )}
-    </StyledListItem>
+          {open && (
+            <Typography variant="body1" color="textSecondary" align="left">
+              {title}
+            </Typography>
+          )}
+        </StyledColumn>
+        <PaymentRoundedIcon
+          color="secondary"
+          fontSize={open ? "default" : "large"}
+        />
+      </StyledListItem>
+    </Tooltip>
   );
 };
 
