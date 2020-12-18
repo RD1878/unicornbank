@@ -23,6 +23,10 @@ interface IStyledDrawer extends IWithOpen {
   width: number;
 }
 
+interface ISidebar {
+  fullName: string;
+}
+
 const OPENED_DRAWER_WIDTH = 350;
 
 const CARDS = [
@@ -98,7 +102,7 @@ const StyledLink = withTheme(styled(Link)`
   }
 `);
 
-const Sidebar: FC = () => {
+const Sidebar: FC<ISidebar> = ({ fullName }) => {
   const [open, setOpen] = useState(true);
 
   const handleDrawerCollapse = () => {
@@ -113,7 +117,7 @@ const Sidebar: FC = () => {
             <Grid container direction="column" alignItems="center">
               <StyledAvatar sizes="large">H</StyledAvatar>
               <Typography variant="h2" color="textPrimary" align="center">
-                Константинопальский Константин Константинович
+                {fullName}
               </Typography>
             </Grid>
           </Box>
