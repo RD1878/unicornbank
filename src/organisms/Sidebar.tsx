@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-import clsx from "clsx";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -23,8 +22,6 @@ interface ISidebar {
   fullName: string;
 }
 
-// const OPENED_DRAWER_WIDTH = 350;
-
 const CARDS = [
   {
     title: "Текущий счет  **78",
@@ -44,43 +41,27 @@ const CARDS = [
   },
 ];
 
-const drawerWidth = 350;
+const DRAWER_WIDTH = 350;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-    },
-    hide: {
-      display: "none",
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    paper: {
-      position: "relative",
-      overflowY: "unset",
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      backgroundColor: theme.palette.primary.main,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerClose: {
-      backgroundColor: theme.palette.primary.main,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      overflowX: "hidden",
-      width: theme.spacing(15),
-    },
-  })
-);
+const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
+  <Drawer classes={{ paper: "paper" }} open={open} width={width} {...props} />
+))`
+  & .paper {
+    position: relative;
+    background-color: ${(props) => props.theme.palette.primary.main};
+    transition: all 0.2s ease-in-out;
+    overflow-y: unset;
+    overflow-x: ${(props) => (props.open ? "unset" : "hidden")};
+    width: ${(props) => (props.open ? props.width : props.theme.spacing(15))}px;
+    transition: ${(props) =>
+      props.theme.transitions.create("width", {
+        easing: props.theme.transitions.easing.sharp,
+        duration: props.open
+          ? props.theme.transitions.duration.enteringScreen
+          : props.theme.transitions.duration.leavingScreen,
+      })};
+  }
+`);
 
 const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
   display: flex;
@@ -112,7 +93,6 @@ const StyledLink = withTheme(styled(Link)`
 `);
 
 const Sidebar: FC<ISidebar> = ({ fullName }) => {
-  const classes = useStyles();
   const [open, setOpen] = useState(true);
 
   const handleDrawerCollapse = () => {
@@ -120,19 +100,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
   };
 
   return (
-    <Drawer
-      variant="permanent"
-      className={clsx(classes.drawer, {
-        [classes.drawerOpen]: open,
-        [classes.drawerClose]: !open,
-      })}
-      classes={{
-        paper: clsx(classes.paper, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        }),
-      }}
-    >
+    <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
       <StyledWrap>
         {open && (
           <StyledProfileInfo m={3}>
@@ -169,7 +137,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
           </Tooltip>
         </Grid>
       </StyledWrap>
-    </Drawer>
+    </StyledDrawer>
   );
 };
 
