@@ -67,6 +67,17 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: ${(props) => (props.open ? "30px" : "0px")};
+  width: ${(props) => (props.open ? "auto" : "0px")};
+  height: ${(props) => (props.open ? "auto" : "0px")};
+  overflow: ${(props) => (props.open ? "unset" : "hidden")};
+  transition: ${(props) =>
+    props.theme.transitions.create("all", {
+      easing: props.theme.transitions.easing.sharp,
+      duration: props.open
+        ? props.theme.transitions.duration.enteringScreen
+        : props.theme.transitions.duration.leavingScreen,
+    })};
 `);
 
 const StyledWrap = styled(Box)`
@@ -101,22 +112,20 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
   return (
     <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
       <StyledWrap>
-        {open && (
-          <StyledProfileInfo m={3}>
-            <Grid container justify="center" alignItems="center">
-              <StyledAvatar sizes="large">H</StyledAvatar>
-              <Typography variant="h2" color="textPrimary" align="center">
-                {fullName}
-              </Typography>
-            </Grid>
-            <StyledLink href={routes.main}>
-              <CreateRoundedIcon color="action" />
-              <Typography variant="body1" color="textSecondary" align="center">
-                Редактировать профиль
-              </Typography>
-            </StyledLink>
-          </StyledProfileInfo>
-        )}
+        <StyledProfileInfo open={open}>
+          <Grid container justify="center" alignItems="center">
+            <StyledAvatar sizes="large">H</StyledAvatar>
+            <Typography variant="h2" color="textPrimary" align="center">
+              {fullName}
+            </Typography>
+          </Grid>
+          <StyledLink href={routes.main}>
+            <CreateRoundedIcon color="action" />
+            <Typography variant="body1" color="textSecondary" align="center">
+              Редактировать профиль
+            </Typography>
+          </StyledLink>
+        </StyledProfileInfo>
         <Box mt={5}>
           <List>
             {CARDS.map((card) => (
