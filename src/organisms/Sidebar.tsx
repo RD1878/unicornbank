@@ -50,7 +50,7 @@ const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
     background-color: ${(props) => props.theme.palette.primary.main};
     transition: all 0.2s ease-in-out;
     overflow-y: unset;
-    overflow-x: ${(props) => (props.open ? "unset" : "hidden")};
+    overflow-x: hidden;
     width: ${(props) => (props.open ? props.width : props.theme.spacing(15))}px;
     transition: ${(props) =>
       props.theme.transitions.create("width", {
@@ -70,14 +70,7 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
   margin: ${(props) => (props.open ? "30px" : "0px")};
   width: ${(props) => (props.open ? "auto" : "0px")};
   height: ${(props) => (props.open ? "auto" : "0px")};
-  overflow: ${(props) => (props.open ? "unset" : "hidden")};
-  transition: ${(props) =>
-    props.theme.transitions.create("all", {
-      easing: props.theme.transitions.easing.sharp,
-      duration: props.open
-        ? props.theme.transitions.duration.enteringScreen
-        : props.theme.transitions.duration.leavingScreen,
-    })};
+  overflow: hidden;
 `);
 
 const StyledWrap = styled(Box)`
