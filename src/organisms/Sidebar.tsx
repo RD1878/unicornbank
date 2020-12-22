@@ -55,10 +55,9 @@ const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
     transition: ${(props) =>
       props.theme.transitions.create("width", {
         easing: props.theme.transitions.easing.sharp,
-        // duration: props.open
-        //   ? props.theme.transitions.duration.enteringScreen
-        //   : props.theme.transitions.duration.leavingScreen,
-        duration: "1.5s",
+        duration: props.open
+          ? props.theme.transitions.duration.enteringScreen
+          : props.theme.transitions.duration.leavingScreen,
       })};
   }
 `);
