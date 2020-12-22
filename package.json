@@ -57,17 +57,5 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "lint-staged": {
-    "*.{js, jsx, ts, tsx, json}": [
-      "prettier --write",
-      "eslint src/**/ --max-warnings=0 --fix",
-      "git add"
-    ]
-  },
-  "dev": {
-    "*.{js, jsx, ts, tsx, json, css}": [
-      "git add"
-    ]
   }
 }

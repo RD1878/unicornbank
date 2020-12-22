@@ -7,6 +7,7 @@ declare module "@material-ui/core/styles/createPalette" {
     textSecondary?: PaletteOptions["primary"];
     active?: PaletteOptions["primary"];
     white?: PaletteOptions["primary"];
+    initial?: PaletteOptions["primary"];
   }
 }
 
@@ -28,6 +29,7 @@ const overrides = {
       fontSize: 32,
       fontWeight: 500,
       marginBottom: "0.5rem",
+      textShadow: `1px 1px 2px ${BLUE800}BB`,
     },
     h2: {
       fontSize: 22,
@@ -50,8 +52,11 @@ const overrides = {
       borderRadius: 10,
       "&$focused $notchedOutline": {
         color: WHITE50,
-        borderColor: `${WHITE50}`,
+        borderColor: WHITE50,
       },
+    },
+    input: {
+      padding: "15.5px 14px",
     },
     notchedOutline: {
       borderWidth: 2,
@@ -60,8 +65,13 @@ const overrides = {
   MuiFormLabel: {
     root: {
       "&$focused": {
-        color: `${WHITE50}`,
+        color: WHITE50,
       },
+    },
+  },
+  MuiInputLabel: {
+    outlined: {
+      transform: "translate(18px, 18px)",
     },
   },
 };
@@ -77,6 +87,7 @@ const dark = createMuiTheme({
     secondary: { main: YELLOW500 },
     textPrimary: { main: WHITE50 },
     textSecondary: { main: `${WHITE50}50` },
+    initial: { main: WHITE50 },
     active: { main: YELLOW500 },
     white: { main: WHITE50 },
   },
@@ -94,6 +105,7 @@ const light = createMuiTheme({
     secondary: { main: BLUE500 },
     textPrimary: { main: BLUE500 },
     textSecondary: { main: `${WHITE50}50` },
+    initial: { main: WHITE50 },
     active: { main: YELLOW500 },
     white: { main: WHITE50 },
   },

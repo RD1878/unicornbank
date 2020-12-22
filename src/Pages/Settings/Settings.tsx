@@ -1,78 +1,59 @@
-import React, { FC, useState } from "react";
-import { Container, TextField, Typography } from "@material-ui/core";
+import React, { FC } from "react";
+import { Container, Typography } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { PasswordField } from "../../atoms";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import PrimaryButton from "./../../atoms/PrimaryButton";
+import { PrimaryButton, PasswordField } from "../../atoms";
 
-enum SelectValue {
-  Login,
-  Password,
-}
-
-const StyledRow = withTheme(styled("div")`
-  display: flex;
-  align-items: center;
-  margin-top: 50px;
-`);
-
-const StyledColumn = withTheme(styled("div")`
+const StyledColumn = styled("div")`
   display: flex;
   flex-direction: column;
-  margin-right: 30px;
+  margin-top: 40px;
+  max-width: 496px;
 
   & > div {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    width: 100%;
   }
+
+  p {
+    margin-bottom: 60px;
+  }
+`;
+
+const Title = withTheme(styled(Typography)`
+  margin-top: 40px;
+  border: 2px solid ${(props) => props.theme.palette.WHITE};
+  border-radius: 10px;
+  max-width: 496px;
+  width: 100%;
+  padding: 10px 14px;
+  box-sizing: border-box;
 `);
 
 const Settings: FC = () => {
-  const [selectValue, setSelectValue] = useState(SelectValue.Login);
-
-  const onSelectChange = (event: any) => {
-    const { value: newValue } = event.target;
-
-    setSelectValue(newValue);
-  };
-
   return (
     <Container>
-      <Box>
+      <Box mt={5}>
         <Typography variant="h1" color="textPrimary">
           Настройки
         </Typography>
         <Typography variant="body2" color="textSecondary">
           Вход
         </Typography>
-        <StyledRow>
-          <StyledColumn>
-            <Select
-              variant="outlined"
-              value={selectValue}
-              onChange={onSelectChange}
-            >
-              <MenuItem value={SelectValue.Login}>Смена логина</MenuItem>
-              <MenuItem value={SelectValue.Password}>Смена пароля</MenuItem>
-            </Select>
-            {selectValue === SelectValue.Login ? (
-              <>
-                <TextField fullWidth label="Текущий логин" name="email1" />
-                <TextField fullWidth label="Новый логин" name="email2" />
-                <TextField fullWidth label="Повторите логин" name="email3" />
-              </>
-            ) : (
-              <>
-                <PasswordField label="Текущий пароль" />
-                <PasswordField label="Новый пароль" />
-                <PasswordField label="Повторите пароль" />
-              </>
-            )}
-          </StyledColumn>
-        </StyledRow>
-        <PrimaryButton>Сохраниить изменения</PrimaryButton>
+        <Title variant="body2" color="textPrimary">
+          Смена пароля
+        </Title>
+        <StyledColumn>
+          <PasswordField name="password1" label="Введите текущий пароль" />
+          <PasswordField name="password1" label="Введите новый пароль" />
+          <PasswordField name="password1" label="Повторите новый пароль" />
+          <Typography variant="body2" color="textSecondary">
+            Если Вы забыли логин, обратитесь в отделение банка. Для изменения
+            других данных Вы можете обратиться в чат.
+          </Typography>
+          <PrimaryButton size="large">Сохранить изменения </PrimaryButton>
+        </StyledColumn>
       </Box>
     </Container>
   );

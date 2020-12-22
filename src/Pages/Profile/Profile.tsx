@@ -1,26 +1,16 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Container, Typography } from "@material-ui/core";
-import { withTheme } from "@material-ui/core/styles";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import styled from "styled-components";
-import { Box, Avatar, Link } from "@material-ui/core";
+import { Box, Avatar } from "@material-ui/core";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
+import { db } from "../../firebase/firebaseAuth";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
-interface IProfileDocs {
-  [x: string]: string | number;
-}
-
-const PROFILE = {
-  phone: "89085****",
-  email: "user@****",
-  passport: "** ** 8989",
-  snils: "439884-2848794-2847947- 32",
-};
-
-const StyledRow = withTheme(styled("div")`
+const StyledRow = styled("div")`
   display: flex;
   align-items: center;
   margin-top: 50px;
@@ -40,52 +30,85 @@ const StyledRow = withTheme(styled("div")`
   input {
     width: 100%;
   }
-`);
+`;
 
-const StyledAvatar = withTheme(styled(Avatar)`
+const StyledAvatar = styled(Avatar)`
   width: 100px;
   min-height: 100px;
   margin-bottom: 20px;
-`);
+`;
 
-const StyledBox = withTheme(styled(Box)`
+const StyledBox = styled(Box)`
   p {
     margin-bottom: 60px;
   }
   max-width: 496px;
   margin-top: 40px;
   margin-bottom: 80px;
-`);
+`;
 
 const Profile: FC = () => {
-  const [data, setData] = useState<IProfileDocs>(PROFILE);
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [passport, setPassport] = useState("");
+  const [snils, setSnils] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const getContactInfo = () => {
+    db.ref("users/0")
+      .once("value")
+      .then((response) => {
+        const data = response.val();
+
+        setPhone(data.contact.phone);
+        setEmail(data.contact.email);
+        setSnils(data.snils);
+        setPassport(data.passport);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getContactInfo();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container>
+        <LinearProgress />
+      </Container>
+    );
+  }
 
   return (
     <Container>
-      <Box my={6}>
-        <Typography variant="h1" color="textPrimary">
-          Профиль
+      <Typography variant="h1" color="textPrimary">
+        Профиль
+      </Typography>
+      <Box mt={6}>
+        <Typography variant="h2" color="textPrimary">
+          Контакты
         </Typography>
         <StyledRow>
           <PhoneRoundedIcon color="action" fontSize="large" />
-          <TextField label="Телефон" focused defaultValue={data.phone} />
+          <TextField label="Телефон" focused defaultValue={phone} />;
         </StyledRow>
         <StyledRow>
           <EmailRoundedIcon color="action" fontSize="large" />
-          <TextField label="Email" focused defaultValue={data.email} />
+          <TextField label="Email" focused defaultValue={email} />
         </StyledRow>
       </Box>
       <Box mt={10}>
-        <Typography variant="h1" color="textPrimary">
+        <Typography variant="h2" color="textPrimary">
           Документы
         </Typography>
         <StyledRow>
           <ListAltRoundedIcon color="action" fontSize="large" />
-          <TextField label="Паспорт" disabled defaultValue={data.passport} />
+          <TextField label="Паспорт" disabled defaultValue={passport} />
         </StyledRow>
         <StyledRow>
           <ListAltRoundedIcon color="action" fontSize="large" />
-          <TextField label="СНИЛС" disabled defaultValue={data.snils} />
+          <TextField label="СНИЛС" disabled defaultValue={snils} />
         </StyledRow>
       </Box>
       <StyledRow>
