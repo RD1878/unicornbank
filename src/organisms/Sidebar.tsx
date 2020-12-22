@@ -67,10 +67,17 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: ${(props) => (props.open ? "30px" : "0px")};
-  width: ${(props) => (props.open ? "auto" : "0px")};
-  height: ${(props) => (props.open ? "auto" : "0px")};
-  overflow: hidden;
+  margin: 30px auto 0;
+  max-width: ${(props) => (props.open ? 290 : 0)}px;
+  max-height: ${(props) => (props.open ? "100%" : 0)};
+  transform: ${(props) => (props.open ? "scale(1)" : "scale(0)")};
+  transition: ${(props) =>
+    props.theme.transitions.create(["transform", "max-height", "max-width"], {
+      easing: props.theme.transitions.easing.sharp,
+      duration: props.open
+        ? props.theme.transitions.duration.enteringScreen
+        : props.theme.transitions.duration.leavingScreen,
+    })};
 `);
 
 const StyledWrap = styled(Box)<IWithOpen>`
