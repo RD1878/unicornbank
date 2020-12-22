@@ -55,9 +55,10 @@ const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
     transition: ${(props) =>
       props.theme.transitions.create("width", {
         easing: props.theme.transitions.easing.sharp,
-        duration: props.open
-          ? props.theme.transitions.duration.enteringScreen
-          : props.theme.transitions.duration.leavingScreen,
+        // duration: props.open
+        //   ? props.theme.transitions.duration.enteringScreen
+        //   : props.theme.transitions.duration.leavingScreen,
+        duration: "1.5s",
       })};
   }
 `);
@@ -73,9 +74,10 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
   overflow: hidden;
 `);
 
-const StyledWrap = styled(Box)`
+const StyledWrap = styled(Box)<IWithOpen>`
   position: sticky;
   top: 0;
+  width: ${(props) => (props.open ? `${DRAWER_WIDTH}px` : "auto")};
 `;
 
 const StyledAvatar = withTheme(styled(Avatar)`
@@ -104,7 +106,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
 
   return (
     <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
-      <StyledWrap>
+      <StyledWrap open={open}>
         <StyledProfileInfo open={open}>
           <Grid container justify="center" alignItems="center">
             <StyledAvatar sizes="large">H</StyledAvatar>
