@@ -24,7 +24,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
     <>
       <Header onToggleTheme={onToggleTheme} />
       <ContentContainer>
-        <Sidebar />
+        <Sidebar fullName="Константинопальский Константин Константинович" />
         <Container>{children}</Container>
       </ContentContainer>
       <Footer />

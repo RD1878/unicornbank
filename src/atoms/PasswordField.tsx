@@ -30,7 +30,6 @@ const PasswordField: FC<IPasswordField> = ({
       <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
       <OutlinedInput
         label={label}
-        id="outlined-adornment-password"
         type={visible ? "text" : "password"}
         endAdornment={
           <InputAdornment position="end">
