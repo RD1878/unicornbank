@@ -11,7 +11,7 @@ const ContentContainer = withTheme(styled("div")`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 60px;
+  padding: 40px;
   width: 100%;
 `;
 

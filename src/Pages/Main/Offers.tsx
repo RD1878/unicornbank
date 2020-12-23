@@ -1,4 +1,5 @@
-import React, { FC, ChangeEvent, useState } from "react";
+import React, { FC, ChangeEvent, useState, useEffect } from "react";
+import firebase from "firebase/app";
 import { TabPanel } from "../../molecules";
 import {
   Box,
@@ -7,6 +8,7 @@ import {
   Tabs,
   Tab,
   Typography,
+  LinearProgress,
 } from "@material-ui/core";
 
 interface TabPanelProps {
@@ -18,8 +20,13 @@ interface TabPanelProps {
 
 function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   return (
-    <TabPanel type="vertical-tabpanel" value={value} index={index}>
-      <Box p={5}>
+    <TabPanel
+      type="vertical-tabpanel"
+      value={value}
+      index={index}
+      imagesrc={index + 1}
+    >
+      <Box p={5} minHeight={200}>
         <Typography variant="h1" color="textPrimary">
           {title}
         </Typography>
@@ -31,53 +38,57 @@ function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   );
 }
 
-const offers = [
-  {
-    id: 1,
-    title: "Процент выше",
-    subtitle: "По вкладу 'Семейный'",
-    type: "deposit",
-  },
-  {
-    id: 2,
-    title: "Еще больше выгоды",
-    subtitle: "Проценты снижены",
-    type: "loan",
-  },
-  {
-    id: 3,
-    title: "Новые возможности",
-    subtitle: "Для вас и вашего бизнеса",
-    type: "business",
-  },
-];
+interface IOffer {
+  id: number;
+  title: string;
+  subtitle: string;
+  type: string;
+}
 
 export const Offers: FC = () => {
-  const [tab, setTab] = useState(0);
+  const [offerTab, setOfferTab] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [offers, setOffers] = useState<IOffer[]>([]);
 
-  const handleChange = (
-    e: ChangeEvent<Record<string, unknown>>,
-    newVal: number
-  ) => {
-    setTab(newVal);
+  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
+    setOfferTab(newVal);
   };
+
+  useEffect(() => {
+    firebase
+      .database()
+      .ref("/offers")
+      .once("value")
+      .then((snapshot) => {
+        setOffers(snapshot.val());
+        setLoaded(true);
+      });
+  }, []);
 
   return (
     <Container maxWidth="lg" disableGutters={true}>
-      {offers.map((item, index) => (
-        <TabPanelWrapper
-          value={tab}
-          index={index}
-          key={item.id}
-          title={item.title}
-          subtitle={item.subtitle}
-        />
-      ))}
-
-      <Box my={7}>
+      {offers.length ? (
+        offers.map((item, index) => (
+          <TabPanelWrapper
+            value={offerTab}
+            index={index}
+            key={item.id}
+            title={item.title}
+            subtitle={item.subtitle}
+          />
+        ))
+      ) : (
+        <Box p={8}>
+          <Typography variant="h2" color="textPrimary">
+            Загрузка персональных предложений
+          </Typography>
+        </Box>
+      )}
+      {!loaded && <LinearProgress color="secondary" />}
+      <Box mb={7}>
         <Paper>
           <Tabs
-            value={tab}
+            value={offerTab}
             onChange={handleChange}
             indicatorColor="secondary"
             textColor="secondary"
