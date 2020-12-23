@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { Box, Avatar } from "@material-ui/core";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
-import { db } from "../../firebase/firebaseAuth";
+import { db } from "../../firebase/firebase";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 const StyledRow = styled("div")`
@@ -82,51 +82,53 @@ const Profile: FC = () => {
 
   return (
     <Container>
-      <Typography variant="h1" color="textPrimary">
-        Профиль
-      </Typography>
-      <Box mt={6}>
-        <Typography variant="h2" color="textPrimary">
-          Контакты
+      <Box mt={5}>
+        <Typography variant="h1" color="textPrimary">
+          Профиль
         </Typography>
-        <StyledRow>
-          <PhoneRoundedIcon color="action" fontSize="large" />
-          <TextField label="Телефон" focused defaultValue={phone} />;
-        </StyledRow>
-        <StyledRow>
-          <EmailRoundedIcon color="action" fontSize="large" />
-          <TextField label="Email" focused defaultValue={email} />
-        </StyledRow>
-      </Box>
-      <Box mt={10}>
-        <Typography variant="h2" color="textPrimary">
-          Документы
-        </Typography>
-        <StyledRow>
-          <ListAltRoundedIcon color="action" fontSize="large" />
-          <TextField label="Паспорт" disabled defaultValue={passport} />
-        </StyledRow>
-        <StyledRow>
-          <ListAltRoundedIcon color="action" fontSize="large" />
-          <TextField label="СНИЛС" disabled defaultValue={snils} />
-        </StyledRow>
-      </Box>
-      <StyledRow>
-        <StyledAvatar sizes="large">H</StyledAvatar>
-        <StyledRow>
-          <AddAPhotoRoundedIcon color="action" />
-          <Typography variant="body2" color="textSecondary">
-            Загрузить фото
+        <Box mt={6}>
+          <Typography variant="h2" color="textPrimary">
+            Контакты
           </Typography>
+          <StyledRow>
+            <PhoneRoundedIcon color="action" fontSize="large" />
+            <TextField label="Телефон" focused defaultValue={phone} />;
+          </StyledRow>
+          <StyledRow>
+            <EmailRoundedIcon color="action" fontSize="large" />
+            <TextField label="Email" focused defaultValue={email} />
+          </StyledRow>
+        </Box>
+        <Box mt={10}>
+          <Typography variant="h2" color="textPrimary">
+            Документы
+          </Typography>
+          <StyledRow>
+            <ListAltRoundedIcon color="action" fontSize="large" />
+            <TextField label="Паспорт" disabled defaultValue={passport} />
+          </StyledRow>
+          <StyledRow>
+            <ListAltRoundedIcon color="action" fontSize="large" />
+            <TextField label="СНИЛС" disabled defaultValue={snils} />
+          </StyledRow>
+        </Box>
+        <StyledRow>
+          <StyledAvatar sizes="large">H</StyledAvatar>
+          <StyledRow>
+            <AddAPhotoRoundedIcon color="action" />
+            <Typography variant="body2" color="textSecondary">
+              Загрузить фото
+            </Typography>
+          </StyledRow>
         </StyledRow>
-      </StyledRow>
-      <StyledBox>
-        <Typography variant="body2" color="textSecondary">
-          Если у вас поменялось ФИО, обратитесь в отделение банка. Для изменения
-          других данных Вы можете обратиться в чат.
-        </Typography>
-        <PrimaryButton size="large">Сохранить изменения </PrimaryButton>
-      </StyledBox>
+        <StyledBox>
+          <Typography variant="body2" color="textSecondary">
+            Если у вас поменялось ФИО, обратитесь в отделение банка. Для
+            изменения других данных Вы можете обратиться в чат.
+          </Typography>
+          <PrimaryButton size="large">Сохранить изменения </PrimaryButton>
+        </StyledBox>
+      </Box>
     </Container>
   );
 };

@@ -1,6 +1,6 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import { firebaseAuth } from "../../firebase/firebaseAuth";
+import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
 import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
