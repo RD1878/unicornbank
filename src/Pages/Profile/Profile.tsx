@@ -92,11 +92,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" focused defaultValue={phone} />;
+            <TextField label="Телефон" defaultValue={phone} />;
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" focused defaultValue={email} />
+            <TextField label="Email" defaultValue={email} />
           </StyledRow>
         </Box>
         <Box mt={10}>
