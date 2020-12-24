@@ -5,6 +5,7 @@ import { Auth, MainPage } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import Register from "./Pages/Register/Register";
 import { routes } from "./routes";
+import Map from "./Pages/Map/index";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -27,6 +28,13 @@ const App: FC = () => {
 
       case routes.auth:
         return <Auth />;
+
+      case routes.offices:
+        return (
+          <MainLayout onToggleTheme={toggleTheme}>
+            <Map />
+          </MainLayout>
+        );
 
       default:
         return <Register />;
