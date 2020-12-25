@@ -98,7 +98,7 @@ const StyledLink = withTheme(styled(Link)`
   justify-content: center;
   margin-top: 10px;
 
-  p {
+  a {
     margin-left: 10px;
   }
 `);
@@ -120,7 +120,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
               {fullName}
             </Typography>
           </Grid>
-          <StyledLink href={routes.main}>
+          <StyledLink href={routes.profile}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
               Редактировать профиль

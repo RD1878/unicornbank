@@ -1,9 +1,8 @@
 import React, { FC, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
-import { Auth, MainPage } from "./Pages";
+import { Auth, MainPage, Profile, Register, Settings } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
-import Register from "./Pages/Register/Register";
 import { routes } from "./routes";
 
 const App: FC = () => {
@@ -27,6 +26,20 @@ const App: FC = () => {
 
       case routes.auth:
         return <Auth />;
+
+      case routes.profile:
+        return (
+          <MainLayout onToggleTheme={toggleTheme}>
+            <Profile />
+          </MainLayout>
+        );
+
+      case routes.settings:
+        return (
+          <MainLayout onToggleTheme={toggleTheme}>
+            <Settings />
+          </MainLayout>
+        );
 
       default:
         return <Register />;

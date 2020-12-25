@@ -6,6 +6,7 @@ import { Header, Sidebar, Footer } from "../../../organisms";
 const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
+  min-height: calc(100vh - 230px);
 `);
 
 const Container = styled.div`
