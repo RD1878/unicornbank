@@ -1,7 +1,19 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, useEffect } from "react";
 import { Container, Typography, Box, Tabs, Tab } from "@material-ui/core";
 import styled from "styled-components";
 import { Map as YMap, Placemark, YMaps, ZoomControl } from "react-yandex-maps";
+import { db } from "../../firebase/firebase";
+import MapInfoItem from "./../../atoms/MapInfoItem";
+
+export interface IAtm {
+  id: number;
+  name: string;
+  address: string;
+  timeStart: string;
+  timeEnd: string;
+  latitude: number;
+  longitude: number;
+}
 
 const categories: { type: string; name: string }[] = [
   { type: "all", name: "Отделения" },
@@ -26,24 +38,48 @@ const StyledWrap = styled("div")`
   margin: -40px;
 `;
 const StyleMapContainer = styled("div")`
+  width: 100%;
   position: relative;
+  min-height: 573px;
+  overflow: hidden;
 `;
 
 const StyledYMap = styled(YMap)`
-  width: 100%;
   position: absolute;
+  top: 30px;
   left: 0;
   right: 0;
-  top: 30px;
-  min-height: 100vh;
+  bottom: 0;
 `;
 
 const Map: FC = () => {
   const [tab, setTab] = useState(0);
+  const [branches, setBranches] = useState<IAtm[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<IAtm | null>(null);
+
+  const KAZAN_CENTER = [55.798551, 49.106324];
+
+  const getMapInfo = () => {
+    db.ref("ATM")
+      .once("value")
+      .then((response) => {
+        const data = response.val();
+        setBranches(data);
+      });
+  };
+
+  useEffect(() => {
+    getMapInfo();
+  }, []);
 
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
   };
+
+  const onMapInfoClose = () => {
+    setSelectedBranch(null);
+  };
+
   return (
     <StyledWrap>
       <Container>
@@ -59,8 +95,8 @@ const Map: FC = () => {
             variant="fullWidth"
             scrollButtons="on"
           >
-            {categories.map((item) => (
-              <StyledTab label={item.name} key={item.type} />
+            {categories.map(({ name, type }) => (
+              <StyledTab label={name} key={type} />
             ))}
           </Tabs>
         </Box>
@@ -68,20 +104,31 @@ const Map: FC = () => {
       <StyleMapContainer>
         <YMaps>
           <StyledYMap
+            width="100%"
+            height="100%"
             defaultState={{
-              center: [55.798551, 49.106324],
-              zoom: 16,
+              center: KAZAN_CENTER,
+              zoom: 13,
               controls: [],
             }}
           >
-            <Placemark />
+            {branches.map((branch) => (
+              <Placemark
+                key={branch.id}
+                geometry={[branch.latitude, branch.longitude]}
+                onClick={() => setSelectedBranch(branch)}
+              />
+            ))}
             <ZoomControl
               options={{
-                float: "right",
+                float: "left",
               }}
             />
           </StyledYMap>
         </YMaps>
+        {selectedBranch && (
+          <MapInfoItem {...selectedBranch} onClose={onMapInfoClose} />
+        )}
       </StyleMapContainer>
     </StyledWrap>
   );
