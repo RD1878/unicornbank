@@ -18,7 +18,7 @@ const StyledItem = withTheme(styled("div")`
   left: 50%;
   transform: translateX(-50%);
   background-color: #ffffff;
-  padding: 28px;
+  padding: 20px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `);
 

@@ -15,10 +15,32 @@ export interface IAtm {
   longitude: number;
 }
 
+enum BranchType { //перечисления позволяют нам объявлять набор именованных констант начинаются с 0
+  ALL,
+  OFFICES,
+  ATM,
+}
+
 const categories: { type: string; name: string }[] = [
-  { type: "all", name: "Отделения" },
-  { type: "transaction", name: "Банкоматы" },
+  { type: "all", name: "Все" },
+  { type: "offices", name: "Отделения" },
+  { type: "atm", name: "Банкоматы" },
 ];
+
+const KAZAN_CENTER = [55.798551, 49.136325];
+
+const filterBranches = (tab: number, branches: IAtm[]): IAtm[] => {
+  // фильтрация массива отделений по name
+  if (tab === BranchType.OFFICES) {
+    return branches.filter(({ name }) => name === "Отделение офиса");
+  }
+
+  if (tab === BranchType.ATM) {
+    return branches.filter(({ name }) => name === "Банкоматы");
+  }
+
+  return branches;
+};
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -29,7 +51,7 @@ const StyledTab = styled(({ ...props }) => (
   line-height: 1.25;
 
   & .wrapper {
-    align-items: flex-start;
+    align-items: center;
     white-space: nowrap;
   }
 `;
@@ -48,16 +70,15 @@ const StyledYMap = styled(YMap)`
   position: absolute;
   top: 30px;
   left: 0;
-  right: 0;
+  right: -240px;
   bottom: 0;
 `;
 
 const Map: FC = () => {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(BranchType.ALL);
   const [branches, setBranches] = useState<IAtm[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<IAtm | null>(null);
-
-  const KAZAN_CENTER = [55.798551, 49.106324];
+  const array = filterBranches(tab, branches);
 
   const getMapInfo = () => {
     db.ref("ATM")
@@ -112,18 +133,14 @@ const Map: FC = () => {
               controls: [],
             }}
           >
-            {branches.map((branch) => (
+            {array.map((branch) => (
               <Placemark
                 key={branch.id}
                 geometry={[branch.latitude, branch.longitude]}
                 onClick={() => setSelectedBranch(branch)}
               />
             ))}
-            <ZoomControl
-              options={{
-                float: "left",
-              }}
-            />
+            <ZoomControl />
           </StyledYMap>
         </YMaps>
         {selectedBranch && (
