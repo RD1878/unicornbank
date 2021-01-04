@@ -7,6 +7,7 @@ import background from "../../assets/images/1-2.png";
 import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { routes } from "../../routes";
+import { device } from "./../../theme/device";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -37,9 +38,9 @@ const FormAuth = withTheme(styled("div")`
   width: 55vw;
   min-width: 300px;
   max-width: 800px;
-  height: 45vw;
-  min-height: 350px;
-  max-height: 640px;
+  height: 50vw;
+  min-height: 400px;
+  max-height: 700px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -47,6 +48,9 @@ const FormAuth = withTheme(styled("div")`
 
   h1 {
     margin-bottom: 1.75em;
+    @media ${device.laptopL} {
+      margin-bottom: 1em;
+    }
   }
 
   & > div {
@@ -56,9 +60,14 @@ const FormAuth = withTheme(styled("div")`
     flex-direction: column;
     align-items: center;
 
-    & > div {
+    .MuiTextField-root,
+    .MuiFormControl-root {
       width: 100%;
-      margin-bottom: 2em;
+      margin-bottom: 1.75em;
+
+      @media ${device.laptopL} {
+        margin-bottom: 1em;
+      }
     }
 
     & > a {
@@ -130,17 +139,15 @@ const Register: FC = () => {
           <Typography variant="h1" color="textPrimary" align="center">
             Регистрация
           </Typography>
-          <div>
-            <TextField
-              fullWidth
-              error={error}
-              label="Почта"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              helperText={errorMessage}
-            />
-          </div>
+          <TextField
+            fullWidth
+            error={error}
+            label="Почта"
+            name="email"
+            value={email}
+            onChange={handleChange}
+            helperText={errorMessage}
+          />
           <PasswordField
             fullWidth
             error={error}

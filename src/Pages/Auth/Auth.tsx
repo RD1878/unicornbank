@@ -5,6 +5,7 @@ import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
+import { device } from "./../../theme/device";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -45,6 +46,10 @@ const FormAuth = withTheme(styled("div")`
 
   h1 {
     margin-bottom: 1.75em;
+
+    @media ${device.mobileM} {
+      margin-bottom: 1em;
+    }
   }
   & > div {
     width: 75%;
