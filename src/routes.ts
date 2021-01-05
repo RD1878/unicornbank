@@ -1,4 +1,4 @@
-enum routes {
+enum ROUTES {
   register = "/register",
   auth = "/auth",
   main = "/",
@@ -10,11 +10,11 @@ enum routes {
 }
 
 const navigation = [
-  { name: "Главная", path: routes.main },
-  { name: "История", path: routes.history },
-  { name: "Чат", path: routes.chat },
-  { name: "Настройки", path: routes.settings },
-  { name: "Офисы и банкоматы", path: routes.offices },
+  { name: "Главная", path: ROUTES.main },
+  { name: "История", path: ROUTES.history },
+  { name: "Чат", path: ROUTES.chat },
+  { name: "Настройки", path: ROUTES.settings },
+  { name: "Офисы и банкоматы", path: ROUTES.offices },
 ];
 
-export { routes, navigation };
+export { ROUTES, navigation };

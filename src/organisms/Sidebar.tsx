@@ -13,7 +13,7 @@ import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncr
 import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
-import { routes } from ".././routes";
+import { ROUTES } from ".././routes";
 interface IWithOpen {
   open: boolean;
 }
@@ -120,7 +120,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
               {fullName}
             </Typography>
           </Grid>
-          <StyledLink href={routes.profile}>
+          <StyledLink href={ROUTES.profile}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
               Редактировать профиль

@@ -2,9 +2,10 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
-import { Link, Switch } from "@material-ui/core";
-import { PrimaryButton, PrimaryLink, Logo } from "../atoms";
+import { Switch } from "@material-ui/core";
+import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
+import { Link } from "react-router-dom";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -31,7 +32,7 @@ const LinksContainer = styled.div`
   flex-grow: 0.5;
 `;
 
-const currentPath = window.location.pathname;
+// const currentPath = window.location.pathname;
 
 interface IHeader {
   onToggleTheme: () => void;
@@ -47,16 +48,16 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         <Logo />
 
         {navigation.map((item) => (
-          <PrimaryLink
-            href={item.path}
+          <Link
+            to={item.path}
             key={item.path}
-            active={currentPath === item.path}
+            // active={currentPath === item.path}
           >
             {item.name}
-          </PrimaryLink>
+          </Link>
         ))}
 
-        <Link href="/auth" color="textPrimary">
+        <Link to="/auth" color="textPrimary">
           <PrimaryButton>Выйти</PrimaryButton>
         </Link>
       </LinksContainer>
