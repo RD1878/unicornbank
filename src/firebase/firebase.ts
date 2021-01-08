@@ -7,3 +7,5 @@ export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const firebaseAuth = firebase.auth();
 
 export const db = firebase.database();
+
+export type IUser = firebase.User | null;
