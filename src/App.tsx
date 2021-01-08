@@ -14,38 +14,18 @@ const App: FC = () => {
     setTheme(appThemes[newTheme]);
   };
 
-  // const path = window.location.pathname;
-
   return (
     <ThemeProvider theme={theme}>
       <Switch>
-        <Route path={ROUTES.auth} component={Auth} />
-        <Route path={ROUTES.register} component={Register} />
-        <Route
-          path={ROUTES.main}
-          exact
-          render={() => (
-            <MainLayout onToggleTheme={toggleTheme}>
-              <MainPage />
-            </MainLayout>
-          )}
-        />
-        <Route
-          path={ROUTES.profile}
-          render={() => (
-            <MainLayout onToggleTheme={toggleTheme}>
-              <Profile />
-            </MainLayout>
-          )}
-        />
-        <Route
-          path={ROUTES.settings}
-          render={() => (
-            <MainLayout onToggleTheme={toggleTheme}>
-              <Settings />
-            </MainLayout>
-          )}
-        />
+        <Route path={ROUTES.AUTH} exact component={Auth} />
+        <Route path={ROUTES.REGISTER} exact component={Register} />
+        <Route path="*">
+          <MainLayout onToggleTheme={toggleTheme}>
+            <Route path={ROUTES.MAIN} exact component={MainPage} />
+            <Route path={ROUTES.PROFILE} component={Profile} />
+            <Route path={ROUTES.SETTINGS} component={Settings} />
+          </MainLayout>
+        </Route>
       </Switch>
     </ThemeProvider>
   );

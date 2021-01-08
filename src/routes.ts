@@ -1,20 +1,20 @@
 enum ROUTES {
-  register = "/register",
-  auth = "/auth",
-  main = "/",
-  history = "/history",
-  chat = "/chat",
-  settings = "/settings",
-  offices = "/offices",
-  profile = "/profile",
+  REGISTER = "/register",
+  AUTH = "/auth",
+  MAIN = "/",
+  HISTORY = "/history",
+  CHAT = "/chat",
+  SETTINGS = "/settings",
+  OFFICES = "/offices",
+  PROFILE = "/profile",
 }
 
 const navigation = [
-  { name: "Главная", path: ROUTES.main },
-  { name: "История", path: ROUTES.history },
-  { name: "Чат", path: ROUTES.chat },
-  { name: "Настройки", path: ROUTES.settings },
-  { name: "Офисы и банкоматы", path: ROUTES.offices },
+  { name: "Главная", path: ROUTES.MAIN },
+  { name: "История", path: ROUTES.HISTORY },
+  { name: "Чат", path: ROUTES.CHAT },
+  { name: "Настройки", path: ROUTES.SETTINGS },
+  { name: "Офисы и банкоматы", path: ROUTES.OFFICES },
 ];
 
 export { ROUTES, navigation };

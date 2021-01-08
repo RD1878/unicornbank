@@ -32,8 +32,6 @@ const LinksContainer = styled.div`
   flex-grow: 0.5;
 `;
 
-// const currentPath = window.location.pathname;
-
 interface IHeader {
   onToggleTheme: () => void;
 }
@@ -48,11 +46,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         <Logo />
 
         {navigation.map((item) => (
-          <Link
-            to={item.path}
-            key={item.path}
-            // active={currentPath === item.path}
-          >
+          <Link to={item.path} key={item.path}>
             {item.name}
           </Link>
         ))}

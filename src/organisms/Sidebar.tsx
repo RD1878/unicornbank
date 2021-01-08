@@ -120,7 +120,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
               {fullName}
             </Typography>
           </Grid>
-          <StyledLink href={ROUTES.profile}>
+          <StyledLink href={ROUTES.PROFILE}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
               Редактировать профиль

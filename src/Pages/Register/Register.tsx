@@ -162,7 +162,7 @@ const Register: FC = () => {
           <PrimaryButton onClick={createAccount} size="large">
             Зарегистрироваться
           </PrimaryButton>
-          <Link href={ROUTES.auth} color="textPrimary">
+          <Link href={ROUTES.AUTH} color="textPrimary">
             <Typography variant="body2" color="textPrimary" align="center">
               У вас уже есть аккаунт?
             </Typography>
