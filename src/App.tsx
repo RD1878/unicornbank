@@ -3,7 +3,8 @@ import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import { Auth, MainPage, Profile, Register, Settings } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
-import { routes } from "./routes";
+import { ROUTES } from "./routes";
+import { Switch, Route } from "react-router-dom";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -13,40 +14,21 @@ const App: FC = () => {
     setTheme(appThemes[newTheme]);
   };
 
-  const path = window.location.pathname;
-
-  function routing() {
-    switch (path) {
-      case routes.main:
-        return (
+  return (
+    <ThemeProvider theme={theme}>
+      <Switch>
+        <Route path={ROUTES.AUTH} exact component={Auth} />
+        <Route path={ROUTES.REGISTER} exact component={Register} />
+        <Route path="*">
           <MainLayout onToggleTheme={toggleTheme}>
-            <MainPage />
+            <Route path={ROUTES.MAIN} exact component={MainPage} />
+            <Route path={ROUTES.PROFILE} component={Profile} />
+            <Route path={ROUTES.SETTINGS} component={Settings} />
           </MainLayout>
-        );
-
-      case routes.auth:
-        return <Auth />;
-
-      case routes.profile:
-        return (
-          <MainLayout onToggleTheme={toggleTheme}>
-            <Profile />
-          </MainLayout>
-        );
-
-      case routes.settings:
-        return (
-          <MainLayout onToggleTheme={toggleTheme}>
-            <Settings />
-          </MainLayout>
-        );
-
-      default:
-        return <Register />;
-    }
-  }
-
-  return <ThemeProvider theme={theme}>{routing()}</ThemeProvider>;
+        </Route>
+      </Switch>
+    </ThemeProvider>
+  );
 };
 
 export default App;
