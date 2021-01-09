@@ -1,7 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
+import { db } from "../../../firebase/firebase";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -21,11 +22,31 @@ interface IMainLayout {
 }
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [patronymic, setPatronymic] = useState("");
+
+  const getContactInfo = () => {
+    db.ref("users/0")
+      .once("value")
+      .then((response) => {
+        const data = response.val();
+
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setPatronymic(data.patronymic);
+      });
+  };
+
+  useEffect(() => {
+    getContactInfo();
+  }, []);
+
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
       <ContentContainer>
-        <Sidebar fullName="Константинопальский Константин Константинович" />
+        <Sidebar fullName={`${firstName} ${lastName} ${patronymic}`} />
         <Container>{children}</Container>
       </ContentContainer>
       <Footer />

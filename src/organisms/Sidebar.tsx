@@ -1,9 +1,16 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import { withTheme } from "@material-ui/core/styles";
-import { Box, Avatar } from "@material-ui/core";
+import {
+  Box,
+  Avatar,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+} from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import CardItem from "./../atoms/CardItem";
@@ -14,31 +21,17 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import { ROUTES } from ".././routes";
+import { db } from "../firebase/firebase";
+import { ICard } from "../interfaces/card";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
+
 interface IWithOpen {
   open: boolean;
 }
 interface ISidebar {
   fullName: string;
 }
-
-const CARDS = [
-  {
-    title: "Текущий счет  **78",
-    value: "1000, 45р",
-  },
-  {
-    title: "Текущий зарплатный счет  **99",
-    value: "9990, 45р",
-  },
-  {
-    title: "Счет кредитной карты  **34",
-    value: "9990, 45р",
-  },
-  {
-    title: "Накопительный счет  **77",
-    value: "199990, 45р",
-  },
-];
 
 const DRAWER_WIDTH = 350;
 
@@ -80,6 +73,10 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
     })};
 `);
 
+const StyledListItem = styled(ListItem)`
+  flex-direction: column;
+`;
+
 const StyledWrap = styled(Box)<IWithOpen>`
   position: sticky;
   top: 0;
@@ -105,10 +102,30 @@ const StyledLink = withTheme(styled(Link)`
 
 const Sidebar: FC<ISidebar> = ({ fullName }) => {
   const [open, setOpen] = useState(true);
+  const [isOpenCards, setOpenCards] = useState(true);
+  const [cards, setCards] = useState([]);
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
   };
+
+  const handleClick = () => {
+    setOpenCards((isOpenCards) => !isOpenCards);
+  };
+
+  const getCardsInfo = () => {
+    db.ref("users/0")
+      .once("value")
+      .then((response) => {
+        const data = response.val();
+
+        setCards(data.products.cards);
+      });
+  };
+
+  useEffect(() => {
+    getCardsInfo();
+  }, []);
 
   return (
     <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
@@ -129,9 +146,28 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
         </StyledProfileInfo>
         <Box mt={5}>
           <List>
-            {CARDS.map((card) => (
-              <CardItem key={card.title} open={open} {...card} />
-            ))}
+            <ListItem button onClick={handleClick}>
+              <ListItemIcon>
+                {<PaymentRoundedIcon color="secondary" fontSize="large" />}
+              </ListItemIcon>
+              <ListItemText>
+                {open ? (
+                  <Typography variant="h2" color="textPrimary">
+                    Карты
+                  </Typography>
+                ) : null}
+              </ListItemText>
+              {isOpenCards ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <StyledListItem button /* className={classes.nested} */>
+                  {cards.map((card: ICard) => {
+                    return <CardItem key={card.id} open={open} {...card} />;
+                  })}
+                </StyledListItem>
+              </List>
+            </Collapse>
           </List>
         </Box>
         <Grid container justify="center">
