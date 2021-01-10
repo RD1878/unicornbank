@@ -66,12 +66,12 @@ const Profile: FC = () => {
       .once("value")
       .then((response) => {
         const data = response.val();
-        dispatch(saveUser(data));
         /* setPhone(data.contact.phone);
         setEmail(data.contact.email);
         setSnils(data.snils);
         setPassport(data.passport);*/
         setLoading(false);
+        dispatch(saveUser(data));
       });
   };
 
@@ -86,7 +86,6 @@ const Profile: FC = () => {
       </Container>
     );
   }
-
   return (
     <Container>
       <Box mt={5}>
@@ -99,11 +98,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" /* defaultValue={phone} */ />;
+            <TextField label="Телефон" defaultValue={user.contact.phone} />;
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" /* defaultValue={email} */ />
+            <TextField label="Email" defaultValue={user.contact.email} />
           </StyledRow>
         </Box>
         <Box mt={10}>
@@ -112,7 +111,7 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="Паспорт" disabled /* defaultValue={passport} */ />
+            <TextField label="Паспорт" disabled defaultValue={user.passport} />
           </StyledRow>
           <StyledRow>
             <ListAltRoundedIcon color="action" fontSize="large" />

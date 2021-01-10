@@ -12,21 +12,23 @@ const initialState = {
 
 interface IArgument {
   type: string;
-  payload: IUser;
+  payload: {
+    user: IUser;
+  };
 }
 
 export default (state = initialState, { type, payload }: IArgument): IUser => {
   switch (type) {
     case SAVE_USER:
       return {
-        passport: payload.passport,
-        snils: payload.snils,
+        passport: payload.user.passport,
+        snils: payload.user.snils,
         contact: {
-          phone: payload.contact.phone,
-          email: payload.contact.email,
+          phone: payload.user.contact.phone,
+          email: payload.user.contact.email,
         },
       };
+    default:
+      return state;
   }
-
-  return state;
 };

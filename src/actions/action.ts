@@ -9,9 +9,16 @@ export interface IUser {
   };
 }
 
-export const saveUser = (user: IUser): void => {
-  type: SAVE_USER;
+interface IArgument {
+  type: string;
   payload: {
-    user;
-  }
-};
+    user: IUser;
+  };
+}
+
+export const saveUser = (user: IUser): IArgument => ({
+  type: SAVE_USER,
+  payload: {
+    user,
+  },
+});
