@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
+import { ErrorBoundary } from "../../../errorBoundaries";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -24,10 +25,12 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
-      <ContentContainer>
-        <Sidebar fullName="Константинопальский Константин Константинович" />
-        <Container>{children}</Container>
-      </ContentContainer>
+      <ErrorBoundary>
+        <ContentContainer>
+          <Sidebar fullName="Константинопальский Константин Константинович" />
+          <Container>{children}</Container>
+        </ContentContainer>
+      </ErrorBoundary>
       <Footer />
     </>
   );
