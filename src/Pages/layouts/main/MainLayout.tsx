@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
 import { db } from "../../../firebase/firebase";
+import { ErrorBoundary } from "../../../errorBoundaries";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -25,6 +26,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [patronymic, setPatronymic] = useState("");
+  const [icon, setIcon] = useState(null);
 
   const getContactInfo = () => {
     db.ref("users/0")
@@ -35,6 +37,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
         setFirstName(data.firstName);
         setLastName(data.lastName);
         setPatronymic(data.patronymic);
+        setIcon(data.icon);
       });
   };
 
@@ -45,10 +48,15 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
-      <ContentContainer>
-        <Sidebar fullName={`${firstName} ${lastName} ${patronymic}`} />
-        <Container>{children}</Container>
-      </ContentContainer>
+      <ErrorBoundary>
+        <ContentContainer>
+          <Sidebar
+            fullName={`${firstName} ${lastName} ${patronymic}`}
+            icon={icon}
+          />
+          <Container>{children}</Container>
+        </ContentContainer>
+      </ErrorBoundary>
       <Footer />
     </>
   );

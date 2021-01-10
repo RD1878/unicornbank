@@ -25,12 +25,15 @@ import { db } from "../firebase/firebase";
 import { ICard } from "../interfaces/card";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
+import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
+import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 
 interface IWithOpen {
   open: boolean;
 }
 interface ISidebar {
   fullName: string;
+  icon: null | HTMLImageElement;
 }
 
 const DRAWER_WIDTH = 350;
@@ -83,10 +86,22 @@ const StyledWrap = styled(Box)<IWithOpen>`
   width: ${(props) => (props.open ? `${DRAWER_WIDTH}px` : "auto")};
 `;
 
-const StyledAvatar = withTheme(styled(Avatar)`
+const StyledAvatar = styled(Avatar)`
   width: 100px;
   min-height: 100px;
   margin-bottom: 20px;
+`;
+
+const StyledIcon = withTheme(styled(PersonRoundedIcon)`
+  width: 100px;
+  min-height: 100px;
+  color: ${(props) => props.theme.palette.textPrimary.main};
+  border-radius: 50%;
+  border 2px solid ${(props) => props.theme.palette.textPrimary.main};
+`);
+
+const StyledAddAvatar = withTheme(styled(AddAPhotoRoundedIcon)`
+  color: ${(props) => props.theme.palette.textPrimary.main};
 `);
 
 const StyledLink = withTheme(styled(Link)`
@@ -100,7 +115,25 @@ const StyledLink = withTheme(styled(Link)`
   }
 `);
 
-const Sidebar: FC<ISidebar> = ({ fullName }) => {
+const StyledContainer = styled("div")`
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 20px;
+`;
+
+const StyledIconButtonDecrease = withTheme(styled(
+  FormatIndentDecreaseRoundedIcon
+)`
+  color: ${(props) => props.theme.palette.textPrimary.main};
+`);
+
+const StyledIconButtonIncrease = withTheme(styled(
+  FormatIndentIncreaseRoundedIcon
+)`
+  color: ${(props) => props.theme.palette.textPrimary.main};
+`);
+
+const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
   const [cards, setCards] = useState([]);
@@ -132,7 +165,14 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
       <StyledWrap open={open}>
         <StyledProfileInfo open={open}>
           <Grid container justify="center" alignItems="center">
-            <StyledAvatar sizes="large">H</StyledAvatar>
+            {icon ? (
+              <StyledAvatar sizes="large">{icon}</StyledAvatar>
+            ) : (
+              <StyledContainer>
+                <StyledIcon sizes="large" />
+                <StyledAddAvatar />
+              </StyledContainer>
+            )}
             <Typography variant="h2" color="textPrimary" align="center">
               {fullName}
             </Typography>
@@ -161,7 +201,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
             </ListItem>
             <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <StyledListItem button /* className={classes.nested} */>
+                <StyledListItem button>
                   {cards.map((card: ICard) => {
                     return <CardItem key={card.id} open={open} {...card} />;
                   })}
@@ -174,9 +214,9 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
           <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
             <IconButton onClick={handleDrawerCollapse}>
               {open ? (
-                <FormatIndentDecreaseRoundedIcon />
+                <StyledIconButtonDecrease />
               ) : (
-                <FormatIndentIncreaseRoundedIcon />
+                <StyledIconButtonIncrease />
               )}
             </IconButton>
           </Tooltip>

@@ -4,8 +4,7 @@ import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import styled from "styled-components";
-import { Box, Avatar } from "@material-ui/core";
-import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
+import { Box } from "@material-ui/core";
 import { PrimaryButton, TextField } from "../../atoms";
 import { db } from "../../firebase/firebase";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -30,12 +29,6 @@ const StyledRow = styled("div")`
   input {
     width: 100%;
   }
-`;
-
-const StyledAvatar = styled(Avatar)`
-  width: 100px;
-  min-height: 100px;
-  margin-bottom: 20px;
 `;
 
 const StyledBox = styled(Box)`
@@ -92,7 +85,7 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" defaultValue={phone} />;
+            <TextField label="Телефон" defaultValue={phone} />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
@@ -112,15 +105,6 @@ const Profile: FC = () => {
             <TextField label="СНИЛС" disabled defaultValue={snils} />
           </StyledRow>
         </Box>
-        <StyledRow>
-          <StyledAvatar sizes="large">H</StyledAvatar>
-          <StyledRow>
-            <AddAPhotoRoundedIcon color="action" />
-            <Typography variant="body2" color="textSecondary">
-              Загрузить фото
-            </Typography>
-          </StyledRow>
-        </StyledRow>
         <StyledBox>
           <Typography variant="body2" color="textSecondary">
             Если у вас поменялось ФИО, обратитесь в отделение банка. Для
