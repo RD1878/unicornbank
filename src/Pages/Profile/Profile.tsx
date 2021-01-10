@@ -70,8 +70,8 @@ const Profile: FC = () => {
         setEmail(data.contact.email);
         setSnils(data.snils);
         setPassport(data.passport);*/
-        setLoading(false);
         dispatch(saveUser(data));
+        setLoading(false);
       });
   };
 
