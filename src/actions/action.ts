@@ -9,14 +9,14 @@ export interface IUser {
   };
 }
 
-interface IArgument {
+interface IActionSaveUser {
   type: string;
   payload: {
     user: IUser;
   };
 }
 
-export const saveUser = (user: IUser): IArgument => ({
+export const saveUser = (user: IUser): IActionSaveUser => ({
   type: SAVE_USER,
   payload: {
     user,

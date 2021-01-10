@@ -51,12 +51,6 @@ const StyledBox = styled(Box)`
 `;
 
 const Profile: FC = () => {
-  /* const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [passport, setPassport] = useState("");
-  const [snils, setSnils] = useState(""); */
-  /*  const [user, setUser] = useState(null); */
-
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -66,12 +60,8 @@ const Profile: FC = () => {
       .once("value")
       .then((response) => {
         const data = response.val();
-        /* setPhone(data.contact.phone);
-        setEmail(data.contact.email);
-        setSnils(data.snils);
-        setPassport(data.passport);*/
-        setLoading(false);
         dispatch(saveUser(data));
+        setLoading(false);
       });
   };
 
@@ -86,6 +76,7 @@ const Profile: FC = () => {
       </Container>
     );
   }
+
   return (
     <Container>
       <Box mt={5}>

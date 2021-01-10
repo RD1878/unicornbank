@@ -10,14 +10,17 @@ const initialState = {
   },
 };
 
-interface IArgument {
+interface IActionSaveUser {
   type: string;
   payload: {
     user: IUser;
   };
 }
 
-export default (state = initialState, { type, payload }: IArgument): IUser => {
+export default (
+  state = initialState,
+  { type, payload }: IActionSaveUser
+): IUser => {
   switch (type) {
     case SAVE_USER:
       return {
