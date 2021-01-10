@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
+import { Provider } from "react-redux";
+import store from "../../../store/store";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -24,10 +26,12 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
-      <ContentContainer>
-        <Sidebar fullName="Константинопальский Константин Константинович" />
-        <Container>{children}</Container>
-      </ContentContainer>
+      <Provider store={store}>
+        <ContentContainer>
+          <Sidebar fullName="Константинопальский Константин Константинович" />
+          <Container>{children}</Container>
+        </ContentContainer>
+      </Provider>
       <Footer />
     </>
   );

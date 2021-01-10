@@ -9,6 +9,9 @@ import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
 import { db } from "../../firebase/firebase";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { useSelector, useDispatch } from "react-redux";
+import { userSelector } from "../../selectors/userSelector";
+import { saveUser } from "../../actions/action";
 
 const StyledRow = styled("div")`
   display: flex;
@@ -48,22 +51,26 @@ const StyledBox = styled(Box)`
 `;
 
 const Profile: FC = () => {
-  const [email, setEmail] = useState("");
+  /* const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [passport, setPassport] = useState("");
-  const [snils, setSnils] = useState("");
+  const [snils, setSnils] = useState(""); */
+  /*  const [user, setUser] = useState(null); */
+
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const user = useSelector(userSelector);
 
   const getContactInfo = () => {
     db.ref("users/0")
       .once("value")
       .then((response) => {
         const data = response.val();
-
-        setPhone(data.contact.phone);
+        dispatch(saveUser(data));
+        /* setPhone(data.contact.phone);
         setEmail(data.contact.email);
         setSnils(data.snils);
-        setPassport(data.passport);
+        setPassport(data.passport);*/
         setLoading(false);
       });
   };
@@ -92,11 +99,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" defaultValue={phone} />;
+            <TextField label="Телефон" /* defaultValue={phone} */ />;
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" defaultValue={email} />
+            <TextField label="Email" /* defaultValue={email} */ />
           </StyledRow>
         </Box>
         <Box mt={10}>
@@ -105,11 +112,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="Паспорт" disabled defaultValue={passport} />
+            <TextField label="Паспорт" disabled /* defaultValue={passport} */ />
           </StyledRow>
           <StyledRow>
             <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="СНИЛС" disabled defaultValue={snils} />
+            <TextField label="СНИЛС" disabled defaultValue={user.snils} />
           </StyledRow>
         </Box>
         <StyledRow>
