@@ -27,7 +27,6 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
-
 interface IWithOpen {
   open: boolean;
 }
@@ -177,7 +176,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
               {fullName}
             </Typography>
           </Grid>
-          <StyledLink href={ROUTES.PROFILE}>
+          <StyledLink to={ROUTES.PROFILE}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
               Редактировать профиль
