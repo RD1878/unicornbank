@@ -4,7 +4,6 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import { withTheme } from "@material-ui/core/styles";
 import { Box, Avatar } from "@material-ui/core";
-import { Link } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import CardItem from "./../atoms/CardItem";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,7 +12,8 @@ import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncr
 import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
-import { routes } from ".././routes";
+import { ROUTES } from ".././routes";
+import { Link } from "react-router-dom";
 interface IWithOpen {
   open: boolean;
 }
@@ -120,7 +120,7 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
               {fullName}
             </Typography>
           </Grid>
-          <StyledLink href={routes.profile}>
+          <StyledLink to={ROUTES.PROFILE}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
               Редактировать профиль

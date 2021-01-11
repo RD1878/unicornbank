@@ -6,8 +6,8 @@ import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
 import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { routes } from "../../routes";
 import { device } from "./../../theme/device";
+import { ROUTES } from "../../routes";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -169,7 +169,7 @@ const Register: FC = () => {
           <PrimaryButton onClick={createAccount} size="large">
             Зарегистрироваться
           </PrimaryButton>
-          <Link href={routes.auth} color="textPrimary">
+          <Link href={ROUTES.AUTH} color="textPrimary">
             <Typography variant="body2" color="textPrimary" align="center">
               У вас уже есть аккаунт?
             </Typography>

@@ -4,13 +4,17 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StylesProvider } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.render(
-  <StylesProvider injectFirst>
-    <App />
-  </StylesProvider>,
-  document.getElementById("root")
+const application = (
+  <BrowserRouter>
+    <StylesProvider injectFirst>
+      <App />
+    </StylesProvider>
+  </BrowserRouter>
 );
+
+ReactDOM.render(application, document.getElementById("root"));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
