@@ -1,5 +1,5 @@
 import { SAVE_USER } from "../actions/constants";
-import { IUser } from "../actions/action";
+import { IUser, IActionSaveUser } from "../interfaces/redux";
 
 const initialState = {
   passport: "",
@@ -9,13 +9,6 @@ const initialState = {
     email: "",
   },
 };
-
-interface IActionSaveUser {
-  type: string;
-  payload: {
-    user: IUser;
-  };
-}
 
 export default (
   state = initialState,

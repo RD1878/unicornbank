@@ -53,7 +53,7 @@ const StyledBox = styled(Box)`
 const Profile: FC = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const user = useSelector(userSelector);
+  const { passport, snils, contact } = useSelector(userSelector);
 
   const getContactInfo = () => {
     db.ref("users/0")
@@ -89,11 +89,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" defaultValue={user.contact.phone} />;
+            <TextField label="Телефон" defaultValue={contact.phone} />;
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" defaultValue={user.contact.email} />
+            <TextField label="Email" defaultValue={contact.email} />
           </StyledRow>
         </Box>
         <Box mt={10}>
@@ -102,11 +102,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="Паспорт" disabled defaultValue={user.passport} />
+            <TextField label="Паспорт" disabled defaultValue={passport} />
           </StyledRow>
           <StyledRow>
             <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="СНИЛС" disabled defaultValue={user.snils} />
+            <TextField label="СНИЛС" disabled defaultValue={snils} />
           </StyledRow>
         </Box>
         <StyledRow>

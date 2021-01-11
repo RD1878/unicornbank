@@ -1,3 +1,3 @@
-import { IUser } from "../actions/action";
+import { IUser } from "../interfaces/redux";
 
 export const userSelector = (state: IUser): IUser => state;
