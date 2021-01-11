@@ -15,28 +15,23 @@ export interface IAtm {
   longitude: number;
 }
 
-enum BranchType { //перечисления позволяют нам объявлять набор именованных констант начинаются с 0
-  ALL,
-  OFFICES,
-  ATM,
+interface ICategory {
+  type: string;
+  name: string;
+  target?: string;
 }
 
-const categories: { type: string; name: string }[] = [
+const CATEGORIES: ICategory[] = [
   { type: "all", name: "Все" },
-  { type: "offices", name: "Отделения" },
-  { type: "atm", name: "Банкоматы" },
+  { type: "offices", name: "Отделения", target: "Отделение офиса" },
+  { type: "atm", name: "Банкоматы", target: "Банкоматы" },
 ];
 
 const KAZAN_CENTER = [55.798551, 49.136325];
 
 const filterBranches = (tab: number, branches: IAtm[]): IAtm[] => {
-  // фильтрация массива отделений по name
-  if (tab === BranchType.OFFICES) {
-    return branches.filter(({ name }) => name === "Отделение офиса");
-  }
-
-  if (tab === BranchType.ATM) {
-    return branches.filter(({ name }) => name === "Банкоматы");
+  if (tab !== 0) {
+    return branches.filter(({ name }) => CATEGORIES[tab].target === name);
   }
 
   return branches;
@@ -75,10 +70,10 @@ const StyledYMap = styled(YMap)`
 `;
 
 const Map: FC = () => {
-  const [tab, setTab] = useState(BranchType.ALL);
+  const [tab, setTab] = useState(0);
   const [branches, setBranches] = useState<IAtm[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<IAtm | null>(null);
-  const array = filterBranches(tab, branches);
+  const branchesArray = filterBranches(tab, branches);
 
   const getMapInfo = () => {
     db.ref("ATM")
@@ -93,7 +88,7 @@ const Map: FC = () => {
     getMapInfo();
   }, []);
 
-  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
+  const tabHandleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
   };
 
@@ -110,13 +105,13 @@ const Map: FC = () => {
           </Typography>
           <Tabs
             value={tab}
-            onChange={handleChange}
+            onChange={tabHandleChange}
             indicatorColor="secondary"
             textColor="secondary"
             variant="fullWidth"
             scrollButtons="on"
           >
-            {categories.map(({ name, type }) => (
+            {CATEGORIES.map(({ name, type }) => (
               <StyledTab label={name} key={type} />
             ))}
           </Tabs>
@@ -133,7 +128,7 @@ const Map: FC = () => {
               controls: [],
             }}
           >
-            {array.map((branch) => (
+            {branchesArray.map((branch) => (
               <Placemark
                 key={branch.id}
                 geometry={[branch.latitude, branch.longitude]}
