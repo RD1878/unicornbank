@@ -5,6 +5,7 @@ import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
+import { useHistory } from "react-router-dom";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -58,6 +59,7 @@ const Auth: FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -76,7 +78,7 @@ const Auth: FC = () => {
     firebaseAuth
       .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
       .then(() => {
-        location.href = "/";
+        history.push("/");
       })
       .catch((error: Error) => {
         setError(true);

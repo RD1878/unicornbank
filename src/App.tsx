@@ -3,8 +3,10 @@ import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import { Auth, MainPage, Profile, Register, Settings } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
-import { routes } from "./routes";
-import Map from "./Pages/Map/index";
+import { ROUTES } from "./routes";
+import { Switch, Route } from "react-router-dom";
+import { ProtectedRoute } from "./ProtectedRoute";
+import FirebaseAuthContext from "./firebase/firebaseAuthContext";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -14,46 +16,23 @@ const App: FC = () => {
     setTheme(appThemes[newTheme]);
   };
 
-  const path = window.location.pathname;
-
-  function routing() {
-    switch (path) {
-      case routes.main:
-        return (
-          <MainLayout onToggleTheme={toggleTheme}>
-            <MainPage />
-          </MainLayout>
-        );
-
-      case routes.auth:
-        return <Auth />;
-
-      case routes.profile:
-        return (
-          <MainLayout onToggleTheme={toggleTheme}>
-            <Profile />
-          </MainLayout>
-        );
-
-      case routes.settings:
-        return (
-          <MainLayout onToggleTheme={toggleTheme}>
-            <Settings />
-          </MainLayout>
-        );
-
-      case routes.offices:
-        return (
-          <MainLayout onToggleTheme={toggleTheme}>
-            <Map />
-          </MainLayout>
-        );
-      default:
-        return <Register />;
-    }
-  }
-
-  return <ThemeProvider theme={theme}>{routing()}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <FirebaseAuthContext>
+        <Switch>
+          <Route path={ROUTES.AUTH} exact component={Auth} />
+          <Route path={ROUTES.REGISTER} exact component={Register} />
+          <ProtectedRoute path="*">
+            <MainLayout onToggleTheme={toggleTheme}>
+              <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
+              <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
+              <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
+            </MainLayout>
+          </ProtectedRoute>
+        </Switch>
+      </FirebaseAuthContext>
+    </ThemeProvider>
+  );
 };
 
 export default App;
