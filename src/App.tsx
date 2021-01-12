@@ -15,7 +15,6 @@ const App: FC = () => {
     const newTheme = theme.palette.type === "dark" ? "light" : "dark";
     setTheme(appThemes[newTheme]);
   };
-
   return (
     <ThemeProvider theme={theme}>
       <FirebaseAuthContext>

@@ -10,8 +10,8 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
+  useMediaQuery,
 } from "@material-ui/core";
-import { Link } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import CardItem from "./../atoms/CardItem";
 import IconButton from "@material-ui/core/IconButton";
@@ -27,6 +27,8 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
+import { Link } from "react-router-dom";
+
 interface IWithOpen {
   open: boolean;
 }
@@ -108,6 +110,7 @@ const StyledLink = withTheme(styled(Link)`
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+  text-decoration: none;
 
   a {
     margin-left: 10px;
@@ -159,12 +162,20 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
     getCardsInfo();
   }, []);
 
+  const matches = useMediaQuery("(max-width:1280px)");
+
+  const isMatchMedia = () => (matches ? !open : open);
+
   return (
-    <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
-      <StyledWrap open={open}>
-        <StyledProfileInfo open={open}>
+    <StyledDrawer
+      variant="permanent"
+      open={isMatchMedia()}
+      width={DRAWER_WIDTH}
+    >
+      <StyledWrap open={isMatchMedia()}>
+        <StyledProfileInfo open={isMatchMedia()}>
           <Grid container justify="center" alignItems="center">
-            {icon ? (
+            {icon === null ? (
               <StyledAvatar sizes="large">{icon}</StyledAvatar>
             ) : (
               <StyledContainer>
@@ -190,7 +201,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
                 {<PaymentRoundedIcon color="secondary" fontSize="large" />}
               </ListItemIcon>
               <ListItemText>
-                {open ? (
+                {isMatchMedia() ? (
                   <Typography variant="h2" color="textPrimary">
                     Карты
                   </Typography>
@@ -202,7 +213,9 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
               <List component="div" disablePadding>
                 <StyledListItem button>
                   {cards.map((card: ICard) => {
-                    return <CardItem key={card.id} open={open} {...card} />;
+                    return (
+                      <CardItem key={card.id} open={isMatchMedia()} {...card} />
+                    );
                   })}
                 </StyledListItem>
               </List>
@@ -210,9 +223,9 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
           </List>
         </Box>
         <Grid container justify="center">
-          <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
+          <Tooltip title={isMatchMedia() ? "Свернуть" : "Развернуть"} arrow>
             <IconButton onClick={handleDrawerCollapse}>
-              {open ? (
+              {isMatchMedia() ? (
                 <StyledIconButtonDecrease />
               ) : (
                 <StyledIconButtonIncrease />
