@@ -1,8 +1,11 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
 import { ErrorBoundary } from "../../../errorBoundaries";
+import SimpleBottomNavigation from "../../../atoms/SimpleBottomNavigation";
+import ProminentAppBar from "../../../atoms/ProminentAppBar";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -22,16 +25,21 @@ interface IMainLayout {
 }
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
+  const matches = useMediaQuery("(max-width:768px)");
   return (
     <>
-      <Header onToggleTheme={onToggleTheme} />
+      {matches && <ProminentAppBar />}
+      {!matches && <Header onToggleTheme={onToggleTheme} />}
       <ErrorBoundary>
         <ContentContainer>
-          <Sidebar fullName="Константинопальский Константин Константинович" />
+          {!matches && (
+            <Sidebar fullName="Константинопальский Константин Константинович" />
+          )}
           <Container>{children}</Container>
         </ContentContainer>
       </ErrorBoundary>
-      <Footer />
+      {!matches && <Footer />}
+      {matches && <SimpleBottomNavigation />}
     </>
   );
 };

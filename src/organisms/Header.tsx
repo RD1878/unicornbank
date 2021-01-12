@@ -5,6 +5,8 @@ import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
 import { Switch } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
+import PrimaryLink from "./../atoms/PrimaryLink";
+import { ROUTES } from ".././routes";
 import { Link } from "react-router-dom";
 
 const Container = withTheme(styled("div")`
@@ -47,11 +49,11 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
         {navigation.map((item) => (
           <Link to={item.path} key={item.path}>
-            {item.name}
+            <PrimaryLink component="span">{item.name}</PrimaryLink>
           </Link>
         ))}
 
-        <Link to="/auth" color="textPrimary">
+        <Link to={ROUTES.AUTH}>
           <PrimaryButton>Выйти</PrimaryButton>
         </Link>
       </LinksContainer>
