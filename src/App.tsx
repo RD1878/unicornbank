@@ -5,6 +5,8 @@ import { Auth, MainPage, Profile, Register, Settings } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
+import { ProtectedRoute } from "./ProtectedRoute";
+import FirebaseAuthContext from "./firebase/firebaseAuthContext";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -16,17 +18,19 @@ const App: FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Switch>
-        <Route path={ROUTES.AUTH} exact component={Auth} />
-        <Route path={ROUTES.REGISTER} exact component={Register} />
-        <Route path="*">
-          <MainLayout onToggleTheme={toggleTheme}>
-            <Route path={ROUTES.MAIN} exact component={MainPage} />
-            <Route path={ROUTES.PROFILE} component={Profile} />
-            <Route path={ROUTES.SETTINGS} component={Settings} />
-          </MainLayout>
-        </Route>
-      </Switch>
+      <FirebaseAuthContext>
+        <Switch>
+          <Route path={ROUTES.AUTH} exact component={Auth} />
+          <Route path={ROUTES.REGISTER} exact component={Register} />
+          <ProtectedRoute path="*">
+            <MainLayout onToggleTheme={toggleTheme}>
+              <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
+              <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
+              <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
+            </MainLayout>
+          </ProtectedRoute>
+        </Switch>
+      </FirebaseAuthContext>
     </ThemeProvider>
   );
 };
