@@ -103,6 +103,8 @@ const StyledIcon = withTheme(styled(PersonRoundedIcon)`
 
 const StyledAddAvatar = withTheme(styled(AddAPhotoRoundedIcon)`
   color: ${(props) => props.theme.palette.textPrimary.main};
+  position: absolute;
+  right: -20px;
 `);
 
 const StyledLink = withTheme(styled(Link)`
@@ -121,6 +123,7 @@ const StyledContainer = styled("div")`
   display: flex;
   align-items: flex-end;
   margin-bottom: 20px;
+  position: relative;
 `;
 
 const StyledIconButtonDecrease = withTheme(styled(

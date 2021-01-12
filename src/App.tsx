@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
-import { Auth, MainPage, Profile, Register, Settings } from "./Pages";
+import { Auth, MainPage, Profile, Register, Settings, Map } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
@@ -26,6 +26,7 @@ const App: FC = () => {
               <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
               <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
               <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
+              <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
             </MainLayout>
           </ProtectedRoute>
         </Switch>
