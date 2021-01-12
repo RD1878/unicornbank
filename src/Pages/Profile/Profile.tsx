@@ -8,6 +8,9 @@ import { Box } from "@material-ui/core";
 import { PrimaryButton, TextField } from "../../atoms";
 import { db } from "../../firebase/firebase";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { useSelector, useDispatch } from "react-redux";
+import { userSelector } from "../../selectors/userSelector";
+import { saveUser } from "../../actions/action";
 
 const StyledRow = styled("div")`
   display: flex;
@@ -41,22 +44,16 @@ const StyledBox = styled(Box)`
 `;
 
 const Profile: FC = () => {
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [passport, setPassport] = useState("");
-  const [snils, setSnils] = useState("");
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { passport, snils, contact } = useSelector(userSelector);
 
   const getContactInfo = () => {
     db.ref("users/0")
       .once("value")
       .then((response) => {
         const data = response.val();
-
-        setPhone(data.contact.phone);
-        setEmail(data.contact.email);
-        setSnils(data.snils);
-        setPassport(data.passport);
+        dispatch(saveUser(data));
         setLoading(false);
       });
   };
@@ -85,11 +82,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" defaultValue={phone} />
+            <TextField label="Телефон" defaultValue={contact.phone} />;
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" defaultValue={email} />
+            <TextField label="Email" defaultValue={contact.email} />
           </StyledRow>
         </Box>
         <Box mt={10}>

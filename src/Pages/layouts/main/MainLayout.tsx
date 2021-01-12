@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
 import { db } from "../../../firebase/firebase";
+import { Provider } from "react-redux";
+import store from "../../../store/store";
 import { ErrorBoundary } from "../../../errorBoundaries";
 
 const ContentContainer = withTheme(styled("div")`
@@ -49,13 +51,15 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
     <>
       <Header onToggleTheme={onToggleTheme} />
       <ErrorBoundary>
-        <ContentContainer>
-          <Sidebar
-            fullName={`${firstName} ${lastName} ${patronymic}`}
-            icon={icon}
-          />
-          <Container>{children}</Container>
-        </ContentContainer>
+        <Provider store={store}>
+          <ContentContainer>
+            <Sidebar
+              fullName={`${firstName} ${lastName} ${patronymic}`}
+              icon={icon}
+            />
+            <Container>{children}</Container>
+          </ContentContainer>
+        </Provider>
       </ErrorBoundary>
       <Footer />
     </>
