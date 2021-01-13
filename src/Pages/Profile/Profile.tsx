@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Container, Typography } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -7,11 +7,8 @@ import styled from "styled-components";
 import { Box, Avatar } from "@material-ui/core";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
-import { db } from "../../firebase/firebase";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors/userSelector";
-import { saveUser } from "../../actions/action";
 
 const StyledRow = styled("div")`
   display: flex;
@@ -51,31 +48,7 @@ const StyledBox = styled(Box)`
 `;
 
 const Profile: FC = () => {
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
   const { passport, snils, contact } = useSelector(userSelector);
-
-  const getContactInfo = () => {
-    db.ref("users/0")
-      .once("value")
-      .then((response) => {
-        const data = response.val();
-        dispatch(saveUser(data));
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    getContactInfo();
-  }, []);
-
-  if (loading) {
-    return (
-      <Container>
-        <LinearProgress />
-      </Container>
-    );
-  }
 
   return (
     <Container>

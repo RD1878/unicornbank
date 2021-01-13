@@ -1,11 +1,13 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import { firebaseAuth } from "../../firebase/firebase";
+import { db, firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { saveUser } from "../../actions/action";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -60,6 +62,7 @@ const Auth: FC = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -74,16 +77,25 @@ const Auth: FC = () => {
     }
   };
 
-  const userAuthorization = (): void => {
-    firebaseAuth
-      .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
-      .then(() => {
-        history.push("/");
-      })
-      .catch((error: Error) => {
-        setError(true);
-        setErrorMessage(error.message);
-      });
+  const userAuthorization = async (): Promise<void> => {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(email, password);
+      const uid = await firebaseAuth?.currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("Invalid id");
+      }
+
+      const result = await db.ref("users/" + uid).once("value");
+      const data = await result.val();
+
+      dispatch(saveUser(data));
+
+      history.push("/");
+    } catch (error) {
+      setError(true);
+      setErrorMessage(error.message);
+    }
   };
 
   return (

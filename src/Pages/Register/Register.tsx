@@ -1,12 +1,13 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import { firebaseAuth } from "../../firebase/firebase";
+import { db, firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
 import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
 import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { ROUTES } from "../../routes";
+import { useHistory } from "react-router-dom";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -76,6 +77,7 @@ const Register: FC = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const history = useHistory();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -92,23 +94,42 @@ const Register: FC = () => {
     }
   };
 
-  const createAccount = (): void => {
-    if (verifyPassword === password) {
-      firebaseAuth
-        .createUserWithEmailAndPassword(email, password) //создание аккаунта
-        .then(() => {
-          setOpen(true);
-          setTimeout(() => {
-            location.href = "/";
-          }, 2000);
-        })
-        .catch((error: Error) => {
-          setError(true);
-          setErrorMessage(error.message);
-        });
-    } else {
+  const createAccount = async (): Promise<void> => {
+    try {
+      if (verifyPassword !== password) {
+        throw new Error("Пароли не совпадают");
+      }
+
+      const res = await firebaseAuth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      if (!res?.user?.uid) {
+        throw new Error("Ошибка");
+      }
+
+      const { uid, email: userEmail } = res.user;
+
+      db.ref("users").child(uid).push().key;
+      db.ref().update({
+        [`users/${uid}`]: {
+          contact: {
+            email: userEmail,
+          },
+          createdAt: new Date(),
+          email: email,
+        },
+      });
+
+      setOpen(true);
+
+      setTimeout(() => {
+        history.push(ROUTES.AUTH);
+      }, 2000);
+    } catch ({ message }) {
+      setErrorMessage(message);
       setError(true);
-      setErrorMessage("Пароли не совпадают");
     }
   };
 

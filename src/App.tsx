@@ -7,6 +7,8 @@ import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import FirebaseAuthContext from "./firebase/firebaseAuthContext";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -17,21 +19,23 @@ const App: FC = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <FirebaseAuthContext>
-        <Switch>
-          <Route path={ROUTES.AUTH} exact component={Auth} />
-          <Route path={ROUTES.REGISTER} exact component={Register} />
-          <ProtectedRoute path="*">
-            <MainLayout onToggleTheme={toggleTheme}>
-              <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
-              <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
-              <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
-            </MainLayout>
-          </ProtectedRoute>
-        </Switch>
-      </FirebaseAuthContext>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <FirebaseAuthContext>
+          <Switch>
+            <Route path={ROUTES.AUTH} exact component={Auth} />
+            <Route path={ROUTES.REGISTER} exact component={Register} />
+            <ProtectedRoute path="*">
+              <MainLayout onToggleTheme={toggleTheme}>
+                <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
+                <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
+                <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
+              </MainLayout>
+            </ProtectedRoute>
+          </Switch>
+        </FirebaseAuthContext>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
