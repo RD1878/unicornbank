@@ -49,7 +49,7 @@ const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
 
   const getContactInfo = () => {
-    db.ref("users/0")
+    db.ref("users/WR7teNNWJXbC2TiJqXJjtIld8g72")
       .once("value")
       .then((response) => {
         const data = response.val();

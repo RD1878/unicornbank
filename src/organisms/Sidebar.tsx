@@ -28,6 +28,9 @@ import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { userSelector } from "../selectors/userSelector";
+import { saveUser } from "../actions/action";
 
 interface IWithOpen {
   open: boolean;
@@ -139,9 +142,23 @@ const StyledIconButtonIncrease = withTheme(styled(
 `);
 
 const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
-  const [cards, setCards] = useState([]);
+  const { products } = useSelector(userSelector);
+
+  const getContactInfo = () => {
+    db.ref("users/WR7teNNWJXbC2TiJqXJjtIld8g72")
+      .once("value")
+      .then((response) => {
+        const data = response.val();
+        dispatch(saveUser(data));
+      });
+  };
+
+  useEffect(() => {
+    getContactInfo();
+  }, []);
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
@@ -150,20 +167,6 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
   const handleClick = () => {
     setOpenCards((isOpenCards) => !isOpenCards);
   };
-
-  const getCardsInfo = () => {
-    db.ref("users/0")
-      .once("value")
-      .then((response) => {
-        const data = response.val();
-
-        setCards(data.products.cards);
-      });
-  };
-
-  useEffect(() => {
-    getCardsInfo();
-  }, []);
 
   const matches = useMediaQuery("(max-width:1280px)");
 
@@ -178,7 +181,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
       <StyledWrap open={isMatchMedia()}>
         <StyledProfileInfo open={isMatchMedia()}>
           <Grid container justify="center" alignItems="center">
-            {icon === null ? (
+            {icon ? (
               <StyledAvatar sizes="large">{icon}</StyledAvatar>
             ) : (
               <StyledContainer>
@@ -215,7 +218,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
             <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <StyledListItem button>
-                  {cards.map((card: ICard) => {
+                  {products.cards.map((card: ICard) => {
                     return (
                       <CardItem key={card.id} open={isMatchMedia()} {...card} />
                     );

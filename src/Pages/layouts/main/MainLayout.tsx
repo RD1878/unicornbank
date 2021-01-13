@@ -31,7 +31,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   const [icon, setIcon] = useState(null);
 
   const getContactInfo = () => {
-    db.ref("users/0")
+    db.ref("users/WR7teNNWJXbC2TiJqXJjtIld8g72")
       .once("value")
       .then((response) => {
         const data = response.val();

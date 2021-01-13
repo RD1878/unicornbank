@@ -8,10 +8,13 @@ const initialState = {
     phone: "",
     email: "",
   },
+  products: {
+    cards: [],
+  },
 };
 
 export default (
-  state = initialState,
+  state: IUser = initialState,
   { type, payload }: IActionSaveUser
 ): IUser => {
   switch (type) {
@@ -22,6 +25,9 @@ export default (
         contact: {
           phone: payload.user.contact.phone,
           email: payload.user.contact.email,
+        },
+        products: {
+          cards: payload.user.products.cards,
         },
       };
     default:
