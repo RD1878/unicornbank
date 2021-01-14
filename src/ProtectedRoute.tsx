@@ -4,9 +4,9 @@ import { AuthContext } from "./firebase/firebaseAuthContext";
 import { ROUTES } from "./routes";
 
 export const ProtectedRoute: FC<RouteProps> = (props) => {
-  const currentUser = useContext(AuthContext);
+  const { currentUser, loading } = useContext(AuthContext);
 
-  if (!currentUser) {
+  if (!currentUser && !loading) {
     return <Redirect to={ROUTES.AUTH} />;
   }
 

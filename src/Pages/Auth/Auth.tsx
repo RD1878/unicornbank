@@ -1,6 +1,6 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import { db, firebaseAuth } from "../../firebase/firebase";
+import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
@@ -8,6 +8,7 @@ import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../../actions/action";
+import { readUserData } from "./../../firebase/firebase";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -86,8 +87,7 @@ const Auth: FC = () => {
         throw new Error("Invalid id");
       }
 
-      const result = await db.ref("users/" + uid).once("value");
-      const data = await result.val();
+      const data = await readUserData(uid);
 
       dispatch(saveUser(data));
 
