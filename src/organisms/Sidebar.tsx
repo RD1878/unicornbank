@@ -148,7 +148,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
   const { products } = useSelector(userSelector);
 
   const getContactInfo = () => {
-    db.ref("users/WR7teNNWJXbC2TiJqXJjtIld8g72")
+    db.ref("users/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
       .once("value")
       .then((response) => {
         const data = response.val();
@@ -218,11 +218,9 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
             <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <StyledListItem button>
-                  {products.cards.map((card: ICard) => {
-                    return (
-                      <CardItem key={card.id} open={isMatchMedia()} {...card} />
-                    );
-                  })}
+                  {products.cards.map((card: ICard) => (
+                    <CardItem key={card.id} open={isMatchMedia()} {...card} />
+                  ))}
                 </StyledListItem>
               </List>
             </Collapse>

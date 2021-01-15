@@ -5,11 +5,10 @@ import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import Tooltip from "@material-ui/core/Tooltip";
-import getCardNumberMask from "../helpers/getCardNumberMask";
 import getCurrencyTypeBalance from "../helpers/getCurrencyTypeBalance";
 
 interface ICardItem {
-  number: number;
+  number: string;
   balance: number;
   currency: string;
   open: boolean;
@@ -33,7 +32,7 @@ const StyledColumn = withTheme(styled("div")<ICardItem>`
 
 const CardItem: FC<ICardItem> = ({ number, balance, currency, open }) => {
   return (
-    <Tooltip title={`Карта ${getCardNumberMask(number)}`} arrow>
+    <Tooltip title={`Карта ${number}`} arrow>
       <StyledListItem button open={open}>
         <StyledColumn open={open}>
           <Typography
@@ -45,7 +44,7 @@ const CardItem: FC<ICardItem> = ({ number, balance, currency, open }) => {
           </Typography>
           {open && (
             <Typography variant="body1" color="textSecondary" align="left">
-              {`Карта ${getCardNumberMask(number)}`}
+              {`Карта ${number}`}
             </Typography>
           )}
         </StyledColumn>

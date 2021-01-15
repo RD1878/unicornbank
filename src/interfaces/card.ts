@@ -1,6 +1,6 @@
 interface ICard {
   id: number;
-  number: number;
+  number: string;
   currency: string;
   balance: number;
   isActive: boolean;

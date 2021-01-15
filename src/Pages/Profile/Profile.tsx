@@ -4,7 +4,8 @@ import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import styled from "styled-components";
-import { Box } from "@material-ui/core";
+import { Box, Avatar } from "@material-ui/core";
+import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
 import { db } from "../../firebase/firebase";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -34,6 +35,12 @@ const StyledRow = styled("div")`
   }
 `;
 
+const StyledAvatar = styled(Avatar)`
+  width: 100px;
+  min-height: 100px;
+  margin-bottom: 20px;
+`;
+
 const StyledBox = styled(Box)`
   p {
     margin-bottom: 60px;
@@ -49,7 +56,7 @@ const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
 
   const getContactInfo = () => {
-    db.ref("users/WR7teNNWJXbC2TiJqXJjtIld8g72")
+    db.ref("users/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
       .once("value")
       .then((response) => {
         const data = response.val();
@@ -102,6 +109,15 @@ const Profile: FC = () => {
             <TextField label="СНИЛС" disabled defaultValue={snils} />
           </StyledRow>
         </Box>
+        <StyledRow>
+          <StyledAvatar sizes="large">H</StyledAvatar>
+          <StyledRow>
+            <AddAPhotoRoundedIcon color="action" />
+            <Typography variant="body2" color="textSecondary">
+              Загрузить фото
+            </Typography>
+          </StyledRow>
+        </StyledRow>
         <StyledBox>
           <Typography variant="body2" color="textSecondary">
             Если у вас поменялось ФИО, обратитесь в отделение банка. Для

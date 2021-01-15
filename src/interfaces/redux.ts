@@ -11,7 +11,7 @@ export interface IUser {
       currency: string;
       id: number;
       isActive: boolean;
-      number: number;
+      number: string;
       requisites: {
         account: number;
         bankOfRecipient: string;
