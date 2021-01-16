@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { Container, Typography } from "@material-ui/core";
+import React, { FC, useState, useEffect } from "react";
+import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
@@ -9,6 +9,13 @@ import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors/userSelector";
+import { db, firebaseAuth } from "../../firebase/firebase";
+import { saveUser } from "../../actions/action";
+import { readUserData } from "./../../firebase/firebase";
+import { useDispatch } from "react-redux";
+import { Alert } from "@material-ui/lab";
+
+export type TAlert = "success" | "error";
 
 const StyledRow = styled("div")`
   display: flex;
@@ -49,6 +56,48 @@ const StyledBox = styled(Box)`
 
 const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
+  const [phone, setPhone] = useState(contact.phone);
+  const [email, setEmail] = useState(contact.email);
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState<TAlert>("success");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setPhone(contact.phone);
+    setEmail(contact.email);
+  }, [contact]);
+
+  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const changeContactInfo = async (): Promise<void> => {
+    try {
+      const user = firebaseAuth.currentUser;
+      const uid: string = user?.uid as string;
+
+      db.ref().update({
+        [`users/${uid}`]: {
+          contact: {
+            phone,
+            email,
+          },
+        },
+      });
+      const updatedContactInfo = await readUserData(uid);
+      dispatch(saveUser(updatedContactInfo));
+      setAlertType("success");
+    } catch (error) {
+      setErrorMessage(error.message);
+      setAlertType("error");
+    } finally {
+      setOpen(true);
+    }
+  };
 
   return (
     <Container>
@@ -62,11 +111,19 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" defaultValue={contact.phone} />;
+            <TextField
+              label="Телефон"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+            />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" defaultValue={contact.email} />
+            <TextField
+              label="Email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
           </StyledRow>
         </Box>
         <Box mt={10}>
@@ -96,8 +153,21 @@ const Profile: FC = () => {
             Если у вас поменялось ФИО, обратитесь в отделение банка. Для
             изменения других данных Вы можете обратиться в чат.
           </Typography>
-          <PrimaryButton size="large">Сохранить изменения </PrimaryButton>
+          <PrimaryButton size="large" onClick={changeContactInfo}>
+            Сохранить изменения
+          </PrimaryButton>
         </StyledBox>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+        >
+          <Alert severity={alertType} onClose={handleCloseAlert}>
+            {alertType === "success"
+              ? "Данные успешно изменены!"
+              : errorMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );
