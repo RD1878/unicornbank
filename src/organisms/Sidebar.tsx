@@ -21,23 +21,17 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import { ROUTES } from ".././routes";
-import { db } from "../firebase/firebase";
 import { ICard } from "../interfaces/card";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { userSelector } from "../selectors/userSelector";
-import { saveUser } from "../actions/action";
 
 interface IWithOpen {
   open: boolean;
-}
-interface ISidebar {
-  fullName: string;
-  icon: null | HTMLImageElement;
 }
 
 const DRAWER_WIDTH = 350;
@@ -141,24 +135,13 @@ const StyledIconButtonIncrease = withTheme(styled(
   color: ${(props) => props.theme.palette.textPrimary.main};
 `);
 
-const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
-  const dispatch = useDispatch();
+const Sidebar: FC = () => {
+  const { firstName, lastName, patronymic, products, icon } = useSelector(
+    userSelector
+  );
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
-  const { products } = useSelector(userSelector);
-
-  const getContactInfo = () => {
-    db.ref("users/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
-      .once("value")
-      .then((response) => {
-        const data = response.val();
-        dispatch(saveUser(data));
-      });
-  };
-
-  useEffect(() => {
-    getContactInfo();
-  }, []);
+  const matches = useMediaQuery("(max-width:1280px)");
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
@@ -168,18 +151,14 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
     setOpenCards((isOpenCards) => !isOpenCards);
   };
 
-  const matches = useMediaQuery("(max-width:1280px)");
-
-  const isMatchMedia = () => (matches ? !open : open);
+  useEffect(() => {
+    matches ? setOpen(false) : setOpen(true);
+  }, [matches]);
 
   return (
-    <StyledDrawer
-      variant="permanent"
-      open={isMatchMedia()}
-      width={DRAWER_WIDTH}
-    >
-      <StyledWrap open={isMatchMedia()}>
-        <StyledProfileInfo open={isMatchMedia()}>
+    <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
+      <StyledWrap open={open}>
+        <StyledProfileInfo open={open}>
           <Grid container justify="center" alignItems="center">
             {icon ? (
               <StyledAvatar sizes="large">{icon}</StyledAvatar>
@@ -190,7 +169,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
               </StyledContainer>
             )}
             <Typography variant="h2" color="textPrimary" align="center">
-              {fullName}
+              {`${firstName} ${patronymic} ${lastName} `}
             </Typography>
           </Grid>
           <StyledLink to={ROUTES.PROFILE}>
@@ -207,7 +186,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
                 {<PaymentRoundedIcon color="secondary" fontSize="large" />}
               </ListItemIcon>
               <ListItemText>
-                {isMatchMedia() ? (
+                {open ? (
                   <Typography variant="h2" color="textPrimary">
                     Карты
                   </Typography>
@@ -219,7 +198,7 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
               <List component="div" disablePadding>
                 <StyledListItem button>
                   {products.cards.map((card: ICard) => (
-                    <CardItem key={card.id} open={isMatchMedia()} {...card} />
+                    <CardItem key={card.id} open={open} {...card} />
                   ))}
                 </StyledListItem>
               </List>
@@ -227,9 +206,9 @@ const Sidebar: FC<ISidebar> = ({ fullName, icon }) => {
           </List>
         </Box>
         <Grid container justify="center">
-          <Tooltip title={isMatchMedia() ? "Свернуть" : "Развернуть"} arrow>
+          <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
             <IconButton onClick={handleDrawerCollapse}>
-              {isMatchMedia() ? (
+              {open ? (
                 <StyledIconButtonDecrease />
               ) : (
                 <StyledIconButtonIncrease />

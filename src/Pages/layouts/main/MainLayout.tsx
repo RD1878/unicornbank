@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
 import { db } from "../../../firebase/firebase";
-import { Provider } from "react-redux";
-import store from "../../../store/store";
+import { useDispatch } from "react-redux";
 import { ErrorBoundary } from "../../../errorBoundaries";
+import { saveUser } from "../../../actions/action";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -25,21 +25,14 @@ interface IMainLayout {
 }
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [patronymic, setPatronymic] = useState("");
-  const [icon, setIcon] = useState(null);
+  const dispatch = useDispatch();
 
   const getContactInfo = () => {
     db.ref("users/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
       .once("value")
       .then((response) => {
         const data = response.val();
-
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setPatronymic(data.patronymic);
-        setIcon(data.icon);
+        dispatch(saveUser(data));
       });
   };
 
@@ -51,15 +44,10 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
     <>
       <Header onToggleTheme={onToggleTheme} />
       <ErrorBoundary>
-        <Provider store={store}>
-          <ContentContainer>
-            <Sidebar
-              fullName={`${firstName} ${lastName} ${patronymic}`}
-              icon={icon}
-            />
-            <Container>{children}</Container>
-          </ContentContainer>
-        </Provider>
+        <ContentContainer>
+          <Sidebar />
+          <Container>{children}</Container>
+        </ContentContainer>
       </ErrorBoundary>
       <Footer />
     </>

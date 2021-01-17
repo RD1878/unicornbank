@@ -1,4 +1,8 @@
 export interface IUser {
+  firstName: string;
+  lastName: string;
+  patronymic: string;
+  icon: null | HTMLImageElement;
   passport: string;
   snils: string;
   contact: {
