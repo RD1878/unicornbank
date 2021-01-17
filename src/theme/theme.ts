@@ -19,6 +19,16 @@ const WHITE100 = "#F2E9E4";
 const WHITE200 = "#F5F5F5";
 const YELLOW500 = "#FCA311";
 
+const breakpoints = {
+  values: {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  },
+};
+
 const overrides = {
   MuiTypography: {
     root: {
@@ -77,6 +87,7 @@ const overrides = {
 };
 
 const dark = createMuiTheme({
+  breakpoints: breakpoints,
   palette: {
     type: "dark",
     primary: {
@@ -95,6 +106,7 @@ const dark = createMuiTheme({
 });
 
 const light = createMuiTheme({
+  breakpoints: breakpoints,
   palette: {
     type: "light",
     primary: {

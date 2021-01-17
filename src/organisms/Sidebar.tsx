@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import { withTheme } from "@material-ui/core/styles";
+import { withTheme, useTheme } from "@material-ui/core/styles";
 import {
   Box,
   Avatar,
@@ -139,9 +139,10 @@ const Sidebar: FC = () => {
   const { firstName, lastName, patronymic, products, icon } = useSelector(
     userSelector
   );
+  const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
-  const matches = useMediaQuery("(max-width:1280px)");
+  const matches = useMediaQuery(theme.breakpoints.only("lg"));
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
@@ -152,7 +153,7 @@ const Sidebar: FC = () => {
   };
 
   useEffect(() => {
-    matches ? setOpen(false) : setOpen(true);
+    matches ? setOpen(true) : setOpen(false);
   }, [matches]);
 
   return (
