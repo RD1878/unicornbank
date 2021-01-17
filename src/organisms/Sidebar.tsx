@@ -136,13 +136,13 @@ const StyledIconButtonIncrease = withTheme(styled(
 `);
 
 const Sidebar: FC = () => {
-  const { firstName, lastName, patronymic, products, icon } = useSelector(
+  const { firstName, lastName, patronymic, products, avatarURL } = useSelector(
     userSelector
   );
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
-  const matches = useMediaQuery(theme.breakpoints.only("lg"));
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
@@ -161,8 +161,8 @@ const Sidebar: FC = () => {
       <StyledWrap open={open}>
         <StyledProfileInfo open={open}>
           <Grid container justify="center" alignItems="center">
-            {icon ? (
-              <StyledAvatar sizes="large">{icon}</StyledAvatar>
+            {avatarURL ? (
+              <StyledAvatar sizes="large">{avatarURL}</StyledAvatar>
             ) : (
               <StyledContainer>
                 <StyledIcon sizes="large" />

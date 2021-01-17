@@ -5,7 +5,7 @@ const initialState = {
   firstName: "",
   lastName: "",
   patronymic: "",
-  icon: null,
+  avatarURL: "",
   passport: "",
   snils: "",
   contact: {
