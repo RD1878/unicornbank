@@ -96,9 +96,7 @@ const Register: FC = () => {
 
   const createAccount = async (): Promise<void> => {
     try {
-      if (verifyPassword !== password) {
-        throw new Error("Пароли не совпадают");
-      }
+      if (verifyPassword !== password) throw new Error("Пароли не совпадают");
 
       const res = await firebaseAuth.createUserWithEmailAndPassword(
         email,

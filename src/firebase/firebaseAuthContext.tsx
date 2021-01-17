@@ -24,19 +24,19 @@ export const FirebaseAuthContext: FC<IAuthFirebase> = ({ children }) => {
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (user) => {
-      if (user) {
+      try {
         setCurrentUser(user);
-
+        if (!user) {
+          throw new Error("Данных нет");
+        }
         const data = await readUserData(user.uid);
-
         if (data) {
           dispatch(saveUser(data));
         }
-      } else {
+      } catch (error) {
         setCurrentUser(null);
+        setLoading(false);
       }
-
-      setLoading(false);
     });
   }, []);
 

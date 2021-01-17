@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
@@ -46,7 +46,7 @@ const Settings: FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
 
-  const reauthenticate = async () => {
+  const reauthenticate = () => {
     const user = firebaseAuth.currentUser;
     const cred = firebase.auth.EmailAuthProvider.credential(
       user?.email as string,
@@ -81,6 +81,18 @@ const Settings: FC = () => {
     }
   };
 
+  const changeCurrentPassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentPassword(e.target.value);
+  };
+
+  const changeNewPassword1 = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewPassword1(e.target.value);
+  };
+
+  const changeNewPassword2 = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewPassword2(e.target.value);
+  };
+
   return (
     <Container>
       <Box mt={5}>
@@ -97,14 +109,14 @@ const Settings: FC = () => {
             helperText={errorMessage}
             value={currentPassword}
             error={error}
-            onChange={(event) => setCurrentPassword(event.target.value)}
+            onChange={changeCurrentPassword}
           />
           <PasswordField
             name="newPassword1"
             label="Введите новый пароль"
             value={newPassword1}
             error={error}
-            onChange={(event) => setNewPassword1(event.target.value)}
+            onChange={changeNewPassword1}
             helperText={errorMessage}
           />
           <PasswordField
@@ -112,7 +124,7 @@ const Settings: FC = () => {
             label="Повторите новый пароль"
             value={newPassword2}
             error={error}
-            onChange={(event) => setNewPassword2(event.target.value)}
+            onChange={changeNewPassword2}
             helperText={errorMessage}
           />
         </StyledColumn>

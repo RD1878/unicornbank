@@ -1,4 +1,10 @@
-import React, { FC, useState, useEffect } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  SyntheticEvent,
+  ChangeEvent,
+} from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -58,7 +64,7 @@ const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
   const [phone, setPhone] = useState(contact.phone);
   const [email, setEmail] = useState(contact.email);
-  const [open, setOpen] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const dispatch = useDispatch();
@@ -68,11 +74,9 @@ const Profile: FC = () => {
     setEmail(contact.email);
   }, [contact]);
 
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setIsOpenAlert(false);
   };
 
   const changeContactInfo = async (): Promise<void> => {
@@ -95,8 +99,16 @@ const Profile: FC = () => {
       setErrorMessage(error.message);
       setAlertType("error");
     } finally {
-      setOpen(true);
+      setIsOpenAlert(true);
     }
+  };
+
+  const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
+    setPhone(e.target.value);
+  };
+
+  const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
   return (
@@ -111,19 +123,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField
-              label="Телефон"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-            />
+            <TextField label="Телефон" value={phone} onChange={changePhone} />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField
-              label="Email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
+            <TextField label="Email" value={email} onChange={changeEmail} />
           </StyledRow>
         </Box>
         <Box mt={10}>
@@ -158,7 +162,7 @@ const Profile: FC = () => {
           </PrimaryButton>
         </StyledBox>
         <Snackbar
-          open={open}
+          open={isOpenAlert}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
         >
