@@ -16,7 +16,7 @@ import { PrimaryButton, TextField } from "../../atoms";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors/userSelector";
 import { db, firebaseAuth } from "../../firebase/firebase";
-import { saveUser } from "../../actions/action";
+import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { Alert } from "@material-ui/lab";

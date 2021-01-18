@@ -7,7 +7,7 @@ import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { saveUser } from "../../actions/action";
+import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 
 const BackGround = styled.div`
@@ -60,16 +60,13 @@ const FormAuth = withTheme(styled("div")`
 const Auth: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
-    setError(false);
     setErrorMessage("");
-
     if (name === "email") {
       setEmail(value);
     }
@@ -82,18 +79,13 @@ const Auth: FC = () => {
     try {
       await firebaseAuth.signInWithEmailAndPassword(email, password);
       const uid = await firebaseAuth?.currentUser?.uid;
-
       if (!uid) {
         throw new Error("Invalid id");
       }
-
       const data = await readUserData(uid);
-
       dispatch(saveUser(data));
-
       history.push("/");
     } catch (error) {
-      setError(true);
       setErrorMessage(error.message);
     }
   };
@@ -109,7 +101,7 @@ const Auth: FC = () => {
         </Typography>
         <TextField
           fullWidth
-          error={error}
+          error={!!errorMessage}
           label="Почта"
           name="email"
           value={email}
@@ -117,7 +109,7 @@ const Auth: FC = () => {
           helperText={errorMessage}
         />
         <PasswordField
-          error={error}
+          error={!!errorMessage}
           name="password"
           value={password}
           onChange={handleChange}
