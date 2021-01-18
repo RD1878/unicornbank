@@ -1,10 +1,11 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
-import { Provider } from "react-redux";
-import store from "../../../store/store";
+import { db } from "../../../firebase/firebase";
+import { useDispatch } from "react-redux";
 import { ErrorBoundary } from "../../../errorBoundaries";
+import { saveUser } from "../../../actions/action";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -24,16 +25,29 @@ interface IMainLayout {
 }
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
+  const dispatch = useDispatch();
+
+  const getContactInfo = () => {
+    db.ref("users/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
+      .once("value")
+      .then((response) => {
+        const data = response.val();
+        dispatch(saveUser(data));
+      });
+  };
+
+  useEffect(() => {
+    getContactInfo();
+  }, []);
+
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />
       <ErrorBoundary>
-        <Provider store={store}>
-          <ContentContainer>
-            <Sidebar fullName="Константинопальский Константин Константинович" />
-            <Container>{children}</Container>
-          </ContentContainer>
-        </Provider>
+        <ContentContainer>
+          <Sidebar />
+          <Container>{children}</Container>
+        </ContentContainer>
       </ErrorBoundary>
       <Footer />
     </>
