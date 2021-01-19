@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
@@ -41,10 +41,8 @@ interface IHeader {
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
 
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
     setError(false);
   };
 

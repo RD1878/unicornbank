@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, SyntheticEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
@@ -41,7 +41,7 @@ const Settings: FC = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword1, setNewPassword1] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
-  const [open, setOpen] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -56,9 +56,9 @@ const Settings: FC = () => {
     return user?.reauthenticateWithCredential(cred);
   };
 
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
-    setOpen(false);
+    setIsOpenAlert(false);
   };
 
   const changePassword = async () => {
@@ -75,7 +75,7 @@ const Settings: FC = () => {
       setErrorMessage(error.message);
       setAlertType("error");
     } finally {
-      setOpen(true);
+      setIsOpenAlert(true);
     }
   };
 
@@ -137,7 +137,7 @@ const Settings: FC = () => {
           </PrimaryButton>
         </StyledBox>
         <Snackbar
-          open={open}
+          open={isOpenAlert}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
         >
