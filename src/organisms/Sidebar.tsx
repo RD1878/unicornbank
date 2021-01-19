@@ -153,7 +153,7 @@ const Sidebar: FC = () => {
   };
 
   useEffect(() => {
-    matches ? setOpen(true) : setOpen(false);
+    setOpen(matches);
   }, [matches]);
 
   return (
@@ -184,7 +184,7 @@ const Sidebar: FC = () => {
           <List>
             <ListItem button onClick={handleClick}>
               <ListItemIcon>
-                {<PaymentRoundedIcon color="secondary" fontSize="large" />}
+                <PaymentRoundedIcon color="secondary" fontSize="large" />
               </ListItemIcon>
               <ListItemText>
                 {open ? (

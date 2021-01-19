@@ -87,7 +87,7 @@ const overrides = {
 };
 
 const dark = createMuiTheme({
-  breakpoints: breakpoints,
+  breakpoints,
   palette: {
     type: "dark",
     primary: {
@@ -106,7 +106,7 @@ const dark = createMuiTheme({
 });
 
 const light = createMuiTheme({
-  breakpoints: breakpoints,
+  breakpoints,
   palette: {
     type: "light",
     primary: {
