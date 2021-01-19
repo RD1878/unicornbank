@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import FirebaseAuthContext from "./firebase/firebaseAuthContext";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import CardInfo from "./Pages/CardInfo/CardInfo";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -17,6 +18,7 @@ const App: FC = () => {
     const newTheme = theme.palette.type === "dark" ? "light" : "dark";
     setTheme(appThemes[newTheme]);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
@@ -30,6 +32,7 @@ const App: FC = () => {
                 <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
                 <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
                 <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
+                <ProtectedRoute path={"/card/:id"} component={CardInfo} />
               </MainLayout>
             </ProtectedRoute>
           </Switch>

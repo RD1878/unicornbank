@@ -123,6 +123,11 @@ const StyledContainer = styled("div")`
   position: relative;
 `;
 
+const StyledCardLink = styled(Link)`
+  text-decoration: none;
+  width: 100%;
+`;
+
 const StyledIconButtonDecrease = withTheme(styled(
   FormatIndentDecreaseRoundedIcon
 )`
@@ -153,7 +158,7 @@ const Sidebar: FC = () => {
   };
 
   useEffect(() => {
-    matches ? setOpen(true) : setOpen(false);
+    setOpen(matches);
   }, [matches]);
 
   return (
@@ -184,7 +189,7 @@ const Sidebar: FC = () => {
           <List>
             <ListItem button onClick={handleClick}>
               <ListItemIcon>
-                {<PaymentRoundedIcon color="secondary" fontSize="large" />}
+                <PaymentRoundedIcon color="secondary" fontSize="large" />
               </ListItemIcon>
               <ListItemText>
                 {open ? (
@@ -199,7 +204,9 @@ const Sidebar: FC = () => {
               <List component="div" disablePadding>
                 <StyledListItem button>
                   {products.cards.map((card: ICard) => (
-                    <CardItem key={card.id} open={open} {...card} />
+                    <StyledCardLink to={`/card/${card.id}`} key={card.id}>
+                      <CardItem key={card.id} open={open} {...card} />
+                    </StyledCardLink>
                   ))}
                 </StyledListItem>
               </List>
