@@ -69,6 +69,22 @@ const Profile: FC = () => {
   const [alertType, setAlertType] = useState<TAlert>("success");
   const dispatch = useDispatch();
 
+  const phoneMask = (): string => {
+    const pattern = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
+    const match = phone.match(pattern);
+
+    if (!match) {
+      return "+7";
+    }
+
+    const first = match[2] && `(${match[2]}`;
+    const second = match[3] && `)${match[3]}`;
+    const third = match[4] && `-${match[4]}`;
+    const fourth = match[5] && `-${match[5]}`;
+
+    return ["+7", first, second, third, fourth].join("");
+  };
+
   useEffect(() => {
     setPhone(contact.phone);
     setEmail(contact.email);
@@ -107,7 +123,16 @@ const Profile: FC = () => {
   };
 
   const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
+    const { value } = e.target;
+    const cleaned = value.replace(/\D/g, "");
+
+    if (cleaned.length > 11) {
+      return;
+    }
+
+    const newPhone = cleaned.replace(/[^0-9]+/, "");
+
+    setPhone(newPhone);
   };
 
   const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +151,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" value={phone} onChange={changePhone} />
+            <TextField
+              label="Телефон"
+              value={phoneMask()}
+              onChange={changePhone}
+            />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
