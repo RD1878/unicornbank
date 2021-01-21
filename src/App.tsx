@@ -7,8 +7,8 @@ import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, getSessionError, saveUser } from "./actions";
-import { firebaseAuth, readUserData } from "./firebase/firebase";
+import { getSession, getSessionError, requestUser } from "./actions";
+import { firebaseAuth } from "./firebase/firebase";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -23,10 +23,7 @@ const App: FC = () => {
         }
 
         dispatch(getSession(user));
-
-        const data = await readUserData(user.uid);
-
-        dispatch(saveUser(data));
+        dispatch(requestUser());
       } catch (error) {
         dispatch(getSessionError());
       }

@@ -1,23 +1,15 @@
-import { put, takeEvery } from "redux-saga/effects";
-import { SAVE_USER } from "../actions/constants";
+import { put, takeEvery, call } from "redux-saga/effects";
+import { REQUEST_USER, saveUser } from "../actions";
 import { SagaIterator } from "redux-saga";
-
 import api from "../api";
 
-import { saveUser } from "./../actions";
-
 function* rootSaga(): SagaIterator {
-  yield takeEvery(SAVE_USER, saveUserAsync);
+  yield takeEvery(REQUEST_USER, saveUserAsync);
 }
 
 function* saveUserAsync() {
-  try {
-    const data = yield api.fetchUser();
-
-    yield put(saveUser(data));
-  } catch (error) {
-    console.error(error.message);
-  }
+  const user = yield call(api.fetchUser);
+  yield put(saveUser(user));
 }
 
 export default rootSaga;
