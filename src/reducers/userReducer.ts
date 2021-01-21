@@ -1,4 +1,4 @@
-import { SAVE_USER } from "../actions/constants";
+import { SAVE_USER } from "../actions";
 import { IUser, IActionSaveUser } from "../interfaces/redux";
 
 const initialState = {

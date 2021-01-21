@@ -1,12 +1,13 @@
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
+import { useSelector } from "react-redux";
 import { Route, Redirect, RouteProps } from "react-router-dom";
-import { AuthContext } from "./firebase/firebaseAuthContext";
+
 import { ROUTES } from "./routes";
+import { authSelector } from "./selectors";
 
 export const ProtectedRoute: FC<RouteProps> = (props) => {
-  const currentUser = useContext(AuthContext);
-
-  if (!currentUser) {
+  const { currentUser, loading } = useSelector(authSelector);
+  if (!currentUser && !loading) {
     return <Redirect to={ROUTES.AUTH} />;
   }
 
