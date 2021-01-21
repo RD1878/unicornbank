@@ -5,7 +5,7 @@ import { Header, Sidebar, Footer } from "../../../organisms";
 import { db } from "../../../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { ErrorBoundary } from "../../../errorBoundaries";
-import { saveUser } from "../../../actions/action";
+import { saveUser } from "../../../actions/user";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;

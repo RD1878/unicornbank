@@ -24,8 +24,8 @@ const categories: { type: string; name: string }[] = [
   { type: "all", name: "Все" },
   { type: "transaction", name: "Переводы" },
   { type: "income", name: "Пополнения" },
-  { type: "service", name: "Товары и услуги" },
-  { type: "entertainment", name: "Развлечения" },
+  { type: "writeOff", name: "Списания" },
+  /* { type: "entertainment", name: "Развлечения" }, */
 ];
 
 export const Operations: FC = () => {
