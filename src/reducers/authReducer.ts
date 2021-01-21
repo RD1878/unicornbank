@@ -1,4 +1,4 @@
-import { TGetSession, GET_SESSION } from "../actions";
+import { TGetSession, GET_SESSION, GET_SESSION_ERROR } from "../actions";
 import { TUser } from "../firebase/firebase";
 
 export interface IAuthSession {
@@ -22,6 +22,12 @@ export default (
       return {
         loading: false,
         currentUser: user,
+      };
+
+    case GET_SESSION_ERROR:
+      return {
+        loading: false,
+        currentUser: null,
       };
 
     default:

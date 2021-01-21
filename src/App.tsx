@@ -7,7 +7,7 @@ import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, saveUser } from "./actions";
+import { getSession, getSessionError, saveUser } from "./actions";
 import { firebaseAuth, readUserData } from "./firebase/firebase";
 
 const App: FC = () => {
@@ -28,7 +28,7 @@ const App: FC = () => {
 
         dispatch(saveUser(data));
       } catch (error) {
-        dispatch(getSession(null));
+        dispatch(getSessionError());
       }
     });
   }, []);

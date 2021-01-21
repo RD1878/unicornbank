@@ -81,8 +81,11 @@ const Profile: FC = () => {
 
   const changeContactInfo = async (): Promise<void> => {
     try {
-      const user = firebaseAuth.currentUser;
-      const uid: string = user?.uid as string;
+      const uid = firebaseAuth?.currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("Пользователь не найден");
+      }
 
       db.ref().update({
         [`users/${uid}`]: {

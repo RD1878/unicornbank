@@ -78,7 +78,7 @@ const Auth: FC = () => {
   const userAuthorization = async (): Promise<void> => {
     try {
       await firebaseAuth.signInWithEmailAndPassword(email, password);
-      const uid = await firebaseAuth?.currentUser?.uid;
+      const uid = firebaseAuth?.currentUser?.uid;
       if (!uid) {
         throw new Error("Invalid id");
       }
