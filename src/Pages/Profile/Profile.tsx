@@ -1,5 +1,11 @@
-import React, { FC, useEffect, useState } from "react";
-import { Container, Typography } from "@material-ui/core";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  SyntheticEvent,
+  ChangeEvent,
+} from "react";
+import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
@@ -7,11 +13,15 @@ import styled from "styled-components";
 import { Box, Avatar } from "@material-ui/core";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { PrimaryButton, TextField } from "../../atoms";
-import { db } from "../../firebase/firebase";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors/userSelector";
-import { saveUser } from "../../actions/action";
+import { db, firebaseAuth } from "../../firebase/firebase";
+import { saveUser } from "../../actions/user";
+import { readUserData } from "./../../firebase/firebase";
+import { useDispatch } from "react-redux";
+import { Alert } from "@material-ui/lab";
+
+export type TAlert = "success" | "error";
 
 const StyledRow = styled("div")`
   display: flex;
@@ -51,31 +61,58 @@ const StyledBox = styled(Box)`
 `;
 
 const Profile: FC = () => {
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
   const { passport, snils, contact } = useSelector(userSelector);
-
-  const getContactInfo = () => {
-    db.ref("users/0")
-      .once("value")
-      .then((response) => {
-        const data = response.val();
-        dispatch(saveUser(data));
-        setLoading(false);
-      });
-  };
+  const [phone, setPhone] = useState(contact.phone);
+  const [email, setEmail] = useState(contact.email);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState<TAlert>("success");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getContactInfo();
-  }, []);
+    setPhone(contact.phone);
+    setEmail(contact.email);
+  }, [contact]);
 
-  if (loading) {
-    return (
-      <Container>
-        <LinearProgress />
-      </Container>
-    );
-  }
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setIsOpenAlert(false);
+  };
+
+  const changeContactInfo = async (): Promise<void> => {
+    try {
+      const uid = firebaseAuth?.currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("Пользователь не найден");
+      }
+
+      db.ref().update({
+        [`users/${uid}`]: {
+          contact: {
+            phone,
+            email,
+          },
+        },
+      });
+      const updatedContactInfo = await readUserData(uid);
+      dispatch(saveUser(updatedContactInfo));
+      setAlertType("success");
+    } catch (error) {
+      setErrorMessage(error.message);
+      setAlertType("error");
+    } finally {
+      setIsOpenAlert(true);
+    }
+  };
+
+  const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
+    setPhone(e.target.value);
+  };
+
+  const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
 
   return (
     <Container>
@@ -89,11 +126,11 @@ const Profile: FC = () => {
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" defaultValue={contact.phone} />;
+            <TextField label="Телефон" value={phone} onChange={changePhone} />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" defaultValue={contact.email} />
+            <TextField label="Email" value={email} onChange={changeEmail} />
           </StyledRow>
         </Box>
         <Box mt={10}>
@@ -123,8 +160,21 @@ const Profile: FC = () => {
             Если у вас поменялось ФИО, обратитесь в отделение банка. Для
             изменения других данных Вы можете обратиться в чат.
           </Typography>
-          <PrimaryButton size="large">Сохранить изменения </PrimaryButton>
+          <PrimaryButton size="large" onClick={changeContactInfo}>
+            Сохранить изменения
+          </PrimaryButton>
         </StyledBox>
+        <Snackbar
+          open={isOpenAlert}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+        >
+          <Alert severity={alertType} onClose={handleCloseAlert}>
+            {alertType === "success"
+              ? "Данные успешно изменены!"
+              : errorMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );

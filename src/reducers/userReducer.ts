@@ -1,4 +1,4 @@
-import { SAVE_USER } from "../actions/constants";
+import { SAVE_USER } from "../actions";
 import { IUser, IActionSaveUser } from "../interfaces/redux";
 
 const initialState = {
@@ -17,12 +17,8 @@ export default (
   switch (type) {
     case SAVE_USER:
       return {
-        passport: payload.user.passport,
-        snils: payload.user.snils,
-        contact: {
-          phone: payload.user.contact.phone,
-          email: payload.user.contact.email,
-        },
+        ...state,
+        ...payload.user,
       };
     default:
       return state;

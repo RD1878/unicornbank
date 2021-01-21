@@ -43,7 +43,7 @@ const PasswordField: FC<IPasswordField> = ({
         }
         {...rest}
       />
-      {error && <FormHelperText>{helperText}</FormHelperText>}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };
