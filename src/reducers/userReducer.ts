@@ -2,16 +2,23 @@ import { SAVE_USER } from "../actions";
 import { IUser, IActionSaveUser } from "../interfaces/redux";
 
 const initialState = {
+  firstName: "",
+  lastName: "",
+  patronymic: "",
+  avatarURL: "",
   passport: "",
   snils: "",
   contact: {
     phone: "",
     email: "",
   },
+  products: {
+    cards: [],
+  },
 };
 
 export default (
-  state = initialState,
+  state: IUser = initialState,
   { type, payload }: IActionSaveUser
 ): IUser => {
   switch (type) {
