@@ -15,6 +15,10 @@ const initialState = {
   products: {
     cards: [],
   },
+  validity: {
+    month: 0,
+    year: 0,
+  },
 };
 
 export default (

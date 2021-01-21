@@ -4,6 +4,10 @@ interface ICard {
   currency: string;
   balance: number;
   isActive: boolean;
+  validity: {
+    month: number;
+    year: number;
+  };
   requisites: {
     recipient: string;
     account: number;

@@ -220,7 +220,13 @@ const Sidebar: FC = () => {
                 <StyledListItem button>
                   {products.cards.map((card: ICard) => (
                     <StyledCardLink to={`/card/${card.id}`} key={card.id}>
-                      <CardItem key={card.id} open={open} {...card} />
+                      <CardItem
+                        key={card.id}
+                        open={open}
+                        number={card.number}
+                        balance={card.balance}
+                        currency={card.currency}
+                      />
                     </StyledCardLink>
                   ))}
                 </StyledListItem>

@@ -16,6 +16,10 @@ export interface IUser {
       id: number;
       isActive: boolean;
       number: string;
+      validity: {
+        month: number;
+        year: number;
+      };
       requisites: {
         account: number;
         bankOfRecipient: string;

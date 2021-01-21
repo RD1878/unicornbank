@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Container, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
+import getCurrencyTypeBalance from "../helpers/getCurrencyTypeBalance";
 
 const StyledCardInfoContainer = styled("div")`
   display: flex;
@@ -19,20 +20,42 @@ const StyledCardDataContainer = styled(Container)`
   margin-left: 20px;
 `;
 
-const CardInfoTitle: FC = () => {
+interface IProps {
+  balance: number;
+  number: string;
+  currency: string;
+  isActive: boolean;
+  validity: {
+    month: number;
+    year: number;
+  };
+}
+
+const CardInfoTitle: FC<IProps> = ({
+  balance,
+  currency,
+  validity,
+  isActive,
+  number,
+}) => {
   return (
     <>
       <Typography variant="h1" color="textPrimary">
-        {`Дебетовая карта *1234`}
+        {`Дебетовая карта\u00A0\u00A0${number.slice(-7)}`}
       </Typography>
       <StyledCardInfoContainer>
         <StyledPaymentRoundedIcon color="secondary" />
         <StyledCardDataContainer>
           <Typography variant="body1" color="textPrimary">
-            {`Срок действия до 12/25`}
+            {`Срок действия до ${String(validity.month).padStart(2, "0")}/${
+              validity.year
+            }`}
+            <Typography variant="body1" color="textPrimary">
+              {isActive ? "Активна" : "Заблокирована"}
+            </Typography>
           </Typography>
           <Typography variant="h1" color="textPrimary">
-            {`25 000,00 руб`}
+            {getCurrencyTypeBalance(balance, currency)}
           </Typography>
         </StyledCardDataContainer>
       </StyledCardInfoContainer>
