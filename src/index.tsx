@@ -5,13 +5,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StylesProvider } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const application = (
-  <BrowserRouter>
-    <StylesProvider injectFirst>
-      <App />
-    </StylesProvider>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <StylesProvider injectFirst>
+        <App />
+      </StylesProvider>
+    </BrowserRouter>
+  </Provider>
 );
 
 ReactDOM.render(application, document.getElementById("root"));

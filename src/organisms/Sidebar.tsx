@@ -11,6 +11,7 @@ import {
   ListItemText,
   Collapse,
   useMediaQuery,
+  Button,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import CardItem from "./../atoms/CardItem";
@@ -26,6 +27,7 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
+import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { userSelector } from "../selectors/userSelector";
@@ -140,6 +142,19 @@ const StyledIconButtonIncrease = withTheme(styled(
   color: ${(props) => props.theme.palette.textPrimary.main};
 `);
 
+const StyledNewProductLink = withTheme(styled(Link)`
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-decoration: none;
+`);
+
+const StyledProductsContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+`;
+
 const Sidebar: FC = () => {
   const { firstName, lastName, patronymic, products, avatarURL } = useSelector(
     userSelector
@@ -185,7 +200,7 @@ const Sidebar: FC = () => {
             </Typography>
           </StyledLink>
         </StyledProfileInfo>
-        <Box mt={5}>
+        <StyledProductsContainer>
           <List>
             <ListItem button onClick={handleClick}>
               <ListItemIcon>
@@ -212,7 +227,18 @@ const Sidebar: FC = () => {
               </List>
             </Collapse>
           </List>
-        </Box>
+          {open ? (
+            <StyledNewProductLink to="">
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<AddIcon />}
+              >
+                Новый продукт
+              </Button>
+            </StyledNewProductLink>
+          ) : null}
+        </StyledProductsContainer>
         <Grid container justify="center">
           <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
             <IconButton onClick={handleDrawerCollapse}>
