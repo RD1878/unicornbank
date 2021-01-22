@@ -1,11 +1,8 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
-import { db } from "../../../firebase/firebase";
-import { useDispatch } from "react-redux";
 import { ErrorBoundary } from "../../../errorBoundaries";
-import { saveUser } from "../../../actions/user";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
@@ -25,21 +22,6 @@ interface IMainLayout {
 }
 
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
-  const dispatch = useDispatch();
-
-  const getContactInfo = () => {
-    db.ref("users/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
-      .once("value")
-      .then((response) => {
-        const data = response.val();
-        dispatch(saveUser(data));
-      });
-  };
-
-  useEffect(() => {
-    getContactInfo();
-  }, []);
-
   return (
     <>
       <Header onToggleTheme={onToggleTheme} />

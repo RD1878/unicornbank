@@ -119,26 +119,34 @@ const Settings: FC = () => {
           <PasswordField
             name="password"
             label="Введите текущий пароль"
-            helperText={formik.errors.password}
+            helperText={formik.touched.password && formik.errors.password}
             value={formik.values.password}
-            error={Boolean(formik.errors.password)}
+            error={formik.touched.password && Boolean(formik.errors.password)}
             onChange={formik.handleChange}
           />
           <PasswordField
             name="newPassword1"
             label="Введите новый пароль"
             value={formik.values.newPassword1}
-            error={Boolean(formik.errors.newPassword1)}
+            error={
+              formik.touched.newPassword1 && Boolean(formik.errors.newPassword1)
+            }
             onChange={formik.handleChange}
-            helperText={formik.errors.newPassword1}
+            helperText={
+              formik.touched.newPassword1 && formik.errors.newPassword1
+            }
           />
           <PasswordField
             name="newPassword2"
             label="Повторите новый пароль"
             value={formik.values.newPassword2}
-            error={Boolean(formik.errors.newPassword2)}
+            error={
+              formik.touched.newPassword2 && Boolean(formik.errors.newPassword2)
+            }
             onChange={formik.handleChange}
-            helperText={formik.errors.newPassword2}
+            helperText={
+              formik.touched.newPassword2 && formik.errors.newPassword2
+            }
           />
           <StyledBox>
             <Typography variant="body2" color="textSecondary">

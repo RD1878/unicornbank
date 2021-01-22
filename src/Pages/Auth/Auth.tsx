@@ -111,20 +111,20 @@ const Auth: FC = () => {
         </Typography>
         <TextField
           fullWidth
-          error={Boolean(formik.errors.email)}
+          error={formik.touched.email && Boolean(formik.errors.email)}
           label="Почта"
           name="email"
           value={formik.values.email}
           onChange={formik.handleChange}
-          helperText={formik.errors.email}
+          helperText={formik.touched.email && formik.errors.email}
         />
         <PasswordField
           label="Введите пароль"
-          error={Boolean(formik.errors.password)}
+          error={formik.touched.password && Boolean(formik.errors.password)}
           name="password"
           value={formik.values.password}
           onChange={formik.handleChange}
-          helperText={formik.errors.password}
+          helperText={formik.touched.password && formik.errors.password}
         />
         <PrimaryButton size="large" type="submit">
           Войти

@@ -149,8 +149,8 @@ const Profile: FC = () => {
               id="phone"
               value={formik.values.phone}
               onChange={formik.handleChange}
-              error={Boolean(formik.errors.phone)}
-              helperText={formik.errors.phone}
+              error={formik.touched.phone && Boolean(formik.errors.phone)}
+              helperText={formik.touched.phone && formik.errors.phone}
             />
           </StyledRow>
           <StyledRow>
@@ -161,8 +161,8 @@ const Profile: FC = () => {
               id="email"
               value={formik.values.email}
               onChange={formik.handleChange}
-              error={Boolean(formik.errors.email)}
-              helperText={formik.errors.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </StyledRow>
           <Box mt={10}>

@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { db, firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
@@ -8,6 +8,8 @@ import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -28,7 +30,7 @@ const StyledLogo = styled.div`
   left: 3%;
 `;
 
-const FormAuth = withTheme(styled("div")`
+const FormAuth = withTheme(styled("form")`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,72 +72,72 @@ const FormAuth = withTheme(styled("div")`
   }
 `);
 
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .required("Введите Email")
+    .email("Введите корректный email"),
+  password1: yup
+    .string()
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Password is required"),
+  password2: yup
+    .string()
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Password is required"),
+});
+
 const Register: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [verifyPassword, setVerifyPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    setError(false);
-    setErrorMessage("");
-
-    switch (name) {
-      case "email":
-        return setEmail(value);
-      case "password":
-        return setPassword(value);
-      default:
-        return setVerifyPassword(value);
-    }
-  };
-
-  const createAccount = async (): Promise<void> => {
-    try {
-      if (verifyPassword !== password) throw new Error("Пароли не совпадают");
-
-      const res = await firebaseAuth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      if (!res?.user?.uid) {
-        throw new Error("Ошибка");
-      }
-
-      const { uid, email: userEmail } = res.user;
-
-      db.ref("users").child(uid).push().key;
-      db.ref().update({
-        [`users/${uid}`]: {
-          contact: {
-            email: userEmail,
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password1: "",
+      password2: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { setErrors }) => {
+      try {
+        const { password1, password2, email } = values;
+        if (password1 !== password2) throw new Error("Пароли не совпадают");
+        const res = await firebaseAuth.createUserWithEmailAndPassword(
+          email,
+          password2
+        );
+        if (!res?.user?.uid) {
+          throw new Error("Ошибка");
+        }
+        const { uid, email: userEmail } = res.user;
+        db.ref("users").child(uid).push().key;
+        db.ref().update({
+          [`users/${uid}`]: {
+            contact: {
+              email: userEmail,
+            },
+            createdAt: new Date(),
+            email: email,
           },
-          createdAt: new Date(),
-          email: email,
-        },
-      });
-
-      setOpen(true);
-
-      setTimeout(() => {
-        history.push(ROUTES.AUTH);
-      }, 2000);
-    } catch ({ message }) {
-      setErrorMessage(message);
-      setError(true);
-    }
-  };
+        });
+        setOpen(true);
+        setTimeout(() => {
+          history.push(ROUTES.AUTH);
+        }, 2000);
+      } catch (error) {
+        setErrors({
+          email: error.message,
+          password1: error.message,
+          password2: error.message,
+        });
+      }
+    },
+  });
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -144,7 +146,7 @@ const Register: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormAuth>
+      <FormAuth onSubmit={formik.handleSubmit}>
         <div>
           <Typography variant="h1" color="textPrimary" align="center">
             Регистрация
@@ -152,33 +154,33 @@ const Register: FC = () => {
           <div>
             <TextField
               fullWidth
-              error={error}
+              error={formik.touched.email && Boolean(formik.errors.email)}
               label="Почта"
               name="email"
-              value={email}
-              onChange={handleChange}
-              helperText={errorMessage}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </div>
           <PasswordField
             fullWidth
-            error={error}
-            name="password"
-            value={password}
-            onChange={handleChange}
-            helperText={errorMessage}
+            error={formik.touched.password1 && Boolean(formik.errors.password1)}
+            name="password1"
+            value={formik.values.password1}
+            onChange={formik.handleChange}
+            helperText={formik.touched.password1 && formik.errors.password1}
             label="Введите пароль"
           />
           <PasswordField
             fullWidth
-            error={error}
-            name="verifyPassword"
-            value={verifyPassword}
-            onChange={handleChange}
-            helperText={errorMessage}
+            error={formik.touched.password2 && Boolean(formik.errors.password2)}
+            name="password2"
+            value={formik.values.password2}
+            onChange={formik.handleChange}
+            helperText={formik.touched.password2 && formik.errors.password2}
             label="Повторите пароль"
           />
-          <PrimaryButton onClick={createAccount} size="large">
+          <PrimaryButton type="submit" size="large">
             Зарегистрироваться
           </PrimaryButton>
           <Link href={ROUTES.AUTH} color="textPrimary">
