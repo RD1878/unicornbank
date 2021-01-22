@@ -20,6 +20,10 @@ const StyledCardDataContainer = styled(Container)`
   margin-left: 20px;
 `;
 
+const StyledWraper = styled("div")`
+  margin-bottom: 20px;
+`;
+
 interface IProps {
   balance: number;
   number: string;
@@ -39,7 +43,7 @@ const CardInfoTitle: FC<IProps> = ({
   number,
 }) => {
   return (
-    <>
+    <StyledWraper>
       <Typography variant="h1" color="textPrimary">
         {`Дебетовая карта\u00A0\u00A0${number.slice(-7)}`}
       </Typography>
@@ -59,7 +63,7 @@ const CardInfoTitle: FC<IProps> = ({
           </Typography>
         </StyledCardDataContainer>
       </StyledCardInfoContainer>
-    </>
+    </StyledWraper>
   );
 };
 

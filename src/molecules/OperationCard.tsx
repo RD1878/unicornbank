@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { IOperation } from "../interfaces/main";
 import { Avatar, Box, Card, Typography } from "@material-ui/core";
+import ICardOperation from "../interfaces/cardOpeartion";
+import getCurrencyTypeBalance from "../helpers/getCurrencyTypeBalance";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -9,14 +10,14 @@ const StyledCard = styled(Card)`
   padding: 20px 30px;
 `;
 
-interface IOperationCard {
-  operation: IOperation;
+interface IProps {
+  operation: ICardOperation;
 }
 
-const OperationCard: FC<IOperationCard> = ({ operation }) => {
-  const { name, type, date, description, amount, currency } = operation;
+const OperationCard: FC<IProps> = ({ operation }) => {
+  const { amount, category, currency, date, name, type } = operation;
 
-  const formatDate = (date: string): string => {
+  const formatDate = (date: Date): string => {
     const obj = new Date(date);
     return obj.toLocaleDateString(undefined, {
       month: "long",
@@ -35,7 +36,7 @@ const OperationCard: FC<IOperationCard> = ({ operation }) => {
         <Box ml={5} width="100%">
           <Typography variant="button">{name}</Typography>
           <Typography variant="body1" color="textSecondary">
-            {description}
+            {category}
           </Typography>
         </Box>
         <Typography
@@ -43,9 +44,8 @@ const OperationCard: FC<IOperationCard> = ({ operation }) => {
           color={type === "income" ? "secondary" : "textPrimary"}
           align="right"
         >
-          {type === "expense" && "-"}
-          {amount.toLocaleString()}
-          {currency}
+          {type === "writeOff" && "-"}
+          {getCurrencyTypeBalance(amount, currency)}
         </Typography>
       </StyledCard>
     </Box>

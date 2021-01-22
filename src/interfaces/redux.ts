@@ -20,6 +20,16 @@ export interface IUser {
         month: number;
         year: number;
       };
+      operations: {
+        amount: number;
+        category: string;
+        currency: string;
+        date: Date;
+        description: string;
+        id: number;
+        name: string;
+        type: string;
+      }[];
       requisites: {
         account: number;
         bankOfRecipient: string;

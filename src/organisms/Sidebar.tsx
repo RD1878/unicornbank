@@ -11,10 +11,9 @@ import {
   ListItemText,
   Collapse,
   useMediaQuery,
-  Button,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
-import CardItem from "./../atoms/CardItem";
+import { CardItem, PrimaryButton } from "./../atoms";
 import IconButton from "@material-ui/core/IconButton";
 import FormatIndentDecreaseRoundedIcon from "@material-ui/icons/FormatIndentDecreaseRounded";
 import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncreaseRounded";
@@ -235,13 +234,9 @@ const Sidebar: FC = () => {
           </List>
           {open ? (
             <StyledNewProductLink to="">
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<AddIcon />}
-              >
+              <PrimaryButton startIcon={<AddIcon />}>
                 Новый продукт
-              </Button>
+              </PrimaryButton>
             </StyledNewProductLink>
           ) : null}
         </StyledProductsContainer>

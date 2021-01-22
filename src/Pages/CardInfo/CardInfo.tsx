@@ -10,7 +10,7 @@ import { userSelector } from "../../selectors";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   max-width: 1200px;
   @media screen and (max-width: 1280px) {
@@ -19,11 +19,8 @@ const StyledButtonsWraper = styled("div")`
 `;
 
 const StyledPrimaryButton = styled(PrimaryButton)`
-  min-width: 265px;
-  @media screen and (max-width: 1280px) {
-    width: 265px;
-    margin-top: 10px;
-  }
+  width: 265px;
+  margin-top: 10px;
 `;
 
 const StyledLink = styled(Link)`
@@ -47,7 +44,14 @@ const CardInfo: FC<IProps> = ({ match }) => {
   const id = match.params.id;
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[+id];
-  const { balance, currency, isActive, validity, number } = currentCard;
+  const {
+    balance,
+    currency,
+    isActive,
+    validity,
+    number,
+    operations,
+  } = currentCard;
 
   return (
     <StyledWraper>
@@ -58,7 +62,6 @@ const CardInfo: FC<IProps> = ({ match }) => {
         validity={validity}
         number={number}
       />
-      <TransactionsList />
       <StyledButtonsWraper>
         <StyledPrimaryButton>Заблокировать карту</StyledPrimaryButton>
         <StyledPrimaryButton>Перевыпустить карту</StyledPrimaryButton>
@@ -66,6 +69,7 @@ const CardInfo: FC<IProps> = ({ match }) => {
           <StyledPrimaryButton>Реквизиты</StyledPrimaryButton>
         </StyledLink>
       </StyledButtonsWraper>
+      <TransactionsList operations={operations} />
     </StyledWraper>
   );
 };
