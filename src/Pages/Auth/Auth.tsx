@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -29,7 +31,7 @@ const StyledLogo = styled.div`
   left: 3%;
 `;
 
-const FormAuth = withTheme(styled("div")`
+const FormAuth = withTheme(styled("form")`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,66 +59,74 @@ const FormAuth = withTheme(styled("div")`
   }
 `);
 
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .required("Введите Email")
+    .email("Введите корректный email"),
+  password: yup
+    .string()
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Password is required"),
+});
+
 const Auth: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    setErrorMessage("");
-    if (name === "email") {
-      setEmail(value);
-    }
-    if (name === "password") {
-      setPassword(value);
-    }
-  };
-
-  const userAuthorization = async (): Promise<void> => {
-    try {
-      await firebaseAuth.signInWithEmailAndPassword(email, password);
-      const uid = firebaseAuth?.currentUser?.uid;
-      if (!uid) {
-        throw new Error("Invalid id");
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { setErrors }) => {
+      try {
+        const { email, password } = values;
+        await firebaseAuth.signInWithEmailAndPassword(email, password);
+        const uid = firebaseAuth?.currentUser?.uid;
+        if (!uid) {
+          throw new Error("Invalid id");
+        }
+        const data = await readUserData(uid);
+        dispatch(saveUser(data));
+        history.push("/");
+      } catch (error) {
+        setErrors({
+          email: error.message,
+          password: error.message,
+        });
       }
-      const data = await readUserData(uid);
-      dispatch(saveUser(data));
-      history.push("/");
-    } catch (error) {
-      setErrorMessage(error.message);
-    }
-  };
+    },
+  });
 
   return (
     <BackGround>
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormAuth>
+      <FormAuth onSubmit={formik.handleSubmit}>
         <Typography variant="h1" color="textPrimary" align="center">
           Вход в личный кабинет
         </Typography>
         <TextField
           fullWidth
-          error={!!errorMessage}
+          error={Boolean(formik.errors.email)}
           label="Почта"
           name="email"
-          value={email}
-          onChange={handleChange}
-          helperText={errorMessage}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          helperText={formik.errors.email}
         />
         <PasswordField
-          error={!!errorMessage}
-          name="password"
-          value={password}
-          onChange={handleChange}
-          helperText={errorMessage}
           label="Введите пароль"
+          error={Boolean(formik.errors.password)}
+          name="password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          helperText={formik.errors.password}
         />
-        <PrimaryButton onClick={userAuthorization} size="large">
+        <PrimaryButton size="large" type="submit">
           Войти
         </PrimaryButton>
       </FormAuth>

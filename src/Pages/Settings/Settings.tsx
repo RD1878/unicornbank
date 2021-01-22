@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent, SyntheticEvent } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
@@ -8,7 +8,10 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { Alert } from "@material-ui/lab";
 import { TAlert } from "../Profile/Profile";
-const StyledColumn = styled("div")`
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+const StyledColumn = styled("form")`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
@@ -37,20 +40,31 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
+const validationSchema = yup.object({
+  password: yup
+    .string()
+    .min(8, "Введите корректный пароль")
+    .required("Введите текущий пароль"),
+  newPassword1: yup
+    .string()
+    .min(8, "Введите новый пароль")
+    .required("Введите новый пароль"),
+  newPassword2: yup
+    .string()
+    .min(8, "Введите корректный пароль")
+    .required("Повторите новый пароль"),
+});
+
 const Settings: FC = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword1, setNewPassword1] = useState("");
-  const [newPassword2, setNewPassword2] = useState("");
   const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
 
-  const reauthenticate = () => {
+  const reauthenticate = (password: string) => {
     const user = firebaseAuth.currentUser;
     const cred = firebase.auth.EmailAuthProvider.credential(
       user?.email as string,
-      currentPassword
+      password
     );
 
     return user?.reauthenticateWithCredential(cred);
@@ -61,35 +75,36 @@ const Settings: FC = () => {
     setIsOpenAlert(false);
   };
 
-  const changePassword = async () => {
-    try {
-      if (newPassword1 !== newPassword2) {
-        throw new Error("Пароли не совпадают");
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+      newPassword1: "",
+      newPassword2: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { setErrors }) => {
+      try {
+        const { newPassword1, newPassword2, password } = values;
+        if (newPassword1 !== newPassword2) {
+          throw new Error("Пароли не совпадают");
+        }
+        await reauthenticate(password);
+        const user = firebaseAuth.currentUser;
+        await user?.updatePassword(newPassword2);
+        setAlertType("success");
+      } catch (error) {
+        setErrors({
+          password: error.message,
+          newPassword1: error.message,
+          newPassword2: error.message,
+        });
+        setAlertType("error");
+        setErrorMessage(error.message);
+      } finally {
+        setIsOpenAlert(true);
       }
-      await reauthenticate();
-      const user = firebaseAuth.currentUser;
-      await user?.updatePassword(newPassword2);
-      setAlertType("success");
-    } catch (error) {
-      setError(error.message);
-      setErrorMessage(error.message);
-      setAlertType("error");
-    } finally {
-      setIsOpenAlert(true);
-    }
-  };
-
-  const changeCurrentPassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentPassword(e.target.value);
-  };
-
-  const changeNewPassword1 = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword1(e.target.value);
-  };
-
-  const changeNewPassword2 = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword2(e.target.value);
-  };
+    },
+  });
 
   return (
     <Container>
@@ -100,42 +115,42 @@ const Settings: FC = () => {
         <Typography variant="subtitle1" color="textPrimary">
           Смена пароля
         </Typography>
-        <StyledColumn>
+        <StyledColumn onSubmit={formik.handleSubmit}>
           <PasswordField
             name="password"
             label="Введите текущий пароль"
-            helperText={errorMessage}
-            value={currentPassword}
-            error={error}
-            onChange={changeCurrentPassword}
+            helperText={formik.errors.password}
+            value={formik.values.password}
+            error={Boolean(formik.errors.password)}
+            onChange={formik.handleChange}
           />
           <PasswordField
             name="newPassword1"
             label="Введите новый пароль"
-            value={newPassword1}
-            error={error}
-            onChange={changeNewPassword1}
-            helperText={errorMessage}
+            value={formik.values.newPassword1}
+            error={Boolean(formik.errors.newPassword1)}
+            onChange={formik.handleChange}
+            helperText={formik.errors.newPassword1}
           />
           <PasswordField
             name="newPassword2"
             label="Повторите новый пароль"
-            value={newPassword2}
-            error={error}
-            onChange={changeNewPassword2}
-            helperText={errorMessage}
+            value={formik.values.newPassword2}
+            error={Boolean(formik.errors.newPassword2)}
+            onChange={formik.handleChange}
+            helperText={formik.errors.newPassword2}
           />
+          <StyledBox>
+            <Typography variant="body2" color="textSecondary">
+              Если у вас поменялся логин или вы забыли пароль, обратитесь в
+              отделение банка. Для изменения других данных Вы можете обратиться
+              в чат.
+            </Typography>
+            <PrimaryButton size="large" type="submit">
+              Сохранить изменения
+            </PrimaryButton>
+          </StyledBox>
         </StyledColumn>
-        <StyledBox>
-          <Typography variant="body2" color="textSecondary">
-            Если у вас поменялся логин или вы забыли пароль, обратитесь в
-            отделение банка. Для изменения других данных Вы можете обратиться в
-            чат.
-          </Typography>
-          <PrimaryButton size="large" onClick={changePassword}>
-            Сохранить изменения
-          </PrimaryButton>
-        </StyledBox>
         <Snackbar
           open={isOpenAlert}
           autoHideDuration={6000}

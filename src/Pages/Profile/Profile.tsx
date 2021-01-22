@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  SyntheticEvent,
-  ChangeEvent,
-} from "react";
+import React, { FC, useState, useEffect, SyntheticEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -20,6 +14,9 @@ import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { Alert } from "@material-ui/lab";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { withTheme } from "@material-ui/core/styles";
 
 export type TAlert = "success" | "error";
 
@@ -40,10 +37,17 @@ const StyledRow = styled("div")`
     margin-right: 25px;
   }
 
-  input {
+  .MuiTextField-root {
+    max-width: 230px;
     width: 100%;
   }
 `;
+
+const FormContact = withTheme(styled("form")`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`);
 
 const StyledAvatar = styled(Avatar)`
   width: 100px;
@@ -60,58 +64,71 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .required("Введите Email")
+    .email("Введите корректный email"),
+  phone: yup
+    .number()
+    .min(11, "Введите корректный телефон")
+    .required("Phone is required"),
+});
+
 const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
-  const [phone, setPhone] = useState(contact.phone);
-  const [email, setEmail] = useState(contact.email);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setPhone(contact.phone);
-    setEmail(contact.email);
+    formik.setValues({
+      email: contact.email,
+      phone: contact.phone,
+    });
   }, [contact]);
+
+  const formik = useFormik({
+    initialValues: {
+      email: contact.email,
+      phone: contact.phone,
+    },
+    validationSchema,
+    onSubmit: async (values, { setErrors }) => {
+      try {
+        const uid = firebaseAuth?.currentUser?.uid;
+
+        if (!uid) {
+          throw new Error("Пользователь не найден");
+        }
+
+        db.ref().update({
+          [`users/${uid}`]: {
+            contact: {
+              email: values.email,
+              phone: values.phone,
+            },
+          },
+        });
+        const updatedContactInfo = await readUserData(uid);
+        dispatch(saveUser(updatedContactInfo));
+        setAlertType("success");
+      } catch (error) {
+        setErrors({
+          phone: error.message,
+          email: error.message,
+        });
+        setErrorMessage(error.message);
+      } finally {
+        setIsOpenAlert(true);
+      }
+    },
+  });
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
     setIsOpenAlert(false);
-  };
-
-  const changeContactInfo = async (): Promise<void> => {
-    try {
-      const uid = firebaseAuth?.currentUser?.uid;
-
-      if (!uid) {
-        throw new Error("Пользователь не найден");
-      }
-
-      db.ref().update({
-        [`users/${uid}`]: {
-          contact: {
-            phone,
-            email,
-          },
-        },
-      });
-      const updatedContactInfo = await readUserData(uid);
-      dispatch(saveUser(updatedContactInfo));
-      setAlertType("success");
-    } catch (error) {
-      setErrorMessage(error.message);
-      setAlertType("error");
-    } finally {
-      setIsOpenAlert(true);
-    }
-  };
-
-  const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
-  };
-
-  const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
   };
 
   return (
@@ -120,50 +137,66 @@ const Profile: FC = () => {
         <Typography variant="h1" color="textPrimary">
           Профиль
         </Typography>
-        <Box mt={6}>
+        <FormContact mt={6} onSubmit={formik.handleSubmit}>
           <Typography variant="h2" color="textPrimary">
             Контакты
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" value={phone} onChange={changePhone} />
+            <TextField
+              label="Телефон"
+              name="phone"
+              id="phone"
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              error={Boolean(formik.errors.phone)}
+              helperText={formik.errors.phone}
+            />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" value={email} onChange={changeEmail} />
+            <TextField
+              label="Email"
+              name="email"
+              id="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={Boolean(formik.errors.email)}
+              helperText={formik.errors.email}
+            />
           </StyledRow>
-        </Box>
-        <Box mt={10}>
-          <Typography variant="h2" color="textPrimary">
-            Документы
-          </Typography>
-          <StyledRow>
-            <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="Паспорт" disabled defaultValue={passport} />
-          </StyledRow>
-          <StyledRow>
-            <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="СНИЛС" disabled defaultValue={snils} />
-          </StyledRow>
-        </Box>
-        <StyledRow>
-          <StyledAvatar sizes="large">H</StyledAvatar>
-          <StyledRow>
-            <AddAPhotoRoundedIcon color="action" />
-            <Typography variant="body2" color="textSecondary">
-              Загрузить фото
+          <Box mt={10}>
+            <Typography variant="h2" color="textPrimary">
+              Документы
             </Typography>
+            <StyledRow>
+              <ListAltRoundedIcon color="action" fontSize="large" />
+              <TextField label="Паспорт" disabled defaultValue={passport} />
+            </StyledRow>
+            <StyledRow>
+              <ListAltRoundedIcon color="action" fontSize="large" />
+              <TextField label="СНИЛС" disabled defaultValue={snils} />
+            </StyledRow>
+          </Box>
+          <StyledRow>
+            <StyledAvatar sizes="large">H</StyledAvatar>
+            <StyledRow>
+              <AddAPhotoRoundedIcon color="action" />
+              <Typography variant="body2" color="textSecondary">
+                Загрузить фото
+              </Typography>
+            </StyledRow>
           </StyledRow>
-        </StyledRow>
-        <StyledBox>
-          <Typography variant="body2" color="textSecondary">
-            Если у вас поменялось ФИО, обратитесь в отделение банка. Для
-            изменения других данных Вы можете обратиться в чат.
-          </Typography>
-          <PrimaryButton size="large" onClick={changeContactInfo}>
-            Сохранить изменения
-          </PrimaryButton>
-        </StyledBox>
+          <StyledBox>
+            <Typography variant="body2" color="textSecondary">
+              Если у вас поменялось ФИО, обратитесь в отделение банка. Для
+              изменения других данных Вы можете обратиться в чат.
+            </Typography>
+            <PrimaryButton size="large" type="submit">
+              Сохранить изменения
+            </PrimaryButton>
+          </StyledBox>
+        </FormContact>
         <Snackbar
           open={isOpenAlert}
           autoHideDuration={6000}
