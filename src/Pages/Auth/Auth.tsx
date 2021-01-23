@@ -1,16 +1,19 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Typography, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
-import { FormikHelpers, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
+
+export type TAlert = "success" | "error";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -76,28 +79,26 @@ interface IFormValues {
 }
 
 const Auth: FC = () => {
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState<TAlert>("success");
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const onSubmit = async (
-    formData: IFormValues,
-    { setErrors }: FormikHelpers<IFormValues>
-  ) => {
+  const onSubmit = async (formData: IFormValues) => {
     try {
       const { email, password } = formData;
       await firebaseAuth.signInWithEmailAndPassword(email, password);
       const uid = firebaseAuth?.currentUser?.uid;
       if (!uid) {
-        throw new Error("Invalid id");
+        throw new Error("Некорректный id");
       }
       const data = await readUserData(uid);
       dispatch(saveUser(data));
       history.push("/");
     } catch (error) {
-      setErrors({
-        email: error.message,
-        password: error.message,
-      });
+      setErrorMessage(error.message);
+      setAlertType("error");
     }
   };
 
@@ -109,6 +110,13 @@ const Auth: FC = () => {
     validationSchema,
     onSubmit,
   });
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenAlert(false);
+  };
 
   return (
     <BackGround>
@@ -140,6 +148,18 @@ const Auth: FC = () => {
           Войти
         </PrimaryButton>
       </FormAuth>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleClose}>
+          {alertType === "success"
+            ? "Вы успешно зарегистрированы!"
+            : errorMessage}
+        </Alert>
+      </Snackbar>
     </BackGround>
   );
 };

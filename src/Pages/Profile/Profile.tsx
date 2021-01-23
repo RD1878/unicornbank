@@ -13,7 +13,7 @@ import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { Alert } from "@material-ui/lab";
-import { FormikHelpers, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
 
@@ -80,17 +80,7 @@ const Profile: FC = () => {
   const [alertType, setAlertType] = useState<TAlert>("success");
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setValues({
-      email: contact.email,
-      phone: contact.phone,
-    });
-  }, [contact]);
-
-  const onSubmit = async (
-    formData: IFormValues,
-    { setErrors }: FormikHelpers<IFormValues>
-  ) => {
+  const onSubmit = async (formData: IFormValues) => {
     try {
       const uid = firebaseAuth?.currentUser?.uid;
 
@@ -101,20 +91,18 @@ const Profile: FC = () => {
       db.ref().update({
         [`users/${uid}`]: {
           contact: {
-            email: values.email,
-            phone: values.phone,
+            email: formData.email,
+            phone: formData.phone,
           },
         },
       });
+
       const updatedContactInfo = await readUserData(uid);
       dispatch(saveUser(updatedContactInfo));
       setAlertType("success");
     } catch (error) {
-      setErrors({
-        phone: error.message,
-        email: error.message,
-      });
       setErrorMessage(error.message);
+      setAlertType("error");
     } finally {
       setIsOpenAlert(true);
     }
@@ -135,6 +123,13 @@ const Profile: FC = () => {
     validationSchema,
     onSubmit,
   });
+
+  useEffect(() => {
+    setValues({
+      email: contact.email,
+      phone: contact.phone,
+    });
+  }, [contact]);
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -202,6 +197,7 @@ const Profile: FC = () => {
           open={isOpenAlert}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert severity={alertType} onClose={handleCloseAlert}>
             {alertType === "success"

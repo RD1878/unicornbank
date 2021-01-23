@@ -7,9 +7,10 @@ import { firebaseAuth } from "../../firebase/firebase";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Alert } from "@material-ui/lab";
-import { TAlert } from "../Profile/Profile";
-import { FormikHelpers, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
+
+export type TAlert = "success" | "error";
 
 const StyledColumn = styled("form")`
   display: flex;
@@ -81,12 +82,9 @@ const Settings: FC = () => {
     setIsOpenAlert(false);
   };
 
-  const onSubmit = async (
-    formData: IFormValues,
-    { setErrors }: FormikHelpers<IFormValues>
-  ) => {
+  const onSubmit = async (formData: IFormValues) => {
     try {
-      const { newPassword1, newPassword2, password } = values;
+      const { newPassword1, newPassword2, password } = formData;
       if (newPassword1 !== newPassword2) {
         throw new Error("Пароли не совпадают");
       }
@@ -95,11 +93,6 @@ const Settings: FC = () => {
       await user?.updatePassword(newPassword2);
       setAlertType("success");
     } catch (error) {
-      setErrors({
-        password: error.message,
-        newPassword1: error.message,
-        newPassword2: error.message,
-      });
       setAlertType("error");
       setErrorMessage(error.message);
     } finally {
@@ -166,6 +159,7 @@ const Settings: FC = () => {
           open={isOpenAlert}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert severity={alertType} onClose={handleCloseAlert}>
             {alertType === "success" ? "Пароль успешно изменён!" : errorMessage}

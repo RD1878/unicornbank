@@ -8,8 +8,9 @@ import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
-import { FormikHelpers, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
+export type TAlert = "success" | "error";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -94,15 +95,14 @@ interface IFormValues {
 }
 
 const Register: FC = () => {
-  const [open, setOpen] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState<TAlert>("success");
   const history = useHistory();
 
-  const onSubmit = async (
-    formData: IFormValues,
-    { setErrors }: FormikHelpers<IFormValues>
-  ) => {
+  const onSubmit = async (formData: IFormValues) => {
     try {
-      const { password1, password2, email } = values;
+      const { password1, password2, email } = formData;
       if (password1 !== password2) throw new Error("Пароли не совпадают");
       const res = await firebaseAuth.createUserWithEmailAndPassword(
         email,
@@ -122,16 +122,13 @@ const Register: FC = () => {
           email: email,
         },
       });
-      setOpen(true);
+      setIsOpenAlert(true);
       setTimeout(() => {
         history.push(ROUTES.AUTH);
       }, 2000);
     } catch (error) {
-      setErrors({
-        email: error.message,
-        password1: error.message,
-        password2: error.message,
-      });
+      setErrorMessage(error.message);
+      setAlertType("error");
     }
   };
 
@@ -149,7 +146,7 @@ const Register: FC = () => {
     if (reason === "clickaway") {
       return;
     }
-    setOpen(false);
+    setIsOpenAlert(false);
   };
 
   return (
@@ -201,9 +198,16 @@ const Register: FC = () => {
           </Link>
         </div>
       </FormAuth>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert severity="success" onClose={handleClose}>
-          Вы успешно зарегистрированы!
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleClose}>
+          {alertType === "success"
+            ? "Вы успешно зарегистрированы!"
+            : errorMessage}
         </Alert>
       </Snackbar>
     </BackGround>
