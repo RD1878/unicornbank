@@ -9,8 +9,7 @@ import "firebase/auth";
 import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
-export type TAlert = "success" | "error";
+import { TAlert } from "../../interfaces/main";
 
 const StyledColumn = styled("form")`
   display: flex;

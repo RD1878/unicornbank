@@ -10,7 +10,7 @@ import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-export type TAlert = "success" | "error";
+import { TAlert } from "../../interfaces/main";
 
 const BackGround = styled.div`
   background-image: url(${background});

@@ -16,8 +16,7 @@ import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
-
-export type TAlert = "success" | "error";
+import { TAlert } from "../../interfaces/main";
 
 const StyledRow = styled("div")`
   display: flex;
