@@ -65,7 +65,7 @@ export const CurrencyRate: FC = () => {
   return (
     <Box mt={7} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
-        Курсы валют
+        Курсы валют ЦБ РФ
       </Typography>
       <Typography variant="body1" color="textSecondary">
         на {formatDate(currencyRates.date || new Date())}

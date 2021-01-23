@@ -12,7 +12,7 @@ interface ICard {
     amount: number;
     category: string;
     currency: string;
-    date: Date;
+    date: string;
     description: string;
     id: number;
     name: string;

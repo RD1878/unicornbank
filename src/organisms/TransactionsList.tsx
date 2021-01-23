@@ -60,7 +60,7 @@ const TransactionsList: FC<IProps> = ({ operations }) => {
 
     if (filtered.length) {
       return filtered
-        .sort((itemA, itemB) => itemB.id - itemA.id) //По ДАТАМ НАДО
+        .sort((itemA, itemB) => Date.parse(itemB.date) - Date.parse(itemA.date))
         .slice(0, 10)
         .map((item) => <OperationCard operation={item} key={item.id} />);
     } else
@@ -93,7 +93,9 @@ const TransactionsList: FC<IProps> = ({ operations }) => {
         </Tabs>
         <TabPanel type="scrollable-force" value={tab} index={0}>
           {operations
-            .sort((itemA, itemB) => itemB.id - itemA.id)
+            .sort(
+              (itemA, itemB) => Date.parse(itemB.date) - Date.parse(itemA.date)
+            )
             .slice(0, 10)
             .map((item) => (
               <OperationCard operation={item} key={item.id} />

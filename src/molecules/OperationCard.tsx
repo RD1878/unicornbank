@@ -17,7 +17,7 @@ interface IProps {
 const OperationCard: FC<IProps> = ({ operation }) => {
   const { amount, category, currency, date, name, type } = operation;
 
-  const formatDate = (date: Date): string => {
+  const formatDate = (date: string): string => {
     const obj = new Date(date);
     return obj.toLocaleDateString(undefined, {
       month: "long",
