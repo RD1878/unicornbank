@@ -62,8 +62,8 @@ const FormAuth = withTheme(styled("form")`
 const validationSchema = yup.object({
   email: yup
     .string()
-    .required("Введите Email")
-    .email("Введите корректный email"),
+    .required("Enter Email")
+    .email("Please enter a valid email"),
   password: yup
     .string()
     .min(8, "Password should be of minimum 8 characters length")
@@ -119,7 +119,7 @@ const Auth: FC = () => {
           helperText={formik.touched.email && formik.errors.email}
         />
         <PasswordField
-          label="Введите пароль"
+          label="Пароль"
           error={formik.touched.password && Boolean(formik.errors.password)}
           name="password"
           value={formik.values.password}

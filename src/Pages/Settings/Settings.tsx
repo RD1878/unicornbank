@@ -43,16 +43,16 @@ const StyledBox = styled(Box)`
 const validationSchema = yup.object({
   password: yup
     .string()
-    .min(8, "Введите корректный пароль")
-    .required("Введите текущий пароль"),
+    .min(8, "Enter correct password")
+    .required("Enter the current password"),
   newPassword1: yup
     .string()
-    .min(8, "Введите новый пароль")
-    .required("Введите новый пароль"),
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Enter a new password"),
   newPassword2: yup
     .string()
-    .min(8, "Введите корректный пароль")
-    .required("Повторите новый пароль"),
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Repeat new password"),
 });
 
 const Settings: FC = () => {

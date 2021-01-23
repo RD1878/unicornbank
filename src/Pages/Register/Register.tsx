@@ -75,8 +75,8 @@ const FormAuth = withTheme(styled("form")`
 const validationSchema = yup.object({
   email: yup
     .string()
-    .required("Введите Email")
-    .email("Введите корректный email"),
+    .required("Enter Email")
+    .email("Please enter a valid email"),
   password1: yup
     .string()
     .min(8, "Password should be of minimum 8 characters length")

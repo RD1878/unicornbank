@@ -4,8 +4,7 @@ import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import styled from "styled-components";
-import { Box, Avatar } from "@material-ui/core";
-import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
+import { Box } from "@material-ui/core";
 import { PrimaryButton, TextField } from "../../atoms";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors/userSelector";
@@ -49,12 +48,6 @@ const FormContact = withTheme(styled("form")`
   justify-content: center;
 `);
 
-const StyledAvatar = styled(Avatar)`
-  width: 100px;
-  min-height: 100px;
-  margin-bottom: 20px;
-`;
-
 const StyledBox = styled(Box)`
   p {
     margin-bottom: 60px;
@@ -67,11 +60,11 @@ const StyledBox = styled(Box)`
 const validationSchema = yup.object({
   email: yup
     .string()
-    .required("Введите Email")
-    .email("Введите корректный email"),
+    .required("Enter Email")
+    .email("Please enter a valid email"),
   phone: yup
     .number()
-    .min(11, "Введите корректный телефон")
+    .min(11, "Please enter a valid phone")
     .required("Phone is required"),
 });
 
@@ -178,15 +171,6 @@ const Profile: FC = () => {
               <TextField label="СНИЛС" disabled defaultValue={snils} />
             </StyledRow>
           </Box>
-          <StyledRow>
-            <StyledAvatar sizes="large">H</StyledAvatar>
-            <StyledRow>
-              <AddAPhotoRoundedIcon color="action" />
-              <Typography variant="body2" color="textSecondary">
-                Загрузить фото
-              </Typography>
-            </StyledRow>
-          </StyledRow>
           <StyledBox>
             <Typography variant="body2" color="textSecondary">
               Если у вас поменялось ФИО, обратитесь в отделение банка. Для
