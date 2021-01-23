@@ -10,6 +10,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import CardInfo from "./Pages/CardInfo/CardInfo";
 import { getSession, getSessionError, saveUser } from "./actions";
 import { firebaseAuth, readUserData } from "./firebase/firebase";
+import Requisites from "./Pages/Requisites";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -50,7 +51,8 @@ const App: FC = () => {
             <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
-            <ProtectedRoute path={ROUTES.CARD} component={CardInfo} />
+            <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
+            <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
           </MainLayout>
         </ProtectedRoute>
       </Switch>

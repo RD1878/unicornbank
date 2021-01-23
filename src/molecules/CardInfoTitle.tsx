@@ -54,9 +54,9 @@ const CardInfoTitle: FC<IProps> = ({
             {`Срок действия до ${String(validity.month).padStart(2, "0")}/${
               validity.year
             }`}
-            <Typography variant="body1" color="textPrimary">
-              {isActive ? "Активна" : "Заблокирована"}
-            </Typography>
+          </Typography>
+          <Typography variant="body1" color="textPrimary">
+            {isActive ? "Активна" : "Заблокирована"}
           </Typography>
           <Typography variant="h1" color="textPrimary">
             {getCurrencyTypeBalance(balance, currency)}

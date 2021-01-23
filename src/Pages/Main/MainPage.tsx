@@ -11,8 +11,8 @@ const MainPage: FC = () => {
   const { products } = useSelector(userSelector);
 
   const cardsTransactions = products.cards.reduce(
-    (acc: ICardOperation[], item: ICard) => {
-      return [...acc, ...item.operations];
+    (acc: ICardOperation[], card: ICard) => {
+      return [...acc, ...card.operations];
     },
     []
   );

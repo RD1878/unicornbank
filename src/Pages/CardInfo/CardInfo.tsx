@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { CardInfoTitle } from "../../molecules";
+import { CardInfoTitle, DialogReissue } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
 import { RouteComponentProps } from "@reach/router";
@@ -32,7 +32,7 @@ const StyledWraper = styled("div")`
   flex-direction: column;
 `;
 
-interface IProps extends RouteComponentProps {
+interface IMatchId extends RouteComponentProps {
   match: {
     params: {
       id: string;
@@ -40,7 +40,7 @@ interface IProps extends RouteComponentProps {
   };
 }
 
-const CardInfo: FC<IProps> = ({ match }) => {
+const CardInfo: FC<IMatchId> = ({ match }) => {
   const id = match.params.id;
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[+id];
@@ -64,7 +64,7 @@ const CardInfo: FC<IProps> = ({ match }) => {
       />
       <StyledButtonsWraper>
         <StyledPrimaryButton>Заблокировать карту</StyledPrimaryButton>
-        <StyledPrimaryButton>Перевыпустить карту</StyledPrimaryButton>
+        <DialogReissue /* idCurrentCard={id} */ />
         <StyledLink to={`/card/${id}/requisites`}>
           <StyledPrimaryButton>Реквизиты</StyledPrimaryButton>
         </StyledLink>
