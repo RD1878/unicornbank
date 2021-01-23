@@ -2257,13 +2257,6 @@
   dependencies:
     "@types/react" "^16"
 
-"@types/react-native@*":
-  version "0.63.37"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.37.tgz#c43df90c9d3cc082a97a49a53e989de26cb8ab45"
-  integrity sha512-xr9SZG7tQQBKT6840tAGaWEC65D2gjyxZtuZxz631UgeW1ofItuu9HMVhoyYqot2hRSa6Q4YC8FYkRVUpM53/w==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-redux@^7.1.15":
   version "7.1.15"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.15.tgz#19075884db94101be762accef924d266a603fb1b"
@@ -10143,7 +10136,7 @@ react-error-overlay@7.0.0-next.98+025f2739:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-7.0.0-next.98.tgz#a27e427f7f23d3c197252c975e1ef30f222c0b95"
   integrity sha512-soXGQzvZraJYe5tDQW/Wi7avGgDBqEgUzvCGeRvDXqknQ+ucoMgUEN0AaWaQl30iIvwBc/DrBQ3iwHYTIzV5gg==
 
-react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.8.1:
+react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
