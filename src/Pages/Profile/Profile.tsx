@@ -13,7 +13,7 @@ import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { Alert } from "@material-ui/lab";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
 
@@ -60,13 +60,18 @@ const StyledBox = styled(Box)`
 const validationSchema = yup.object({
   email: yup
     .string()
-    .required("Enter Email")
-    .email("Please enter a valid email"),
+    .required("Введите почту")
+    .email("Введите почту в правильном формате"),
   phone: yup
     .number()
-    .min(11, "Please enter a valid phone")
-    .required("Phone is required"),
+    .min(11, "Введите корректный номер телефона")
+    .required("Обязательно для заполнения"),
 });
+
+interface IFormValues {
+  phone: string;
+  email: string;
+}
 
 const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
@@ -76,47 +81,59 @@ const Profile: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    formik.setValues({
+    setValues({
       email: contact.email,
       phone: contact.phone,
     });
   }, [contact]);
 
-  const formik = useFormik({
+  const onSubmit = async (
+    formData: IFormValues,
+    { setErrors }: FormikHelpers<IFormValues>
+  ) => {
+    try {
+      const uid = firebaseAuth?.currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("Пользователь не найден");
+      }
+
+      db.ref().update({
+        [`users/${uid}`]: {
+          contact: {
+            email: values.email,
+            phone: values.phone,
+          },
+        },
+      });
+      const updatedContactInfo = await readUserData(uid);
+      dispatch(saveUser(updatedContactInfo));
+      setAlertType("success");
+    } catch (error) {
+      setErrors({
+        phone: error.message,
+        email: error.message,
+      });
+      setErrorMessage(error.message);
+    } finally {
+      setIsOpenAlert(true);
+    }
+  };
+
+  const {
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    touched,
+    setValues,
+  } = useFormik({
     initialValues: {
       email: contact.email,
       phone: contact.phone,
     },
     validationSchema,
-    onSubmit: async (values, { setErrors }) => {
-      try {
-        const uid = firebaseAuth?.currentUser?.uid;
-
-        if (!uid) {
-          throw new Error("Пользователь не найден");
-        }
-
-        db.ref().update({
-          [`users/${uid}`]: {
-            contact: {
-              email: values.email,
-              phone: values.phone,
-            },
-          },
-        });
-        const updatedContactInfo = await readUserData(uid);
-        dispatch(saveUser(updatedContactInfo));
-        setAlertType("success");
-      } catch (error) {
-        setErrors({
-          phone: error.message,
-          email: error.message,
-        });
-        setErrorMessage(error.message);
-      } finally {
-        setIsOpenAlert(true);
-      }
-    },
+    onSubmit,
   });
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
@@ -130,7 +147,7 @@ const Profile: FC = () => {
         <Typography variant="h1" color="textPrimary">
           Профиль
         </Typography>
-        <FormContact mt={6} onSubmit={formik.handleSubmit}>
+        <FormContact mt={6} onSubmit={handleSubmit}>
           <Typography variant="h2" color="textPrimary">
             Контакты
           </Typography>
@@ -140,10 +157,10 @@ const Profile: FC = () => {
               label="Телефон"
               name="phone"
               id="phone"
-              value={formik.values.phone}
-              onChange={formik.handleChange}
-              error={formik.touched.phone && Boolean(formik.errors.phone)}
-              helperText={formik.touched.phone && formik.errors.phone}
+              value={values.phone}
+              onChange={handleChange}
+              error={touched.phone && Boolean(errors.phone)}
+              helperText={touched.phone && errors.phone}
             />
           </StyledRow>
           <StyledRow>
@@ -152,10 +169,10 @@ const Profile: FC = () => {
               label="Email"
               name="email"
               id="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              value={values.email}
+              onChange={handleChange}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
             />
           </StyledRow>
           <Box mt={10}>

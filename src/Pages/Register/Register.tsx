@@ -8,7 +8,7 @@ import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import * as yup from "yup";
 
 const BackGround = styled.div`
@@ -75,63 +75,74 @@ const FormAuth = withTheme(styled("form")`
 const validationSchema = yup.object({
   email: yup
     .string()
-    .required("Enter Email")
-    .email("Please enter a valid email"),
+    .required("Введите почту")
+    .email("Введите почту в правильном формате"),
   password1: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
+    .min(8, "Пароль должен одержать в себе миниму 8 символов")
+    .required("Обязательно для заполнения"),
   password2: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
+    .min(8, "Пароль должен одержать в себе миниму 8 символов")
+    .required("Обязательно для заполнения"),
 });
+
+interface IFormValues {
+  email: string;
+  password1: string;
+  password2: string;
+}
 
 const Register: FC = () => {
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
-  const formik = useFormik({
+  const onSubmit = async (
+    formData: IFormValues,
+    { setErrors }: FormikHelpers<IFormValues>
+  ) => {
+    try {
+      const { password1, password2, email } = values;
+      if (password1 !== password2) throw new Error("Пароли не совпадают");
+      const res = await firebaseAuth.createUserWithEmailAndPassword(
+        email,
+        password2
+      );
+      if (!res?.user?.uid) {
+        throw new Error("Ошибка");
+      }
+      const { uid, email: userEmail } = res.user;
+      db.ref("users").child(uid).push().key;
+      db.ref().update({
+        [`users/${uid}`]: {
+          contact: {
+            email: userEmail,
+          },
+          createdAt: new Date(),
+          email: email,
+        },
+      });
+      setOpen(true);
+      setTimeout(() => {
+        history.push(ROUTES.AUTH);
+      }, 2000);
+    } catch (error) {
+      setErrors({
+        email: error.message,
+        password1: error.message,
+        password2: error.message,
+      });
+    }
+  };
+
+  const { errors, handleChange, handleSubmit, values, touched } = useFormik({
     initialValues: {
       email: "",
       password1: "",
       password2: "",
     },
     validationSchema,
-    onSubmit: async (values, { setErrors }) => {
-      try {
-        const { password1, password2, email } = values;
-        if (password1 !== password2) throw new Error("Пароли не совпадают");
-        const res = await firebaseAuth.createUserWithEmailAndPassword(
-          email,
-          password2
-        );
-        if (!res?.user?.uid) {
-          throw new Error("Ошибка");
-        }
-        const { uid, email: userEmail } = res.user;
-        db.ref("users").child(uid).push().key;
-        db.ref().update({
-          [`users/${uid}`]: {
-            contact: {
-              email: userEmail,
-            },
-            createdAt: new Date(),
-            email: email,
-          },
-        });
-        setOpen(true);
-        setTimeout(() => {
-          history.push(ROUTES.AUTH);
-        }, 2000);
-      } catch (error) {
-        setErrors({
-          email: error.message,
-          password1: error.message,
-          password2: error.message,
-        });
-      }
-    },
+    onSubmit,
   });
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -146,7 +157,7 @@ const Register: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormAuth onSubmit={formik.handleSubmit}>
+      <FormAuth onSubmit={handleSubmit}>
         <div>
           <Typography variant="h1" color="textPrimary" align="center">
             Регистрация
@@ -154,30 +165,30 @@ const Register: FC = () => {
           <div>
             <TextField
               fullWidth
-              error={formik.touched.email && Boolean(formik.errors.email)}
+              error={touched.email && Boolean(errors.email)}
               label="Почта"
               name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              helperText={formik.touched.email && formik.errors.email}
+              value={values.email}
+              onChange={handleChange}
+              helperText={touched.email && errors.email}
             />
           </div>
           <PasswordField
             fullWidth
-            error={formik.touched.password1 && Boolean(formik.errors.password1)}
+            error={touched.password1 && Boolean(errors.password1)}
             name="password1"
-            value={formik.values.password1}
-            onChange={formik.handleChange}
-            helperText={formik.touched.password1 && formik.errors.password1}
+            value={values.password1}
+            onChange={handleChange}
+            helperText={touched.password1 && errors.password1}
             label="Введите пароль"
           />
           <PasswordField
             fullWidth
-            error={formik.touched.password2 && Boolean(formik.errors.password2)}
+            error={touched.password2 && Boolean(errors.password2)}
             name="password2"
-            value={formik.values.password2}
-            onChange={formik.handleChange}
-            helperText={formik.touched.password2 && formik.errors.password2}
+            value={values.password2}
+            onChange={handleChange}
+            helperText={touched.password2 && errors.password2}
             label="Повторите пароль"
           />
           <PrimaryButton type="submit" size="large">

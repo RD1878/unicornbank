@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import * as yup from "yup";
 
 const BackGround = styled.div`
@@ -62,42 +62,52 @@ const FormAuth = withTheme(styled("form")`
 const validationSchema = yup.object({
   email: yup
     .string()
-    .required("Enter Email")
-    .email("Please enter a valid email"),
+    .required("Введите почту")
+    .email("Введите почту в правильном формате"),
   password: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
+    .min(8, "Пароль должен одержать в себе миниму 8 символов")
+    .required("Обязательно для заполнения"),
 });
+
+interface IFormValues {
+  email: string;
+  password: string;
+}
 
 const Auth: FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const formik = useFormik({
+  const onSubmit = async (
+    formData: IFormValues,
+    { setErrors }: FormikHelpers<IFormValues>
+  ) => {
+    try {
+      const { email, password } = formData;
+      await firebaseAuth.signInWithEmailAndPassword(email, password);
+      const uid = firebaseAuth?.currentUser?.uid;
+      if (!uid) {
+        throw new Error("Invalid id");
+      }
+      const data = await readUserData(uid);
+      dispatch(saveUser(data));
+      history.push("/");
+    } catch (error) {
+      setErrors({
+        email: error.message,
+        password: error.message,
+      });
+    }
+  };
+
+  const { errors, handleChange, handleSubmit, values, touched } = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema,
-    onSubmit: async (values, { setErrors }) => {
-      try {
-        const { email, password } = values;
-        await firebaseAuth.signInWithEmailAndPassword(email, password);
-        const uid = firebaseAuth?.currentUser?.uid;
-        if (!uid) {
-          throw new Error("Invalid id");
-        }
-        const data = await readUserData(uid);
-        dispatch(saveUser(data));
-        history.push("/");
-      } catch (error) {
-        setErrors({
-          email: error.message,
-          password: error.message,
-        });
-      }
-    },
+    onSubmit,
   });
 
   return (
@@ -105,26 +115,26 @@ const Auth: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormAuth onSubmit={formik.handleSubmit}>
+      <FormAuth onSubmit={handleSubmit}>
         <Typography variant="h1" color="textPrimary" align="center">
           Вход в личный кабинет
         </Typography>
         <TextField
           fullWidth
-          error={formik.touched.email && Boolean(formik.errors.email)}
+          error={touched.email && Boolean(errors.email)}
           label="Почта"
           name="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          helperText={formik.touched.email && formik.errors.email}
+          value={values.email}
+          onChange={handleChange}
+          helperText={touched.email && errors.email}
         />
         <PasswordField
           label="Пароль"
-          error={formik.touched.password && Boolean(formik.errors.password)}
+          error={touched.password && Boolean(errors.password)}
           name="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          helperText={formik.touched.password && formik.errors.password}
+          value={values.password}
+          onChange={handleChange}
+          helperText={touched.password && errors.password}
         />
         <PrimaryButton size="large" type="submit">
           Войти

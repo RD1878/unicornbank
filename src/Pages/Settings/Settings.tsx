@@ -8,7 +8,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { Alert } from "@material-ui/lab";
 import { TAlert } from "../Profile/Profile";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import * as yup from "yup";
 
 const StyledColumn = styled("form")`
@@ -43,17 +43,23 @@ const StyledBox = styled(Box)`
 const validationSchema = yup.object({
   password: yup
     .string()
-    .min(8, "Enter correct password")
-    .required("Enter the current password"),
+    .min(8, "Пароль должен одержать в себе миниму 8 символов")
+    .required("Введите текущий пароль"),
   newPassword1: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Enter a new password"),
+    .min(8, "Пароль должен одержать в себе миниму 8 символов")
+    .required("Введите новый пароль"),
   newPassword2: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Repeat new password"),
+    .min(8, "Пароль должен одержать в себе миниму 8 символов")
+    .required("Повторите новый пароль"),
 });
+
+interface IFormValues {
+  password: string;
+  newPassword1: string;
+  newPassword2: string;
+}
 
 const Settings: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
@@ -75,35 +81,40 @@ const Settings: FC = () => {
     setIsOpenAlert(false);
   };
 
-  const formik = useFormik({
+  const onSubmit = async (
+    formData: IFormValues,
+    { setErrors }: FormikHelpers<IFormValues>
+  ) => {
+    try {
+      const { newPassword1, newPassword2, password } = values;
+      if (newPassword1 !== newPassword2) {
+        throw new Error("Пароли не совпадают");
+      }
+      await reauthenticate(password);
+      const user = firebaseAuth.currentUser;
+      await user?.updatePassword(newPassword2);
+      setAlertType("success");
+    } catch (error) {
+      setErrors({
+        password: error.message,
+        newPassword1: error.message,
+        newPassword2: error.message,
+      });
+      setAlertType("error");
+      setErrorMessage(error.message);
+    } finally {
+      setIsOpenAlert(true);
+    }
+  };
+
+  const { errors, handleChange, handleSubmit, values, touched } = useFormik({
     initialValues: {
       password: "",
       newPassword1: "",
       newPassword2: "",
     },
     validationSchema,
-    onSubmit: async (values, { setErrors }) => {
-      try {
-        const { newPassword1, newPassword2, password } = values;
-        if (newPassword1 !== newPassword2) {
-          throw new Error("Пароли не совпадают");
-        }
-        await reauthenticate(password);
-        const user = firebaseAuth.currentUser;
-        await user?.updatePassword(newPassword2);
-        setAlertType("success");
-      } catch (error) {
-        setErrors({
-          password: error.message,
-          newPassword1: error.message,
-          newPassword2: error.message,
-        });
-        setAlertType("error");
-        setErrorMessage(error.message);
-      } finally {
-        setIsOpenAlert(true);
-      }
-    },
+    onSubmit,
   });
 
   return (
@@ -115,38 +126,30 @@ const Settings: FC = () => {
         <Typography variant="subtitle1" color="textPrimary">
           Смена пароля
         </Typography>
-        <StyledColumn onSubmit={formik.handleSubmit}>
+        <StyledColumn onSubmit={handleSubmit}>
           <PasswordField
             name="password"
             label="Введите текущий пароль"
-            helperText={formik.touched.password && formik.errors.password}
-            value={formik.values.password}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            onChange={formik.handleChange}
+            helperText={touched.password && errors.password}
+            value={values.password}
+            error={touched.password && Boolean(errors.password)}
+            onChange={handleChange}
           />
           <PasswordField
             name="newPassword1"
             label="Введите новый пароль"
-            value={formik.values.newPassword1}
-            error={
-              formik.touched.newPassword1 && Boolean(formik.errors.newPassword1)
-            }
-            onChange={formik.handleChange}
-            helperText={
-              formik.touched.newPassword1 && formik.errors.newPassword1
-            }
+            value={values.newPassword1}
+            error={touched.newPassword1 && Boolean(errors.newPassword1)}
+            onChange={handleChange}
+            helperText={touched.newPassword1 && errors.newPassword1}
           />
           <PasswordField
             name="newPassword2"
             label="Повторите новый пароль"
-            value={formik.values.newPassword2}
-            error={
-              formik.touched.newPassword2 && Boolean(formik.errors.newPassword2)
-            }
-            onChange={formik.handleChange}
-            helperText={
-              formik.touched.newPassword2 && formik.errors.newPassword2
-            }
+            value={values.newPassword2}
+            error={touched.newPassword2 && Boolean(errors.newPassword2)}
+            onChange={handleChange}
+            helperText={touched.newPassword2 && errors.newPassword2}
           />
           <StyledBox>
             <Typography variant="body2" color="textSecondary">
