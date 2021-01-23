@@ -12,7 +12,7 @@ function* saveUserAsync() {
     const user = yield call(api.fetchUser);
     yield put(saveUser(user));
   } catch (error) {
-    yield put(getSessionError());
+    yield put(getSessionError(error.message));
   }
 }
 

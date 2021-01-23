@@ -4,30 +4,32 @@ import { TUser } from "../firebase/firebase";
 export interface IAuthSession {
   currentUser: TUser;
   loading: boolean;
+  errorMessage: string;
 }
 
 const initialState = {
   loading: true,
   currentUser: null,
+  errorMessage: "",
 };
 
 export default (
   state: IAuthSession = initialState,
-  { type, payload }: TGetSession
+  { type, payload }: TGetSession<TUser | string>
 ): IAuthSession => {
   switch (type) {
     case GET_SESSION:
-      const { user } = payload;
-
       return {
+        ...state,
         loading: false,
-        currentUser: user,
+        currentUser: payload as TUser,
       };
 
     case GET_SESSION_ERROR:
       return {
         loading: false,
         currentUser: null,
+        errorMessage: payload as string,
       };
 
     default:
