@@ -154,6 +154,7 @@ const Sidebar: FC = () => {
   const { firstName, lastName, patronymic, products, avatarURL } = useSelector(
     userSelector
   );
+  const cards = Object.values(products.cards);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
@@ -213,7 +214,7 @@ const Sidebar: FC = () => {
             <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <StyledListItem button>
-                  {products.cards.map((card: ICard) => (
+                  {cards.map((card: ICard) => (
                     <CardItem key={card.id} open={open} {...card} />
                   ))}
                 </StyledListItem>
