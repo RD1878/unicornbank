@@ -1,13 +1,14 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { CardInfoTitle, DialogReissue } from "../../molecules";
+import { CardInfoTitle, DialogBlockCard } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
 import { RouteComponentProps } from "@reach/router";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
 import ICardOperation from "../../interfaces/cardOpeartion";
+import { DialogReissueCard } from "../../molecules";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
@@ -75,8 +76,8 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
         number={number}
       />
       <StyledButtonsWraper>
-        <StyledPrimaryButton>Заблокировать карту</StyledPrimaryButton>
-        <DialogReissue idCurrentCard={id} />
+        <DialogBlockCard idCurrentCard={id} />
+        <DialogReissueCard idCurrentCard={id} />
         <StyledLink to={`/card/${id}/requisites`}>
           <StyledPrimaryButton>Реквизиты</StyledPrimaryButton>
         </StyledLink>

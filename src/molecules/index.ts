@@ -3,7 +3,8 @@ import TabPanel from "./TabPanel";
 import CardInfoTitle from "./CardInfoTitle";
 import { CurrencyRate } from "./CurrencyRate";
 import { Offers } from "./Offers";
-import DialogReissue from "./DialogReissue";
+import DialogReissueCard from "./DialogReissueCard";
+import DialogBlockCard from "./DialogBlockCard";
 
 export {
   OperationCard,
@@ -11,5 +12,6 @@ export {
   CardInfoTitle,
   CurrencyRate,
   Offers,
-  DialogReissue,
+  DialogReissueCard,
+  DialogBlockCard,
 };
