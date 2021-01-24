@@ -9,12 +9,17 @@ import { ICard } from "../../interfaces/card";
 
 const MainPage: FC = () => {
   const { products } = useSelector(userSelector);
-  const cards = Object.values(products.cards);
-
-  const cardsTransactions = cards.reduce(
-    (acc: ICardOperation[], card: ICard) => {
-      const operations = Object.values(card.operations);
-      return [...acc, ...operations];
+  const cards = Object.entries(products.cards);
+  const allCardsTransactions = cards.reduce(
+    (
+      acc: { id: string; key: string; operation: ICardOperation }[],
+      [id, card]: [string, ICard]
+    ) => {
+      const operations = Object.entries(card.operations);
+      for (const [key, operation] of operations) {
+        acc = [...acc, { id, key, operation }];
+      }
+      return acc;
     },
     []
   );
@@ -22,7 +27,7 @@ const MainPage: FC = () => {
   return (
     <>
       <Offers />
-      <TransactionsList operations={cardsTransactions} />
+      <TransactionsList cardsTransactions={allCardsTransactions} />
       <CurrencyRate />
     </>
   );

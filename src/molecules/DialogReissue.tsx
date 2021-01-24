@@ -2,25 +2,24 @@ import { Dialog, DialogActions, DialogTitle } from "@material-ui/core";
 import React, { FC, useState } from "react";
 import { PrimaryButton } from "../atoms";
 import styled from "styled-components";
-/* import { db, firebaseAuth, readUserData } from "../firebase/firebase";
+import { db, firebaseAuth, readUserData } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../actions";
- */
+
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: 265px;
   margin-top: 10px;
 `;
 
-/* interface IProps {
+interface IProps {
   idCurrentCard: string;
-} */
+}
 
-const DialogReissue: FC = () => {
+const DialogReissue: FC<IProps> = ({ idCurrentCard }) => {
   const [isOpenDialogReissue, setOpenDialogReissue] = useState(false);
   const [isConfirm, setConfirm] = useState(false);
   /*   const [errorMessage, setErrorMessage] = useState("");
-  const dispatch = useDispatch();
- */
+   */ const dispatch = useDispatch();
   const handleOpenDialogReissue = () => {
     setOpenDialogReissue(true);
   };
@@ -31,11 +30,10 @@ const DialogReissue: FC = () => {
   };
 
   const handleConfirm = () => {
-    /*  handleDisactiveCard(); */
+    handleDisactiveCard();
     setConfirm(true);
   };
-
-  /* const handleDisactiveCard = async (): Promise<void> => {
+  const handleDisactiveCard = async (): Promise<void> => {
     try {
       const uid = firebaseAuth?.currentUser?.uid;
 
@@ -47,7 +45,7 @@ const DialogReissue: FC = () => {
         [`users/${uid}`]: {
           products: {
             cards: {
-              [+idCurrentCard]: {
+              [idCurrentCard]: {
                 isActive: false,
               },
             },
@@ -57,9 +55,10 @@ const DialogReissue: FC = () => {
       const updatedCardStatus = await readUserData(uid);
       dispatch(saveUser(updatedCardStatus));
     } catch (error) {
-      setErrorMessage(error.message);
+      /*       setErrorMessage(error.message);
+       */
     }
-  }; */
+  };
 
   return (
     <>

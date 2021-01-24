@@ -7,6 +7,7 @@ import TransactionsList from "../../organisms/TransactionsList";
 import { RouteComponentProps } from "@reach/router";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
+import ICardOperation from "../../interfaces/cardOpeartion";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
@@ -52,7 +53,17 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
     number,
     operations,
   } = currentCard;
-  const cardOperations = Object.values(operations);
+  const currentCardOperations = Object.entries(operations);
+
+  const currentCardTransactions = currentCardOperations.reduce(
+    (
+      acc: { id: string; key: string; operation: ICardOperation }[],
+      [key, operation]: [string, ICardOperation]
+    ) => {
+      return [...acc, { id, key, operation }];
+    },
+    []
+  );
 
   return (
     <StyledWraper>
@@ -65,12 +76,12 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
       />
       <StyledButtonsWraper>
         <StyledPrimaryButton>Заблокировать карту</StyledPrimaryButton>
-        <DialogReissue /* idCurrentCard={id} */ />
+        <DialogReissue idCurrentCard={id} />
         <StyledLink to={`/card/${id}/requisites`}>
           <StyledPrimaryButton>Реквизиты</StyledPrimaryButton>
         </StyledLink>
       </StyledButtonsWraper>
-      <TransactionsList operations={cardOperations} />
+      <TransactionsList cardsTransactions={currentCardTransactions} />
     </StyledWraper>
   );
 };

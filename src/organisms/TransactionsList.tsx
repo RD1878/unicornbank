@@ -45,24 +45,30 @@ const categories: { type: string; name: string }[] = [
 ];
 
 interface IProps {
-  operations: ICardOperation[];
+  cardsTransactions: { id: string; key: string; operation: ICardOperation }[];
 }
 
-const TransactionsList: FC<IProps> = ({ operations }) => {
+const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const [tab, setTab] = useState(0);
-
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
   };
 
   const filteredOperationsByType = (type: string) => {
-    const filtered = operations.filter((item) => item.type === type);
+    const filtered = cardsTransactions.filter(
+      ({ operation }) => operation.type === type
+    );
 
     if (filtered.length) {
       return filtered
-        .sort((itemA, itemB) => Date.parse(itemB.date) - Date.parse(itemA.date))
+        .sort(
+          (itemA, itemB) =>
+            Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+        )
         .slice(0, 10)
-        .map((item) => <OperationCard operation={item} key={item.id} />);
+        .map(({ key, operation }) => (
+          <OperationCard operation={operation} key={key} />
+        ));
     } else
       return (
         <Box p={4}>
@@ -92,13 +98,15 @@ const TransactionsList: FC<IProps> = ({ operations }) => {
           ))}
         </Tabs>
         <TabPanel type="scrollable-force" value={tab} index={0}>
-          {operations
+          {cardsTransactions
             .sort(
-              (itemA, itemB) => Date.parse(itemB.date) - Date.parse(itemA.date)
+              (itemA, itemB) =>
+                Date.parse(itemB.operation.date) -
+                Date.parse(itemA.operation.date)
             )
             .slice(0, 10)
-            .map((item) => (
-              <OperationCard operation={item} key={item.id} />
+            .map(({ key, operation }) => (
+              <OperationCard operation={operation} key={key} />
             ))}
         </TabPanel>
         {categories.map(

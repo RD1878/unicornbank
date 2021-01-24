@@ -14,7 +14,6 @@ export interface IUser {
       [key: string]: {
         balance: number;
         currency: string;
-        id: number;
         isActive: boolean;
         number: string;
         validity: {
@@ -28,7 +27,6 @@ export interface IUser {
             currency: string;
             date: string;
             description: string;
-            id: number;
             name: string;
             type: string;
           };

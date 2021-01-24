@@ -4,7 +4,6 @@ interface ICardOperation {
   currency: string;
   date: string;
   description: string;
-  id: number;
   name: string;
   type: string;
 }
