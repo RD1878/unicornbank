@@ -9,10 +9,12 @@ import { ICard } from "../../interfaces/card";
 
 const MainPage: FC = () => {
   const { products } = useSelector(userSelector);
+  const cards = Object.values(products.cards);
 
-  const cardsTransactions = products.cards.reduce(
+  const cardsTransactions = cards.reduce(
     (acc: ICardOperation[], card: ICard) => {
-      return [...acc, ...card.operations];
+      const operations = Object.values(card.operations);
+      return [...acc, ...operations];
     },
     []
   );

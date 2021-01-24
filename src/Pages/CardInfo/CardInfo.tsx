@@ -43,7 +43,7 @@ interface IMatchId extends RouteComponentProps {
 const CardInfo: FC<IMatchId> = ({ match }) => {
   const id = match.params.id;
   const { products } = useSelector(userSelector);
-  const currentCard = products.cards[+id];
+  const currentCard = products.cards[id];
   const {
     balance,
     currency,
@@ -52,6 +52,7 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
     number,
     operations,
   } = currentCard;
+  const cardOperations = Object.values(operations);
 
   return (
     <StyledWraper>
@@ -69,7 +70,7 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
           <StyledPrimaryButton>Реквизиты</StyledPrimaryButton>
         </StyledLink>
       </StyledButtonsWraper>
-      <TransactionsList operations={operations} />
+      <TransactionsList operations={cardOperations} />
     </StyledWraper>
   );
 };

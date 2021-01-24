@@ -41,7 +41,7 @@ interface IMatchId extends RouteComponentProps {
 const Requisites: FC<IMatchId> = ({ match }) => {
   const id = match.params.id;
   const { products } = useSelector(userSelector);
-  const currentCard = products.cards[+id];
+  const currentCard = products.cards[id];
   const { number, requisites } = currentCard;
   const {
     account,

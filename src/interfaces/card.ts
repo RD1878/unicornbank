@@ -9,15 +9,17 @@ interface ICard {
     year: number;
   };
   operations: {
-    amount: number;
-    category: string;
-    currency: string;
-    date: string;
-    description: string;
-    id: number;
-    name: string;
-    type: string;
-  }[];
+    [key: string]: {
+      amount: number;
+      category: string;
+      currency: string;
+      date: string;
+      description: string;
+      id: number;
+      name: string;
+      type: string;
+    };
+  };
   requisites: {
     recipient: string;
     account: number;

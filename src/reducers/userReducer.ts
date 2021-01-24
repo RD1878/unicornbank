@@ -13,7 +13,7 @@ const initialState = {
     email: "",
   },
   products: {
-    cards: [],
+    cards: {},
   },
   validity: {
     month: 0,
