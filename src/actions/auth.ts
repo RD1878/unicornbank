@@ -1,20 +1,17 @@
 import { TUser } from "../firebase/firebase";
 import { GET_SESSION, GET_SESSION_ERROR } from "./constants";
 
-export type TGetSession = {
+export interface TGetSession<T> {
   type: string;
-  payload: {
-    user: TUser;
-  };
-};
+  payload: T;
+}
 
-export const getSession = (user: TUser): TGetSession => ({
+export const getSession = (user: TUser): TGetSession<TUser> => ({
   type: GET_SESSION,
-  payload: {
-    user,
-  },
+  payload: user,
 });
 
-export const getSessionError = (): { type: string } => ({
+export const getSessionError = (errorMessage = ""): TGetSession<string> => ({
   type: GET_SESSION_ERROR,
+  payload: errorMessage,
 });
