@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
@@ -9,13 +9,15 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 
 const application = (
-  <Provider store={store}>
-    <BrowserRouter>
-      <StylesProvider injectFirst>
-        <App />
-      </StylesProvider>
-    </BrowserRouter>
-  </Provider>
+  <Suspense fallback="loading">
+    <Provider store={store}>
+      <BrowserRouter>
+        <StylesProvider injectFirst>
+          <App />
+        </StylesProvider>
+      </BrowserRouter>
+    </Provider>
+  </Suspense>
 );
 
 ReactDOM.render(application, document.getElementById("root"));
