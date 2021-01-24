@@ -13,6 +13,12 @@ import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/main";
+import { ROUTES } from "../../routes";
+import {
+  emailValidation,
+  passwordValidation,
+} from "../../utils/validationSchemas";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -62,14 +68,8 @@ const FormAuth = withTheme(styled("form")`
 `);
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .required("Введите почту")
-    .email("Введите почту в правильном формате"),
-  password: yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required("Обязательно для заполнения"),
+  email: emailValidation(),
+  password: passwordValidation(),
 });
 
 interface IFormValues {
@@ -81,6 +81,8 @@ const Auth: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -94,14 +96,14 @@ const Auth: FC = () => {
       }
       const data = await readUserData(uid);
       dispatch(saveUser(data));
-      history.push("/");
+      history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
     }
   };
 
-  const { errors, handleChange, handleSubmit, values, touched } = useFormik({
+  const { errors, handleSubmit, touched, getFieldProps } = useFormik({
     initialValues: {
       email: "",
       password: "",
@@ -130,17 +132,13 @@ const Auth: FC = () => {
           fullWidth
           error={touched.email && Boolean(errors.email)}
           label="Почта"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
+          {...getFieldProps("email")}
           helperText={touched.email && errors.email}
         />
         <PasswordField
           label="Пароль"
           error={touched.password && Boolean(errors.password)}
-          name="password"
-          value={values.password}
-          onChange={handleChange}
+          {...getFieldProps("password")}
           helperText={touched.password && errors.password}
         />
         <PrimaryButton size="large" type="submit">
@@ -149,14 +147,12 @@ const Auth: FC = () => {
       </FormAuth>
       <Snackbar
         open={isOpenAlert}
-        autoHideDuration={6000}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
         onClose={handleClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert severity={alertType} onClose={handleClose}>
-          {alertType === "success"
-            ? "Вы успешно зарегистрированы!"
-            : errorMessage}
+          {alertMessage}
         </Alert>
       </Snackbar>
     </BackGround>

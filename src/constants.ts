@@ -1,0 +1,1 @@
+export const SHACKBAR_SHOW_DURATION = 6000;

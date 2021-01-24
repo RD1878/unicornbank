@@ -10,6 +10,8 @@ import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/main";
+import { passwordValidation } from "../../utils/validationSchemas";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
 
 const StyledColumn = styled("form")`
   display: flex;
@@ -41,18 +43,9 @@ const StyledBox = styled(Box)`
 `;
 
 const validationSchema = yup.object({
-  password: yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required("Введите текущий пароль"),
-  newPassword1: yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required("Введите новый пароль"),
-  newPassword2: yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required("Повторите новый пароль"),
+  password: passwordValidation("Введите текущий пароль"),
+  newPassword1: passwordValidation("Введите новый пароль"),
+  newPassword2: passwordValidation("Повторите новый пароль"),
 });
 
 interface IFormValues {
@@ -65,6 +58,8 @@ const Settings: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Пароль успешно изменён!" : errorMessage;
 
   const reauthenticate = (password: string) => {
     const user = firebaseAuth.currentUser;
@@ -91,6 +86,7 @@ const Settings: FC = () => {
       const user = firebaseAuth.currentUser;
       await user?.updatePassword(newPassword2);
       setAlertType("success");
+      resetForm();
     } catch (error) {
       setAlertType("error");
       setErrorMessage(error.message);
@@ -99,15 +95,17 @@ const Settings: FC = () => {
     }
   };
 
-  const { errors, handleChange, handleSubmit, values, touched } = useFormik({
-    initialValues: {
-      password: "",
-      newPassword1: "",
-      newPassword2: "",
-    },
-    validationSchema,
-    onSubmit,
-  });
+  const { errors, handleSubmit, touched, resetForm, getFieldProps } = useFormik(
+    {
+      initialValues: {
+        password: "",
+        newPassword1: "",
+        newPassword2: "",
+      },
+      validationSchema,
+      onSubmit,
+    }
+  );
 
   return (
     <Container>
@@ -120,27 +118,21 @@ const Settings: FC = () => {
         </Typography>
         <StyledColumn onSubmit={handleSubmit}>
           <PasswordField
-            name="password"
+            {...getFieldProps("password")}
             label="Введите текущий пароль"
             helperText={touched.password && errors.password}
-            value={values.password}
             error={touched.password && Boolean(errors.password)}
-            onChange={handleChange}
           />
           <PasswordField
-            name="newPassword1"
+            {...getFieldProps("newPassword1")}
             label="Введите новый пароль"
-            value={values.newPassword1}
             error={touched.newPassword1 && Boolean(errors.newPassword1)}
-            onChange={handleChange}
             helperText={touched.newPassword1 && errors.newPassword1}
           />
           <PasswordField
-            name="newPassword2"
+            {...getFieldProps("newPassword2")}
             label="Повторите новый пароль"
-            value={values.newPassword2}
             error={touched.newPassword2 && Boolean(errors.newPassword2)}
-            onChange={handleChange}
             helperText={touched.newPassword2 && errors.newPassword2}
           />
           <StyledBox>
@@ -156,12 +148,12 @@ const Settings: FC = () => {
         </StyledColumn>
         <Snackbar
           open={isOpenAlert}
-          autoHideDuration={6000}
+          autoHideDuration={SHACKBAR_SHOW_DURATION}
           onClose={handleCloseAlert}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertType === "success" ? "Пароль успешно изменён!" : errorMessage}
+            {alertMessage}
           </Alert>
         </Snackbar>
       </Box>

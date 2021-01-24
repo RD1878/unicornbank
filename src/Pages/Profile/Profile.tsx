@@ -17,6 +17,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
 import { TAlert } from "../../interfaces/main";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import {
+  emailValidation,
+  phoneValidation,
+} from "./../../utils/validationSchemas";
 
 const StyledRow = styled("div")`
   display: flex;
@@ -57,14 +62,8 @@ const StyledBox = styled(Box)`
 `;
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .required("Введите почту")
-    .email("Введите почту в правильном формате"),
-  phone: yup
-    .number()
-    .min(11, "Введите корректный номер телефона")
-    .required("Обязательно для заполнения"),
+  email: emailValidation(),
+  phone: phoneValidation(),
 });
 
 interface IFormValues {
@@ -77,9 +76,11 @@ const Profile: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const dispatch = useDispatch();
 
-  const onSubmit = async (formData: IFormValues) => {
+  const onSubmit = async ({ email, phone }: IFormValues) => {
     try {
       const uid = firebaseAuth?.currentUser?.uid;
 
@@ -90,8 +91,8 @@ const Profile: FC = () => {
       db.ref().update({
         [`users/${uid}`]: {
           contact: {
-            email: formData.email,
-            phone: formData.phone,
+            email,
+            phone,
           },
         },
       });
@@ -107,21 +108,16 @@ const Profile: FC = () => {
     }
   };
 
-  const {
-    errors,
-    handleChange,
-    handleSubmit,
-    values,
-    touched,
-    setValues,
-  } = useFormik({
-    initialValues: {
-      email: contact.email,
-      phone: contact.phone,
-    },
-    validationSchema,
-    onSubmit,
-  });
+  const { errors, handleSubmit, touched, getFieldProps, setValues } = useFormik(
+    {
+      initialValues: {
+        email: contact.email,
+        phone: contact.phone,
+      },
+      validationSchema,
+      onSubmit,
+    }
+  );
 
   useEffect(() => {
     setValues({
@@ -149,10 +145,8 @@ const Profile: FC = () => {
             <PhoneRoundedIcon color="action" fontSize="large" />
             <TextField
               label="Телефон"
-              name="phone"
               id="phone"
-              value={values.phone}
-              onChange={handleChange}
+              {...getFieldProps("phone")}
               error={touched.phone && Boolean(errors.phone)}
               helperText={touched.phone && errors.phone}
             />
@@ -161,10 +155,8 @@ const Profile: FC = () => {
             <EmailRoundedIcon color="action" fontSize="large" />
             <TextField
               label="Email"
-              name="email"
               id="email"
-              value={values.email}
-              onChange={handleChange}
+              {...getFieldProps("email")}
               error={touched.email && Boolean(errors.email)}
               helperText={touched.email && errors.email}
             />
@@ -194,14 +186,12 @@ const Profile: FC = () => {
         </FormContact>
         <Snackbar
           open={isOpenAlert}
-          autoHideDuration={6000}
+          autoHideDuration={SHACKBAR_SHOW_DURATION}
           onClose={handleCloseAlert}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertType === "success"
-              ? "Данные успешно изменены!"
-              : errorMessage}
+            {alertMessage}
           </Alert>
         </Snackbar>
       </Box>

@@ -11,6 +11,11 @@ import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/main";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import {
+  passwordValidation,
+  emailValidation,
+} from "../../utils/validationSchemas";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -74,18 +79,9 @@ const FormAuth = withTheme(styled("form")`
 `);
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .required("Введите почту")
-    .email("Введите почту в правильном формате"),
-  password1: yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required("Обязательно для заполнения"),
-  password2: yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required("Обязательно для заполнения"),
+  email: emailValidation(),
+  password1: passwordValidation("Придумайте пароль"),
+  password2: passwordValidation("Повторите пароль"),
 });
 
 interface IFormValues {
@@ -98,6 +94,8 @@ const Register: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
   const history = useHistory();
 
   const onSubmit = async (formData: IFormValues) => {
@@ -132,7 +130,7 @@ const Register: FC = () => {
     }
   };
 
-  const { errors, handleChange, handleSubmit, values, touched } = useFormik({
+  const { errors, handleSubmit, touched, getFieldProps } = useFormik({
     initialValues: {
       email: "",
       password1: "",
@@ -162,29 +160,23 @@ const Register: FC = () => {
           <div>
             <TextField
               fullWidth
+              {...getFieldProps("email")}
               error={touched.email && Boolean(errors.email)}
               label="Почта"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
               helperText={touched.email && errors.email}
             />
           </div>
           <PasswordField
             fullWidth
             error={touched.password1 && Boolean(errors.password1)}
-            name="password1"
-            value={values.password1}
-            onChange={handleChange}
+            {...getFieldProps("password1")}
             helperText={touched.password1 && errors.password1}
             label="Введите пароль"
           />
           <PasswordField
             fullWidth
             error={touched.password2 && Boolean(errors.password2)}
-            name="password2"
-            value={values.password2}
-            onChange={handleChange}
+            {...getFieldProps("password2")}
             helperText={touched.password2 && errors.password2}
             label="Повторите пароль"
           />
@@ -200,14 +192,12 @@ const Register: FC = () => {
       </FormAuth>
       <Snackbar
         open={isOpenAlert}
-        autoHideDuration={6000}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
         onClose={handleClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert severity={alertType} onClose={handleClose}>
-          {alertType === "success"
-            ? "Вы успешно зарегистрированы!"
-            : errorMessage}
+          {alertMessage}
         </Alert>
       </Snackbar>
     </BackGround>
