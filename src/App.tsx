@@ -22,7 +22,7 @@ const App: FC = () => {
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (user) => {
       if (!user) {
-        dispatch(getSessionError());
+        dispatch(getSessionError("Нет активной сессии"));
       }
 
       dispatch(getSession(user));
