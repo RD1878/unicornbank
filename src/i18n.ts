@@ -18,7 +18,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "tat",
+  lng: "ru",
   keySeparator: false,
   interpolation: {
     escapeValue: false,
