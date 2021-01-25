@@ -8,6 +8,7 @@ import { navigation } from "../routes";
 import { Link } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
+import { useTranslation } from "react-i18next";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -40,6 +41,7 @@ interface IHeader {
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
+  const { t } = useTranslation();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -70,11 +72,11 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
         {navigation.map((item) => (
           <Link to={item.path} key={item.path}>
-            {item.name}
+            {t(item.name)}
           </Link>
         ))}
 
-        <PrimaryButton onClick={signOut}>Выйти</PrimaryButton>
+        <PrimaryButton onClick={signOut}>{t("Выйти")}</PrimaryButton>
       </LinksContainer>
 
       <Switch onChange={onToggleTheme} />
