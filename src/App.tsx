@@ -1,41 +1,48 @@
 import React, { FC, useState, useEffect } from "react";
-import { ThemeProvider } from "@material-ui/core";
+import { Snackbar, ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
-import { useDispatch } from "react-redux";
-import { Auth, MainPage, Profile, Register, Settings } from "./Pages";
+import { Auth, MainPage, Profile, Register, Settings, Map } from "./Pages";
+import { useDispatch, useSelector } from "react-redux";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, getSessionError, saveUser } from "./actions";
-import { firebaseAuth, readUserData } from "./firebase/firebase";
+import { getSession, getSessionError, requestUser } from "./actions";
+import { firebaseAuth } from "./firebase/firebase";
+import { Alert } from "@material-ui/lab";
+import { authSelector } from "./selectors";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
+  const [isOpen, setOpen] = useState(false);
+  const { errorMessage } = useSelector(authSelector);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (user) => {
-      try {
-        if (!user) {
-          throw new Error("Нет активной сессии");
-        }
-
-        dispatch(getSession(user));
-
-        const data = await readUserData(user.uid);
-
-        dispatch(saveUser(data));
-      } catch (error) {
-        dispatch(getSessionError());
+      if (!user) {
+        dispatch(getSessionError("Нет активной сессии"));
       }
+
+      dispatch(getSession(user));
+      dispatch(requestUser());
     });
   }, []);
+
+  useEffect(() => {
+    if (errorMessage.length) {
+      setOpen(true);
+    }
+  }, [errorMessage]);
 
   const toggleTheme = () => {
     const newTheme = theme.palette.type === "dark" ? "light" : "dark";
     setTheme(appThemes[newTheme]);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -48,9 +55,23 @@ const App: FC = () => {
             <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
             <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
+            <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
           </MainLayout>
         </ProtectedRoute>
       </Switch>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        open={isOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert severity="error" onClose={handleClose}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 };

@@ -11,7 +11,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 
 interface IPasswordField extends OutlinedInputProps {
   error?: boolean;
-  helperText?: string;
+  helperText?: string | false | undefined;
   label: string;
   fullWidth?: boolean;
 }

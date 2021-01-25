@@ -1,9 +1,18 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import { withTheme } from "@material-ui/core/styles";
-import { Box, Avatar } from "@material-ui/core";
+import { withTheme, useTheme } from "@material-ui/core/styles";
+import {
+  Box,
+  Avatar,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  useMediaQuery,
+  Button,
+} from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import CardItem from "./../atoms/CardItem";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,32 +22,19 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import { ROUTES } from ".././routes";
+import { ICard } from "../interfaces/card";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
+import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
+import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
+import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { userSelector } from "../selectors/userSelector";
+
 interface IWithOpen {
   open: boolean;
 }
-interface ISidebar {
-  fullName: string;
-}
-
-const CARDS = [
-  {
-    title: "Текущий счет  **78",
-    value: "1000, 45р",
-  },
-  {
-    title: "Текущий зарплатный счет  **99",
-    value: "9990, 45р",
-  },
-  {
-    title: "Счет кредитной карты  **34",
-    value: "9990, 45р",
-  },
-  {
-    title: "Накопительный счет  **77",
-    value: "199990, 45р",
-  },
-];
 
 const DRAWER_WIDTH = 350;
 
@@ -80,16 +76,34 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
     })};
 `);
 
+const StyledListItem = styled(ListItem)`
+  flex-direction: column;
+`;
+
 const StyledWrap = styled(Box)<IWithOpen>`
   position: sticky;
   top: 0;
   width: ${(props) => (props.open ? `${DRAWER_WIDTH}px` : "auto")};
 `;
 
-const StyledAvatar = withTheme(styled(Avatar)`
+const StyledAvatar = styled(Avatar)`
   width: 100px;
   min-height: 100px;
   margin-bottom: 20px;
+`;
+
+const StyledIcon = withTheme(styled(PersonRoundedIcon)`
+  width: 100px;
+  min-height: 100px;
+  color: ${(props) => props.theme.palette.textPrimary.main};
+  border-radius: 50%;
+  border 2px solid ${(props) => props.theme.palette.textPrimary.main};
+`);
+
+const StyledAddAvatar = withTheme(styled(AddAPhotoRoundedIcon)`
+  color: ${(props) => props.theme.palette.textPrimary.main};
+  position: absolute;
+  right: -20px;
 `);
 
 const StyledLink = withTheme(styled(Link)`
@@ -97,27 +111,82 @@ const StyledLink = withTheme(styled(Link)`
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+  text-decoration: none;
 
   a {
     margin-left: 10px;
   }
 `);
 
-const Sidebar: FC<ISidebar> = ({ fullName }) => {
+const StyledContainer = styled("div")`
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  position: relative;
+`;
+
+const StyledIconButtonDecrease = withTheme(styled(
+  FormatIndentDecreaseRoundedIcon
+)`
+  color: ${(props) => props.theme.palette.textPrimary.main};
+`);
+
+const StyledIconButtonIncrease = withTheme(styled(
+  FormatIndentIncreaseRoundedIcon
+)`
+  color: ${(props) => props.theme.palette.textPrimary.main};
+`);
+
+const StyledNewProductLink = withTheme(styled(Link)`
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-decoration: none;
+`);
+
+const StyledProductsContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+`;
+
+const Sidebar: FC = () => {
+  const { firstName, lastName, patronymic, products, avatarURL } = useSelector(
+    userSelector
+  );
+  const cards = Object.values(products.cards);
+  const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const [isOpenCards, setOpenCards] = useState(true);
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
   };
+
+  const handleClick = () => {
+    setOpenCards((isOpenCards) => !isOpenCards);
+  };
+
+  useEffect(() => {
+    setOpen(matches);
+  }, [matches]);
 
   return (
     <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
       <StyledWrap open={open}>
         <StyledProfileInfo open={open}>
           <Grid container justify="center" alignItems="center">
-            <StyledAvatar sizes="large">H</StyledAvatar>
+            {avatarURL ? (
+              <StyledAvatar sizes="large">{avatarURL}</StyledAvatar>
+            ) : (
+              <StyledContainer>
+                <StyledIcon sizes="large" />
+                <StyledAddAvatar />
+              </StyledContainer>
+            )}
             <Typography variant="h2" color="textPrimary" align="center">
-              {fullName}
+              {`${firstName} ${patronymic} ${lastName} `}
             </Typography>
           </Grid>
           <StyledLink to={ROUTES.PROFILE}>
@@ -127,20 +196,50 @@ const Sidebar: FC<ISidebar> = ({ fullName }) => {
             </Typography>
           </StyledLink>
         </StyledProfileInfo>
-        <Box mt={5}>
+        <StyledProductsContainer>
           <List>
-            {CARDS.map((card) => (
-              <CardItem key={card.title} open={open} {...card} />
-            ))}
+            <ListItem button onClick={handleClick}>
+              <ListItemIcon>
+                <PaymentRoundedIcon color="secondary" fontSize="large" />
+              </ListItemIcon>
+              <ListItemText>
+                {open ? (
+                  <Typography variant="h2" color="textPrimary">
+                    Карты
+                  </Typography>
+                ) : null}
+              </ListItemText>
+              {isOpenCards ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <StyledListItem button>
+                  {cards.map((card: ICard) => (
+                    <CardItem key={card.id} open={open} {...card} />
+                  ))}
+                </StyledListItem>
+              </List>
+            </Collapse>
           </List>
-        </Box>
+          {open ? (
+            <StyledNewProductLink to="">
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<AddIcon />}
+              >
+                Новый продукт
+              </Button>
+            </StyledNewProductLink>
+          ) : null}
+        </StyledProductsContainer>
         <Grid container justify="center">
           <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
             <IconButton onClick={handleDrawerCollapse}>
               {open ? (
-                <FormatIndentDecreaseRoundedIcon />
+                <StyledIconButtonDecrease />
               ) : (
-                <FormatIndentIncreaseRoundedIcon />
+                <StyledIconButtonIncrease />
               )}
             </IconButton>
           </Tooltip>
