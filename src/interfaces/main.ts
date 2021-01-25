@@ -10,4 +10,5 @@ interface IOperation {
   category: string;
 }
 
+export type TAlert = "success" | "error";
 export type { IOperation };

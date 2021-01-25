@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  SyntheticEvent,
-  ChangeEvent,
-} from "react";
+import React, { FC, useState, useEffect, SyntheticEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -19,13 +13,22 @@ import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { Alert } from "@material-ui/lab";
-
-export type TAlert = "success" | "error";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { withTheme } from "@material-ui/core/styles";
+import { TAlert } from "../../interfaces/main";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import {
+  emailValidation,
+  phoneValidation,
+} from "./../../utils/validationSchemas";
 
 const StyledRow = styled("div")`
   display: flex;
   align-items: center;
   margin-top: 50px;
+  max-width: 280px;
+  width: 100%;
 
   p {
     margin-left: 5px;
@@ -38,11 +41,13 @@ const StyledRow = styled("div")`
   svg {
     margin-right: 25px;
   }
-
-  input {
-    width: 100%;
-  }
 `;
+
+const FormContact = withTheme(styled("form")`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`);
 
 const StyledBox = styled(Box)`
   p {
@@ -53,26 +58,26 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
+const validationSchema = yup.object({
+  email: emailValidation,
+  phone: phoneValidation,
+});
+
+interface IFormValues {
+  phone: string;
+  email: string;
+}
+
 const Profile: FC = () => {
   const { passport, snils, contact } = useSelector(userSelector);
-  const [phone, setPhone] = useState(contact.phone);
-  const [email, setEmail] = useState(contact.email);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setPhone(contact.phone);
-    setEmail(contact.email);
-  }, [contact]);
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
-  };
-
-  const changeContactInfo = async (): Promise<void> => {
+  const onSubmit = async ({ email, phone }: IFormValues) => {
     try {
       const uid = firebaseAuth?.currentUser?.uid;
 
@@ -83,11 +88,12 @@ const Profile: FC = () => {
       db.ref().update({
         [`users/${uid}`]: {
           contact: {
-            phone,
             email,
+            phone,
           },
         },
       });
+
       const updatedContactInfo = await readUserData(uid);
       dispatch(saveUser(updatedContactInfo));
       setAlertType("success");
@@ -99,12 +105,27 @@ const Profile: FC = () => {
     }
   };
 
-  const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
-  };
+  const { errors, handleSubmit, touched, getFieldProps, setValues } = useFormik(
+    {
+      initialValues: {
+        email: contact.email,
+        phone: contact.phone,
+      },
+      validationSchema,
+      onSubmit,
+    }
+  );
 
-  const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  useEffect(() => {
+    setValues({
+      email: contact.email,
+      phone: contact.phone,
+    });
+  }, [contact]);
+
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setIsOpenAlert(false);
   };
 
   return (
@@ -113,50 +134,73 @@ const Profile: FC = () => {
         <Typography variant="h1" color="textPrimary">
           Профиль
         </Typography>
-        <Box mt={6}>
+        <FormContact mt={6} onSubmit={handleSubmit}>
           <Typography variant="h2" color="textPrimary">
             Контакты
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
-            <TextField label="Телефон" value={phone} onChange={changePhone} />
+            <TextField
+              fullWidth
+              label="Телефон"
+              id="phone"
+              {...getFieldProps("phone")}
+              error={touched.phone && Boolean(errors.phone)}
+              helperText={touched.phone && errors.phone}
+            />
           </StyledRow>
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
-            <TextField label="Email" value={email} onChange={changeEmail} />
+            <TextField
+              fullWidth
+              label="Email"
+              id="email"
+              {...getFieldProps("email")}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
+            />
           </StyledRow>
-        </Box>
-        <Box mt={10}>
-          <Typography variant="h2" color="textPrimary">
-            Документы
-          </Typography>
-          <StyledRow>
-            <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="Паспорт" disabled defaultValue={passport} />
-          </StyledRow>
-          <StyledRow>
-            <ListAltRoundedIcon color="action" fontSize="large" />
-            <TextField label="СНИЛС" disabled defaultValue={snils} />
-          </StyledRow>
-        </Box>
-        <StyledBox>
-          <Typography variant="body2" color="textSecondary">
-            Если у вас поменялось ФИО, обратитесь в отделение банка. Для
-            изменения других данных Вы можете обратиться в чат.
-          </Typography>
-          <PrimaryButton size="large" onClick={changeContactInfo}>
-            Сохранить изменения
-          </PrimaryButton>
-        </StyledBox>
+          <Box mt={10}>
+            <Typography variant="h2" color="textPrimary">
+              Документы
+            </Typography>
+            <StyledRow>
+              <ListAltRoundedIcon color="action" fontSize="large" />
+              <TextField
+                fullWidth
+                label="Паспорт"
+                disabled
+                defaultValue={passport}
+              />
+            </StyledRow>
+            <StyledRow>
+              <ListAltRoundedIcon color="action" fontSize="large" />
+              <TextField
+                fullWidth
+                label="СНИЛС"
+                disabled
+                defaultValue={snils}
+              />
+            </StyledRow>
+          </Box>
+          <StyledBox>
+            <Typography variant="body2" color="textSecondary">
+              Если у вас поменялось ФИО, обратитесь в отделение банка. Для
+              изменения других данных Вы можете обратиться в чат.
+            </Typography>
+            <PrimaryButton size="large" type="submit">
+              Сохранить изменения
+            </PrimaryButton>
+          </StyledBox>
+        </FormContact>
         <Snackbar
           open={isOpenAlert}
-          autoHideDuration={6000}
+          autoHideDuration={SHACKBAR_SHOW_DURATION}
           onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertType === "success"
-              ? "Данные успешно изменены!"
-              : errorMessage}
+            {alertMessage}
           </Alert>
         </Snackbar>
       </Box>
