@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
@@ -68,7 +68,7 @@ const FormAuth = withTheme(styled("form")`
 `);
 
 const validationSchema = yup.object({
-  email: emailValidation(),
+  email: emailValidation,
   password: passwordValidation(),
 });
 
@@ -112,7 +112,7 @@ const Auth: FC = () => {
     onSubmit,
   });
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }

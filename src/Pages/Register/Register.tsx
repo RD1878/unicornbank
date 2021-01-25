@@ -79,7 +79,7 @@ const FormAuth = withTheme(styled("form")`
 `);
 
 const validationSchema = yup.object({
-  email: emailValidation(),
+  email: emailValidation,
   password1: passwordValidation("Придумайте пароль"),
   password2: passwordValidation("Повторите пароль"),
 });

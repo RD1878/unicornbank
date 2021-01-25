@@ -27,6 +27,8 @@ const StyledRow = styled("div")`
   display: flex;
   align-items: center;
   margin-top: 50px;
+  max-width: 280px;
+  width: 100%;
 
   p {
     margin-left: 5px;
@@ -38,11 +40,6 @@ const StyledRow = styled("div")`
 
   svg {
     margin-right: 25px;
-  }
-
-  .MuiTextField-root {
-    max-width: 230px;
-    width: 100%;
   }
 `;
 
@@ -62,8 +59,8 @@ const StyledBox = styled(Box)`
 `;
 
 const validationSchema = yup.object({
-  email: emailValidation(),
-  phone: phoneValidation(),
+  email: emailValidation,
+  phone: phoneValidation,
 });
 
 interface IFormValues {
@@ -144,6 +141,7 @@ const Profile: FC = () => {
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
             <TextField
+              fullWidth
               label="Телефон"
               id="phone"
               {...getFieldProps("phone")}
@@ -154,6 +152,7 @@ const Profile: FC = () => {
           <StyledRow>
             <EmailRoundedIcon color="action" fontSize="large" />
             <TextField
+              fullWidth
               label="Email"
               id="email"
               {...getFieldProps("email")}
@@ -167,11 +166,21 @@ const Profile: FC = () => {
             </Typography>
             <StyledRow>
               <ListAltRoundedIcon color="action" fontSize="large" />
-              <TextField label="Паспорт" disabled defaultValue={passport} />
+              <TextField
+                fullWidth
+                label="Паспорт"
+                disabled
+                defaultValue={passport}
+              />
             </StyledRow>
             <StyledRow>
               <ListAltRoundedIcon color="action" fontSize="large" />
-              <TextField label="СНИЛС" disabled defaultValue={snils} />
+              <TextField
+                fullWidth
+                label="СНИЛС"
+                disabled
+                defaultValue={snils}
+              />
             </StyledRow>
           </Box>
           <StyledBox>
