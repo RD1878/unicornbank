@@ -69,13 +69,14 @@ interface IFormValues {
 }
 
 const Profile: FC = () => {
-  const { passport, snils, contact } = useSelector(userSelector);
+  const user = useSelector(userSelector);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const dispatch = useDispatch();
+  const { passport, snils, contact } = user;
 
   const onSubmit = async ({ email, phone }: IFormValues) => {
     try {
@@ -87,6 +88,7 @@ const Profile: FC = () => {
 
       db.ref().update({
         [`users/${uid}`]: {
+          ...user,
           contact: {
             email,
             phone,
