@@ -23,6 +23,9 @@ import { Alert } from "@material-ui/lab";
 
 export type TAlert = "success" | "error";
 
+const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
+const LETTER = /\D/g;
+
 const StyledRow = styled("div")`
   display: flex;
   align-items: center;
@@ -70,8 +73,7 @@ const Profile: FC = () => {
   const dispatch = useDispatch();
 
   const phoneMask = (): string => {
-    const pattern = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
-    const match = phone.match(pattern);
+    const match = phone.match(PATTERN);
 
     if (!match) {
       return "+7";
@@ -124,7 +126,7 @@ const Profile: FC = () => {
 
   const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    const cleaned = value.replace(/\D/g, "");
+    const cleaned = value.replace(LETTER, "");
 
     if (cleaned.length > 11) {
       return;
