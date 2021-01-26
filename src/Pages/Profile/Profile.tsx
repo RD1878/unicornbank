@@ -70,13 +70,13 @@ interface IFormValues {
 
 const Profile: FC = () => {
   const user = useSelector(userSelector);
+  const { passport, snils, contact } = user;
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const dispatch = useDispatch();
-  const { passport, snils, contact } = user;
 
   const onSubmit = async ({ email, phone }: IFormValues) => {
     try {

@@ -175,6 +175,7 @@ const StyledProductsContainer = styled("div")`
 
 const Sidebar: FC = () => {
   const user = useSelector(userSelector);
+  const { firstName, lastName, patronymic, products, avatarUrl } = user;
   const { currentUser } = useSelector(authSelector);
   const dispatch = useDispatch();
 
@@ -183,7 +184,6 @@ const Sidebar: FC = () => {
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
-  const { firstName, lastName, patronymic, products, avatarUrl } = user;
   const cards = Object.values(products.cards);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
