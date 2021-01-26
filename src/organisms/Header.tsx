@@ -1,13 +1,14 @@
-import React, { FC } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
-import { Switch } from "@material-ui/core";
+import { Switch, Snackbar } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
-import { ROUTES } from ".././routes";
 import { Link } from "react-router-dom";
+import { firebaseAuth } from "../firebase/firebase";
+import { Alert } from "@material-ui/lab";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -39,8 +40,29 @@ interface IHeader {
 }
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
+  const [error, setError] = useState(false);
+
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setError(false);
+  };
+
+  const signOut = async () => {
+    try {
+      await firebaseAuth.signOut();
+    } catch (error) {
+      setError(true);
+    }
+  };
+
   return (
     <Container>
+      <Snackbar open={error} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert severity="error" onClose={handleCloseAlert}>
+          Произошла ошибка, не получилось выйти!
+        </Alert>
+      </Snackbar>
+
       <SidebarHeader>
         <ArrowBackRoundedIcon color="secondary" />
       </SidebarHeader>
@@ -53,9 +75,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
           </Link>
         ))}
 
-        <Link to={ROUTES.AUTH}>
-          <PrimaryButton>Выйти</PrimaryButton>
-        </Link>
+        <PrimaryButton onClick={signOut}>Выйти</PrimaryButton>
       </LinksContainer>
 
       <Switch onChange={onToggleTheme} />

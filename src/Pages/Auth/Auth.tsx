@@ -1,12 +1,25 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Typography, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { device } from "./../../theme/device";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { saveUser } from "../../actions/user";
+import { readUserData } from "./../../firebase/firebase";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { TAlert } from "../../interfaces/main";
+import { ROUTES } from "../../routes";
+import {
+  emailValidation,
+  passwordValidation,
+} from "../../utils/validationSchemas";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -27,7 +40,7 @@ const StyledLogo = styled.div`
   left: 3%;
 `;
 
-const FormAuth = withTheme(styled("div")`
+const FormAuth = withTheme(styled("form")`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,36 +72,56 @@ const FormAuth = withTheme(styled("div")`
   }
 `);
 
+const validationSchema = yup.object({
+  email: emailValidation,
+  password: passwordValidation(),
+});
+
+interface IFormValues {
+  email: string;
+  password: string;
+}
+
 const Auth: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    setError(false);
-    setErrorMessage("");
-
-    if (name === "email") {
-      setEmail(value);
-    }
-    if (name === "password") {
-      setPassword(value);
+  const onSubmit = async (formData: IFormValues) => {
+    try {
+      const { email, password } = formData;
+      await firebaseAuth.signInWithEmailAndPassword(email, password);
+      const uid = firebaseAuth?.currentUser?.uid;
+      if (!uid) {
+        throw new Error("Некорректный id");
+      }
+      const data = await readUserData(uid);
+      dispatch(saveUser(data));
+      history.push(ROUTES.MAIN);
+    } catch (error) {
+      setErrorMessage(error.message);
+      setAlertType("error");
     }
   };
 
-  const userAuthorization = (): void => {
-    firebaseAuth
-      .signInWithEmailAndPassword(email, password) //войти с помощью почты и пароля
-      .then(() => {
-        history.push("/");
-      })
-      .catch((error: Error) => {
-        setError(true);
-        setErrorMessage(error.message);
-      });
+  const { errors, handleSubmit, touched, getFieldProps } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit,
+  });
+
+  const handleClose = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenAlert(false);
   };
 
   return (
@@ -96,31 +129,37 @@ const Auth: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormAuth>
+      <FormAuth onSubmit={handleSubmit}>
         <Typography variant="h1" color="textPrimary" align="center">
           Вход в личный кабинет
         </Typography>
         <TextField
           fullWidth
-          error={error}
+          error={touched.email && Boolean(errors.email)}
           label="Почта"
-          name="email"
-          value={email}
-          onChange={handleChange}
-          helperText={errorMessage}
+          {...getFieldProps("email")}
+          helperText={touched.email && errors.email}
         />
         <PasswordField
-          error={error}
-          name="password"
-          value={password}
-          onChange={handleChange}
-          helperText={errorMessage}
-          label="Введите пароль"
+          label="Пароль"
+          error={touched.password && Boolean(errors.password)}
+          {...getFieldProps("password")}
+          helperText={touched.password && errors.password}
         />
-        <PrimaryButton onClick={userAuthorization} size="large">
+        <PrimaryButton size="large" type="submit">
           Войти
         </PrimaryButton>
       </FormAuth>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleClose}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </BackGround>
   );
 };

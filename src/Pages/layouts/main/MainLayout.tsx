@@ -32,9 +32,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
       {!matches && <Header onToggleTheme={onToggleTheme} />}
       <ErrorBoundary>
         <ContentContainer>
-          {!matches && (
-            <Sidebar fullName="Константинопальский Константин Константинович" />
-          )}
+          <Sidebar />
           <Container>{children}</Container>
         </ContentContainer>
       </ErrorBoundary>

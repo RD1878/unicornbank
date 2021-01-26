@@ -1,6 +1,6 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
-import { firebaseAuth } from "../../firebase/firebase";
+import { db, firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
 import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
@@ -8,6 +8,15 @@ import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { device } from "./../../theme/device";
 import { ROUTES } from "../../routes";
+import { useHistory } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { TAlert } from "../../interfaces/main";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import {
+  passwordValidation,
+  emailValidation,
+} from "../../utils/validationSchemas";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -28,7 +37,7 @@ const StyledLogo = styled.div`
   left: 3%;
 `;
 
-const FormAuth = withTheme(styled("div")`
+const FormAuth = withTheme(styled("form")`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,55 +87,73 @@ const FormAuth = withTheme(styled("div")`
   }
 `);
 
+const validationSchema = yup.object({
+  email: emailValidation,
+  password1: passwordValidation("Придумайте пароль"),
+  password2: passwordValidation("Повторите пароль"),
+});
+
+interface IFormValues {
+  email: string;
+  password1: string;
+  password2: string;
+}
+
 const Register: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [verifyPassword, setVerifyPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
+  const history = useHistory();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    setError(false);
-    setErrorMessage("");
-
-    switch (name) {
-      case "email":
-        return setEmail(value);
-      case "password":
-        return setPassword(value);
-      default:
-        return setVerifyPassword(value);
+  const onSubmit = async (formData: IFormValues) => {
+    try {
+      const { password1, password2, email } = formData;
+      if (password1 !== password2) throw new Error("Пароли не совпадают");
+      const res = await firebaseAuth.createUserWithEmailAndPassword(
+        email,
+        password2
+      );
+      if (!res?.user?.uid) {
+        throw new Error("Ошибка");
+      }
+      const { uid, email: userEmail } = res.user;
+      db.ref("users").child(uid).push().key;
+      db.ref().update({
+        [`users/${uid}`]: {
+          contact: {
+            email: userEmail,
+          },
+          createdAt: new Date(),
+          email: email,
+        },
+      });
+      setIsOpenAlert(true);
+      setTimeout(() => {
+        history.push(ROUTES.AUTH);
+      }, 2000);
+    } catch (error) {
+      setErrorMessage(error.message);
+      setAlertType("error");
     }
   };
 
-  const createAccount = (): void => {
-    if (verifyPassword === password) {
-      firebaseAuth
-        .createUserWithEmailAndPassword(email, password) //создание аккаунта
-        .then(() => {
-          setOpen(true);
-          setTimeout(() => {
-            location.href = "/";
-          }, 2000);
-        })
-        .catch((error: Error) => {
-          setError(true);
-          setErrorMessage(error.message);
-        });
-    } else {
-      setError(true);
-      setErrorMessage("Пароли не совпадают");
-    }
-  };
+  const { errors, handleSubmit, touched, getFieldProps } = useFormik({
+    initialValues: {
+      email: "",
+      password1: "",
+      password2: "",
+    },
+    validationSchema,
+    onSubmit,
+  });
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
-
-    setOpen(false);
+    setIsOpenAlert(false);
   };
 
   return (
@@ -134,39 +161,35 @@ const Register: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormAuth>
+      <FormAuth onSubmit={handleSubmit}>
         <div>
           <Typography variant="h1" color="textPrimary" align="center">
             Регистрация
           </Typography>
-          <TextField
-            fullWidth
-            error={error}
-            label="Почта"
-            name="email"
-            value={email}
-            onChange={handleChange}
-            helperText={errorMessage}
-          />
+          <div>
+            <TextField
+              fullWidth
+              {...getFieldProps("email")}
+              error={touched.email && Boolean(errors.email)}
+              label="Почта"
+              helperText={touched.email && errors.email}
+            />
+          </div>
           <PasswordField
             fullWidth
-            error={error}
-            name="password"
-            value={password}
-            onChange={handleChange}
-            helperText={errorMessage}
+            error={touched.password1 && Boolean(errors.password1)}
+            {...getFieldProps("password1")}
+            helperText={touched.password1 && errors.password1}
             label="Введите пароль"
           />
           <PasswordField
             fullWidth
-            error={error}
-            name="verifyPassword"
-            value={verifyPassword}
-            onChange={handleChange}
-            helperText={errorMessage}
+            error={touched.password2 && Boolean(errors.password2)}
+            {...getFieldProps("password2")}
+            helperText={touched.password2 && errors.password2}
             label="Повторите пароль"
           />
-          <PrimaryButton onClick={createAccount} size="large">
+          <PrimaryButton type="submit" size="large">
             Зарегистрироваться
           </PrimaryButton>
           <Link href={ROUTES.AUTH} color="textPrimary">
@@ -176,9 +199,14 @@ const Register: FC = () => {
           </Link>
         </div>
       </FormAuth>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert severity="success" onClose={handleClose}>
-          Вы успешно зарегистрированы!
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleClose}>
+          {alertMessage}
         </Alert>
       </Snackbar>
     </BackGround>
