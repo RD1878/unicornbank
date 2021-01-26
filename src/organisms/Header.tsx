@@ -34,7 +34,6 @@ const LinksContainer = styled.div`
   align-items: center;
   flex-grow: 0.5;
 `;
-
 interface IHeader {
   onToggleTheme: () => void;
 }

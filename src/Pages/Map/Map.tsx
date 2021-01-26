@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Map as YMap, Placemark, YMaps, ZoomControl } from "react-yandex-maps";
 import { db } from "../../firebase/firebase";
 import MapInfoItem from "./../../atoms/MapInfoItem";
+import { withTheme } from "@material-ui/core/styles";
 
 export interface IAtm {
   id: number;
@@ -51,15 +52,30 @@ const StyledTab = styled(({ ...props }) => (
   }
 `;
 
-const StyledWrap = styled("div")`
+const StyledWrap = withTheme(styled("div")`
   margin: -40px;
-`;
-const StyleMapContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+
+  ${(props) => props.theme.breakpoints.down("sm")} {
+    margin: -15px;
+  }
+`);
+
+const StyleMapContainer = withTheme(styled("div")`
   width: 100%;
+  height: 100%;
   position: relative;
-  min-height: 573px;
+  min-height: calc(100vh - 370px);
   overflow: hidden;
-`;
+
+  ${(props) => props.theme.breakpoints.down("lg")} {
+    min-height: calc(100vh - 367px);
+  }
+  ${(props) => props.theme.breakpoints.down("sm")} {
+    min-height: calc(100vh - 253px);
+  }
+`);
 
 const StyledYMap = styled(YMap)`
   position: absolute;
@@ -124,7 +140,7 @@ const Map: FC = () => {
             height="100%"
             defaultState={{
               center: KAZAN_CENTER,
-              zoom: 13,
+              zoom: 12,
               controls: [],
             }}
           >

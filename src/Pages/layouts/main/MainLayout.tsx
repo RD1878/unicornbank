@@ -10,10 +10,13 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
-  min-height: calc(100vh - 230px);
+  min-height: calc(100vh - 370px);
 
-  ${(props) => props.theme.breakpoints.down("lg")} {
-    min-height: 100vh;
+  ${(props) => props.theme.breakpoints.down("md")} {
+    min-height: calc(100vh - 370px);
+  }
+  ${(props) => props.theme.breakpoints.down("sm")} {
+    min-height: calc(100vh - 56px);
   }
 `);
 
@@ -24,6 +27,7 @@ const Container = withTheme(styled("div")`
   width: 100%;
   ${(props) => props.theme.breakpoints.down("sm")} {
     padding: 15px;
+    margin: 64px 0 56px;
   }
 `);
 
