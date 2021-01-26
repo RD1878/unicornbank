@@ -78,15 +78,16 @@ export const Operations: FC = () => {
               onChange={handleChange}
               indicatorColor="secondary"
               textColor="secondary"
-              variant="fullWidth"
-              scrollButtons="on"
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs example"
             >
               {categories.map((item) => (
                 <StyledTab label={item.name} key={item.type} />
               ))}
             </Tabs>
 
-            <TabPanel type="scrollable-force" value={tab} index={0}>
+            <TabPanel type="scrollable" value={tab} index={0}>
               {operations.map((item) => (
                 <OperationCard operation={item} key={item.id} />
               ))}
