@@ -1,4 +1,10 @@
-import React, { FC, useEffect, useState } from "react";
+import React, {
+  FC,
+  useEffect,
+  useState,
+  SyntheticEvent,
+  ChangeEvent,
+} from "react";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
@@ -12,6 +18,7 @@ import {
   Collapse,
   useMediaQuery,
   Button,
+  Snackbar,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import CardItem from "./../atoms/CardItem";
@@ -22,6 +29,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import { ROUTES } from ".././routes";
+import { Alert } from "@material-ui/lab";
 import { ICard } from "../interfaces/card";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
@@ -29,8 +37,13 @@ import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { userSelector } from "../selectors/userSelector";
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector, authSelector } from "../selectors";
+import firebase from "firebase";
+import { db } from "./../firebase/firebase";
+import { requestUser } from "../actions";
+import { SHACKBAR_SHOW_DURATION } from "../constants";
+import { TAlert } from "../interfaces/main";
 
 interface IWithOpen {
   open: boolean;
@@ -97,14 +110,24 @@ const StyledIcon = withTheme(styled(PersonRoundedIcon)`
   min-height: 100px;
   color: ${(props) => props.theme.palette.textPrimary.main};
   border-radius: 50%;
-  border 2px solid ${(props) => props.theme.palette.textPrimary.main};
+  border: 2px solid ${(props) => props.theme.palette.textPrimary.main};
+  margin-bottom: 20px;
 `);
 
-const StyledAddAvatar = withTheme(styled(AddAPhotoRoundedIcon)`
-  color: ${(props) => props.theme.palette.textPrimary.main};
-  position: absolute;
-  right: -20px;
-`);
+const StyledAddAvatar = styled("div")`
+  position: relative;
+  overflow: hidden;
+
+  & > input {
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0px;
+  }
+`;
 
 const StyledLink = withTheme(styled(Link)`
   display: flex;
@@ -151,14 +174,59 @@ const StyledProductsContainer = styled("div")`
 `;
 
 const Sidebar: FC = () => {
-  const { firstName, lastName, patronymic, products, avatarURL } = useSelector(
-    userSelector
-  );
+  const user = useSelector(userSelector);
+  const { firstName, lastName, patronymic, products, avatarUrl } = user;
+  const { currentUser } = useSelector(authSelector);
+  const dispatch = useDispatch();
+
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const cards = Object.values(products.cards);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
+
+  const addPhoto = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+    try {
+      const file = e?.target?.files?.[0];
+
+      if (!file) return;
+
+      const imagesRef = firebase.storage().ref().child("avatars/");
+      const fileRef = imagesRef.child(file.name);
+
+      await fileRef.put(file);
+
+      const avatarUrl = await fileRef.getDownloadURL();
+      const uid = currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("Пользователь не найден");
+      }
+
+      db.ref().update({
+        [`users/${uid}`]: {
+          ...user,
+          avatarUrl,
+        },
+      });
+
+      dispatch(requestUser());
+      setAlertType("success");
+    } catch (error) {
+      setErrorMessage(error.message);
+      setAlertType("error");
+    }
+  };
+
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setIsOpenAlert(false);
+  };
 
   const handleDrawerCollapse = () => {
     setOpen((prev) => !prev);
@@ -177,14 +245,17 @@ const Sidebar: FC = () => {
       <StyledWrap open={open}>
         <StyledProfileInfo open={open}>
           <Grid container justify="center" alignItems="center">
-            {avatarURL ? (
-              <StyledAvatar sizes="large">{avatarURL}</StyledAvatar>
-            ) : (
-              <StyledContainer>
+            <StyledContainer>
+              {avatarUrl ? (
+                <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
+              ) : (
                 <StyledIcon sizes="large" />
-                <StyledAddAvatar />
-              </StyledContainer>
-            )}
+              )}
+              <StyledAddAvatar>
+                <input onChange={addPhoto} type="file" />
+                <AddAPhotoRoundedIcon />
+              </StyledAddAvatar>
+            </StyledContainer>
             <Typography variant="h2" color="textPrimary" align="center">
               {`${firstName} ${patronymic} ${lastName} `}
             </Typography>
@@ -215,7 +286,7 @@ const Sidebar: FC = () => {
               <List component="div" disablePadding>
                 <StyledListItem button>
                   {cards.map((card: ICard) => (
-                    <CardItem key={card.id} open={open} {...card} />
+                    <CardItem key={card.number} open={open} {...card} />
                   ))}
                 </StyledListItem>
               </List>
@@ -245,6 +316,16 @@ const Sidebar: FC = () => {
           </Tooltip>
         </Grid>
       </StyledWrap>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleCloseAlert}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </StyledDrawer>
   );
 };

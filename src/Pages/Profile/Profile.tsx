@@ -69,7 +69,8 @@ interface IFormValues {
 }
 
 const Profile: FC = () => {
-  const { passport, snils, contact } = useSelector(userSelector);
+  const user = useSelector(userSelector);
+  const { passport, snils, contact } = user;
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -87,6 +88,7 @@ const Profile: FC = () => {
 
       db.ref().update({
         [`users/${uid}`]: {
+          ...user,
           contact: {
             email,
             phone,
