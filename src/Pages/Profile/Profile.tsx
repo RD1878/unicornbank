@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, SyntheticEvent, ChangeEvent } from "react";
+import React, { FC, useState, useEffect, SyntheticEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -25,6 +25,8 @@ import {
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 const LETTER = /\D/g;
+
+const cleanPhone = (phone: string): string => phone.replace(LETTER, "");
 
 const StyledRow = styled("div")`
   display: flex;
@@ -80,8 +82,9 @@ const Profile: FC = () => {
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const dispatch = useDispatch();
 
-  const phoneMask = (): string => {
-    const match = phone.match(PATTERN);
+  const phoneMask = (phone: string): string => {
+    const cleaned = cleanPhone(phone);
+    const match = cleaned.match(PATTERN);
 
     if (!match) {
       return "+7";
@@ -95,23 +98,10 @@ const Profile: FC = () => {
     return ["+7", first, second, third, fourth].join("");
   };
 
-  useEffect(() => {
-    setValues({
-      email: contact.email,
-      phone: contact.phone,
-    });
-  }, [contact]);
-
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
-  };
-
-  const changeContactInfo = async (): Promise<void> => {
   const onSubmit = async ({ email, phone }: IFormValues) => {
     try {
       const uid = firebaseAuth?.currentUser?.uid;
+      const cleanedPhone = cleanPhone(phone);
 
       if (!uid) {
         throw new Error("Пользователь не найден");
@@ -121,7 +111,7 @@ const Profile: FC = () => {
         [`users/${uid}`]: {
           contact: {
             email,
-            phone,
+            phone: cleanedPhone,
           },
         },
       });
@@ -137,30 +127,22 @@ const Profile: FC = () => {
     }
   };
 
-  const changePhone = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    const cleaned = value.replace(LETTER, "");
-
-    if (cleaned.length > 11) {
-      return;
-    }
-
-    const newPhone = cleaned.replace(/[^0-9]+/, "");
-
-    setPhone(newPhone); 
-  };
-  
-  const { errors, handleSubmit, touched, getFieldProps, setValues } = useFormik(
-    {
-      initialValues: {
-        email: contact.email,
-        phone: contact.phone,
-      },
-      validationSchema,
-      onSubmit,
-    }
-  );
-
+  const {
+    errors,
+    handleSubmit,
+    touched,
+    getFieldProps,
+    setValues,
+    values,
+    handleChange,
+  } = useFormik({
+    initialValues: {
+      email: contact.email,
+      phone: contact.phone,
+    },
+    validationSchema,
+    onSubmit,
+  });
   useEffect(() => {
     setValues({
       email: contact.email,
@@ -189,7 +171,9 @@ const Profile: FC = () => {
               fullWidth
               label="Телефон"
               id="phone"
-              {...getFieldProps("phone")}
+              name="phone"
+              value={phoneMask(values.phone)}
+              onChange={handleChange}
               error={touched.phone && Boolean(errors.phone)}
               helperText={touched.phone && errors.phone}
             />
