@@ -6,7 +6,6 @@ import { Typography, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
-import { device } from "./../../theme/device";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../../actions/user";
@@ -60,8 +59,7 @@ const FormAuth = withTheme(styled("form")`
 
   h1 {
     margin-bottom: 1.75em;
-
-    @media ${device.mobileM} {
+    ${(props) => props.theme.breakpoints.down("lg")} {
       margin-bottom: 1em;
     }
   }

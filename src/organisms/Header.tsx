@@ -1,7 +1,6 @@
 import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
 import { Switch, Snackbar } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
@@ -9,6 +8,7 @@ import PrimaryLink from "./../atoms/PrimaryLink";
 import { Link } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
+import { SHACKBAR_SHOW_DURATION } from "../constants";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -57,15 +57,17 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
   return (
     <Container>
-      <Snackbar open={error} autoHideDuration={6000} onClose={handleCloseAlert}>
+      <Snackbar
+        open={error}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleCloseAlert}
+      >
         <Alert severity="error" onClose={handleCloseAlert}>
           Произошла ошибка, не получилось выйти!
         </Alert>
       </Snackbar>
 
-      <SidebarHeader>
-        <ArrowBackRoundedIcon color="secondary" />
-      </SidebarHeader>
+      <SidebarHeader></SidebarHeader>
       <LinksContainer>
         <Logo />
 

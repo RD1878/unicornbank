@@ -11,6 +11,10 @@ const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
   min-height: calc(100vh - 230px);
+
+  ${(props) => props.theme.breakpoints.down("lg")} {
+    min-height: 100vh;
+  }
 `);
 
 const Container = styled.div`
@@ -28,16 +32,16 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   const matches = useMediaQuery("(max-width:768px)");
   return (
     <>
-      {matches && <ProminentAppBar />}
       {!matches && <Header onToggleTheme={onToggleTheme} />}
       <ErrorBoundary>
         <ContentContainer>
-          <Sidebar />
+          {matches && <ProminentAppBar />}
+          {!matches && <Sidebar />}
           <Container>{children}</Container>
+          {matches && <SimpleBottomNavigation />}
         </ContentContainer>
       </ErrorBoundary>
       {!matches && <Footer />}
-      {matches && <SimpleBottomNavigation />}
     </>
   );
 };

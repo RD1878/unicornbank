@@ -97,7 +97,7 @@ const StyledIcon = withTheme(styled(PersonRoundedIcon)`
   min-height: 100px;
   color: ${(props) => props.theme.palette.textPrimary.main};
   border-radius: 50%;
-  border 2px solid ${(props) => props.theme.palette.textPrimary.main};
+  border: 2px solid ${(props) => props.theme.palette.textPrimary.main};
 `);
 
 const StyledAddAvatar = withTheme(styled(AddAPhotoRoundedIcon)`
@@ -215,7 +215,7 @@ const Sidebar: FC = () => {
               <List component="div" disablePadding>
                 <StyledListItem button>
                   {cards.map((card: ICard) => (
-                    <CardItem key={card.id} open={open} {...card} />
+                    <CardItem key={card.number} open={open} {...card} />
                   ))}
                 </StyledListItem>
               </List>

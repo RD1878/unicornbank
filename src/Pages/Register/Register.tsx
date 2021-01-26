@@ -6,7 +6,6 @@ import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
 import background from "../../assets/images/1-2.png";
 import { Snackbar, Link, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { device } from "./../../theme/device";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
@@ -57,7 +56,7 @@ const FormAuth = withTheme(styled("form")`
 
   h1 {
     margin-bottom: 1.75em;
-    @media ${device.laptopL} {
+    ${(props) => props.theme.breakpoints.down("lg")} {
       margin-bottom: 1em;
     }
   }
@@ -74,7 +73,7 @@ const FormAuth = withTheme(styled("form")`
       width: 100%;
       margin-bottom: 1.75em;
 
-      @media ${device.laptopL} {
+      ${(props) => props.theme.breakpoints.down("lg")} {
         margin-bottom: 1em;
       }
     }
@@ -166,15 +165,13 @@ const Register: FC = () => {
           <Typography variant="h1" color="textPrimary" align="center">
             Регистрация
           </Typography>
-          <div>
-            <TextField
-              fullWidth
-              {...getFieldProps("email")}
-              error={touched.email && Boolean(errors.email)}
-              label="Почта"
-              helperText={touched.email && errors.email}
-            />
-          </div>
+          <TextField
+            fullWidth
+            {...getFieldProps("email")}
+            error={touched.email && Boolean(errors.email)}
+            label="Почта"
+            helperText={touched.email && errors.email}
+          />
           <PasswordField
             fullWidth
             error={touched.password1 && Boolean(errors.password1)}

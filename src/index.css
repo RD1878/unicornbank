@@ -21,3 +21,9 @@ code {
 a {
   text-decoration: none;
 }
+
+@media (max-width: 798px) {
+  html {
+    font-size: 80%;
+  }
+}

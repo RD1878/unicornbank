@@ -4,10 +4,12 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
+// import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../routes";
+// import PrimaryButton from "./PrimaryButton";
+// import { firebaseAuth } from "../firebase/firebase";
 
 const StyledToolbar = withTheme(styled(Toolbar)`
   &.MuiToolbar-regular {
@@ -17,6 +19,15 @@ const StyledToolbar = withTheme(styled(Toolbar)`
 `);
 
 const ProminentAppBar: FC = () => {
+  // const [error, setError] = useState(false);
+
+  // const signOut = async () => {
+  //   try {
+  //     await firebaseAuth.signOut();
+  //   } catch (error) {
+  //     setError(true);
+  //   }
+  // };
   return (
     <AppBar position="fixed">
       <StyledToolbar>
@@ -26,9 +37,13 @@ const ProminentAppBar: FC = () => {
           </IconButton>
         </Link>
         <Link to={ROUTES.MAIN}>
-          <IconButton aria-label="display more actions" edge="end">
+          {/* <IconButton
+            aria-label="display more actions"
+            edge="end"
+            onClick={signOut}
+          >
             <ExitToAppRoundedIcon />
-          </IconButton>
+          </IconButton> */}
         </Link>
       </StyledToolbar>
     </AppBar>
