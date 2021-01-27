@@ -15,6 +15,7 @@ import { PrimaryButton } from "../../atoms";
 const StyledWraper = styled("div")`
   display: flex;
   flex-direction: column;
+  max-width: 800px;
 `;
 
 const StyledTable = styled(Table)`
