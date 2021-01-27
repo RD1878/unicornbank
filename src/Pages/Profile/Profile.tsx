@@ -24,9 +24,10 @@ import {
 } from "./../../utils/validationSchemas";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
-const LETTER = /\D/g;
+const NOT_NUMBER_REGEX = /\D/g;
 
-const cleanPhone = (phone: string): string => phone.replace(LETTER, "");
+const cleanPhone = (phone: string): string =>
+  phone.replace(NOT_NUMBER_REGEX, "");
 
 const StyledRow = styled("div")`
   display: flex;
