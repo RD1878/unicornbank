@@ -81,7 +81,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
           </Link>
         ))}
 
-        <PrimaryButton onClick={signOut}>{t("Выйти")}</PrimaryButton>
+        <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
       <FormControl>
         <NativeSelect defaultValue="ru" onChange={handleChange}>

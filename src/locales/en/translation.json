@@ -1,8 +1,8 @@
 {
-  "Главная": "Home",
-  "История": "History",
-  "Чат": "Chat",
-  "Настройки": "Settings",
-  "Офисы и банкоматы": "Offices and ATMs",
-  "Выйти": "Exit"
+  "Home": "Home",
+  "History": "History",
+  "Chat": "Chat",
+  "Settings": "Settings",
+  "Offices and ATMs": "Offices and ATMs",
+  "Exit": "Exit"
 }
