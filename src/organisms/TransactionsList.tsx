@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { PrimaryButton } from "../atoms";
 import { OperationCard, TabPanel } from "../molecules";
 import { Box, Tabs, Tab, Typography } from "@material-ui/core";
-import ICardOperation from "../interfaces/cardOpeartion";
+import { IOperation } from "../interfaces/opeartion";
 import { Link } from "react-router-dom";
 
 const StyledTab = styled(({ ...props }) => (
@@ -45,7 +45,7 @@ const categories: { type: string; name: string }[] = [
 ];
 
 interface IProps {
-  cardsTransactions: { id: string; key: string; operation: ICardOperation }[];
+  cardsTransactions: { id: string; key: string; operation: IOperation }[];
 }
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {

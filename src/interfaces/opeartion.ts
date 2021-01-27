@@ -1,4 +1,4 @@
-interface ICardOperation {
+interface IOperation {
   amount: number;
   category: string;
   currency: string;
@@ -8,4 +8,4 @@ interface ICardOperation {
   type: string;
 }
 
-export default ICardOperation;
+export type { IOperation };

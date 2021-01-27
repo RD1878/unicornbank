@@ -2,7 +2,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   patronymic: string;
-  avatarURL: string;
+  avatarUrl: string;
   passport: string;
   snils: string;
   contact: {

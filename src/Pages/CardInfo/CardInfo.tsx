@@ -7,7 +7,7 @@ import TransactionsList from "../../organisms/TransactionsList";
 import { RouteComponentProps } from "@reach/router";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
-import ICardOperation from "../../interfaces/cardOpeartion";
+import { IOperation } from "../../interfaces/opeartion";
 import { DialogReissueCard } from "../../molecules";
 
 const StyledButtonsWraper = styled("div")`
@@ -58,8 +58,8 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
 
   const currentCardTransactions = currentCardOperations.reduce(
     (
-      acc: { id: string; key: string; operation: ICardOperation }[],
-      [key, operation]: [string, ICardOperation]
+      acc: { id: string; key: string; operation: IOperation }[],
+      [key, operation]: [string, IOperation]
     ) => {
       return [...acc, { id, key, operation }];
     },

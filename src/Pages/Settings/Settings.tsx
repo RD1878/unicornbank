@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent, SyntheticEvent } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
@@ -7,8 +7,13 @@ import { firebaseAuth } from "../../firebase/firebase";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Alert } from "@material-ui/lab";
-import { TAlert } from "../Profile/Profile";
-const StyledColumn = styled("div")`
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { TAlert } from "../../interfaces/tAlert";
+import { passwordValidation } from "../../utils/validationSchemas";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
+
+const StyledColumn = styled("form")`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
@@ -37,20 +42,30 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
+const validationSchema = yup.object({
+  password: passwordValidation("Введите текущий пароль"),
+  newPassword1: passwordValidation("Введите новый пароль"),
+  newPassword2: passwordValidation("Повторите новый пароль"),
+});
+
+interface IFormValues {
+  password: string;
+  newPassword1: string;
+  newPassword2: string;
+}
+
 const Settings: FC = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword1, setNewPassword1] = useState("");
-  const [newPassword2, setNewPassword2] = useState("");
   const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
+  const alertMessage =
+    alertType === "success" ? "Пароль успешно изменён!" : errorMessage;
 
-  const reauthenticate = () => {
+  const reauthenticate = (password: string) => {
     const user = firebaseAuth.currentUser;
     const cred = firebase.auth.EmailAuthProvider.credential(
       user?.email as string,
-      currentPassword
+      password
     );
 
     return user?.reauthenticateWithCredential(cred);
@@ -61,35 +76,36 @@ const Settings: FC = () => {
     setIsOpenAlert(false);
   };
 
-  const changePassword = async () => {
+  const onSubmit = async (formData: IFormValues) => {
     try {
+      const { newPassword1, newPassword2, password } = formData;
       if (newPassword1 !== newPassword2) {
         throw new Error("Пароли не совпадают");
       }
-      await reauthenticate();
+      await reauthenticate(password);
       const user = firebaseAuth.currentUser;
       await user?.updatePassword(newPassword2);
       setAlertType("success");
+      resetForm();
     } catch (error) {
-      setError(error.message);
-      setErrorMessage(error.message);
       setAlertType("error");
+      setErrorMessage(error.message);
     } finally {
       setIsOpenAlert(true);
     }
   };
 
-  const changeCurrentPassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentPassword(e.target.value);
-  };
-
-  const changeNewPassword1 = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword1(e.target.value);
-  };
-
-  const changeNewPassword2 = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword2(e.target.value);
-  };
+  const { errors, handleSubmit, touched, resetForm, getFieldProps } = useFormik(
+    {
+      initialValues: {
+        password: "",
+        newPassword1: "",
+        newPassword2: "",
+      },
+      validationSchema,
+      onSubmit,
+    }
+  );
 
   return (
     <Container>
@@ -100,49 +116,44 @@ const Settings: FC = () => {
         <Typography variant="subtitle1" color="textPrimary">
           Смена пароля
         </Typography>
-        <StyledColumn>
+        <StyledColumn onSubmit={handleSubmit}>
           <PasswordField
-            name="password"
+            {...getFieldProps("password")}
             label="Введите текущий пароль"
-            helperText={errorMessage}
-            value={currentPassword}
-            error={error}
-            onChange={changeCurrentPassword}
+            helperText={touched.password && errors.password}
+            error={touched.password && Boolean(errors.password)}
           />
           <PasswordField
-            name="newPassword1"
+            {...getFieldProps("newPassword1")}
             label="Введите новый пароль"
-            value={newPassword1}
-            error={error}
-            onChange={changeNewPassword1}
-            helperText={errorMessage}
+            error={touched.newPassword1 && Boolean(errors.newPassword1)}
+            helperText={touched.newPassword1 && errors.newPassword1}
           />
           <PasswordField
-            name="newPassword2"
+            {...getFieldProps("newPassword2")}
             label="Повторите новый пароль"
-            value={newPassword2}
-            error={error}
-            onChange={changeNewPassword2}
-            helperText={errorMessage}
+            error={touched.newPassword2 && Boolean(errors.newPassword2)}
+            helperText={touched.newPassword2 && errors.newPassword2}
           />
+          <StyledBox>
+            <Typography variant="body2" color="textSecondary">
+              Если у вас поменялся логин или вы забыли пароль, обратитесь в
+              отделение банка. Для изменения других данных Вы можете обратиться
+              в чат.
+            </Typography>
+            <PrimaryButton size="large" type="submit">
+              Сохранить изменения
+            </PrimaryButton>
+          </StyledBox>
         </StyledColumn>
-        <StyledBox>
-          <Typography variant="body2" color="textSecondary">
-            Если у вас поменялся логин или вы забыли пароль, обратитесь в
-            отделение банка. Для изменения других данных Вы можете обратиться в
-            чат.
-          </Typography>
-          <PrimaryButton size="large" onClick={changePassword}>
-            Сохранить изменения
-          </PrimaryButton>
-        </StyledBox>
         <Snackbar
           open={isOpenAlert}
-          autoHideDuration={6000}
+          autoHideDuration={SHACKBAR_SHOW_DURATION}
           onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertType === "success" ? "Пароль успешно изменён!" : errorMessage}
+            {alertMessage}
           </Alert>
         </Snackbar>
       </Box>

@@ -3,7 +3,7 @@ import { Offers } from "../../molecules";
 import { CurrencyRate } from "../../molecules";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
-import ICardOperation from "../../interfaces/cardOpeartion";
+import { IOperation } from "../../interfaces/opeartion";
 import TransactionsList from "../../organisms/TransactionsList";
 import { ICard } from "../../interfaces/card";
 
@@ -12,7 +12,7 @@ const MainPage: FC = () => {
   const cards = Object.entries(products.cards);
   const allCardsTransactions = cards.reduce(
     (
-      acc: { id: string; key: string; operation: ICardOperation }[],
+      acc: { id: string; key: string; operation: IOperation }[],
       [id, card]: [string, ICard]
     ) => {
       const operations = Object.entries(card.operations);

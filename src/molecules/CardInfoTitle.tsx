@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Container, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
-import getCurrencyTypeBalance from "../helpers/getCurrencyTypeBalance";
+import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
 
 const StyledCardInfoContainer = styled("div")`
   display: flex;

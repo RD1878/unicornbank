@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Avatar, Box, Card, Typography } from "@material-ui/core";
-import ICardOperation from "../interfaces/cardOpeartion";
-import getCurrencyTypeBalance from "../helpers/getCurrencyTypeBalance";
+import { IOperation } from "../interfaces/opeartion";
+import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -11,7 +11,7 @@ const StyledCard = styled(Card)`
 `;
 
 interface IProps {
-  operation: ICardOperation;
+  operation: IOperation;
 }
 
 const OperationCard: FC<IProps> = ({ operation }) => {
