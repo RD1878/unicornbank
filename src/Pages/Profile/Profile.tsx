@@ -147,7 +147,7 @@ const Profile: FC = () => {
   } = useFormik({
     initialValues: {
       email: contact.email,
-      phone: contact.phone,
+      phone: phoneMask(contact.phone),
     },
     validationSchema,
     onSubmit,
