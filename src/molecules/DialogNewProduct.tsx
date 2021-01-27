@@ -10,16 +10,18 @@ import {
   Radio,
   RadioGroup,
 } from "@material-ui/core";
-import React, { FC, useState } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import { PrimaryButton } from "../atoms";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
+import { CURRENCIES } from "../constants";
 
 /* import { db, firebaseAuth, readUserData } from "../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { saveUser } from "../actions";
 import { userSelector } from "../selectors";
+import { CURRENCIES } from '../constants';
  */
 const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
   width: fit-content;
@@ -28,6 +30,8 @@ const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
 
 const DialogNewProduct: FC = () => {
   const [isOpenDialog, setOpenDialog] = useState(false);
+  const [valueProduct, setValueProduct] = useState("Дебетовая карта");
+  const [valueCurrency, setValueCurrency] = useState("Рубли, РФ");
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -37,7 +41,15 @@ const DialogNewProduct: FC = () => {
     setOpenDialog(false);
   };
   const handleConfirm = () => {
-    setConfirm(true);
+    setOpenDialog(false);
+  };
+
+  const handleChangeProduct = (event: ChangeEvent<HTMLInputElement>) => {
+    setValueProduct((event.target as HTMLInputElement).value);
+  };
+
+  const handleChangeCurrency = (event: ChangeEvent<HTMLInputElement>) => {
+    setValueCurrency((event.target as HTMLInputElement).value);
   };
 
   return (
@@ -67,8 +79,8 @@ const DialogNewProduct: FC = () => {
             <RadioGroup
               aria-label="Продукт"
               name="product"
-              value="Дебетовая карта"
-              /* onChange={handleChange} */
+              value={valueProduct}
+              onChange={handleChangeProduct}
               row
             >
               <FormControlLabel
@@ -88,6 +100,22 @@ const DialogNewProduct: FC = () => {
                 label="Вклад"
                 disabled
               />
+            </RadioGroup>
+            <RadioGroup
+              aria-label="Валюта"
+              name="currency"
+              value={valueCurrency}
+              onChange={handleChangeCurrency}
+              row
+            >
+              {Object.entries(CURRENCIES).map(([key, value]) => (
+                <FormControlLabel
+                  key={key}
+                  value={value}
+                  control={<Radio />}
+                  label={value}
+                />
+              ))}
             </RadioGroup>
             <PrimaryButton onClick={handleCloseDialog}>Отмена</PrimaryButton>
             <PrimaryButton onClick={handleConfirm} type="submit">
