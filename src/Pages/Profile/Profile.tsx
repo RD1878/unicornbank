@@ -1,4 +1,10 @@
-import React, { FC, useState, useEffect, SyntheticEvent } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  SyntheticEvent,
+  ChangeEvent,
+} from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -137,7 +143,7 @@ const Profile: FC = () => {
     getFieldProps,
     setValues,
     values,
-    handleChange,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       email: contact.email,
@@ -149,13 +155,17 @@ const Profile: FC = () => {
   useEffect(() => {
     setValues({
       email: contact.email,
-      phone: contact.phone,
+      phone: phoneMask(contact.phone),
     });
   }, [contact]);
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
     setIsOpenAlert(false);
+  };
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue("phone", phoneMask(event.target.value));
   };
 
   return (
@@ -175,8 +185,8 @@ const Profile: FC = () => {
               label="Телефон"
               id="phone"
               name="phone"
-              value={phoneMask(values.phone)}
-              onChange={handleChange}
+              value={values.phone}
+              onChange={handlePhoneChange}
               error={touched.phone && Boolean(errors.phone)}
               helperText={touched.phone && errors.phone}
             />
