@@ -5,6 +5,7 @@ import { Typography } from "@material-ui/core";
 import { Logo, PrimaryLink } from "../atoms";
 import { navigation } from "../routes";
 import { Link } from "react-router-dom";
+import { PHONE_BANK, EMAIL_BANK } from "../constants";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -59,11 +60,9 @@ const Footer: FC = () => (
     </LeftNavigation>
 
     <RightNavigation>
-      <PrimaryLink href="tel:88005553535">8 800 555-35-35</PrimaryLink>
+      <PrimaryLink href={PHONE_BANK}>{PHONE_BANK}</PrimaryLink>
       <Typography color="textSecondary">Для звонков по России</Typography>
-      <PrimaryLink href="mailto:unicorn@email.com">
-        unicorn@email.com
-      </PrimaryLink>
+      <PrimaryLink href={EMAIL_BANK}>{EMAIL_BANK}</PrimaryLink>
     </RightNavigation>
   </Container>
 );

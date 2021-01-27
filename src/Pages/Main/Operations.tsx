@@ -80,7 +80,6 @@ export const Operations: FC = () => {
               textColor="secondary"
               variant="scrollable"
               scrollButtons="auto"
-              aria-label="scrollable auto tabs example"
             >
               {categories.map((item) => (
                 <StyledTab label={item.name} key={item.type} />

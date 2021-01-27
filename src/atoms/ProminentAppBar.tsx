@@ -13,8 +13,10 @@ import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
 
-const StyledToolbar = withTheme(styled(Toolbar)`
-  &.MuiToolbar-regular {
+const StyledToolbar = withTheme(styled(({ ...props }) => (
+  <Toolbar classes={{ regular: "regular" }} {...props} />
+))`
+  &.regular {
     display: flex;
     justify-content: space-between;
   }
@@ -52,11 +54,7 @@ const ProminentAppBar: FC = () => {
             <AccountCircleRoundedIcon />
           </IconButton>
         </Link>
-        <IconButton
-          aria-label="display more actions"
-          edge="end"
-          onClick={signOut}
-        >
+        <IconButton edge="end" onClick={signOut}>
           <ExitToAppRoundedIcon />
         </IconButton>
       </StyledToolbar>
