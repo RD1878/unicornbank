@@ -24,13 +24,14 @@ import * as yup from "yup";
 import { db } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { CURRENCIES, SHACKBAR_SHOW_DURATION } from "../constants";
-import { v4 as uuid } from "uuid";
 import { requestUser } from "./../actions/user";
 import { authSelector } from "../selectors";
 import { TAlert } from "../interfaces/main";
 import { requiredStringValidation } from "../utils/validationSchemas";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import { getRandomNumber } from "../utils/randomNumber";
+import { randomId } from "../utils/randomId";
 
 const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
   width: fit-content;
@@ -90,19 +91,13 @@ const DialogNewProduct: FC = () => {
     setIsOpenAlert(false);
   };
 
-  function getRandom(length: number): number {
-    return Math.floor(
-      Math.pow(6, length - 1) + Math.random() * 4 * Math.pow(5, length - 1)
-    );
-  }
-
   const onSubmit = async ({ currency }: IFormRadio) => {
     try {
       const newCard = {
         currency,
         balance: 0,
         isActive: false,
-        number: `${getRandom(5)} **** **** **** ${getRandom(5)}`,
+        number: `${getRandomNumber(5)} **** **** **** ${getRandomNumber(5)}`,
       };
 
       const updateUser = {
@@ -111,7 +106,7 @@ const DialogNewProduct: FC = () => {
           ...user.products,
           cards: {
             ...user.products.cards,
-            [uuid()]: newCard,
+            [randomId()]: newCard,
           },
         },
       };
