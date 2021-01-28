@@ -18,4 +18,6 @@ export const emailValidation = yup
 export const phoneValidation = yup
   .number()
   .min(11, "Введите корректный номер телефона")
-  .required("Обязательно для заполнения");
+  .required(REQUIRED_MESSAGE);
+
+export const requiredStringValidation = yup.string().required(REQUIRED_MESSAGE);
