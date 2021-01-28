@@ -5,10 +5,11 @@ import { Link } from "@material-ui/core";
 import { LinkProps } from "@material-ui/core/Link";
 
 interface IPrimaryLink {
-  href: string;
+  href?: string;
   active?: boolean;
   variant?: string;
   fontWeight?: number;
+  component?: string;
 }
 
 const StyledLink = withTheme(styled(Link)`
@@ -52,12 +53,14 @@ const StyledLink = withTheme(styled(Link)`
 
 const PrimaryLink: FC<IPrimaryLink & LinkProps> = ({
   children,
+  component,
   active = false,
   variant = "body1",
   fontWeight = 400,
   ...LinkProps
 }) => (
   <StyledLink
+    component={component}
     color="textPrimary"
     variant={variant}
     active={active ? 1 : 0}

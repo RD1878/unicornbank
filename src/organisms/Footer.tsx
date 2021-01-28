@@ -4,6 +4,8 @@ import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { Logo, PrimaryLink } from "../atoms";
 import { navigation } from "../routes";
+import { Link } from "react-router-dom";
+import { PHONE_BANK, EMAIL_BANK } from "../constants";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -47,9 +49,9 @@ const Footer: FC = () => (
       <Logo />
       <LinksContainer>
         {navigation.map((item) => (
-          <PrimaryLink href={item.path} key={item.path}>
-            {item.name}
-          </PrimaryLink>
+          <Link to={item.path} key={item.path}>
+            <PrimaryLink component="span">{item.name}</PrimaryLink>
+          </Link>
         ))}
       </LinksContainer>
       <Typography color="textSecondary">
@@ -58,13 +60,9 @@ const Footer: FC = () => (
     </LeftNavigation>
 
     <RightNavigation>
-      <PrimaryLink href="tel:88005553535" variant="h1">
-        8 800 555-35-35
-      </PrimaryLink>
+      <PrimaryLink href={PHONE_BANK}>{PHONE_BANK}</PrimaryLink>
       <Typography color="textSecondary">Для звонков по России</Typography>
-      <PrimaryLink href="mailto:unicorn@email.com" variant="h2">
-        unicorn@email.com
-      </PrimaryLink>
+      <PrimaryLink href={EMAIL_BANK}>{EMAIL_BANK}</PrimaryLink>
     </RightNavigation>
   </Container>
 );

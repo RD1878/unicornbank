@@ -10,10 +10,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 * {
   box-sizing: border-box;
 }
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 798px) {
+  html {
+    font-size: 80%;
+  }
 }
