@@ -74,7 +74,7 @@ const DialogNewProduct: FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
-    alertType === "success" ? "Данные успешно изменены!" : errorMessage;
+    alertType === "success" ? "Карта успешно оформлена!" : errorMessage;
   const dispatch = useDispatch();
 
   const handleOpenDialog = () => {
@@ -84,6 +84,7 @@ const DialogNewProduct: FC = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
     setIsOpenAlert(false);
@@ -91,7 +92,7 @@ const DialogNewProduct: FC = () => {
 
   function getRandom(length: number): number {
     return Math.floor(
-      Math.pow(5, length - 1) + Math.random() * 4 * Math.pow(5, length - 1)
+      Math.pow(6, length - 1) + Math.random() * 4 * Math.pow(5, length - 1)
     );
   }
 
@@ -124,9 +125,12 @@ const DialogNewProduct: FC = () => {
 
       dispatch(requestUser());
       setOpenDialog(false);
+      setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
+    } finally {
+      setIsOpenAlert(true);
     }
   };
 
@@ -217,17 +221,17 @@ const DialogNewProduct: FC = () => {
             </ButtonWrap>
           </form>
         </DialogContent>
-        <Snackbar
-          open={isOpenAlert}
-          autoHideDuration={SHACKBAR_SHOW_DURATION}
-          onClose={handleCloseAlert}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
       </Dialog>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleCloseAlert}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
