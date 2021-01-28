@@ -5,3 +5,6 @@ export const CURRENCIES = {
   USD: "Доллар США",
   EUR: "Евро",
 };
+export const PHONE_BANK = "8 800 555-35-35";
+
+export const EMAIL_BANK = "mailto:unicorn@email.com";

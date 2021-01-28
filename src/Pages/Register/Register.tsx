@@ -46,9 +46,9 @@ const FormAuth = withTheme(styled("form")`
   width: 55vw;
   min-width: 300px;
   max-width: 800px;
-  height: 45vw;
-  min-height: 350px;
-  max-height: 640px;
+  height: 50vw;
+  min-height: 400px;
+  max-height: 700px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -56,6 +56,9 @@ const FormAuth = withTheme(styled("form")`
 
   h1 {
     margin-bottom: 1.75em;
+    ${(props) => props.theme.breakpoints.down("lg")} {
+      margin-bottom: 1em;
+    }
   }
 
   & > div {
@@ -65,15 +68,36 @@ const FormAuth = withTheme(styled("form")`
     flex-direction: column;
     align-items: center;
 
-    & > div {
-      width: 100%;
-      margin-bottom: 2em;
-    }
-
     & > a {
       & > p {
         margin-top: 30px;
       }
+    }
+  }
+`);
+
+const StyledTextField = withTheme(styled(({ ...props }) => (
+  <TextField classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    width: 100%;
+    margin-bottom: 1.75em;
+
+    ${(props) => props.theme.breakpoints.down("lg")} {
+      margin-bottom: 1em;
+    }
+  }
+`);
+
+const StyledPasswordField = withTheme(styled(({ ...props }) => (
+  <PasswordField classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    width: 100%;
+    margin-bottom: 1.75em;
+
+    ${(props) => props.theme.breakpoints.down("lg")} {
+      margin-bottom: 1em;
     }
   }
 `);
@@ -157,23 +181,21 @@ const Register: FC = () => {
           <Typography variant="h1" color="textPrimary" align="center">
             Регистрация
           </Typography>
-          <div>
-            <TextField
-              fullWidth
-              {...getFieldProps("email")}
-              error={touched.email && Boolean(errors.email)}
-              label="Почта"
-              helperText={touched.email && errors.email}
-            />
-          </div>
-          <PasswordField
+          <StyledTextField
+            fullWidth
+            {...getFieldProps("email")}
+            error={touched.email && Boolean(errors.email)}
+            label="Почта"
+            helperText={touched.email && errors.email}
+          />
+          <StyledPasswordField
             fullWidth
             error={touched.password1 && Boolean(errors.password1)}
             {...getFieldProps("password1")}
             helperText={touched.password1 && errors.password1}
             label="Введите пароль"
           />
-          <PasswordField
+          <StyledPasswordField
             fullWidth
             error={touched.password2 && Boolean(errors.password2)}
             {...getFieldProps("password2")}
