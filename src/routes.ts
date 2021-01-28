@@ -12,11 +12,11 @@ enum ROUTES {
 }
 
 const navigation = [
-  { name: "Главная", path: ROUTES.MAIN },
-  { name: "История", path: ROUTES.HISTORY },
-  { name: "Чат", path: ROUTES.CHAT },
-  { name: "Настройки", path: ROUTES.SETTINGS },
-  { name: "Офисы и банкоматы", path: ROUTES.OFFICES },
+  { name: "Home", path: ROUTES.MAIN },
+  { name: "History", path: ROUTES.HISTORY },
+  { name: "Chat", path: ROUTES.CHAT },
+  { name: "Settings", path: ROUTES.SETTINGS },
+  { name: "Offices and ATMs", path: ROUTES.OFFICES },
 ];
 
 export { ROUTES, navigation };

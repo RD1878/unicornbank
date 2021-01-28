@@ -12,6 +12,9 @@ import * as yup from "yup";
 import { TAlert } from "../../interfaces/tAlert";
 import { passwordValidation } from "../../utils/validationSchemas";
 import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { ROUTES } from "../../routes";
+import { Link } from "react-router-dom";
+import PrimaryLink from "../../atoms/PrimaryLink";
 
 const StyledColumn = styled("form")`
   display: flex;
@@ -144,6 +147,15 @@ const Settings: FC = () => {
             <PrimaryButton size="large" type="submit">
               Сохранить изменения
             </PrimaryButton>
+            <Box mt={5}>
+              <PrimaryButton size="large">
+                <Link to={ROUTES.OFFICES}>
+                  <PrimaryLink component="span">
+                    Карта отделений и банкоматов
+                  </PrimaryLink>
+                </Link>
+              </PrimaryButton>
+            </Box>
           </StyledBox>
         </StyledColumn>
         <Snackbar

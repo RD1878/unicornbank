@@ -1,6 +1,7 @@
 import React, { FC, ChangeEvent, useState, useEffect } from "react";
 import firebase from "firebase/app";
-import { TabPanel } from ".";
+import { TabPanel } from "../molecules";
+import { withTheme } from "@material-ui/core/styles";
 import {
   Box,
   Container,
@@ -10,6 +11,7 @@ import {
   Typography,
   LinearProgress,
 } from "@material-ui/core";
+import styled from "styled-components";
 
 interface TabPanelProps {
   title: string;
@@ -17,6 +19,11 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
+
+const StyledContainer = withTheme(styled(Container)`
+  min-width: 200px;
+  width: 100%;
+`);
 
 function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   return (
@@ -26,7 +33,7 @@ function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
       index={index}
       imagesrc={index + 1}
     >
-      <Box p={5} minHeight={200}>
+      <Box p={3} minHeight={200}>
         <Typography variant="h1" color="textPrimary">
           {title}
         </Typography>
@@ -66,7 +73,7 @@ export const Offers: FC = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" disableGutters={true}>
+    <StyledContainer maxWidth="lg" disableGutters={true}>
       {offers.length ? (
         offers.map((item, index) => (
           <TabPanelWrapper
@@ -101,6 +108,6 @@ export const Offers: FC = () => {
           </Tabs>
         </Paper>
       </Box>
-    </Container>
+    </StyledContainer>
   );
 };

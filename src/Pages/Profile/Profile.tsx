@@ -1,4 +1,10 @@
-import React, { FC, useState, useEffect, SyntheticEvent } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  SyntheticEvent,
+  ChangeEvent,
+} from "react";
 import { Container, Typography, Snackbar } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
@@ -22,6 +28,12 @@ import {
   emailValidation,
   phoneValidation,
 } from "./../../utils/validationSchemas";
+
+const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
+const NOT_NUMBER_REGEX = /\D/g;
+
+const cleanPhone = (phone: string): string =>
+  phone.replace(NOT_NUMBER_REGEX, "");
 
 const StyledRow = styled("div")`
   display: flex;
@@ -78,9 +90,26 @@ const Profile: FC = () => {
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
   const dispatch = useDispatch();
 
+  const phoneMask = (phone: string): string => {
+    const cleaned = cleanPhone(phone);
+    const match = cleaned.match(PATTERN);
+
+    if (!match) {
+      return "+7";
+    }
+
+    const first = match[2] && `(${match[2]}`;
+    const second = match[3] && `)${match[3]}`;
+    const third = match[4] && `-${match[4]}`;
+    const fourth = match[5] && `-${match[5]}`;
+
+    return ["+7", first, second, third, fourth].join("");
+  };
+
   const onSubmit = async ({ email, phone }: IFormValues) => {
     try {
       const uid = firebaseAuth?.currentUser?.uid;
+      const cleanedPhone = cleanPhone(phone);
 
       if (!uid) {
         throw new Error("Пользователь не найден");
@@ -91,7 +120,7 @@ const Profile: FC = () => {
           ...user,
           contact: {
             email,
-            phone,
+            phone: cleanedPhone,
           },
         },
       });
@@ -107,27 +136,36 @@ const Profile: FC = () => {
     }
   };
 
-  const { errors, handleSubmit, touched, getFieldProps, setValues } = useFormik(
-    {
-      initialValues: {
-        email: contact.email,
-        phone: contact.phone,
-      },
-      validationSchema,
-      onSubmit,
-    }
-  );
-
+  const {
+    errors,
+    handleSubmit,
+    touched,
+    getFieldProps,
+    setValues,
+    values,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      email: contact.email,
+      phone: phoneMask(contact.phone),
+    },
+    validationSchema,
+    onSubmit,
+  });
   useEffect(() => {
     setValues({
       email: contact.email,
-      phone: contact.phone,
+      phone: phoneMask(contact.phone),
     });
   }, [contact]);
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
     setIsOpenAlert(false);
+  };
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue("phone", phoneMask(event.target.value));
   };
 
   return (
@@ -146,7 +184,9 @@ const Profile: FC = () => {
               fullWidth
               label="Телефон"
               id="phone"
-              {...getFieldProps("phone")}
+              name="phone"
+              value={values.phone}
+              onChange={handlePhoneChange}
               error={touched.phone && Boolean(errors.phone)}
               helperText={touched.phone && errors.phone}
             />

@@ -13,6 +13,7 @@ import { getSession, getSessionError, requestUser } from "./actions";
 import { firebaseAuth } from "./firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { authSelector } from "./selectors";
+import { SHACKBAR_SHOW_DURATION } from "./constants";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -69,7 +70,7 @@ const App: FC = () => {
           horizontal: "center",
         }}
         open={isOpen}
-        autoHideDuration={6000}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
         onClose={handleClose}
       >
         <Alert severity="error" onClose={handleClose}>

@@ -78,10 +78,10 @@ export const CurrencyRate: FC = () => {
                 <Typography variant="button">Валюта</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="button">Сегодня</Typography>
+                <Typography variant="button">Купить</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="button">Вчера</Typography>
+                <Typography variant="button">Продать</Typography>
               </TableCell>
             </TableRow>
           </TableHead>

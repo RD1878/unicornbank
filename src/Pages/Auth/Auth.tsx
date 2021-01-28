@@ -59,6 +59,9 @@ const FormAuth = withTheme(styled("form")`
 
   h1 {
     margin-bottom: 1.75em;
+    ${(props) => props.theme.breakpoints.down("lg")} {
+      margin-bottom: 1em;
+    }
   }
   & > div {
     width: 75%;
