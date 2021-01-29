@@ -19,5 +19,3 @@ export const phoneValidation = yup
   .string()
   .min(11, "Введите корректный номер телефона")
   .required(REQUIRED_MESSAGE);
-
-export const requiredStringValidation = yup.string().required(REQUIRED_MESSAGE);

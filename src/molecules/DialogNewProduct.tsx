@@ -20,14 +20,12 @@ import AddIcon from "@material-ui/icons/Add";
 import { useSelector } from "react-redux";
 import { userSelector } from "../selectors/userSelector";
 import { useFormik } from "formik";
-import * as yup from "yup";
 import { db } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { CURRENCIES, SHACKBAR_SHOW_DURATION } from "../constants";
 import { requestUser } from "./../actions/user";
 import { authSelector } from "../selectors";
 import { TAlert } from "../interfaces/main";
-import { requiredStringValidation } from "../utils/validationSchemas";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { getRandomNumber } from "../utils/randomNumber";
@@ -57,11 +55,6 @@ const StyledIconButton = styled(IconButton)`
   top: 20px;
   right: 20px;
 `;
-
-const validationSchema = yup.object({
-  product: requiredStringValidation,
-  currency: requiredStringValidation,
-});
 
 interface IFormRadio {
   product: string;
@@ -135,10 +128,9 @@ const DialogNewProduct: FC = () => {
 
   const { handleSubmit, getFieldProps } = useFormik({
     initialValues: {
-      product: "Дебетовая карта",
+      product: t("Debit card"),
       currency: "RUB",
     },
-    validationSchema,
     onSubmit,
   });
 
