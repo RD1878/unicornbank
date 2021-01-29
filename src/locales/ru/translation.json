@@ -4,5 +4,18 @@
   "Chat": "Чат",
   "Settings": "Настройки",
   "Offices and ATMs": "Офисы и банкоматы",
-  "Exit": "Выйти"
+  "Exit": "Выйти", 
+  "The card has been successfully issued!" : "Карта успешно оформлена!",
+  "Application for a new product" : "Заявка для нового продукта", 
+  "Please select the required parameters" : "Выберите пожалуйста необходимые параметры:",
+  "Select product" : "Выберите продукт", 
+  "Select currency" : "Выберите валюту" ,
+  "Debit card" : "Дебетовая карта",
+  "Consumer loan" : "Потребительский кредит",
+  "Contribution" : "Вклад" , 
+  "After clicking on the Confirm button, a new card will appear in your open products" : "После нажатии на кнопку Подтвердить в Ваших открытых продуктах появится новая карта", 
+  "Confirm" : "Подтвердить",
+  "Euro": "Евро",
+  "Dollar": "Доллары",
+  "Rubles": "Рубли"
 }

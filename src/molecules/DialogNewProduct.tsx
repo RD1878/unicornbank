@@ -32,6 +32,7 @@ import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { getRandomNumber } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
+import { useTranslation } from "react-i18next";
 
 const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
   width: fit-content;
@@ -68,6 +69,7 @@ interface IFormRadio {
 }
 
 const DialogNewProduct: FC = () => {
+  const { t } = useTranslation();
   const user = useSelector(userSelector);
   const { currentUser } = useSelector(authSelector);
   const [isOpenDialog, setOpenDialog] = useState(false);
@@ -75,7 +77,9 @@ const DialogNewProduct: FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
-    alertType === "success" ? "Карта успешно оформлена!" : errorMessage;
+    alertType === "success"
+      ? `${t("The card has been successfully issued!")}`
+      : errorMessage;
   const dispatch = useDispatch();
 
   const handleOpenDialog = () => {
@@ -154,41 +158,43 @@ const DialogNewProduct: FC = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="form-dialog-title">
-          <Typography variant="body2">Заявка для нового продукта</Typography>
+          <Typography variant="body2">
+            {t("Application for a new product")}
+          </Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Выберите пожалуйста необходимые параметры:
+            {t("Please select the required parameters")}
           </DialogContentText>
           <form onSubmit={handleSubmit}>
             <Box mt={2}>
-              <FormLabel component="legend">Выберите продукт</FormLabel>
+              <FormLabel component="legend">{t("Select product")}</FormLabel>
               <RadioGroup
                 aria-label="Продукт"
                 {...getFieldProps("product")}
                 row
               >
                 <FormControlLabel
-                  value="Дебетовая карта"
+                  value={t("Debit card")}
                   control={<Radio />}
-                  label="Дебетовая карта"
+                  label={t("Debit card")}
                 />
                 <FormControlLabel
-                  value="Потребительский кредит"
+                  value={t("Consumer loan")}
                   control={<Radio />}
-                  label="Потребительский кредит"
+                  label={t("Consumer loan")}
                   disabled
                 />
                 <FormControlLabel
-                  value="Вклад"
+                  value={t("Contribution")}
                   control={<Radio />}
-                  label="Вклад"
+                  label={t("Contribution")}
                   disabled
                 />
               </RadioGroup>
             </Box>
             <Box mt={2} mb={1}>
-              <FormLabel component="legend">Выберите валюту</FormLabel>
+              <FormLabel component="legend">{t("Select currency")}</FormLabel>
               <RadioGroup
                 aria-label="Валюта"
                 {...getFieldProps("currency")}
@@ -199,7 +205,7 @@ const DialogNewProduct: FC = () => {
                     key={key}
                     value={key}
                     control={<Radio />}
-                    label={value}
+                    label={t(value)}
                   />
                 ))}
               </RadioGroup>
@@ -209,10 +215,11 @@ const DialogNewProduct: FC = () => {
                 <CloseIcon color="secondary" />
               </StyledIconButton>
               <Typography variant="body1">
-                После нажатии на кнопку Подтвердить в Ваших открытых продуктах
-                появится новая карта
+                {t(
+                  "After clicking on the Confirm button, a new card will appear in your open products"
+                )}
               </Typography>
-              <PrimaryButton type="submit">Подтвердить</PrimaryButton>
+              <PrimaryButton type="submit">{t("Confirm")}</PrimaryButton>
             </ButtonWrap>
           </form>
         </DialogContent>
