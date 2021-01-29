@@ -1,8 +1,13 @@
-import React, { FC, useState, SyntheticEvent } from "react";
+import React, { FC, useState, SyntheticEvent, ChangeEvent } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography, Snackbar } from "@material-ui/core";
+import {
+  Typography,
+  Snackbar,
+  FormControl,
+  NativeSelect,
+} from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
@@ -19,6 +24,8 @@ import {
   passwordValidation,
 } from "../../utils/validationSchemas";
 import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -83,9 +90,12 @@ interface IFormValues {
 const Auth: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { t } = useTranslation();
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
-    alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
+    alertType === "success"
+      ? `${t("You have successfully signed in to your account!")}`
+      : errorMessage;
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -122,30 +132,41 @@ const Auth: FC = () => {
     setIsOpenAlert(false);
   };
 
+  const handleChange = (e: ChangeEvent<{ value: string }>) => {
+    i18next.changeLanguage(e.target.value);
+  };
+
   return (
     <BackGround>
       <StyledLogo>
         <Logo />
       </StyledLogo>
+      <FormControl>
+        <NativeSelect defaultValue="ru" onChange={handleChange}>
+          <option value="ru">Русский</option>
+          <option value="en">English</option>
+          <option value="tat">Татарча</option>
+        </NativeSelect>
+      </FormControl>
       <FormAuth onSubmit={handleSubmit}>
         <Typography variant="h1" color="textPrimary" align="center">
-          Вход в личный кабинет
+          {t("Login to your personal account")}
         </Typography>
         <TextField
           fullWidth
           error={touched.email && Boolean(errors.email)}
-          label="Почта"
+          label={t("Email")}
           {...getFieldProps("email")}
           helperText={touched.email && errors.email}
         />
         <PasswordField
-          label="Пароль"
+          label={t("Password")}
           error={touched.password && Boolean(errors.password)}
           {...getFieldProps("password")}
           helperText={touched.password && errors.password}
         />
         <PrimaryButton size="large" type="submit">
-          Войти
+          {t("Login")}
         </PrimaryButton>
       </FormAuth>
       <Snackbar
