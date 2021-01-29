@@ -1,4 +1,3 @@
-import { RouteComponentProps } from "@reach/router";
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
@@ -11,6 +10,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { PrimaryButton } from "../../atoms";
+import { useParams } from "react-router-dom";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -31,16 +31,8 @@ const StyledPrimaryButton = styled(PrimaryButton)`
   align-self: center;
 `;
 
-interface IMatchId extends RouteComponentProps {
-  match: {
-    params: {
-      id: string;
-    };
-  };
-}
-
-const Requisites: FC<IMatchId> = ({ match }) => {
-  const id = match.params.id;
+const Requisites: FC = () => {
+  const { id } = useParams<{ id: string }>();
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[id];
   const { number, requisites } = currentCard;

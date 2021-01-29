@@ -1,23 +1,20 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CardInfoTitle, DialogBlockCard } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
-import { RouteComponentProps } from "@reach/router";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/opeartion";
 import { DialogReissueCard } from "../../molecules";
+import { IOperationsItem } from "../../interfaces/operationsItem";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   max-width: 1200px;
-  @media screen and (max-width: 1280px) {
-    flex-direction: column;
-  }
 `;
 
 const StyledPrimaryButton = styled(PrimaryButton)`
@@ -34,16 +31,8 @@ const StyledWraper = styled("div")`
   flex-direction: column;
 `;
 
-interface IMatchId extends RouteComponentProps {
-  match: {
-    params: {
-      id: string;
-    };
-  };
-}
-
-const CardInfo: FC<IMatchId> = ({ match }) => {
-  const id = match.params.id;
+const CardInfo: FC = () => {
+  const { id } = useParams<{ id: string }>();
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[id];
   const {
@@ -57,12 +46,10 @@ const CardInfo: FC<IMatchId> = ({ match }) => {
   const currentCardOperations = Object.entries(operations);
 
   const currentCardTransactions = currentCardOperations.reduce(
-    (
-      acc: { id: string; key: string; operation: IOperation }[],
-      [key, operation]: [string, IOperation]
-    ) => {
-      return [...acc, { id, key, operation }];
-    },
+    (acc: IOperationsItem[], [key, operation]: [string, IOperation]) => [
+      ...acc,
+      { id, key, operation },
+    ],
     []
   );
 
