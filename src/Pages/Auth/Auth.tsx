@@ -23,7 +23,7 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../utils/validationSchemas";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
@@ -37,6 +37,12 @@ const BackGround = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const StyledFormControl = styled(FormControl)`
+  position: absolute;
+  top: 30px;
+  right: 3%;
 `;
 
 const StyledLogo = styled.div`
@@ -77,11 +83,6 @@ const FormAuth = withTheme(styled("form")`
   }
 `);
 
-const validationSchema = yup.object({
-  email: emailValidation,
-  password: passwordValidation(),
-});
-
 interface IFormValues {
   email: string;
   password: string;
@@ -121,7 +122,16 @@ const Auth: FC = () => {
       email: "",
       password: "",
     },
-    validationSchema,
+    validationSchema: yup.object({
+      email: emailValidation(
+        t("Please enter mail in correct format"),
+        t("Enter mail")
+      ),
+      password: passwordValidation(
+        t("Password must contain at least 8 characters"),
+        t(REQUIRED_MESSAGE)
+      ),
+    }),
     onSubmit,
   });
 
@@ -141,13 +151,13 @@ const Auth: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormControl>
+      <StyledFormControl>
         <NativeSelect defaultValue="ru" onChange={handleChange}>
           <option value="ru">Русский</option>
           <option value="en">English</option>
           <option value="tat">Татарча</option>
         </NativeSelect>
-      </FormControl>
+      </StyledFormControl>
       <FormAuth onSubmit={handleSubmit}>
         <Typography variant="h1" color="textPrimary" align="center">
           {t("Login to your personal account")}

@@ -23,7 +23,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
 import { TAlert } from "../../interfaces/main";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
 import {
   emailValidation,
   phoneValidation,
@@ -70,11 +70,6 @@ const StyledBox = styled(Box)`
   margin-top: 40px;
   margin-bottom: 80px;
 `;
-
-const validationSchema = yup.object({
-  email: emailValidation,
-  phone: phoneValidation,
-});
 
 interface IFormValues {
   phone: string;
@@ -151,7 +146,16 @@ const Profile: FC = () => {
       email: contact.email,
       phone: phoneMask(contact.phone),
     },
-    validationSchema,
+    validationSchema: yup.object({
+      email: emailValidation(
+        "Please enter mail in correct format",
+        "Enter mail"
+      ),
+      password: phoneValidation(
+        "Please enter valid phone number",
+        REQUIRED_MESSAGE
+      ),
+    }),
     onSubmit,
   });
   useEffect(() => {

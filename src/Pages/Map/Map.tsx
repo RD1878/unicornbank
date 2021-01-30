@@ -130,7 +130,7 @@ const Map: FC = () => {
             scrollButtons="on"
           >
             {CATEGORIES.map(({ name, type }) => (
-              <StyledTab label={name} key={type} />
+              <StyledTab label={t(name)} key={type} />
             ))}
           </Tabs>
         </Box>

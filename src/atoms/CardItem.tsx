@@ -34,7 +34,7 @@ const StyledColumn = withTheme(styled("div")<ICardItem>`
 const CardItem: FC<ICardItem> = ({ number, balance, currency, open }) => {
   const { t } = useTranslation();
   return (
-    <Tooltip title={`Card ${number}`} arrow>
+    <Tooltip title={`${t("Card")} ${number}`} arrow>
       <StyledListItem button open={open}>
         <StyledColumn open={open}>
           <Typography
@@ -46,7 +46,7 @@ const CardItem: FC<ICardItem> = ({ number, balance, currency, open }) => {
           </Typography>
           {open && (
             <Typography variant="body1" color="textSecondary" align="left">
-              {`${t("Card")}`} {` ${number}`}
+              {`${t("Card")} ${number}`}
             </Typography>
           )}
         </StyledColumn>

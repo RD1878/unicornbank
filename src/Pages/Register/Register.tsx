@@ -44,6 +44,12 @@ const StyledLogo = styled.div`
   left: 3%;
 `;
 
+const StyledFormControl = styled(FormControl)`
+  position: absolute;
+  top: 30px;
+  right: 3%;
+`;
+
 const FormAuth = withTheme(styled("form")`
   display: flex;
   flex-direction: column;
@@ -110,12 +116,6 @@ const StyledPasswordField = withTheme(styled(({ ...props }) => (
   }
 `);
 
-const validationSchema = yup.object({
-  email: emailValidation,
-  password1: passwordValidation("Придумайте пароль"),
-  password2: passwordValidation("Повторите пароль"),
-});
-
 interface IFormValues {
   email: string;
   password1: string;
@@ -171,7 +171,20 @@ const Register: FC = () => {
       password1: "",
       password2: "",
     },
-    validationSchema,
+    validationSchema: yup.object({
+      email: emailValidation(
+        "Please enter mail in correct format",
+        "Enter mail"
+      ),
+      password1: passwordValidation(
+        "Password must contain at least 8 characters",
+        "Create your password"
+      ),
+      password2: passwordValidation(
+        "Password must contain at least 8 characters",
+        "Repeat your password"
+      ),
+    }),
     onSubmit,
   });
 
@@ -191,13 +204,13 @@ const Register: FC = () => {
       <StyledLogo>
         <Logo />
       </StyledLogo>
-      <FormControl>
+      <StyledFormControl>
         <NativeSelect defaultValue="ru" onChange={handleChange}>
           <option value="ru">Русский</option>
           <option value="en">English</option>
           <option value="tat">Татарча</option>
         </NativeSelect>
-      </FormControl>
+      </StyledFormControl>
       <FormAuth onSubmit={handleSubmit}>
         <div>
           <Typography variant="h1" color="textPrimary" align="center">

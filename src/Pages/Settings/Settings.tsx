@@ -46,12 +46,6 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
-const validationSchema = yup.object({
-  password: passwordValidation("Введите текущий пароль"),
-  newPassword1: passwordValidation("Введите новый пароль"),
-  newPassword2: passwordValidation("Повторите новый пароль"),
-});
-
 interface IFormValues {
   password: string;
   newPassword1: string;
@@ -107,7 +101,20 @@ const Settings: FC = () => {
         newPassword1: "",
         newPassword2: "",
       },
-      validationSchema,
+      validationSchema: yup.object({
+        password: passwordValidation(
+          "Enter the current password",
+          "Enter password"
+        ),
+        newPassword1: passwordValidation(
+          "Password must contain at least 8 characters",
+          "Create your password"
+        ),
+        newPassword2: passwordValidation(
+          "Password must contain at least 8 characters",
+          "Repeat your password"
+        ),
+      }),
       onSubmit,
     }
   );

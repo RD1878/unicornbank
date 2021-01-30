@@ -36,5 +36,15 @@
   "You have successfully registered!": "Вы успешно зарегистрированы!" ,
   "You have successfully signed in to your account!" : "Вы успешно вошли в аккаунт!", 
   "Pick a password" : "Придумайте пароль",
-  "Card" : "Карта"
+  "Card" : "Карта", 
+  "All": "Все", 
+  "Offices" :"Офисы",
+  "ATM": "Банкоматы",
+  "Password must contain at least 8 characters": "Пароль должен одержать в себе миниму 8 символов",
+  "Enter mail": "Введите почту", 
+  "Please enter mail in correct format" : "Введите почту в правильном формате",
+  "Required": "Обязательно для заполнения",
+  "Please enter valid phone number": "Введите корректный номер телефона",
+  "Create your password": "Придумайте ваш пароль",
+  "Repeat your password": "Повторите ваш пароль"
 }

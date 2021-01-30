@@ -36,6 +36,15 @@
   "You have successfully registered!" : "Сез уңышлы теркәлгән!",
   "You have successfully signed in to your account!" : "Сез аккаунтка уңышлы кердегез!",
   "Pick a password" : "Парольне уйлагыз",
-  "Card" : "Карта"
-
+  "Card" : "Карта",
+  "All": "Барча", 
+  "Offices" :"Офислар",
+  "ATM": "Банкоматы", 
+  "Password must contain at least 8 characters": "Пароль кимендә 8 символны үз эченә алырга тиеш", 
+  "Enter mail" : "Языгыз, почта", 
+  "Please enter mail in correct format" : "Языгыз, почта дөрес форматында",
+  "Required": "Бу, һичшиксез, тутыру өчен",
+  "Please enter valid phone number": "Языгыз, корректный телефон номеры",
+  "Create your password": "Сезнең парольне уйлап табыгыз",
+  "Repeat your password": "Повторите Сезнең пароль"
 }

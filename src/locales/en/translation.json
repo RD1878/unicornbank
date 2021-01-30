@@ -35,5 +35,15 @@
   "You have successfully registered!": "You have successfully registered!",
   "You have successfully signed in to your account!": "You have successfully signed in to your account!",
   "Pick a password" : "Pick a password",
-  "Card" : "Card"
+  "Card" : "Card", 
+  "All": "All", 
+  "Offices" :"Offices",
+  "ATM": "ATM",
+  "Password must contain at least 8 characters" :"Password must contain at least 8 characters",
+  "Enter mail": "Enter mail",
+  "Please enter mail in correct format": "Please enter mail in correct format",
+  "Required": "Required",
+  "Please enter valid phone number": "Please enter valid phone number",
+  "Create your password": "Create your password",
+  "Repeat your password": "Repeat your password"
 }
