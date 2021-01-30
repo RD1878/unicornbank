@@ -3,7 +3,7 @@ import { Offers } from "../../molecules";
 import { CurrencyRate } from "../../molecules";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
-import { IOperation } from "../../interfaces/opeartion";
+import { IOperation } from "../../interfaces/operation";
 import TransactionsList from "../../organisms/TransactionsList";
 import { ICard } from "../../interfaces/card";
 

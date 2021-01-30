@@ -6,6 +6,7 @@ import { db, firebaseAuth, readUserData } from "../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { saveUser } from "../actions";
 import { userSelector } from "../selectors";
+import { useTranslation } from "react-i18next";
 
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: 265px;
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
+  const { t } = useTranslation();
   const [isOpenDialogBlock, setOpenDialogBlock] = useState(false);
   const [isConfirm, setConfirm] = useState(false);
   const dispatch = useDispatch();
@@ -37,7 +39,7 @@ const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
     if (!uid) {
       throw new Error("Пользователь не найден");
     }
-    db.ref(`users/${uid}/products/cards/${idCurrentCard}`).update({
+    await db.ref(`users/${uid}/products/cards/${idCurrentCard}`).update({
       isActive: false,
     });
     const updatedCardStatus = await readUserData(uid);
@@ -56,7 +58,7 @@ const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
         onClick={handleOpenDialogReissue}
         disabled={!isActive}
       >
-        Заблокировать карту
+        {t("Block")}
       </StyledPrimaryButton>
       <Dialog
         open={isOpenDialogBlock}
@@ -65,17 +67,15 @@ const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {!isConfirm
-            ? "Вы уверены, что хотите заблокировать карту?"
-            : "Данная карта заблокирована. Для разблокировки необходимо связаться с банком"}
+          {!isConfirm ? t("Are you sure block") : t("Blocked message")}
         </DialogTitle>
         <DialogActions>
           <PrimaryButton onClick={handleCloseDialogBlock}>
-            {!isConfirm ? "Отмена" : "Закрыть"}
+            {!isConfirm ? t("Cancel") : t("Close")}
           </PrimaryButton>
           {!isConfirm ? (
             <PrimaryButton onClick={handleConfirm} autoFocus>
-              Подтвердить
+              {t("Confirm")}
             </PrimaryButton>
           ) : null}
         </DialogActions>

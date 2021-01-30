@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { PrimaryButton } from "../../atoms";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -32,6 +33,7 @@ const StyledPrimaryButton = styled(PrimaryButton)`
 `;
 
 const Requisites: FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[id];
@@ -85,7 +87,7 @@ const Requisites: FC = () => {
   return (
     <StyledWraper>
       <Typography variant="h1" color="textPrimary">
-        {`Реквизиты для перевода на счет карты\u00A0\u00A0${number.slice(-7)}`}
+        {`${t("Details for transfer")}\u00A0\u00A0${number.slice(-7)}`}
       </Typography>
       <StyledTable>
         <TableBody>
@@ -97,7 +99,7 @@ const Requisites: FC = () => {
           ))}
         </TableBody>
       </StyledTable>
-      <StyledPrimaryButton>Отправить на e-mail</StyledPrimaryButton>
+      <StyledPrimaryButton>{t("Send email")}</StyledPrimaryButton>
     </StyledWraper>
   );
 };

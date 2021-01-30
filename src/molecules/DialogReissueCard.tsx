@@ -6,6 +6,7 @@ import { db, firebaseAuth, readUserData } from "../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { saveUser } from "../actions";
 import { userSelector } from "../selectors";
+import { useTranslation } from "react-i18next";
 
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: 265px;
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 const DialogReissueCard: FC<IProps> = ({ idCurrentCard }) => {
+  const { t } = useTranslation();
   const [isOpenDialogReissue, setOpenDialogReissue] = useState(false);
   const [isConfirm, setConfirm] = useState(false);
   const dispatch = useDispatch();
@@ -37,7 +39,7 @@ const DialogReissueCard: FC<IProps> = ({ idCurrentCard }) => {
     if (!uid) {
       throw new Error("Пользователь не найден");
     }
-    db.ref(`users/${uid}/products/cards/${idCurrentCard}`).update({
+    await db.ref(`users/${uid}/products/cards/${idCurrentCard}`).update({
       isActive: false,
     });
     const updatedCardStatus = await readUserData(uid);
@@ -56,7 +58,7 @@ const DialogReissueCard: FC<IProps> = ({ idCurrentCard }) => {
         onClick={handleOpenDialogReissue}
         disabled={!isActive}
       >
-        Перевыпустить карту
+        {t("Reissue")}
       </StyledPrimaryButton>
       <Dialog
         open={isOpenDialogReissue}
@@ -66,16 +68,16 @@ const DialogReissueCard: FC<IProps> = ({ idCurrentCard }) => {
       >
         <DialogTitle id="alert-dialog-title">
           {!isConfirm
-            ? "Вы уверены что хотите перевыпустить карту? После подтверждения данная карта будет заблокирована, а у новой карты будут другие реквизиты."
-            : "Данная карта заблокирована. Сотрудник банка свяжется с Вами в течении 24 часов для уточнения места получения новой карты."}
+            ? t("Are you sure reissue")
+            : t("Blocked message with reissue")}
         </DialogTitle>
         <DialogActions>
           <PrimaryButton onClick={handleCloseDialogReissue}>
-            {!isConfirm ? "Отмена" : "Закрыть"}
+            {!isConfirm ? t("Cancel") : t("Close")}
           </PrimaryButton>
           {!isConfirm ? (
             <PrimaryButton onClick={handleConfirm} autoFocus>
-              Подтвердить
+              {t("Confirm")}
             </PrimaryButton>
           ) : null}
         </DialogActions>

@@ -6,9 +6,10 @@ import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
-import { IOperation } from "../../interfaces/opeartion";
+import { IOperation } from "../../interfaces/operation";
 import { DialogReissueCard } from "../../molecules";
-import { IOperationsItem } from "../../interfaces/operationsItem";
+import { IOperationItem } from "../../interfaces/operationItem";
+import { useTranslation } from "react-i18next";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
@@ -33,8 +34,10 @@ const StyledWraper = styled("div")`
 
 const CardInfo: FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[id];
+
   const {
     balance,
     currency,
@@ -46,7 +49,7 @@ const CardInfo: FC = () => {
   const currentCardOperations = Object.entries(operations);
 
   const currentCardTransactions = currentCardOperations.reduce(
-    (acc: IOperationsItem[], [key, operation]: [string, IOperation]) => [
+    (acc: IOperationItem[], [key, operation]: [string, IOperation]) => [
       ...acc,
       { id, key, operation },
     ],
@@ -66,7 +69,7 @@ const CardInfo: FC = () => {
         <DialogBlockCard idCurrentCard={id} />
         <DialogReissueCard idCurrentCard={id} />
         <StyledLink to={`/card/${id}/requisites`}>
-          <StyledPrimaryButton>Реквизиты</StyledPrimaryButton>
+          <StyledPrimaryButton>{t("Requisites")}</StyledPrimaryButton>
         </StyledLink>
       </StyledButtonsWraper>
       <TransactionsList cardsTransactions={currentCardTransactions} />

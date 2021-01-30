@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { PrimaryButton } from "../atoms";
 import { OperationCard, TabPanel } from "../molecules";
 import { Box, Tabs, Tab, Typography } from "@material-ui/core";
-import { IOperation } from "../interfaces/opeartion";
+import { IOperation } from "../interfaces/operation";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -38,42 +39,44 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const categories: { type: string; name: string }[] = [
-  { type: "all", name: "Все" },
-  { type: "income", name: "Поступления" },
-  { type: "writeOff", name: "Списания" },
-];
-
 interface IProps {
   cardsTransactions: { id: string; key: string; operation: IOperation }[];
 }
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
+  const { t } = useTranslation();
   const [tab, setTab] = useState(0);
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
   };
 
+  const categories: { type: string; name: string }[] = [
+    { type: "all", name: t("All") },
+    { type: "income", name: t("Incomes") },
+    { type: "writeOff", name: t("Write off") },
+  ];
+
   const filteredOperationsByType = (type: string) => {
     const filtered = cardsTransactions.filter(
       ({ operation }) => operation.type === type
     );
-
     if (filtered.length) {
-      return filtered
-        .sort(
+      return (
+        filtered
+          /* .sort(
           (itemA, itemB) =>
             Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
-        )
-        .slice(0, 10)
-        .map(({ key, operation }) => (
-          <OperationCard operation={operation} key={key} />
-        ));
+        ) */
+          /* .slice(0, 10) */
+          .map(({ key, operation }) => (
+            <OperationCard operation={operation} key={key} />
+          ))
+      );
     } else
       return (
         <Box p={4}>
           <Typography variant="body1" color="textPrimary">
-            Не найдено
+            {t("Not found")}
           </Typography>
         </Box>
       );
@@ -82,7 +85,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   return (
     <StyledContainer>
       <Typography variant="h2" color="textPrimary">
-        Последние операции
+        {t("Last operations")}
       </Typography>
       <StyledOperationsContainer>
         <Tabs
@@ -99,12 +102,12 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
         </Tabs>
         <TabPanel type="scrollable-force" value={tab} index={0}>
           {cardsTransactions
-            .sort(
+            /* .sort(
               (itemA, itemB) =>
                 Date.parse(itemB.operation.date) -
                 Date.parse(itemA.operation.date)
             )
-            .slice(0, 10)
+            .slice(0, 10) */
             .map(({ key, operation }) => (
               <OperationCard operation={operation} key={key} />
             ))}
@@ -123,7 +126,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
             )
         )}
         <StyledLink to="*">
-          <PrimaryButton>Подробнее</PrimaryButton>
+          <PrimaryButton>{t("More")}</PrimaryButton>
         </StyledLink>
       </StyledOperationsContainer>
     </StyledContainer>
