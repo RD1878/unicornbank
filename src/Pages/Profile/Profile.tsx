@@ -115,7 +115,7 @@ const Profile: FC = () => {
         throw new Error("Пользователь не найден");
       }
 
-      db.ref().update({
+      await db.ref().update({
         [`users/${uid}`]: {
           ...user,
           contact: {

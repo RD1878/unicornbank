@@ -4,6 +4,7 @@ import styled from "styled-components";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
 import { useTranslation } from "react-i18next";
+import { ICard } from "../interfaces/card";
 
 const StyledCardInfoContainer = styled("div")`
   display: flex;
@@ -26,23 +27,11 @@ const StyledWraper = styled("div")`
 `;
 
 interface IProps {
-  balance: number;
-  number: string;
-  currency: string;
-  isActive: boolean;
-  validity: {
-    month: number;
-    year: number;
-  };
+  currentCard: ICard;
 }
 
-const CardInfoTitle: FC<IProps> = ({
-  balance,
-  currency,
-  validity,
-  isActive,
-  number,
-}) => {
+const CardInfoTitle: FC<IProps> = ({ currentCard }) => {
+  const { balance, number, currency, isActive, validity } = currentCard;
   const { t } = useTranslation();
   return (
     <StyledWraper>

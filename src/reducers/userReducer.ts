@@ -19,6 +19,7 @@ const initialState = {
     month: 0,
     year: 0,
   },
+  isLoading: true,
 };
 
 export default (
@@ -27,10 +28,12 @@ export default (
 ): IUser => {
   switch (type) {
     case SAVE_USER:
-      return {
+      const newState = {
         ...state,
         ...payload.user,
       };
+      newState.isLoading = false;
+      return newState;
     default:
       return state;
   }

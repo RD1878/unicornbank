@@ -1,15 +1,17 @@
-import React, { FC } from "react";
+import React, { FC, useEffect /* , useState */ } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { CardInfoTitle, DialogBlockCard } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/operation";
 import { DialogReissueCard } from "../../molecules";
 import { IOperationItem } from "../../interfaces/operationItem";
 import { useTranslation } from "react-i18next";
+/* import { Box, LinearProgress, Typography } from "@material-ui/core";
+ */ import { requestUser /* , saveUser */ } from "../../actions/user";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
@@ -35,19 +37,17 @@ const StyledWraper = styled("div")`
 const CardInfo: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { products } = useSelector(userSelector);
+  const { isLoading, products } = useSelector(userSelector);
   const currentCard = products.cards[id];
 
-  const {
-    balance,
-    currency,
-    isActive,
-    validity,
-    number,
-    operations,
-  } = currentCard;
-  const currentCardOperations = Object.entries(operations);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(requestUser());
+    /* console.log(isLoading, "Юзэффект"); */
+  }, []);
 
+  const a = currentCard?.operations ?? {};
+  const currentCardOperations = Object.entries(a);
   const currentCardTransactions = currentCardOperations.reduce(
     (acc: IOperationItem[], [key, operation]: [string, IOperation]) => [
       ...acc,
@@ -58,21 +58,21 @@ const CardInfo: FC = () => {
 
   return (
     <StyledWraper>
-      <CardInfoTitle
-        balance={balance}
-        currency={currency}
-        isActive={isActive}
-        validity={validity}
-        number={number}
-      />
-      <StyledButtonsWraper>
-        <DialogBlockCard idCurrentCard={id} />
-        <DialogReissueCard idCurrentCard={id} />
-        <StyledLink to={`/card/${id}/requisites`}>
-          <StyledPrimaryButton>{t("Requisites")}</StyledPrimaryButton>
-        </StyledLink>
-      </StyledButtonsWraper>
-      <TransactionsList cardsTransactions={currentCardTransactions} />
+      {isLoading ? (
+        <div>Загрузка</div>
+      ) : (
+        <>
+          <CardInfoTitle currentCard={currentCard} />
+          <StyledButtonsWraper>
+            <DialogBlockCard idCurrentCard={id} />
+            <DialogReissueCard idCurrentCard={id} />
+            <StyledLink to={`/card/${id}/requisites`}>
+              <StyledPrimaryButton>{t("Requisites")}</StyledPrimaryButton>
+            </StyledLink>
+          </StyledButtonsWraper>
+          <TransactionsList cardsTransactions={currentCardTransactions} />
+        </>
+      )}
     </StyledWraper>
   );
 };

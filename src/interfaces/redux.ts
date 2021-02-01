@@ -9,6 +9,7 @@ export interface IUser {
     phone: string;
     email: string;
   };
+  isLoading: boolean;
   products: {
     cards: {
       [key: string]: {
