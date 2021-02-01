@@ -41,8 +41,14 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
+interface ICardTransaction {
+  id: string;
+  key: string;
+  operation: IOperation;
+}
+
 interface IProps {
-  cardsTransactions: { id: string; key: string; operation: IOperation }[];
+  cardsTransactions: ICardTransaction[];
 }
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
@@ -59,20 +65,23 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
     { type: "writeOff", name: t("Write off") },
   ];
 
+  const formattedOperations = (operations: ICardTransaction[]) =>
+    operations
+      .sort(
+        (itemA, itemB) =>
+          Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+      )
+      .slice(0, 10)
+      .map(({ key, operation }) => (
+        <OperationCard operation={operation} key={key} />
+      ));
+
   const filteredOperationsByType = (type: string) => {
     const filtered = cardsTransactions.filter(
       ({ operation }) => operation.type === type
     );
     if (filtered.length) {
-      return filtered
-        .sort(
-          (itemA, itemB) =>
-            Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
-        )
-        .slice(0, 10)
-        .map(({ key, operation }) => (
-          <OperationCard operation={operation} key={key} />
-        ));
+      return formattedOperations(filtered);
     } else
       return (
         <Box p={4}>
@@ -105,16 +114,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
             ))}
           </Tabs>
           <TabPanel type="scrollable-force" value={tab} index={0}>
-            {cardsTransactions
-              .sort(
-                (itemA, itemB) =>
-                  Date.parse(itemB.operation.date) -
-                  Date.parse(itemA.operation.date)
-              )
-              .slice(0, 10)
-              .map(({ key, operation }) => (
-                <OperationCard operation={operation} key={key} />
-              ))}
+            {formattedOperations(cardsTransactions)}
           </TabPanel>
           {categories.map(
             (category, index) =>

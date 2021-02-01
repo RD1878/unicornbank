@@ -39,8 +39,8 @@ const CardInfo: FC = () => {
   const { isLoading, products } = useSelector(userSelector);
   const currentCard = products.cards[id];
 
-  const a = currentCard?.operations ?? {};
-  const currentCardOperations = Object.entries(a);
+  const operations = currentCard?.operations ?? {};
+  const currentCardOperations = Object.entries(operations);
   const currentCardTransactions = currentCardOperations.reduce(
     (acc: IOperationItem[], [key, operation]: [string, IOperation]) => [
       ...acc,
