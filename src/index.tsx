@@ -5,22 +5,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StylesProvider } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "./store/store";
 import "./i18n";
 import { RecoilRoot } from "recoil";
 
 const application = (
   <Suspense fallback="loading">
-    <Provider store={store}>
-      <RecoilRoot>
-        <BrowserRouter>
-          <StylesProvider injectFirst>
-            <App />
-          </StylesProvider>
-        </BrowserRouter>
-      </RecoilRoot>
-    </Provider>
+    <RecoilRoot>
+      <BrowserRouter>
+        <StylesProvider injectFirst>
+          <App />
+        </StylesProvider>
+      </BrowserRouter>
+    </RecoilRoot>
   </Suspense>
 );
 

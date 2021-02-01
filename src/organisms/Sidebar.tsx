@@ -37,13 +37,14 @@ import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { userSelector, authSelector } from "../selectors";
 import firebase from "firebase";
 import { db } from "./../firebase/firebase";
-import { requestUser } from "../actions";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/main";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
+import authState from "../recoilState/recoilAtoms/authAtom";
+import api from "../api";
 
 interface IWithOpen {
   open: boolean;
@@ -174,10 +175,9 @@ const StyledProductsContainer = styled("div")`
 `;
 
 const Sidebar: FC = () => {
-  const user = useSelector(userSelector);
+  const [user, setUser] = useRecoilState(userState);
   const { firstName, lastName, patronymic, products, avatarUrl } = user;
-  const { currentUser } = useSelector(authSelector);
-  const dispatch = useDispatch();
+  const { currentUser } = useRecoilValue(authState);
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -215,7 +215,9 @@ const Sidebar: FC = () => {
         },
       });
 
-      dispatch(requestUser());
+      const updatedData = await api.fetchUser();
+
+      setUser(updatedData);
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);

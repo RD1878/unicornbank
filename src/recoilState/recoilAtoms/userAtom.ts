@@ -1,6 +1,7 @@
 import { atom } from "recoil";
+import { IUser } from "../../interfaces/user";
 
-const userState = atom({
+const userState = atom<IUser>({
   key: "userState",
   default: {
     firstName: "",
@@ -17,6 +18,7 @@ const userState = atom({
       cards: [],
     },
   },
+  dangerouslyAllowMutability: true,
 });
 
 export default userState;

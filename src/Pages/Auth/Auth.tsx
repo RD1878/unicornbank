@@ -7,8 +7,6 @@ import { Alert } from "@material-ui/lab";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -19,6 +17,8 @@ import {
   passwordValidation,
 } from "../../utils/validationSchemas";
 import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { useSetRecoilState } from "recoil";
+import userState from "./../../recoilState/recoilAtoms/userAtom";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -87,7 +87,7 @@ const Auth: FC = () => {
   const alertMessage =
     alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
   const history = useHistory();
-  const dispatch = useDispatch();
+  const setUserData = useSetRecoilState(userState);
 
   const onSubmit = async (formData: IFormValues) => {
     try {
@@ -98,7 +98,9 @@ const Auth: FC = () => {
         throw new Error("Некорректный id");
       }
       const data = await readUserData(uid);
-      dispatch(saveUser(data));
+
+      setUserData(data);
+
       history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);

@@ -12,12 +12,8 @@ import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import styled from "styled-components";
 import { Box } from "@material-ui/core";
 import { PrimaryButton, TextField } from "../../atoms";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../selectors/userSelector";
 import { db, firebaseAuth } from "../../firebase/firebase";
-import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
-import { useDispatch } from "react-redux";
 import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -28,6 +24,8 @@ import {
   emailValidation,
   phoneValidation,
 } from "./../../utils/validationSchemas";
+import { useRecoilState } from "recoil";
+import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 const NOT_NUMBER_REGEX = /\D/g;
@@ -81,14 +79,13 @@ interface IFormValues {
 }
 
 const Profile: FC = () => {
-  const user = useSelector(userSelector);
+  const [user, setUser] = useRecoilState(userState);
   const { passport, snils, contact } = user;
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
-  const dispatch = useDispatch();
 
   const phoneMask = (phone: string): string => {
     const cleaned = cleanPhone(phone);
@@ -126,7 +123,8 @@ const Profile: FC = () => {
       });
 
       const updatedContactInfo = await readUserData(uid);
-      dispatch(saveUser(updatedContactInfo));
+
+      setUser(updatedContactInfo);
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);

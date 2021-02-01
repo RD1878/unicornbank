@@ -29,10 +29,3 @@ export interface IUser {
     }[];
   };
 }
-
-export interface IActionSaveUser {
-  type: string;
-  payload: {
-    user: IUser;
-  };
-}
