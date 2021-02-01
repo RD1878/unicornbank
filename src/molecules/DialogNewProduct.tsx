@@ -28,7 +28,7 @@ import { authSelector } from "../selectors";
 import { TAlert } from "../interfaces/main";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { getRandomNumber } from "../utils/randomNumber";
+import { getRandomNumber, getRandomIntInclusive } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
 import { useTranslation } from "react-i18next";
 
@@ -95,6 +95,22 @@ const DialogNewProduct: FC = () => {
         balance: 0,
         isActive: false,
         number: `${getRandomNumber(5)} **** **** **** ${getRandomNumber(5)}`,
+        requisites: {
+          account: getRandomNumber(25),
+          bankOfRecipient: 'АО "Юни Корн Банк"',
+          bik: getRandomNumber(15),
+          correspondentAccount: getRandomNumber(25),
+          inn: getRandomNumber(11),
+          kpp: getRandomNumber(11),
+          purposeOfPayment: `Перевод средств на счет ${getRandomNumber(
+            25
+          )} РУБ`,
+          recipient: "Иванов Иван Иванович",
+        },
+        validity: {
+          month: getRandomIntInclusive(1, 12),
+          year: "2024",
+        },
       };
 
       const updateUser = {
@@ -171,18 +187,6 @@ const DialogNewProduct: FC = () => {
                   control={<Radio />}
                   label={t("Debit card")}
                 />
-                <FormControlLabel
-                  value={t("Consumer loan")}
-                  control={<Radio />}
-                  label={t("Consumer loan")}
-                  disabled
-                />
-                <FormControlLabel
-                  value={t("Contribution")}
-                  control={<Radio />}
-                  label={t("Contribution")}
-                  disabled
-                />
               </RadioGroup>
             </Box>
             <Box mt={2} mb={1}>
@@ -206,11 +210,7 @@ const DialogNewProduct: FC = () => {
               <StyledIconButton type="button" onClick={handleCloseDialog}>
                 <CloseIcon color="secondary" />
               </StyledIconButton>
-              <Typography variant="body1">
-                {t(
-                  "After clicking on the Confirm button, a new card will appear in your open products"
-                )}
-              </Typography>
+              <Typography variant="body1">{t("After clicking")}</Typography>
               <PrimaryButton type="submit">{t("Confirm")}</PrimaryButton>
             </ButtonWrap>
           </form>
