@@ -2,10 +2,12 @@ import React, { ChangeEvent, FC, useState } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../atoms";
 import { OperationCard, TabPanel } from "../molecules";
-import { Box, Tabs, Tab, Typography } from "@material-ui/core";
+import { Box, Tabs, Tab, Typography, LinearProgress } from "@material-ui/core";
 import { IOperation } from "../interfaces/operation";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { userSelector } from "../selectors/userSelector";
+import { useSelector } from "react-redux";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -45,6 +47,7 @@ interface IProps {
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
+  const user = useSelector(userSelector);
   const [tab, setTab] = useState(0);
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
@@ -61,17 +64,15 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
       ({ operation }) => operation.type === type
     );
     if (filtered.length) {
-      return (
-        filtered
-          /* .sort(
+      return filtered
+        .sort(
           (itemA, itemB) =>
             Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
-        ) */
-          /* .slice(0, 10) */
-          .map(({ key, operation }) => (
-            <OperationCard operation={operation} key={key} />
-          ))
-      );
+        )
+        .slice(0, 10)
+        .map(({ key, operation }) => (
+          <OperationCard operation={operation} key={key} />
+        ));
     } else
       return (
         <Box p={4}>
@@ -87,48 +88,52 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
       <Typography variant="h2" color="textPrimary">
         {t("Last operations")}
       </Typography>
-      <StyledOperationsContainer>
-        <Tabs
-          value={tab}
-          onChange={handleChange}
-          indicatorColor="secondary"
-          textColor="secondary"
-          variant="fullWidth"
-          scrollButtons="on"
-        >
-          {categories.map((item) => (
-            <StyledTab label={item.name} key={item.type} />
-          ))}
-        </Tabs>
-        <TabPanel type="scrollable-force" value={tab} index={0}>
-          {cardsTransactions
-            /* .sort(
-              (itemA, itemB) =>
-                Date.parse(itemB.operation.date) -
-                Date.parse(itemA.operation.date)
-            )
-            .slice(0, 10) */
-            .map(({ key, operation }) => (
-              <OperationCard operation={operation} key={key} />
+      {user.isLoading ? (
+        <LinearProgress color="secondary" />
+      ) : (
+        <StyledOperationsContainer>
+          <Tabs
+            value={tab}
+            onChange={handleChange}
+            indicatorColor="secondary"
+            textColor="secondary"
+            variant="fullWidth"
+            scrollButtons="on"
+          >
+            {categories.map((item) => (
+              <StyledTab label={item.name} key={item.type} />
             ))}
-        </TabPanel>
-        {categories.map(
-          (category, index) =>
-            category.type !== "all" && (
-              <TabPanel
-                type="scrollable-force"
-                value={tab}
-                index={index}
-                key={index}
-              >
-                {filteredOperationsByType(category.type)}
-              </TabPanel>
-            )
-        )}
-        <StyledLink to="*">
-          <PrimaryButton>{t("More")}</PrimaryButton>
-        </StyledLink>
-      </StyledOperationsContainer>
+          </Tabs>
+          <TabPanel type="scrollable-force" value={tab} index={0}>
+            {cardsTransactions
+              .sort(
+                (itemA, itemB) =>
+                  Date.parse(itemB.operation.date) -
+                  Date.parse(itemA.operation.date)
+              )
+              .slice(0, 10)
+              .map(({ key, operation }) => (
+                <OperationCard operation={operation} key={key} />
+              ))}
+          </TabPanel>
+          {categories.map(
+            (category, index) =>
+              category.type !== "all" && (
+                <TabPanel
+                  type="scrollable-force"
+                  value={tab}
+                  index={index}
+                  key={index}
+                >
+                  {filteredOperationsByType(category.type)}
+                </TabPanel>
+              )
+          )}
+          <StyledLink to="*">
+            <PrimaryButton>{t("More")}</PrimaryButton>
+          </StyledLink>
+        </StyledOperationsContainer>
+      )}
     </StyledContainer>
   );
 };

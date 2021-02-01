@@ -18,6 +18,7 @@ import {
   Collapse,
   useMediaQuery,
   Snackbar,
+  LinearProgress,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
 import { CardItem, PrimaryButton } from "./../atoms";
@@ -286,22 +287,26 @@ const Sidebar: FC = () => {
               </ListItemText>
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <StyledListItem button>
-                  {cards.map(([key, value]: [string, ICard]) => (
-                    <StyledCardLink to={`/card/${key}`} key={key}>
-                      <CardItem
-                        open={open}
-                        number={value.number}
-                        balance={value.balance}
-                        currency={value.currency}
-                      />
-                    </StyledCardLink>
-                  ))}
-                </StyledListItem>
-              </List>
-            </Collapse>
+            {user.isLoading ? (
+              <LinearProgress color="secondary" />
+            ) : (
+              <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <StyledListItem button>
+                    {cards.map(([key, value]: [string, ICard]) => (
+                      <StyledCardLink to={`/card/${key}`} key={key}>
+                        <CardItem
+                          open={open}
+                          number={value.number}
+                          balance={value.balance}
+                          currency={value.currency}
+                        />
+                      </StyledCardLink>
+                    ))}
+                  </StyledListItem>
+                </List>
+              </Collapse>
+            )}
           </List>
           {open ? (
             <StyledNewProductLink to="">

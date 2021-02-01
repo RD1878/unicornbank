@@ -1,17 +1,16 @@
-import React, { FC, useEffect /* , useState */ } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { CardInfoTitle, DialogBlockCard } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/operation";
 import { DialogReissueCard } from "../../molecules";
 import { IOperationItem } from "../../interfaces/operationItem";
 import { useTranslation } from "react-i18next";
-/* import { Box, LinearProgress, Typography } from "@material-ui/core";
- */ import { requestUser /* , saveUser */ } from "../../actions/user";
+import { LinearProgress } from "@material-ui/core";
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
@@ -40,12 +39,6 @@ const CardInfo: FC = () => {
   const { isLoading, products } = useSelector(userSelector);
   const currentCard = products.cards[id];
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(requestUser());
-    /* console.log(isLoading, "Юзэффект"); */
-  }, []);
-
   const a = currentCard?.operations ?? {};
   const currentCardOperations = Object.entries(a);
   const currentCardTransactions = currentCardOperations.reduce(
@@ -59,7 +52,7 @@ const CardInfo: FC = () => {
   return (
     <StyledWraper>
       {isLoading ? (
-        <div>Загрузка</div>
+        <LinearProgress color="secondary" />
       ) : (
         <>
           <CardInfoTitle currentCard={currentCard} />
