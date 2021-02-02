@@ -46,5 +46,6 @@
   "Required": "Обязательно для заполнения",
   "Please enter valid phone number": "Введите корректный номер телефона",
   "Create your password": "Придумайте ваш пароль",
-  "Repeat your password": "Повторите ваш пароль"
+  "Repeat your password": "Повторите ваш пароль",
+  "Don't have an account yet?" : "У вас еще нет аккаунта?"
 }

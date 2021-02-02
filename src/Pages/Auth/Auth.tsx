@@ -6,6 +6,7 @@ import {
   Typography,
   Snackbar,
   FormControl,
+  Link,
   NativeSelect,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
@@ -75,6 +76,9 @@ const FormAuth = withTheme(styled("form")`
     ${(props) => props.theme.breakpoints.down("lg")} {
       margin-bottom: 1em;
     }
+  }
+  & > a {
+    margin-top: 30px;
   }
   & > div {
     width: 75%;
@@ -178,6 +182,11 @@ const Auth: FC = () => {
         <PrimaryButton size="large" type="submit">
           {t("Login")}
         </PrimaryButton>
+        <Link href={ROUTES.REGISTER} color="textPrimary">
+          <Typography variant="body2" color="textPrimary" align="center">
+            {t("Don't have an account yet?")}
+          </Typography>
+        </Link>
       </FormAuth>
       <Snackbar
         open={isOpenAlert}

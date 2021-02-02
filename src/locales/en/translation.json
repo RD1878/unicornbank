@@ -45,5 +45,6 @@
   "Required": "Required",
   "Please enter valid phone number": "Please enter valid phone number",
   "Create your password": "Create your password",
-  "Repeat your password": "Repeat your password"
+  "Repeat your password": "Repeat your password",
+  "Don't have an account yet?" : "Don't have an account yet?"
 }
