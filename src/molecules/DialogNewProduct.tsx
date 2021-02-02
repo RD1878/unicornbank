@@ -28,6 +28,7 @@ import {
   INN,
   KPP,
   SHACKBAR_SHOW_DURATION,
+  CORRESPONDENTACCOUNT,
 } from "../constants";
 import { requestUser } from "./../actions/user";
 import { authSelector } from "../selectors";
@@ -103,11 +104,11 @@ const DialogNewProduct: FC = () => {
         currency,
         balance: 0,
         isActive: false,
-        number: `${getRandomNumber(4)} **** **** **** ${getRandomNumber(4)}`,
+        number: `**** **** **** ${getRandomNumber(4)}`,
         requisites: {
           account,
           bankOfRecipient: BANKOFRECIPIENT,
-          correspondentAccount: getRandomNumber(20),
+          correspondentAccount: CORRESPONDENTACCOUNT,
           bik: BIK,
           inn: INN,
           kpp: KPP,
