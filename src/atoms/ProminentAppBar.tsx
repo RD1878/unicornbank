@@ -9,7 +9,9 @@ import { firebaseAuth } from "../firebase/firebase";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
-import { MobileDrawer } from "../molecules";
+import { LanguageForm, MobileDrawer } from "../molecules";
+import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
+import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
 const StyledToolbar = withTheme(styled(({ ...props }) => (
   <Toolbar classes={{ regular: "regular" }} {...props} />
@@ -20,8 +22,21 @@ const StyledToolbar = withTheme(styled(({ ...props }) => (
   }
 `);
 
-const ProminentAppBar: FC = () => {
+const StyledContainer = styled("div")`
+  position: absolute;
+  right: 70px;
+  width: 140px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+interface IHeader {
+  onToggleTheme: () => void;
+}
+
+const ProminentAppBar: FC<IHeader> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
+  const [stateTheme /* setStateTheme */] = useState(true);
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -35,6 +50,7 @@ const ProminentAppBar: FC = () => {
       setError(true);
     }
   };
+
   return (
     <AppBar position="fixed">
       <Snackbar
@@ -48,6 +64,16 @@ const ProminentAppBar: FC = () => {
       </Snackbar>
       <StyledToolbar>
         <MobileDrawer />
+        <StyledContainer>
+          <IconButton onClick={onToggleTheme}>
+            {stateTheme ? (
+              <Brightness4RoundedIcon />
+            ) : (
+              <Brightness7RoundedIcon />
+            )}
+          </IconButton>
+          <LanguageForm />
+        </StyledContainer>
         <IconButton edge="end" onClick={signOut}>
           <ExitToAppRoundedIcon />
         </IconButton>

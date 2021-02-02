@@ -30,10 +30,16 @@ const StyledBottomNavigation = withTheme(styled(({ ...props }) => (
 `);
 
 const StyledBottomNavigationAction = withTheme(styled(({ ...props }) => (
-  <BottomNavigationAction classes={{ selected: "selected" }} {...props} />
+  <BottomNavigationAction
+    classes={{ selected: "selected", root: "root" }}
+    {...props}
+  />
 ))`
   &.selected {
     color: ${(props) => props.theme.palette.secondary.main};
+  }
+  &.root {
+    min-width: auto;
   }
 `);
 

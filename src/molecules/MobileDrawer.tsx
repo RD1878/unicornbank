@@ -50,6 +50,20 @@ const MobileDrawer: FC = () => {
             <AccountCircleRoundedIcon />
           </IconButton>
         </Link>
+        {/* <List component="div" disablePadding>
+          <StyledListItem button>
+            {cards.map(([key, value]: [string, ICard]) => (
+              <StyledCardLink to={`/card/${key}`} key={key}>
+                <CardItem
+                  open={open}
+                  number={value.number}
+                  balance={value.balance}
+                  currency={value.currency}
+                />
+              </StyledCardLink>
+            ))}
+          </StyledListItem>
+        </List> */}
       </StyledDrawer>
     </>
   );

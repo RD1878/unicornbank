@@ -1,7 +1,7 @@
-import React, { FC, useState, SyntheticEvent, ChangeEvent } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import { Switch, Snackbar, FormControl, NativeSelect } from "@material-ui/core";
+import { Switch, Snackbar } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
@@ -10,7 +10,7 @@ import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
+import { LanguageForm } from "../molecules";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -57,10 +57,6 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<{ value: string }>) => {
-    i18next.changeLanguage(e.target.value);
-  };
-
   return (
     <Container>
       <Snackbar
@@ -85,13 +81,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
         <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
-      <FormControl>
-        <NativeSelect defaultValue="ru" onChange={handleChange}>
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
-          <option value="tat">Татарча</option>
-        </NativeSelect>
-      </FormControl>
+      <LanguageForm />
       <Switch onChange={onToggleTheme} />
     </Container>
   );

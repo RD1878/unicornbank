@@ -43,7 +43,7 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
       {!matches && <Header onToggleTheme={onToggleTheme} />}
       <ErrorBoundary>
         <ContentContainer>
-          {matches && <ProminentAppBar />}
+          {matches && <ProminentAppBar onToggleTheme={onToggleTheme} />}
           {!matches && <Sidebar />}
           <Container>{children}</Container>
           {matches && <SimpleBottomNavigation />}
