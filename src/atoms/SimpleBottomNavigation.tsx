@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
 import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
+import AccountBalanceRoundedIcon from "@material-ui/icons/AccountBalanceRounded";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import HistoryRoundedIcon from "@material-ui/icons/HistoryRounded";
 import { Link } from "react-router-dom";
@@ -61,6 +62,12 @@ const SimpleBottomNavigation: FC = () => {
         to={ROUTES.SETTINGS}
         label="Настройки"
         icon={<SettingsRoundedIcon />}
+      />
+      <StyledBottomNavigationAction
+        component={Link}
+        to={ROUTES.OFFICES}
+        label="Офисы"
+        icon={<AccountBalanceRoundedIcon />}
       />
     </StyledBottomNavigation>
   );

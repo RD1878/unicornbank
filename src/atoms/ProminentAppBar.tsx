@@ -5,13 +5,11 @@ import IconButton from "@material-ui/core/IconButton";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
-import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../routes";
 import { firebaseAuth } from "../firebase/firebase";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
+import { MobileDrawer } from "../molecules";
 
 const StyledToolbar = withTheme(styled(({ ...props }) => (
   <Toolbar classes={{ regular: "regular" }} {...props} />
@@ -49,11 +47,7 @@ const ProminentAppBar: FC = () => {
         </Alert>
       </Snackbar>
       <StyledToolbar>
-        <Link to={ROUTES.PROFILE}>
-          <IconButton edge="start" aria-label="open drawer">
-            <AccountCircleRoundedIcon />
-          </IconButton>
-        </Link>
+        <MobileDrawer />
         <IconButton edge="end" onClick={signOut}>
           <ExitToAppRoundedIcon />
         </IconButton>
