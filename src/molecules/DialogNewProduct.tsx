@@ -22,15 +22,22 @@ import { userSelector } from "../selectors/userSelector";
 import { useFormik } from "formik";
 import { db } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
-import { CURRENCIES, SHACKBAR_SHOW_DURATION } from "../constants";
+import {
+  BANKOFRECIPIENT,
+  CURRENCIES,
+  INN,
+  KPP,
+  SHACKBAR_SHOW_DURATION,
+} from "../constants";
 import { requestUser } from "./../actions/user";
 import { authSelector } from "../selectors";
 import { TAlert } from "../interfaces/main";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { getRandomNumber, getRandomIntInclusive } from "../utils/randomNumber";
+import { getRandomNumber } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
 import { useTranslation } from "react-i18next";
+import { BIK } from "./../constants";
 
 const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
   width: fit-content;
@@ -90,26 +97,26 @@ const DialogNewProduct: FC = () => {
 
   const onSubmit = async ({ currency }: IFormRadio) => {
     try {
+      const { lastName, firstName, patronymic } = user;
+      const account = getRandomNumber(20);
       const newCard = {
         currency,
         balance: 0,
         isActive: false,
-        number: `${getRandomNumber(5)} **** **** **** ${getRandomNumber(5)}`,
+        number: `${getRandomNumber(4)} **** **** **** ${getRandomNumber(4)}`,
         requisites: {
-          account: getRandomNumber(25),
-          bankOfRecipient: 'АО "Юни Корн Банк"',
-          bik: getRandomNumber(15),
-          correspondentAccount: getRandomNumber(25),
-          inn: getRandomNumber(11),
-          kpp: getRandomNumber(11),
-          purposeOfPayment: `Перевод средств на счет ${getRandomNumber(
-            25
-          )} РУБ`,
-          recipient: "Иванов Иван Иванович",
+          account,
+          bankOfRecipient: BANKOFRECIPIENT,
+          correspondentAccount: getRandomNumber(20),
+          bik: BIK,
+          inn: INN,
+          kpp: KPP,
+          purposeOfPayment: `Перевод средств на счет ${account} РУБ`,
+          recipient: `${lastName} ${firstName} ${patronymic}`,
         },
         validity: {
-          month: getRandomIntInclusive(1, 12),
-          year: "2024",
+          month: new Date().getMonth() + 1,
+          year: new Date().getFullYear() + 3,
         },
       };
 
@@ -157,7 +164,7 @@ const DialogNewProduct: FC = () => {
         startIcon={<AddIcon />}
         onClick={handleOpenDialog}
       >
-        Новый продукт
+        {t("New Product")}
       </StyledPrimaryButton>
       <Dialog
         open={isOpenDialog}
@@ -178,7 +185,7 @@ const DialogNewProduct: FC = () => {
             <Box mt={2}>
               <FormLabel component="legend">{t("Select product")}</FormLabel>
               <RadioGroup
-                aria-label="Продукт"
+                aria-label={t("product")}
                 {...getFieldProps("product")}
                 row
               >
@@ -192,7 +199,7 @@ const DialogNewProduct: FC = () => {
             <Box mt={2} mb={1}>
               <FormLabel component="legend">{t("Select currency")}</FormLabel>
               <RadioGroup
-                aria-label="Валюта"
+                aria-label={t("currency")}
                 {...getFieldProps("currency")}
                 row
               >
