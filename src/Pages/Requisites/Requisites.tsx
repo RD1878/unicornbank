@@ -12,6 +12,7 @@ import {
 import { PrimaryButton } from "../../atoms";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { IParams } from "../../interfaces/params";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -34,7 +35,7 @@ const StyledPrimaryButton = styled(PrimaryButton)`
 
 const Requisites: FC = () => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<IParams>();
   const { products } = useSelector(userSelector);
   const currentCard = products.cards[id];
   const { number, requisites } = currentCard;

@@ -279,11 +279,11 @@ const Sidebar: FC = () => {
                 <PaymentRoundedIcon color="secondary" fontSize="large" />
               </ListItemIcon>
               <ListItemText>
-                {open ? (
+                {open && (
                   <Typography variant="h2" color="textPrimary">
                     Карты
                   </Typography>
-                ) : null}
+                )}
               </ListItemText>
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
@@ -308,13 +308,13 @@ const Sidebar: FC = () => {
               </Collapse>
             )}
           </List>
-          {open ? (
+          {open && (
             <StyledNewProductLink to="">
               <PrimaryButton startIcon={<AddIcon />}>
                 Новый продукт
               </PrimaryButton>
             </StyledNewProductLink>
-          ) : null}
+          )}
         </StyledProductsContainer>
         <Grid container justify="center">
           <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>

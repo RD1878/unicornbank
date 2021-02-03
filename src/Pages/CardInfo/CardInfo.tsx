@@ -1,16 +1,25 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
-import { CardInfoTitle, DialogBlockCard } from "../../molecules";
+import { CardInfoTitle, DialogActionCard } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/operation";
-import { DialogReissueCard } from "../../molecules";
 import { IOperationItem } from "../../interfaces/operationItem";
 import { useTranslation } from "react-i18next";
 import { LinearProgress } from "@material-ui/core";
+import { IParams } from "../../interfaces/params";
+
+const phrases = {
+  block: "Block",
+  confirmBlock: "Are you sure block",
+  blocked: "Blocked message",
+  reissue: "Reissue",
+  confirmReissue: "Are you sure reissue",
+  reissued: "Blocked message with reissue",
+};
 
 const StyledButtonsWraper = styled("div")`
   display: flex;
@@ -34,7 +43,7 @@ const StyledWraper = styled("div")`
 `;
 
 const CardInfo: FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<IParams>();
   const { t } = useTranslation();
   const { isLoading, products } = useSelector(userSelector);
   const currentCard = products.cards[id];
@@ -57,8 +66,18 @@ const CardInfo: FC = () => {
         <>
           <CardInfoTitle currentCard={currentCard} />
           <StyledButtonsWraper>
-            <DialogBlockCard idCurrentCard={id} />
-            <DialogReissueCard idCurrentCard={id} />
+            <DialogActionCard
+              idCurrentCard={id}
+              actionType={phrases.block}
+              confirmType={phrases.confirmBlock}
+              message={phrases.blocked}
+            />
+            <DialogActionCard
+              idCurrentCard={id}
+              actionType={phrases.reissue}
+              confirmType={phrases.confirmReissue}
+              message={phrases.reissued}
+            />
             <StyledLink to={`/card/${id}/requisites`}>
               <StyledPrimaryButton>{t("Requisites")}</StyledPrimaryButton>
             </StyledLink>

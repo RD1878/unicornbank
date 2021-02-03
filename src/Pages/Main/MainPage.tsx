@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-import { Offers } from "../../molecules";
-import { CurrencyRate } from "../../molecules";
+import { Offers, CurrencyRate } from "../../molecules";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/operation";

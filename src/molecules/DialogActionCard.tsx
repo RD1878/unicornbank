@@ -15,19 +15,27 @@ const StyledPrimaryButton = styled(PrimaryButton)`
 
 interface IProps {
   idCurrentCard: string;
+  actionType: string;
+  confirmType: string;
+  message: string;
 }
 
-const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
+const DialogActionCard: FC<IProps> = ({
+  idCurrentCard,
+  actionType,
+  confirmType,
+  message,
+}) => {
   const { t } = useTranslation();
-  const [isOpenDialogBlock, setOpenDialogBlock] = useState(false);
+  const [isOpenDialog, setOpenDialog] = useState(false);
   const [isConfirm, setConfirm] = useState(false);
   const dispatch = useDispatch();
-  const handleOpenDialogReissue = () => {
-    setOpenDialogBlock(true);
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
   };
 
-  const handleCloseDialogBlock = () => {
-    setOpenDialogBlock(false);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
     setConfirm(false);
   };
   const handleConfirm = () => {
@@ -54,23 +62,20 @@ const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
   } = useSelector(userSelector);
   return (
     <>
-      <StyledPrimaryButton
-        onClick={handleOpenDialogReissue}
-        disabled={!isActive}
-      >
-        {t("Block")}
+      <StyledPrimaryButton onClick={handleOpenDialog} disabled={!isActive}>
+        {t(actionType)}
       </StyledPrimaryButton>
       <Dialog
-        open={isOpenDialogBlock}
-        onClose={handleCloseDialogBlock}
+        open={isOpenDialog}
+        onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {!isConfirm ? t("Are you sure block") : t("Blocked message")}
+          {!isConfirm ? t(confirmType) : t(message)}
         </DialogTitle>
         <DialogActions>
-          <PrimaryButton onClick={handleCloseDialogBlock}>
+          <PrimaryButton onClick={handleCloseDialog}>
             {!isConfirm ? t("Cancel") : t("Close")}
           </PrimaryButton>
           {!isConfirm ? (
@@ -84,4 +89,4 @@ const DialogBlockCard: FC<IProps> = ({ idCurrentCard }) => {
   );
 };
 
-export default DialogBlockCard;
+export default DialogActionCard;
