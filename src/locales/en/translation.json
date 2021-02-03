@@ -18,5 +18,14 @@
   "Euro": "Euro",
   "Dollar": "Dollar",
   "Rubles": "Rubles",
-  "New Product": "New Product"
+  "New Product": "New Product",
+  "Money transaction": "Money transaction",
+  "Translations" : "Translations",
+  "In order to transfer money to your card" : "In order to transfer money to your card, deposit or account, fill in the form fields and click the Translate button." ,
+  "Filling in requisites" : "Filling in requisites",
+  "Debit account number" : "Debit account number",
+  "Crediting account number" : "Crediting account number",
+  "Amount" :"Amount", 
+  "Transfer money" : "Transfer money", 
+  "Cancel" : "Cancel"
 }

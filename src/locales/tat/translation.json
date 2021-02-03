@@ -18,5 +18,14 @@
   "Euro": "Евро",
   "Dollar": "Доллары",
   "Rubles": "Сум", 
-  "New Product": "Яңа продукт"
+  "New Product": "Яңа продукт",
+  "Money transaction" : "Алыш-биреш бәясе", 
+  "Translations" : "Тәрҗемә", 
+  "In order to transfer money to your card": "Өчен күчерергә акча үз картасын, вкладка яки счет, тутырыгыз басулар формалары һәм төймәгә басыгыз күчерергә.", 
+  "Filling in requisites" : "Реквизитлар тутыру",
+  "Debit account number" : "Исәп-хисап счеты",
+  "Crediting account number" : "Исәпләү номеры",
+  "Amount" : "Җыелма",
+  "Transfer money": "Ничек күчерергә акча",
+  "Cancel" : "Кире кагу"
 }

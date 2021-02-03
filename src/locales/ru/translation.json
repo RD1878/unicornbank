@@ -18,5 +18,14 @@
   "Euro": "Евро",
   "Dollar": "Доллары",
   "Rubles": "Рубли", 
-  "New Product" : "Новый продукт"
+  "New Product" : "Новый продукт",
+  "Money transaction" : "Перевод средств", 
+  "Translations" : "Переводы", 
+  "In order to transfer money to your card": "Для того чтобы перевести деньги на свою карту, вклад или счет, заполните поля формы и нажмите на кнопку Перевести.",
+  "Filling in requisites" : "Заполнение реквизитов",
+  "Debit account number" : "Номер счета списания",
+  "Crediting account number" : "Номер счета зачисления", 
+  "Amount" : "Сумма", 
+  "Transfer money": "Перевести деньги",
+  "Cancel" : "Отмена"
 }

@@ -12,6 +12,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
+import DialogTransaction from "../../molecules/DialogTransaction";
 
 interface TabPanelProps {
   title: string;
@@ -25,7 +26,7 @@ const StyledContainer = withTheme(styled(Container)`
   width: 100%;
 `);
 
-function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
+const TabPanelWrapper: FC<TabPanelProps> = ({ title, value, index }) => {
   return (
     <TabPanel
       type="vertical-tabpanel"
@@ -37,13 +38,13 @@ function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
         <Typography variant="h1" color="textPrimary">
           {title}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {subtitle}
-        </Typography>
+        <Box mt={3}>
+          <DialogTransaction />
+        </Box>
       </Box>
     </TabPanel>
   );
-}
+};
 
 interface IOffer {
   id: number;
@@ -87,7 +88,7 @@ export const Offers: FC = () => {
       ) : (
         <Box p={8}>
           <Typography variant="h2" color="textPrimary">
-            Загрузка персональных предложений
+            Загрузка предложений
           </Typography>
         </Box>
       )}
@@ -102,9 +103,9 @@ export const Offers: FC = () => {
             variant="fullWidth"
             centered={true}
           >
-            <Tab label="Вклады" />
-            <Tab label="Кредиты" />
-            <Tab label="Для бизнеса" />
+            <Tab label="Платежи" />
+            <Tab label="Переводы" />
+            <Tab label="Автоплатежи" />
           </Tabs>
         </Paper>
       </Box>
