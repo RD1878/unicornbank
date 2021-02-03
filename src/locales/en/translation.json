@@ -4,7 +4,6 @@
   "Chat": "Chat",
   "Settings": "Settings",
   "Offices and ATMs": "Offices and ATMs",
-  "Exit": "Exit",
   "Russia, Republic of Tatarstan, Kazan, Pushkin st., 66": "Russia, Republic of Tatarstan, Kazan, Pushkin st., 66",
   "For calls within Russia": "For calls within Russia",
   "Edit profile": "Edit profile",
@@ -46,5 +45,19 @@
   "Please enter valid phone number": "Please enter valid phone number",
   "Create your password": "Create your password",
   "Repeat your password": "Repeat your password",
-  "Don't have an account yet?" : "Don't have an account yet?"
+  "Don't have an account yet?" : "Don't have an account yet?",
+  "Exit": "Exit", 
+  "The card has been successfully issued!": "The card has been successfully issued!",
+  "Application for a new product": "Application for a new product",
+  "Please select the required parameters": "Please select the required parameters:",
+  "Select product" : "Select product", 
+  "Select currency" :"Select currency",
+  "Debit card" : "Debit card", 
+  "Consumer loan" : "Consumer loan",
+  "Contribution" : "Contribution",
+  "After clicking" : "After clicking on the Confirm button, a new card will appear in your open products", 
+  "Confirm" : "Confirm",
+  "Euro": "Euro",
+  "Dollar": "Dollar",
+  "Rubles": "Rubles"
 }
