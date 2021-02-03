@@ -33,5 +33,19 @@
   "Supermarkets": "Супермаркеты",
   "Not found": "Не найдено",
   "Details for transfer": "Реквизиты для перевода на счет карты",
-  "Send email": "Отправить на e-mail"
+  "Send email": "Отправить на e-mail",
+  "The card has been successfully issued!": "Карта успешно оформлена!",
+  "Application for a new product": "Заявка для нового продукта",
+  "Please select the required parameters": "Выберите пожалуйста необходимые параметры:",
+  "Select product": "Выберите продукт",
+  "Select currency": "Выберите валюту",
+  "Debit card": "Дебетовая карта",
+  "Consumer loan": "Потребительский кредит",
+  "Contribution": "Вклад",
+  "After clicking": "После нажатии на кнопку Подтвердить в Ваших открытых продуктах появится новая карта",
+  "Confirm": "Подтвердить",
+  "Euro": "Евро",
+  "Dollar": "Доллары",
+  "Rubles": "Рубли",
+  "New Product": "Новый продукт"
 }

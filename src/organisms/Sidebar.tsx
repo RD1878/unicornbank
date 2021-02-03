@@ -21,7 +21,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
-import { CardItem, PrimaryButton } from "./../atoms";
+import { CardItem } from "./../atoms";
 import IconButton from "@material-ui/core/IconButton";
 import FormatIndentDecreaseRoundedIcon from "@material-ui/icons/FormatIndentDecreaseRounded";
 import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncreaseRounded";
@@ -35,7 +35,6 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
-import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector, authSelector } from "../selectors";
@@ -44,6 +43,7 @@ import { db } from "./../firebase/firebase";
 import { requestUser } from "../actions";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/tAlert";
+import DialogNewProduct from "../molecules/DialogNewProduct";
 
 interface IWithOpen {
   open: boolean;
@@ -163,13 +163,6 @@ const StyledIconButtonIncrease = withTheme(styled(
   FormatIndentIncreaseRoundedIcon
 )`
   color: ${(props) => props.theme.palette.textPrimary.main};
-`);
-
-const StyledNewProductLink = withTheme(styled(Link)`
-  align-self: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  text-decoration: none;
 `);
 
 const StyledProductsContainer = styled("div")`
@@ -308,13 +301,7 @@ const Sidebar: FC = () => {
               </Collapse>
             )}
           </List>
-          {open && (
-            <StyledNewProductLink to="">
-              <PrimaryButton startIcon={<AddIcon />}>
-                Новый продукт
-              </PrimaryButton>
-            </StyledNewProductLink>
-          )}
+          {open ? <DialogNewProduct /> : null}
         </StyledProductsContainer>
         <Grid container justify="center">
           <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>

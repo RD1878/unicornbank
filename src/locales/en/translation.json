@@ -33,5 +33,19 @@
   "Supermarkets": "Supermarkets",
   "Not found": "Not found",
   "Details for transfer": "Details for transfer to card account",
-  "Send email": "Send by e-mail"
+  "Send email": "Send by e-mail",
+  "The card has been successfully issued!": "The card has been successfully issued!",
+  "Application for a new product": "Application for a new product",
+  "Please select the required parameters": "Please select the required parameters:",
+  "Select product": "Select product",
+  "Select currency": "Select currency",
+  "Debit card": "Debit card",
+  "Consumer loan": "Consumer loan",
+  "Contribution": "Contribution",
+  "After clicking": "After clicking on the Confirm button, a new card will appear in your open products",
+  "Confirm": "Confirm",
+  "Euro": "Euro",
+  "Dollar": "Dollar",
+  "Rubles": "Rubles",
+  "New Product": "New Product"
 }

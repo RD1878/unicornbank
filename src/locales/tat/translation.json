@@ -33,5 +33,19 @@
   "Supermarkets": "Супермаркетлар",
   "Not found": "Табылмады",
   "Details for transfer": "Кредит картасы тәрҗемә итү өчен реквизитлар",
-  "Send email": "Электрон почта аша җибәрегез"
+  "Send email": "Электрон почта аша җибәрегез",
+  "The card has been successfully issued!": "Карта уңышлы рәсмиләштерелгән!",
+  "Application for a new product": "Яңа продуктка гариза",
+  "Please select the required parameters": "Сайлагыз, Зинһар, кирәкле параметрлары:",
+  "Select product": "Сайлагыз продукт",
+  "Select currency": "Сайлагыз валюту",
+  "Debit card": "Дебетовая картасы",
+  "Consumer loan": "Кулланучылар кредиты",
+  "Contribution": "Өлеш",
+  "After clicking": "Соң нажатия бу төймәгә эшләвен раслау сезнең ачык продуктларда барлыкка киләчәк яңа карта",
+  "Confirm": "Дөресләү",
+  "Euro": "Евро",
+  "Dollar": "Доллары",
+  "Rubles": "Сум",
+  "New Product": "Яңа продукт"
 }
