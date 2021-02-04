@@ -1,7 +1,7 @@
 import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
-import { Switch, Snackbar } from "@material-ui/core";
+import { useTheme, withTheme } from "@material-ui/core/styles";
+import { Snackbar, IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
@@ -11,6 +11,8 @@ import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { useTranslation } from "react-i18next";
 import { LanguageForm } from "../molecules";
+import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
+import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -42,6 +44,7 @@ interface IHeader {
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
+  const theme = useTheme();
   const { t } = useTranslation();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
@@ -82,7 +85,13 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
       <LanguageForm />
-      <Switch onChange={onToggleTheme} />
+      <IconButton onClick={onToggleTheme}>
+        {theme.palette.type === "dark" ? (
+          <Brightness4RoundedIcon />
+        ) : (
+          <Brightness7RoundedIcon />
+        )}
+      </IconButton>
     </Container>
   );
 };
