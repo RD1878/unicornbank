@@ -1,5 +1,4 @@
 interface ICard {
-  id: number;
   number: string;
   currency: string;
   balance: number;

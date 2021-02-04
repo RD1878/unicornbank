@@ -3,13 +3,14 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import { useTheme, withTheme } from "@material-ui/core/styles";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import { firebaseAuth } from "../firebase/firebase";
 import { Snackbar } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
-import { LanguageForm, MobileDrawer } from "../molecules";
+import { LanguageForm } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
@@ -32,11 +33,15 @@ const StyledContainer = styled("div")`
 
 interface IHeader {
   onToggleTheme: () => void;
+  onToggleMobileDrawer: () => void;
 }
 
-const ProminentAppBar: FC<IHeader> = ({ onToggleTheme }) => {
+const ProminentAppBar: FC<IHeader> = ({
+  onToggleTheme,
+  onToggleMobileDrawer,
+}) => {
   const [error, setError] = useState(false);
-  const [stateTheme /* setStateTheme */] = useState(true);
+  const theme = useTheme();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -63,10 +68,17 @@ const ProminentAppBar: FC<IHeader> = ({ onToggleTheme }) => {
         </Alert>
       </Snackbar>
       <StyledToolbar>
-        <MobileDrawer />
+        <IconButton
+          onClick={onToggleMobileDrawer}
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+        >
+          <MenuIcon />
+        </IconButton>
         <StyledContainer>
           <IconButton onClick={onToggleTheme}>
-            {stateTheme ? (
+            {theme.palette.type === "dark" ? (
               <Brightness4RoundedIcon />
             ) : (
               <Brightness7RoundedIcon />

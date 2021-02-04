@@ -12,7 +12,7 @@ import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { ROUTES } from "../../routes";
 import {
   emailValidation,

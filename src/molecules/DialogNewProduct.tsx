@@ -32,7 +32,7 @@ import {
 } from "../constants";
 import { requestUser } from "./../actions/user";
 import { authSelector } from "../selectors";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { getRandomNumber } from "../utils/randomNumber";

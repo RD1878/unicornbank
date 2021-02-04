@@ -18,12 +18,15 @@ import {
   Collapse,
   useMediaQuery,
   Snackbar,
+  LinearProgress,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
-import CardItem from "./../atoms/CardItem";
+import { CardItem } from "./../atoms";
 import IconButton from "@material-ui/core/IconButton";
 import FormatIndentDecreaseRoundedIcon from "@material-ui/icons/FormatIndentDecreaseRounded";
 import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncreaseRounded";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+
 import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
@@ -41,7 +44,7 @@ import firebase from "firebase";
 import { db } from "./../firebase/firebase";
 import { requestUser } from "../actions";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
 import DialogNewProduct from "../molecules/DialogNewProduct";
 
 interface IWithOpen {
@@ -59,7 +62,14 @@ const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
     transition: all 0.2s ease-in-out;
     overflow-y: unset;
     overflow-x: hidden;
-    width: ${(props) => (props.open ? props.width : props.theme.spacing(15))}px;
+    display: flex;
+    align-items: center;
+    width: ${(props) =>
+      props.view === "mobile"
+        ? 320
+        : props.open
+        ? props.width
+        : props.theme.spacing(15)}px;
     transition: ${(props) =>
       props.theme.transitions.create("width", {
         easing: props.theme.transitions.easing.sharp,
@@ -69,6 +79,14 @@ const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
       })};
   }
 `);
+
+const StyledIconButton = styled(IconButton)`
+  align-self: flex-start;
+`;
+
+const StyledList = styled(List)`
+  width: 100%;
+`;
 
 const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
   display: flex;
@@ -87,10 +105,6 @@ const StyledProfileInfo = withTheme(styled(Box)<IWithOpen>`
         : props.theme.transitions.duration.leavingScreen,
     })};
 `);
-
-const StyledListItem = styled(ListItem)`
-  flex-direction: column;
-`;
 
 const StyledWrap = styled(Box)<IWithOpen>`
   position: sticky;
@@ -116,7 +130,6 @@ const StyledIcon = withTheme(styled(PersonRoundedIcon)`
 const StyledAddAvatar = styled("div")`
   position: relative;
   overflow: hidden;
-
   & > input {
     cursor: pointer;
     position: absolute;
@@ -134,7 +147,6 @@ const StyledLink = withTheme(styled(Link)`
   justify-content: center;
   margin-top: 10px;
   text-decoration: none;
-
   a {
     margin-left: 10px;
   }
@@ -145,6 +157,11 @@ const StyledContainer = styled("div")`
   align-items: flex-end;
   margin-bottom: 20px;
   position: relative;
+`;
+
+const StyledCardLink = styled(Link)`
+  text-decoration: none;
+  width: 100%;
 `;
 
 const StyledIconButtonDecrease = withTheme(styled(
@@ -165,23 +182,27 @@ const StyledProductsContainer = styled("div")`
   margin-top: 40px;
 `;
 
-const Sidebar: FC = () => {
+interface IProps {
+  view: string;
+  isOpenDrawer: boolean;
+  onToggleMobileDrawer: () => void;
+}
+
+const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
   const user = useSelector(userSelector);
   const { firstName, lastName, patronymic, products, avatarUrl } = user;
   const { currentUser } = useSelector(authSelector);
   const dispatch = useDispatch();
-
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
-  const cards = Object.values(products.cards);
+  const cards = Object.entries(products.cards);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
-
   const addPhoto = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     try {
       const file = e?.target?.files?.[0];
@@ -233,82 +254,164 @@ const Sidebar: FC = () => {
   }, [matches]);
 
   return (
-    <StyledDrawer variant="permanent" open={open} width={DRAWER_WIDTH}>
-      <StyledWrap open={open}>
-        <StyledProfileInfo open={open}>
-          <Grid container justify="center" alignItems="center">
-            <StyledContainer>
-              {avatarUrl ? (
-                <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
-              ) : (
-                <StyledIcon sizes="large" />
-              )}
-              <StyledAddAvatar>
-                <input onChange={addPhoto} type="file" />
-                <AddAPhotoRoundedIcon />
-              </StyledAddAvatar>
-            </StyledContainer>
-            <Typography variant="h2" color="textPrimary" align="center">
-              {`${firstName} ${patronymic} ${lastName} `}
-            </Typography>
-          </Grid>
-          <StyledLink to={ROUTES.PROFILE}>
-            <CreateRoundedIcon color="action" />
-            <Typography variant="body1" color="textSecondary" align="center">
-              Редактировать профиль
-            </Typography>
-          </StyledLink>
-        </StyledProfileInfo>
-        <StyledProductsContainer>
-          <List>
+    <>
+      {view === "desktop" ? (
+        <StyledDrawer
+          variant="permanent"
+          open={open}
+          width={DRAWER_WIDTH}
+          view="desktop"
+        >
+          <StyledWrap open={open}>
+            <StyledProfileInfo open={open}>
+              <Grid container justify="center" alignItems="center">
+                <StyledContainer>
+                  {avatarUrl ? (
+                    <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
+                  ) : (
+                    <StyledIcon sizes="large" />
+                  )}
+                  <StyledAddAvatar>
+                    <input onChange={addPhoto} type="file" />
+                    <AddAPhotoRoundedIcon />
+                  </StyledAddAvatar>
+                </StyledContainer>
+                <Typography variant="h2" color="textPrimary" align="center">
+                  {`${firstName} ${patronymic} ${lastName} `}
+                </Typography>
+              </Grid>
+              <StyledLink to={ROUTES.PROFILE}>
+                <CreateRoundedIcon color="action" />
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  align="center"
+                >
+                  Редактировать профиль
+                </Typography>
+              </StyledLink>
+            </StyledProfileInfo>
+            <StyledProductsContainer>
+              <List>
+                <ListItem button onClick={handleClick}>
+                  <ListItemIcon>
+                    <PaymentRoundedIcon color="secondary" fontSize="large" />
+                  </ListItemIcon>
+                  <ListItemText>
+                    {open ? (
+                      <Typography variant="h2" color="textPrimary">
+                        Карты
+                      </Typography>
+                    ) : null}
+                  </ListItemText>
+                  {isOpenCards ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                {user.isLoading ? (
+                  <LinearProgress color="secondary" />
+                ) : (
+                  <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {cards.map(([key, value]: [string, ICard]) => (
+                        <StyledCardLink to={`/card/${key}`} key={key}>
+                          <CardItem
+                            open={open}
+                            number={value.number}
+                            balance={value.balance}
+                            currency={value.currency}
+                          />
+                        </StyledCardLink>
+                      ))}
+                    </List>
+                  </Collapse>
+                )}
+              </List>
+              {open ? <DialogNewProduct /> : null}
+            </StyledProductsContainer>
+            <Grid container justify="center">
+              <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
+                <IconButton onClick={handleDrawerCollapse}>
+                  {open ? (
+                    <StyledIconButtonDecrease />
+                  ) : (
+                    <StyledIconButtonIncrease />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </Grid>
+          </StyledWrap>
+          <Snackbar
+            open={isOpenAlert}
+            autoHideDuration={SHACKBAR_SHOW_DURATION}
+            onClose={handleCloseAlert}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert severity={alertType} onClose={handleCloseAlert}>
+              {alertMessage}
+            </Alert>
+          </Snackbar>
+        </StyledDrawer>
+      ) : (
+        <StyledDrawer
+          open={isOpenDrawer}
+          onClose={onToggleMobileDrawer}
+          view="mobile"
+        >
+          <StyledIconButton onClick={onToggleMobileDrawer}>
+            <ChevronLeftIcon fontSize="large" />
+          </StyledIconButton>
+          <Link to={ROUTES.PROFILE}>
+            {avatarUrl ? (
+              <StyledAvatar
+                sizes="large"
+                alt="name"
+                src={avatarUrl}
+                onClick={onToggleMobileDrawer}
+              />
+            ) : (
+              <StyledIcon sizes="large" onClick={onToggleMobileDrawer} />
+            )}
+          </Link>
+          <Typography variant="h1" color="textPrimary" align="center">
+            {`${firstName} ${patronymic} ${lastName} `}
+          </Typography>
+          <StyledAddAvatar>
+            <input onChange={addPhoto} type="file" />
+            <AddAPhotoRoundedIcon />
+          </StyledAddAvatar>
+          <StyledList>
             <ListItem button onClick={handleClick}>
               <ListItemIcon>
                 <PaymentRoundedIcon color="secondary" fontSize="large" />
               </ListItemIcon>
               <ListItemText>
-                {open ? (
-                  <Typography variant="h2" color="textPrimary">
-                    Карты
-                  </Typography>
-                ) : null}
+                <Typography variant="h1" color="textPrimary">
+                  Карты
+                </Typography>
               </ListItemText>
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <StyledListItem button>
-                  {cards.map((card: ICard) => (
-                    <CardItem key={card.number} open={open} {...card} />
-                  ))}
-                </StyledListItem>
+                {cards.map(([key, value]: [string, ICard]) => (
+                  <StyledCardLink
+                    to={`/card/${key}`}
+                    key={key}
+                    onClick={onToggleMobileDrawer}
+                  >
+                    <CardItem
+                      open={isOpenDrawer}
+                      number={value.number}
+                      balance={value.balance}
+                      currency={value.currency}
+                    />
+                  </StyledCardLink>
+                ))}
               </List>
             </Collapse>
-          </List>
-          {open ? <DialogNewProduct /> : null}
-        </StyledProductsContainer>
-        <Grid container justify="center">
-          <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
-            <IconButton onClick={handleDrawerCollapse}>
-              {open ? (
-                <StyledIconButtonDecrease />
-              ) : (
-                <StyledIconButtonIncrease />
-              )}
-            </IconButton>
-          </Tooltip>
-        </Grid>
-      </StyledWrap>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleCloseAlert}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleCloseAlert}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
-    </StyledDrawer>
+          </StyledList>
+        </StyledDrawer>
+      )}
+    </>
   );
 };
 
