@@ -20,12 +20,14 @@
   "Rubles": "Rubles",
   "New Product": "New Product",
   "Money transaction": "Money transaction",
-  "Translations" : "Translations",
+  "Transaction" : "Transaction",
   "In order to transfer money to your card" : "In order to transfer money to your card, deposit or account, fill in the form fields and click the Translate button." ,
   "Filling in requisites" : "Filling in requisites",
   "Debit account number" : "Debit account number",
   "Crediting account number" : "Crediting account number",
   "Amount" :"Amount", 
   "Transfer money" : "Transfer money", 
-  "Cancel" : "Cancel"
+  "Cancel" : "Cancel",
+  "Accounts for debiting and depositing are the same" : "Accounts for debiting and depositing are the same", 
+  "There are not enough funds on your card": "There are not enough funds on your card"
 }

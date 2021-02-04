@@ -19,3 +19,13 @@ export const phoneValidation = yup
   .string()
   .min(11, "Введите корректный номер телефона")
   .required(REQUIRED_MESSAGE);
+
+export const selectValidation = yup
+  .string()
+  .min(11, "Выберите карту")
+  .required(REQUIRED_MESSAGE);
+
+export const sumValidation = yup
+  .string()
+  .min(1, "Введите cумму")
+  .required(REQUIRED_MESSAGE);
