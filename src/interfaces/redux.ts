@@ -32,9 +32,7 @@ export interface IUser {
   };
 }
 
-export interface IActionSaveUser {
+export interface IAction<T> {
   type: string;
-  payload: {
-    user: IUser;
-  };
+  payload: T;
 }

@@ -19,7 +19,7 @@ import { PrimaryButton, TextField } from "../atoms";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { useFormik } from "formik";
-import { userSelector, authSelector } from "../selectors";
+import { userSelector, authSelector, currencySelector } from "../selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../firebase/firebase";
 import { requestUser } from "../actions";
@@ -37,14 +37,6 @@ const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
     {...props}
   />
 ))`
-  label {
-    padding: 0px 15px;
-  }
-
-  p {
-    padding: 0px 15px;
-  }
-
   & .select {
     margin-top: 10px;
   }
@@ -65,6 +57,7 @@ const validationSchema = yup.object({
 const DialogTransaction: FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useSelector(authSelector);
+  const { currency } = useSelector(currencySelector);
   const { products } = useSelector(userSelector);
   const cards = Object.values(products.cards);
   const arrayNumberCard = cards.map((value) => value.number);
@@ -101,6 +94,7 @@ const DialogTransaction: FC = () => {
 
   const onSubmit = async ({ card1, card2, sum }: IFormData) => {
     try {
+      const amount = Number(sum);
       const uid = currentUser?.uid;
       const [id1, id2] = [findCardId(card1), findCardId(card2)];
 
@@ -112,16 +106,45 @@ const DialogTransaction: FC = () => {
         throw new Error(t("There are not enough funds on your card"));
       }
 
+      const cardCurrency1 = products.cards[id1].currency;
+      const cardCurrency2 = products.cards[id2].currency;
+
+      const calculateOfTransfer = (sum: number): number => {
+        const currency1 = currency.find(
+          ({ charCode }) => charCode === cardCurrency1
+        );
+        const currency2 = currency.find(
+          ({ charCode }) => charCode === cardCurrency2
+        );
+
+        // Если переводим в рубли нерубли
+        if (cardCurrency2 === "RUB" && currency1) {
+          return sum * currency1.value;
+        }
+
+        if (!currency2 || !currency1) return sum;
+
+        if (cardCurrency1 === cardCurrency2) {
+          return sum;
+        }
+
+        if (cardCurrency1 === "EUR") {
+          return (sum * currency1.value) / currency2.previous;
+        }
+
+        return (sum * currency1.previous) / currency2.previous;
+      };
+
       db.ref().update({
         [`users/${uid}/products/cards`]: {
           ...products.cards,
           [id1]: {
             ...products.cards[id1],
-            balance: products.cards[id1].balance - Number(sum),
+            balance: products.cards[id1].balance - amount,
           },
           [id2]: {
             ...products.cards[id2],
-            balance: products.cards[id2].balance + Number(sum),
+            balance: products.cards[id2].balance + calculateOfTransfer(amount),
           },
         },
       });
@@ -167,6 +190,7 @@ const DialogTransaction: FC = () => {
             </Typography>
             <Box mt={3}>
               <StyledFormControl
+                variant="outlined"
                 fullWidth
                 error={touched.card1 && Boolean(errors.card1)}
               >
@@ -185,6 +209,7 @@ const DialogTransaction: FC = () => {
               <StyledFormControl
                 fullWidth
                 error={touched.card2 && Boolean(errors.card2)}
+                variant="outlined"
               >
                 <InputLabel>{t("Crediting account number")}</InputLabel>
                 <Select {...getFieldProps("card2")}>

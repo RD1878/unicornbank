@@ -1,5 +1,5 @@
 import { SAVE_USER } from "../actions";
-import { IUser, IActionSaveUser } from "../interfaces/redux";
+import { IAction, IUser } from "../interfaces/redux";
 
 const initialState = {
   firstName: "",
@@ -19,7 +19,7 @@ const initialState = {
 
 export default (
   state: IUser = initialState,
-  { type, payload }: IActionSaveUser
+  { type, payload }: IAction<{ user: IUser }>
 ): IUser => {
   switch (type) {
     case SAVE_USER:

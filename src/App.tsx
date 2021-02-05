@@ -7,7 +7,12 @@ import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, getSessionError, requestUser } from "./actions";
+import {
+  getSession,
+  getSessionError,
+  requestUser,
+  getCurrency,
+} from "./actions";
 import { firebaseAuth } from "./firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { authSelector } from "./selectors";
@@ -29,6 +34,10 @@ const App: FC = () => {
       dispatch(getSession(user));
       dispatch(requestUser());
     });
+  }, []);
+
+  useEffect(() => {
+    dispatch(getCurrency());
   }, []);
 
   useEffect(() => {

@@ -1,6 +1,8 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
+import { useSelector } from "react-redux";
+import { currencySelector } from "./../../selectors/currencySelector";
 import {
   Box,
   Table,
@@ -11,8 +13,6 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-
-const APIURL = "https://www.cbr-xml-daily.ru/daily_json.js";
 
 const StyledContainer = withTheme(styled(TableContainer)`
   background-color: ${(props) => `${props.theme.palette.primary.main}50`};
@@ -31,36 +31,8 @@ const formatDate = (date: string | Date): string => {
   });
 };
 
-interface ISingleCurrency {
-  CharCode: string;
-  [key: string]: number | string;
-}
-
-interface ICurrencyInfo {
-  date: string;
-  rates: ISingleCurrency[];
-}
-
-const filterCurrencies = (data: { string: ISingleCurrency }) => {
-  const requiredCurrencies = ["EUR", "USD", "JPY", "CNY"];
-  return Object.values(data).filter((item) =>
-    requiredCurrencies.includes(item.CharCode)
-  );
-};
-
 export const CurrencyRate: FC = () => {
-  const [currencyRates, setRates] = useState<ICurrencyInfo>(
-    {} as ICurrencyInfo
-  );
-  useEffect(() => {
-    fetch(APIURL)
-      .then((res) => res.json())
-      .then((res) => {
-        const data = { rates: filterCurrencies(res.Valute), date: res.Date };
-        res && setRates(data);
-      })
-      .catch((err) => alert(err));
-  }, []);
+  const { currency } = useSelector(currencySelector);
 
   return (
     <Box mt={7} maxWidth={800}>
@@ -68,7 +40,7 @@ export const CurrencyRate: FC = () => {
         Курсы валют
       </Typography>
       <Typography variant="body1" color="textSecondary">
-        на {formatDate(currencyRates.date || new Date())}
+        на {formatDate(new Date())}
       </Typography>
       <StyledContainer>
         <Table aria-label="simple table">
@@ -78,32 +50,29 @@ export const CurrencyRate: FC = () => {
                 <Typography variant="button">Валюта</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="button">Купить</Typography>
+                <Typography variant="button">Продать</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="button">Продать</Typography>
+                <Typography variant="button">Купить</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {currencyRates.rates &&
-              currencyRates.rates.map((item) => (
-                <TableRow key={item.ID}>
-                  <TableCell component="th" scope="row">
-                    {`${item.Name} (${item.CharCode})`}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography
-                      color={
-                        item.Value > item.Previous ? "secondary" : "textPrimary"
-                      }
-                    >
-                      {item.Value}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">{item.Previous}</TableCell>
-                </TableRow>
-              ))}
+            {currency.map(({ id, value, previous, charCode, name }) => (
+              <TableRow key={id}>
+                <TableCell component="th" scope="row">
+                  {`${name} (${charCode})`}
+                </TableCell>
+                <TableCell align="center">
+                  <Typography
+                    color={value > previous ? "secondary" : "textPrimary"}
+                  >
+                    {value}
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">{previous}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </StyledContainer>
