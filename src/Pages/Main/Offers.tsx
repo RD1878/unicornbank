@@ -23,7 +23,12 @@ interface TabPanelProps {
 const StyledContainer = withTheme(styled(Container)`
   min-width: 200px;
   width: 100%;
+  margin-left: 0;
 `);
+
+const StyledTab = styled(Tab)`
+  font-size: 12px;
+`;
 
 function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
   return (
@@ -92,7 +97,7 @@ export const Offers: FC = () => {
         </Box>
       )}
       {!loaded && <LinearProgress color="secondary" />}
-      <Box mb={7}>
+      <Box mb={2}>
         <Paper>
           <Tabs
             value={offerTab}
@@ -102,9 +107,9 @@ export const Offers: FC = () => {
             variant="fullWidth"
             centered={true}
           >
-            <Tab label="Вклады" />
-            <Tab label="Кредиты" />
-            <Tab label="Для бизнеса" />
+            <StyledTab label="Вклады" />
+            <StyledTab label="Кредиты" />
+            <StyledTab label="Для бизнеса" />
           </Tabs>
         </Paper>
       </Box>

@@ -27,6 +27,8 @@ const TypographyDescription = withTheme(styled(Typography)`
 
 const StyledBox = withTheme(styled(Box)`
   margin-left: 40px;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   ${(props) => props.theme.breakpoints.down("sm")} {
     margin-left: 10px;
@@ -59,7 +61,7 @@ const OperationCard: FC<IOperationCard> = ({ operation }) => {
       <StyledCard>
         <Avatar>{name.slice(0, 1)}</Avatar>
         <StyledBox>
-          <TypographyName variant="button">{name}</TypographyName>
+          <TypographyName variant="button2">{name}</TypographyName>
           <TypographyDescription variant="body1" color="textSecondary">
             {description}
           </TypographyDescription>

@@ -63,7 +63,7 @@ export const CurrencyRate: FC = () => {
   }, []);
 
   return (
-    <Box mt={7} maxWidth={800}>
+    <Box mt={2} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
         Курсы валют
       </Typography>

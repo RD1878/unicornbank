@@ -8,7 +8,11 @@ const LanguageForm: FC = () => {
   };
 
   return (
-    <NativeSelect defaultValue="ru" onChange={handleChange}>
+    <NativeSelect
+      defaultValue="ru"
+      onChange={handleChange}
+      disableUnderline={false}
+    >
       <option value="ru">Русский</option>
       <option value="en">English</option>
       <option value="tat">Татарча</option>

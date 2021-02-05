@@ -1,5 +1,5 @@
 import React, { FC, useState, SyntheticEvent } from "react";
-import { Container, Typography, Snackbar } from "@material-ui/core";
+import { Typography, Snackbar } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
 import { PrimaryButton, PasswordField } from "../../atoms";
@@ -16,7 +16,7 @@ import { SHACKBAR_SHOW_DURATION } from "../../constants";
 const StyledColumn = styled("form")`
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
+  margin-top: 20px;
   max-width: 496px;
 
   & > div {
@@ -38,8 +38,15 @@ const StyledBox = styled(Box)`
     margin-bottom: 60px;
   }
   max-width: 496px;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledPrimaryButton = styled(PrimaryButton)`
+  width: fit-content;
+  align-self: center;
 `;
 
 const validationSchema = yup.object({
@@ -108,8 +115,8 @@ const Settings: FC = () => {
   );
 
   return (
-    <Container>
-      <Box mt={5}>
+    <>
+      <Box mt={2}>
         <Typography variant="h1" color="textPrimary">
           Настройки
         </Typography>
@@ -141,9 +148,9 @@ const Settings: FC = () => {
               отделение банка. Для изменения других данных Вы можете обратиться
               в чат.
             </Typography>
-            <PrimaryButton size="large" type="submit">
-              Сохранить изменения
-            </PrimaryButton>
+            <StyledPrimaryButton size="large" type="submit">
+              Сохранить
+            </StyledPrimaryButton>
           </StyledBox>
         </StyledColumn>
         <Snackbar
@@ -157,7 +164,7 @@ const Settings: FC = () => {
           </Alert>
         </Snackbar>
       </Box>
-    </Container>
+    </>
   );
 };
 
