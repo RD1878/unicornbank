@@ -45,6 +45,7 @@ interface IFormData {
   card1: string;
   card2: string;
   sum: string;
+  calculatedSum: string;
 }
 
 const validationSchema = yup.object({
@@ -86,7 +87,7 @@ const DialogTransaction: FC = () => {
     ) as string;
   };
 
-  const onSubmit = async ({ card1, card2, sum }: IFormData) => {
+  const onSubmit = async ({ card1, card2, sum, calculatedSum }: IFormData) => {
     try {
       const amount = Number(sum);
       const uid = currentUser?.uid;
@@ -100,35 +101,6 @@ const DialogTransaction: FC = () => {
         throw new Error(t("There are not enough funds on your card"));
       }
 
-      const cardCurrency1 = products.cards[id1].currency;
-      const cardCurrency2 = products.cards[id2].currency;
-
-      const calculateOfTransfer = (sum: number): number => {
-        const currency1 = currency.find(
-          ({ charCode }) => charCode === cardCurrency1
-        );
-        const currency2 = currency.find(
-          ({ charCode }) => charCode === cardCurrency2
-        );
-
-        // Если переводим в рубли нерубли
-        if (cardCurrency2 === "RUB" && currency1) {
-          return sum * currency1.value;
-        }
-
-        if (!currency2 || !currency1) return sum;
-
-        if (cardCurrency1 === cardCurrency2) {
-          return sum;
-        }
-
-        if (cardCurrency1 === "EUR" || cardCurrency1 === "USD") {
-          return (sum * currency1.value) / currency2.previous;
-        }
-
-        return (sum * currency1.previous) / currency2.previous;
-      };
-
       db.ref().update({
         [`users/${uid}/products/cards`]: {
           ...products.cards,
@@ -138,7 +110,7 @@ const DialogTransaction: FC = () => {
           },
           [id2]: {
             ...products.cards[id2],
-            balance: products.cards[id2].balance + calculateOfTransfer(amount),
+            balance: products.cards[id2].balance + calculatedSum,
           },
         },
       });
@@ -167,13 +139,46 @@ const DialogTransaction: FC = () => {
       card1: "",
       card2: "",
       sum: "",
+      calculatedSum: "",
     },
     validationSchema,
     onSubmit,
   });
 
   const handleSumChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const calculateOfTransfer = (): number => {
+      const value = Number(event.target.value);
+      const { card1, card2 } = values;
+      const [id1, id2] = [findCardId(card1), findCardId(card2)];
+      const cardCurrency1 = products.cards[id1].currency;
+      const cardCurrency2 = products.cards[id2].currency;
+      const currency1 = currency.find(
+        ({ charCode }) => charCode === cardCurrency1
+      );
+      const currency2 = currency.find(
+        ({ charCode }) => charCode === cardCurrency2
+      );
+
+      // Если переводим в рубли нерубли
+      if (cardCurrency2 === "RUB" && currency1) {
+        return value * currency1.value;
+      }
+
+      if (!currency1 && currency2) return value / currency2.previous;
+      if (!currency1 || !currency2) return value;
+
+      if (cardCurrency1 === cardCurrency2) {
+        return value;
+      }
+
+      if (cardCurrency1 === "EUR" || cardCurrency1 === "USD") {
+        return (value * currency1.value) / currency2.previous;
+      }
+
+      return (value * currency1.previous) / currency2.previous;
+    };
     setFieldValue("sum", event.target.value.replace(NOT_NUMBER_REGEX, ""));
+    setFieldValue("calculatedSum", calculateOfTransfer());
   };
 
   return (
@@ -249,8 +254,8 @@ const DialogTransaction: FC = () => {
                 disabled
                 fullWidth
                 label="Конвертация валюты"
-                name="convert"
-                value="sum"
+                name="calculatedSum"
+                value={values.calculatedSum}
               />
             </Box>
 
