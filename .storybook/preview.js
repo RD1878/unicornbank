@@ -18,7 +18,7 @@ export const globalTypes = {
       items: ["dark", "light"],
     },
   },
-  locale: {
+  /* locale: {
     name: "Locale",
     description: "Internationalization locale",
     defaultValue: "ru",
@@ -30,7 +30,7 @@ export const globalTypes = {
         { value: "tat", title: "TAT" },
       ],
     },
-  },
+  }, */
 };
 
 const withThemeProvider = (Story, context) => {

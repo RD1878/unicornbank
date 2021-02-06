@@ -5,7 +5,7 @@ import { Switch, Snackbar, FormControl, NativeSelect } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
-import { Link } from "react-router-dom";
+import { BrowserRouter, Link } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
@@ -76,11 +76,12 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
       <SidebarHeader></SidebarHeader>
       <LinksContainer>
         <Logo />
-
         {navigation.map((item) => (
-          <Link to={item.path} key={item.path}>
-            <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
-          </Link>
+          <BrowserRouter key={item.path}>
+            <Link to={item.path}>
+              <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
+            </Link>
+          </BrowserRouter>
         ))}
 
         <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
