@@ -4,7 +4,7 @@ import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { Logo, PrimaryLink } from "../atoms";
 import { navigation } from "../routes";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { PHONE_BANK, EMAIL_BANK } from "../constants";
 
 const Container = withTheme(styled("div")`
@@ -49,11 +49,9 @@ const Footer: FC = () => (
       <Logo />
       <LinksContainer>
         {navigation.map((item) => (
-          <BrowserRouter key={item.path}>
-            <Link to={item.path}>
-              <PrimaryLink component="span">{item.name}</PrimaryLink>
-            </Link>
-          </BrowserRouter>
+          <Link to={item.path} key={item.path}>
+            <PrimaryLink component="span">{item.name}</PrimaryLink>
+          </Link>
         ))}
       </LinksContainer>
       <Typography color="textSecondary">

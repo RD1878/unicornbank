@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["src", "src/atoms/.stories.tsx"]
+  "include": ["src", "src/atoms/.stories.tsx", "src/organisms/.tsx"]
 }
