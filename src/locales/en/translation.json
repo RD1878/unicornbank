@@ -29,5 +29,9 @@
   "Transfer money" : "Transfer money", 
   "Cancel" : "Cancel",
   "Accounts for debiting and depositing are the same" : "Accounts for debiting and depositing are the same", 
-  "There are not enough funds on your card": "There are not enough funds on your card"
+  "There are not enough funds on your card": "There are not enough funds on your card",
+  "Payments": "Payments",
+  "Auto payments": "Auto payments",
+  "Loading payments": "Loading payments",
+  "Translation completed successfully!" :"Translation completed successfully!"
 }

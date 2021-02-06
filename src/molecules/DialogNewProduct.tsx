@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, FC, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   Box,
   Dialog,
@@ -9,11 +9,9 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  Snackbar,
   IconButton,
 } from "@material-ui/core";
-import { PrimaryButton } from "../atoms";
-import { Alert } from "@material-ui/lab";
+import { PrimaryButton, PrimaryAlert } from "../atoms";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -27,7 +25,6 @@ import {
   CURRENCIES,
   INN,
   KPP,
-  SHACKBAR_SHOW_DURATION,
   CORRESPONDENTACCOUNT,
 } from "../constants";
 import { requestUser } from "./../actions/user";
@@ -39,6 +36,7 @@ import { getRandomNumber } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
 import { useTranslation } from "react-i18next";
 import { BIK } from "./../constants";
+import { useAlert } from "../utils/useAlert";
 
 const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
   width: fit-content;
@@ -74,7 +72,7 @@ const DialogNewProduct: FC = () => {
   const user = useSelector(userSelector);
   const { currentUser } = useSelector(authSelector);
   const [isOpenDialog, setOpenDialog] = useState(false);
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
@@ -89,11 +87,6 @@ const DialogNewProduct: FC = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-  };
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
   };
 
   const onSubmit = async ({ currency }: IFormRadio) => {
@@ -141,12 +134,11 @@ const DialogNewProduct: FC = () => {
 
       dispatch(requestUser());
       setOpenDialog(false);
-      setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
     } finally {
-      setIsOpenAlert(true);
+      onAlertOpen();
     }
   };
 
@@ -224,16 +216,12 @@ const DialogNewProduct: FC = () => {
           </form>
         </DialogContent>
       </Dialog>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleCloseAlert}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleCloseAlert}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </>
   );
 };

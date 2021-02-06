@@ -29,5 +29,9 @@
   "Transfer money": "Перевести деньги",
   "Cancel" : "Отмена",
   "Accounts for debiting and depositing are the same" : "Счета для списания и пополнения одинаковые", 
-  "There are not enough funds on your card": "На вашей карте не хватает средств"
+  "There are not enough funds on your card": "На вашей карте не хватает средств", 
+  "Payments": "Платежи",
+  "Auto payments": "Автоплатежи",
+  "Loading payments": "Загрузка платежей",
+  "Translation completed successfully!" :"Перевод успешно выполнен!" 
 }

@@ -29,5 +29,9 @@
   "Transfer money": "Ничек күчерергә акча",
   "Cancel" : "Кире кагу",
   "Accounts for debiting and depositing are the same" : "Счетлар өчен исәптән төшерү һәм тулыландыру бер үк төрле",
-  "There are not enough funds on your card": "Сезнең картада акча җитми"
+  "There are not enough funds on your card": "Сезнең картада акча җитми",
+  "Payments": "Түләүләр",
+  "Auto payments": "Автоматические түләүләр",
+  "Loading payments": "Ничек йөкләнеше түләүләр",
+   "Translation completed successfully!" :"Тәрҗемә уңышлы үтәлде!"
 }

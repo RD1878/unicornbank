@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import DialogTransaction from "../../molecules/DialogTransaction";
+import { useTranslation } from "react-i18next";
 
 interface TabPanelProps {
   title: string;
@@ -53,10 +54,11 @@ interface IOffer {
   type: string;
 }
 
-export const Offers: FC = () => {
+export const Payments: FC = () => {
   const [offerTab, setOfferTab] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [offers, setOffers] = useState<IOffer[]>([]);
+  const { t } = useTranslation();
 
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setOfferTab(newVal);
@@ -88,7 +90,7 @@ export const Offers: FC = () => {
       ) : (
         <Box p={8}>
           <Typography variant="h2" color="textPrimary">
-            Загрузка предложений
+            {t("Loading payments")}
           </Typography>
         </Box>
       )}
@@ -103,9 +105,9 @@ export const Offers: FC = () => {
             variant="fullWidth"
             centered={true}
           >
-            <Tab label="Платежи" />
-            <Tab label="Переводы" />
-            <Tab label="Автоплатежи" />
+            <Tab label={t("Payments")} />
+            <Tab label={t("Transaction")} />
+            <Tab label={t("Auto payments")} />
           </Tabs>
         </Paper>
       </Box>

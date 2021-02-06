@@ -2,20 +2,25 @@ import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { db, firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
+import {
+  PrimaryButton,
+  PasswordField,
+  TextField,
+  Logo,
+  PrimaryAlert,
+} from "../../atoms";
 import background from "../../assets/images/1-2.png";
-import { Snackbar, Link, Typography } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Link, Typography } from "@material-ui/core";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/main";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
 import {
   passwordValidation,
   emailValidation,
 } from "../../utils/validationSchemas";
+import { useAlert } from "../../utils/useAlert";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -115,7 +120,7 @@ interface IFormValues {
 }
 
 const Register: FC = () => {
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
@@ -144,7 +149,7 @@ const Register: FC = () => {
           email: email,
         },
       });
-      setIsOpenAlert(true);
+      onAlertOpen();
       setTimeout(() => {
         history.push(ROUTES.AUTH);
       }, 2000);
@@ -163,13 +168,6 @@ const Register: FC = () => {
     validationSchema,
     onSubmit,
   });
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsOpenAlert(false);
-  };
 
   return (
     <BackGround>
@@ -212,16 +210,12 @@ const Register: FC = () => {
           </Link>
         </div>
       </FormAuth>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleClose}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </BackGround>
   );
 };

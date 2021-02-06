@@ -1,4 +1,4 @@
-import React, { FC, useState, SyntheticEvent } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import {
   Dialog,
   DialogContentText,
@@ -7,7 +7,6 @@ import {
   DialogContent,
   Box,
   Typography,
-  Snackbar,
   FormHelperText,
   MenuItem,
   FormControl,
@@ -15,7 +14,7 @@ import {
   Select,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { PrimaryButton, TextField } from "../atoms";
+import { PrimaryAlert, PrimaryButton, TextField } from "../atoms";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { useFormik } from "formik";
@@ -23,11 +22,11 @@ import { userSelector, authSelector, currencySelector } from "../selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../firebase/firebase";
 import { requestUser } from "../actions";
-import { Alert } from "@material-ui/lab";
-import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/main";
 import * as yup from "yup";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
+import { useAlert } from "../utils/useAlert";
+import { NOT_NUMBER_REGEX } from ".././Pages/Profile/Profile";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
   <FormControl
@@ -61,7 +60,6 @@ const DialogTransaction: FC = () => {
   const { products } = useSelector(userSelector);
   const cards = Object.values(products.cards);
   const arrayNumberCard = cards.map((value) => value.number);
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -70,6 +68,7 @@ const DialogTransaction: FC = () => {
       ? `${t("Translation completed successfully!")}`
       : errorMessage;
   const dispatch = useDispatch();
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -77,11 +76,6 @@ const DialogTransaction: FC = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-  };
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
   };
 
   const findCardId = (cardNumber: string): string => {
@@ -128,7 +122,7 @@ const DialogTransaction: FC = () => {
           return sum;
         }
 
-        if (cardCurrency1 === "EUR") {
+        if (cardCurrency1 === "EUR" || cardCurrency1 === "USD") {
           return (sum * currency1.value) / currency2.previous;
         }
 
@@ -151,15 +145,24 @@ const DialogTransaction: FC = () => {
 
       dispatch(requestUser());
       setOpenDialog(false);
+      resetForm();
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
     } finally {
-      setIsOpenAlert(true);
+      onAlertOpen();
     }
   };
 
-  const { errors, handleSubmit, touched, getFieldProps } = useFormik({
+  const {
+    errors,
+    handleSubmit,
+    touched,
+    getFieldProps,
+    resetForm,
+    setFieldValue,
+    values,
+  } = useFormik({
     initialValues: {
       card1: "",
       card2: "",
@@ -168,6 +171,10 @@ const DialogTransaction: FC = () => {
     validationSchema,
     onSubmit,
   });
+
+  const handleSumChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFieldValue("sum", event.target.value.replace(NOT_NUMBER_REGEX, ""));
+  };
 
   return (
     <>
@@ -195,7 +202,10 @@ const DialogTransaction: FC = () => {
                 error={touched.card1 && Boolean(errors.card1)}
               >
                 <InputLabel>{t("Debit account number")}</InputLabel>
-                <Select {...getFieldProps("card1")}>
+                <Select
+                  label={t("Debit account number")}
+                  {...getFieldProps("card1")}
+                >
                   {arrayNumberCard.map((number: string) => (
                     <MenuItem value={number} key={number}>
                       {number}
@@ -212,7 +222,10 @@ const DialogTransaction: FC = () => {
                 variant="outlined"
               >
                 <InputLabel>{t("Crediting account number")}</InputLabel>
-                <Select {...getFieldProps("card2")}>
+                <Select
+                  label={t("Crediting account number")}
+                  {...getFieldProps("card2")}
+                >
                   {arrayNumberCard.map((number: string) => (
                     <MenuItem value={number} key={number}>
                       {number}
@@ -222,13 +235,25 @@ const DialogTransaction: FC = () => {
                 <FormHelperText>{touched.card2 && errors.card2}</FormHelperText>
               </StyledFormControl>
             </Box>
-            <TextField
-              fullWidth
-              label={t("Amount")}
-              {...getFieldProps("sum")}
-              error={touched.sum && Boolean(errors.sum)}
-              helperText={touched.sum && errors.sum}
-            />
+            <Box display="flex" justifyContent="space-between">
+              <TextField
+                fullWidth
+                label={t("Amount")}
+                name="sum"
+                value={values.sum}
+                onChange={handleSumChange}
+                error={touched.sum && Boolean(errors.sum)}
+                helperText={touched.sum && errors.sum}
+              />
+              <TextField
+                disabled
+                fullWidth
+                label="Конвертация валюты"
+                name="convert"
+                value="sum"
+              />
+            </Box>
+
             <DialogActions>
               <Box mt={3} display="flex">
                 <PrimaryButton type="submit" color="primary">
@@ -244,16 +269,12 @@ const DialogTransaction: FC = () => {
           </form>
         </DialogContent>
       </Dialog>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleCloseAlert}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleCloseAlert}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </>
   );
 };

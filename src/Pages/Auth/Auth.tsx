@@ -1,11 +1,16 @@
-import React, { FC, useState, SyntheticEvent } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import { Typography, Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
-import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
+import {
+  TextField,
+  PrimaryButton,
+  PasswordField,
+  Logo,
+  PrimaryAlert,
+} from "../../atoms";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../../actions/user";
@@ -18,7 +23,7 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../utils/validationSchemas";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { useAlert } from "../../utils/useAlert";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -81,11 +86,11 @@ interface IFormValues {
 }
 
 const Auth: FC = () => {
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
-    alertType === "success" ? "Вы успешно зарегистрированы!" : errorMessage;
+    alertType === "success" ? "Вы успешно вошли!" : errorMessage;
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -99,6 +104,7 @@ const Auth: FC = () => {
       }
       const data = await readUserData(uid);
       dispatch(saveUser(data));
+      onAlertOpen();
       history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);
@@ -114,13 +120,6 @@ const Auth: FC = () => {
     validationSchema,
     onSubmit,
   });
-
-  const handleClose = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsOpenAlert(false);
-  };
 
   return (
     <BackGround>
@@ -148,16 +147,12 @@ const Auth: FC = () => {
           Войти
         </PrimaryButton>
       </FormAuth>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleClose}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </BackGround>
   );
 };
