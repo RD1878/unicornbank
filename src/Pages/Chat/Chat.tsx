@@ -10,6 +10,7 @@ import {
   withTheme,
 } from "@material-ui/core";
 import React, { FC, useState, ChangeEvent } from "react";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { PrimaryButton } from "../../atoms";
 
@@ -44,6 +45,7 @@ const StyledForm = withTheme(styled("form")`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px;
 `);
 
 const StyledTextField = withTheme(styled(TextField)`
@@ -60,9 +62,14 @@ const StyledTypography = styled(Typography)`
   align-self: flex-end;
 `;
 
+const StyledListItemAvatar = styled(ListItemAvatar)`
+  margin-top: 4px;
+`;
+
 const Chat: FC = () => {
   const [message, setMessage] = useState("");
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -86,26 +93,44 @@ const Chat: FC = () => {
   return (
     <>
       <Typography variant="h1" color="textPrimary">
-        Чат с поддержкой банка
+        {t("Chat with an employee")}
       </Typography>
       <StyledList>
+        <StyledListItem
+          type="user"
+          backgroundcolor={theme.palette.secondary.main}
+        >
+          <StyledListItemAvatar>
+            <Avatar alt="User" src="#" />
+          </StyledListItemAvatar>
+          <StyledWraper>
+            <ListItemText>
+              <Typography component="span" variant="body1" color="primary">
+                {"Добрый день! Сколько дебетовых карт я могу открыть?"}
+              </Typography>
+            </ListItemText>
+            <StyledTypography variant="overline" color="primary">
+              {formatDate("2021-01-03T03:42:29Z")}
+            </StyledTypography>
+          </StyledWraper>
+        </StyledListItem>
         <StyledListItem
           type="admin"
           backgroundcolor={theme.palette.primary.dark}
         >
-          <ListItemAvatar>
+          <StyledListItemAvatar>
             <Avatar alt="Admin" src="#" />
-          </ListItemAvatar>
+          </StyledListItemAvatar>
           <StyledWraper>
             <ListItemText>
               <Typography component="span" variant="body1" color="textPrimary">
                 {
-                  "Добрый день! Чем я могу Вам помочь? Добрый день! Чем я могу Вам помочь? Добрый день! Чем я могу Вам помочь?"
+                  "Добрый день! Вы можете открыть любое количество карт в трех любых валютах (Рубли РФ, Доллары США, Евро). Годове обслуживание карт бесплатно."
                 }
               </Typography>
             </ListItemText>
             <StyledTypography variant="overline" color="textPrimary">
-              {formatDate("2021-01-03T03:40:25Z")}
+              {formatDate("2021-01-03T03:44:25Z")}
             </StyledTypography>
           </StyledWraper>
         </StyledListItem>
@@ -113,17 +138,17 @@ const Chat: FC = () => {
           type="user"
           backgroundcolor={theme.palette.secondary.main}
         >
-          <ListItemAvatar>
+          <StyledListItemAvatar>
             <Avatar alt="User" src="#" />
-          </ListItemAvatar>
+          </StyledListItemAvatar>
           <StyledWraper>
             <ListItemText>
               <Typography component="span" variant="body1" color="primary">
-                {"Хочу заблокировать свою карту"}
+                {"Спасибо за информацию"}
               </Typography>
             </ListItemText>
             <StyledTypography variant="overline" color="primary">
-              {formatDate("2021-01-03T03:42:29Z")}
+              {formatDate("2021-01-03T03:45:29Z")}
             </StyledTypography>
           </StyledWraper>
         </StyledListItem>
@@ -134,9 +159,9 @@ const Chat: FC = () => {
           value={message}
           onChange={handleChange}
           autoFocus={true}
-          placeholder="Введите сообщение"
+          placeholder={t("Enter message")}
         />
-        <PrimaryButton onClick={handleClick}>Отправить</PrimaryButton>
+        <PrimaryButton onClick={handleClick}>{t("Send")}</PrimaryButton>
       </StyledForm>
     </>
   );
