@@ -4,7 +4,6 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-  useTheme,
   withTheme,
 } from "@material-ui/core";
 import React, { FC } from "react";
@@ -15,13 +14,17 @@ const StyledListItem = withTheme(styled(({ ...props }) => (
 ))`
   width: fit-content;
   max-width: 50%;
-  background-color: ${(props) => props.backgroundcolor};
+  background-color: ${(props) =>
+    props.type === "admin"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.secondary.main};
   border-radius: 20px;
   align-self: ${(props) =>
     props.type === "admin" ? "flex-start" : "flex-end"};
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  margin-bottom: 10px;
   ${(props) => props.theme.breakpoints.down("sm")} {
     max-width: 100%;
     margin-bottom: 15px;
@@ -37,13 +40,26 @@ const StyledWraper = styled("div")`
   flex-direction: column;
 `;
 
-const StyledTypography = styled(Typography)`
+const StyledTypography = withTheme(styled(({ ...props }) => (
+  <Typography {...props} />
+))`
   align-self: flex-end;
-`;
+  color: ${(props) =>
+    props.type === "admin"
+      ? props.theme.palette.textPrimary.main
+      : props.theme.palette.primary.dark};
+`);
 
-const ChatMessage: FC = () => {
-  const theme = useTheme();
+interface IMessage {
+  message: {
+    date: string;
+    type: string;
+    value: string;
+  };
+}
 
+const ChatMessage: FC<IMessage> = ({ message }) => {
+  const { date, type, value } = message;
   const formatDate = (date: string): string => {
     const obj = new Date(date);
     return obj.toLocaleDateString(undefined, {
@@ -56,20 +72,18 @@ const ChatMessage: FC = () => {
   };
 
   return (
-    <StyledListItem type="admin" backgroundcolor={theme.palette.primary.dark}>
+    <StyledListItem type={type}>
       <StyledListItemAvatar>
-        <Avatar alt="Admin" src="#" />
+        <Avatar alt={type} src="#" />
       </StyledListItemAvatar>
       <StyledWraper>
         <ListItemText>
-          <Typography component="span" variant="body1" color="textPrimary">
-            {
-              "Добрый день! Вы можете открыть любое количество карт в трех любых валютах (Рубли РФ, Доллары США, Евро). Годове обслуживание карт бесплатно."
-            }
-          </Typography>
+          <StyledTypography type={type} component="span" variant="body1">
+            {value}
+          </StyledTypography>
         </ListItemText>
-        <StyledTypography variant="overline" color="textPrimary">
-          {formatDate("2021-01-03T03:44:25Z")}
+        <StyledTypography type={type} variant="overline">
+          {formatDate(date)}
         </StyledTypography>
       </StyledWraper>
     </StyledListItem>

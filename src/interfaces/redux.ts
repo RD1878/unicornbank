@@ -36,3 +36,18 @@ export interface IActionSaveUser {
     user: IUser;
   };
 }
+
+export interface IChatMessages {
+  [key: string]: {
+    date: string;
+    type: string;
+    value: string;
+  };
+}
+
+export interface IActionSaveChatMessage {
+  type: string;
+  payload: {
+    chatMessages: IChatMessages;
+  };
+}
