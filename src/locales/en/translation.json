@@ -26,12 +26,13 @@
   "Debit account number" : "Debit account number",
   "Crediting account number" : "Crediting account number",
   "Amount" :"Amount", 
-  "Transfer money" : "Transfer money", 
+  "Transfer money" : "Transfer", 
   "Cancel" : "Cancel",
   "Accounts for debiting and depositing are the same" : "Accounts for debiting and depositing are the same", 
   "There are not enough funds on your card": "There are not enough funds on your card",
   "Payments": "Payments",
   "Auto payments": "Auto payments",
   "Loading payments": "Loading payments",
-  "Translation completed successfully!" :"Translation completed successfully!"
+  "Translation completed successfully!" :"Translation completed successfully!",
+  "The translation will take place at the rate": "The translation will take place at the rate"
 }

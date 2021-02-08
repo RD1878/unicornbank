@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, useEffect } from "react";
 import {
   Dialog,
   DialogContentText,
@@ -61,6 +61,8 @@ const DialogTransaction: FC = () => {
   const { products } = useSelector(userSelector);
   const cards = Object.values(products.cards);
   const arrayNumberCard = cards.map((value) => value.number);
+  const [currentCurrency, setCurrentCurrency] = useState("");
+  const [num, setNum] = useState<number | undefined>(0);
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -146,19 +148,18 @@ const DialogTransaction: FC = () => {
   });
 
   const handleSumChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    const { card1, card2 } = values;
+    const [id1, id2] = [findCardId(card1), findCardId(card2)];
+    const cardCurrency1 = products.cards[id1].currency;
+    const cardCurrency2 = products.cards[id2].currency;
+    const currency1 = currency.find(
+      ({ charCode }) => charCode === cardCurrency1
+    );
+    const currency2 = currency.find(
+      ({ charCode }) => charCode === cardCurrency2
+    );
     const calculateOfTransfer = (): number => {
-      const value = Number(event.target.value);
-      const { card1, card2 } = values;
-      const [id1, id2] = [findCardId(card1), findCardId(card2)];
-      const cardCurrency1 = products.cards[id1].currency;
-      const cardCurrency2 = products.cards[id2].currency;
-      const currency1 = currency.find(
-        ({ charCode }) => charCode === cardCurrency1
-      );
-      const currency2 = currency.find(
-        ({ charCode }) => charCode === cardCurrency2
-      );
-
       // Если переводим в рубли нерубли
       if (cardCurrency2 === "RUB" && currency1) {
         return value * currency1.value;
@@ -180,6 +181,29 @@ const DialogTransaction: FC = () => {
     setFieldValue("sum", event.target.value.replace(NOT_NUMBER_REGEX, ""));
     setFieldValue("calculatedSum", calculateOfTransfer());
   };
+
+  useEffect(() => {
+    const { card1, card2 } = values;
+    const [id1, id2] = [findCardId(card1), findCardId(card2)];
+    const cardCurrency1 = products.cards[id1]?.currency;
+    const cardCurrency2 = products.cards[id2]?.currency;
+
+    const currentValue1 = currency.find(
+      ({ charCode }) => charCode === cardCurrency1
+    );
+    const currentValue2 = currency.find(
+      ({ charCode }) => charCode === cardCurrency2
+    );
+
+    if (currentValue1) {
+      setCurrentCurrency(cardCurrency1);
+      setNum(currentValue1?.previous);
+      return;
+    }
+
+    setCurrentCurrency(cardCurrency2);
+    setNum(currentValue2?.previous);
+  }, [values]);
 
   return (
     <>
@@ -240,7 +264,12 @@ const DialogTransaction: FC = () => {
                 <FormHelperText>{touched.card2 && errors.card2}</FormHelperText>
               </StyledFormControl>
             </Box>
-            <Box display="flex" justifyContent="space-between">
+            <Typography variant="body1">
+              {t("The translation will take place at the rate")} {num}{" "}
+              {currentCurrency}
+            </Typography>
+
+            <Box display="flex" justifyContent="space-between" mt={2}>
               <TextField
                 fullWidth
                 label={t("Amount")}
@@ -258,11 +287,10 @@ const DialogTransaction: FC = () => {
                 value={values.calculatedSum}
               />
             </Box>
-
             <DialogActions>
               <Box mt={3} display="flex">
                 <PrimaryButton type="submit" color="primary">
-                  {t("Transfer money")}
+                  {t("Transfer")}
                 </PrimaryButton>
                 <Box ml={2}>
                   <PrimaryButton color="primary" onClick={handleCloseDialog}>

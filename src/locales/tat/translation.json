@@ -26,12 +26,13 @@
   "Debit account number" : "Исәп-хисап счеты",
   "Crediting account number" : "Исәпләү номеры",
   "Amount" : "Җыелма",
-  "Transfer money": "Ничек күчерергә акча",
+  "Transfer": "Ничек күчерергә акча",
   "Cancel" : "Кире кагу",
   "Accounts for debiting and depositing are the same" : "Счетлар өчен исәптән төшерү һәм тулыландыру бер үк төрле",
   "There are not enough funds on your card": "Сезнең картада акча җитми",
   "Payments": "Түләүләр",
   "Auto payments": "Автоматические түләүләр",
   "Loading payments": "Ничек йөкләнеше түләүләр",
-   "Translation completed successfully!" :"Тәрҗемә уңышлы үтәлде!"
+   "Translation completed successfully!" :"Тәрҗемә уңышлы үтәлде!",
+   "The translation will take place at the rate": "Тәрҗемә курс буенча булачак"
 }
