@@ -52,7 +52,7 @@ const StyledTypography = withTheme(styled(({ ...props }) => (
 
 interface IMessage {
   message: {
-    date: string;
+    date: number;
     type: string;
     value: string;
   };
@@ -60,7 +60,7 @@ interface IMessage {
 
 const ChatMessage: FC<IMessage> = ({ message }) => {
   const { date, type, value } = message;
-  const formatDate = (date: string): string => {
+  const formatDate = (date: number): string => {
     const obj = new Date(date);
     return obj.toLocaleDateString(undefined, {
       day: "numeric",

@@ -21,7 +21,11 @@ export const readUserData = async (uid: string): Promise<IUser> => {
 export const readChatMessagesData = async (
   uid: string
 ): Promise<IChatMessages> => {
-  const result = await db.ref("chatMessages/" + uid).once("value");
+  const result = await db
+    .ref("chatMessages/" + uid)
+    .orderByChild("date")
+    .limitToLast(10)
+    .once("value");
   const data = await result.val();
   return data;
 };

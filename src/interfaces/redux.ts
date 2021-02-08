@@ -39,7 +39,7 @@ export interface IActionSaveUser {
 
 export interface IChatMessages {
   [key: string]: {
-    date: string;
+    date: number;
     type: string;
     value: string;
   };

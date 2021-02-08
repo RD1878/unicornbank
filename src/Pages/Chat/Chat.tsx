@@ -5,8 +5,13 @@ import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
 import { useSelector, useDispatch } from "react-redux";
 import { chatMessagesSelector } from "../../selectors/chatMessagesSelector";
-import { firebaseAuth, readChatMessagesData } from "../../firebase/firebase";
+import {
+  db,
+  firebaseAuth,
+  readChatMessagesData,
+} from "../../firebase/firebase";
 import { saveChatMessages } from "../../actions/chatMessages";
+import { randomId } from "../../utils/randomId";
 
 const StyledList = styled(List)`
   display: flex;
@@ -40,8 +45,29 @@ const Chat: FC = () => {
     setMessage(e.target.value);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setMessage("");
+    try {
+      const uid = firebaseAuth?.currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("Пользователь не найден");
+      }
+
+      await db.ref().update({
+        [`chatMessages/${uid}`]: {
+          ...messages,
+          [randomId()]: {
+            date: Date.now(),
+            type: "user",
+            value: message,
+          },
+        },
+      });
+
+      const updatedChatMessages = await readChatMessagesData(uid);
+      dispatch(saveChatMessages(updatedChatMessages));
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -54,7 +80,7 @@ const Chat: FC = () => {
         const data = await readChatMessagesData(uid);
         dispatch(saveChatMessages(data));
       } catch (error) {
-        /* setErrorMessage(error.message); */
+        /* console.log(error); */
       }
     };
     fetchData();
