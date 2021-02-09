@@ -2,7 +2,7 @@ import { atom } from "recoil";
 import { IUser } from "../../interfaces/user";
 
 const userState = atom<IUser>({
-  key: "userState",
+  key: "userRequestState",
   default: {
     firstName: "",
     lastName: "",

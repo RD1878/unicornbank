@@ -13,7 +13,6 @@ import styled from "styled-components";
 import { Box } from "@material-ui/core";
 import { PrimaryButton, TextField } from "../../atoms";
 import { db, firebaseAuth } from "../../firebase/firebase";
-import { readUserData } from "./../../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -24,8 +23,8 @@ import {
   emailValidation,
   phoneValidation,
 } from "./../../utils/validationSchemas";
-import { useRecoilState } from "recoil";
-import userState from "../../recoilState/recoilAtoms/userAtom";
+import { userSelector } from "../../recoilState/recoilSelectors/userSelector";
+import { useRecoilValue } from "recoil";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 const NOT_NUMBER_REGEX = /\D/g;
@@ -79,7 +78,7 @@ interface IFormValues {
 }
 
 const Profile: FC = () => {
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userSelector);
   const { passport, snils, contact } = user;
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -122,9 +121,6 @@ const Profile: FC = () => {
         },
       });
 
-      const updatedContactInfo = await readUserData(uid);
-
-      setUser(updatedContactInfo);
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);

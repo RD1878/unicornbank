@@ -17,7 +17,6 @@ import {
   ListItemText,
   Collapse,
   useMediaQuery,
-  Button,
   Snackbar,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
@@ -35,7 +34,6 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
-import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
 import { db } from "./../firebase/firebase";
@@ -45,6 +43,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import api from "../api";
+import DialogNewProduct from "../molecules/DialogNewProduct";
 
 interface IWithOpen {
   open: boolean;
@@ -159,13 +158,6 @@ const StyledIconButtonIncrease = withTheme(styled(
   FormatIndentIncreaseRoundedIcon
 )`
   color: ${(props) => props.theme.palette.textPrimary.main};
-`);
-
-const StyledNewProductLink = withTheme(styled(Link)`
-  align-self: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  text-decoration: none;
 `);
 
 const StyledProductsContainer = styled("div")`
@@ -294,17 +286,7 @@ const Sidebar: FC = () => {
               </List>
             </Collapse>
           </List>
-          {open ? (
-            <StyledNewProductLink to="">
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<AddIcon />}
-              >
-                Новый продукт
-              </Button>
-            </StyledNewProductLink>
-          ) : null}
+          {open ? <DialogNewProduct /> : null}
         </StyledProductsContainer>
         <Grid container justify="center">
           <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
