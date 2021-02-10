@@ -13,3 +13,5 @@ export const INN = "562645787591";
 export const BIK = "509339151";
 export const BANKOFRECIPIENT = 'АО "Юни Корн Банк"';
 export const CORRESPONDENTACCOUNT = "36002524538195927000";
+
+export const DRAWER_BANKCHATS_WIDTH = 400;
