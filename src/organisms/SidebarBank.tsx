@@ -3,6 +3,10 @@ import Drawer from "@material-ui/core/Drawer";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { DRAWER_BANKCHATS_WIDTH } from "../constants";
+import { IconButton, Input, Typography } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import Grid from "@material-ui/core/Grid";
+import { ChatsBankList } from "../molecules";
 
 const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
   <Drawer
@@ -17,11 +21,23 @@ const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
     position: absolute;
     top: 0;
     background-color: ${(props) => props.theme.palette.primary.main};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     overflow-y: unset;
     overflow-x: hidden;
+    padding: 40px 20px;
     width: ${(props) => props.width}px;
   }
 `);
+
+const Styledform = styled("form")`
+  margin-top: 20px;
+`;
+
+const StyledGrid = styled(Grid)`
+  margin-top: 20px;
+`;
 
 const SidebarBank: FC = () => {
   return (
@@ -29,7 +45,44 @@ const SidebarBank: FC = () => {
       variant="permanent"
       anchor="left"
       width={DRAWER_BANKCHATS_WIDTH}
-    ></StyledDrawer>
+    >
+      <Typography variant="h2" color="textPrimary">
+        Чаты с клиентами банка
+      </Typography>
+      <Styledform noValidate autoComplete="off">
+        <Input placeholder="Введите данные клиента" />
+        <IconButton type="submit" aria-label="search">
+          <SearchIcon />
+        </IconButton>
+      </Styledform>
+      <StyledGrid container>
+        <Grid container spacing={1}>
+          <Grid item xs={10}>
+            <Typography variant="body2" color="textPrimary">
+              Непрочитанных сообщений:
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" color="secondary">
+              5
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={10}>
+            <Typography variant="body2" color="textPrimary">
+              Активных чатов:
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" color="secondary">
+              31
+            </Typography>
+          </Grid>
+        </Grid>
+      </StyledGrid>
+      <ChatsBankList />
+    </StyledDrawer>
   );
 };
 
