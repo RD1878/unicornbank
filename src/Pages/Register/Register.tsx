@@ -88,6 +88,15 @@ const FormAuth = withTheme(styled("form")`
       }
     }
   }
+  & > div {
+    & > div {
+      margin-bottom: 1.75em;
+
+      ${(props) => props.theme.breakpoints.down("lg")} {
+        margin-bottom: 1em;
+      }
+    }
+  }
 `);
 
 const StyledTextField = withTheme(styled(({ ...props }) => (
@@ -95,11 +104,6 @@ const StyledTextField = withTheme(styled(({ ...props }) => (
 ))`
   &.root {
     width: 100%;
-    margin-bottom: 1.75em;
-
-    ${(props) => props.theme.breakpoints.down("lg")} {
-      margin-bottom: 1em;
-    }
   }
 `);
 
@@ -108,11 +112,6 @@ const StyledPasswordField = withTheme(styled(({ ...props }) => (
 ))`
   &.root {
     width: 100%;
-    margin-bottom: 1.75em;
-
-    ${(props) => props.theme.breakpoints.down("lg")} {
-      margin-bottom: 1em;
-    }
   }
 `);
 
@@ -136,13 +135,13 @@ const Register: FC = () => {
   const onSubmit = async (formData: IFormValues) => {
     try {
       const { password1, password2, email } = formData;
-      if (password1 !== password2) throw new Error("Пароли не совпадают");
+      if (password1 !== password2) throw new Error(t("Passwords do not match"));
       const res = await firebaseAuth.createUserWithEmailAndPassword(
         email,
         password2
       );
       if (!res?.user?.uid) {
-        throw new Error("Ошибка");
+        throw new Error(t("Error"));
       }
       const { uid, email: userEmail } = res.user;
       db.ref("users").child(uid).push().key;
@@ -173,16 +172,16 @@ const Register: FC = () => {
     },
     validationSchema: yup.object({
       email: emailValidation(
-        "Please enter mail in correct format",
-        "Enter mail"
+        t("Please enter mail in correct format"),
+        t("Enter mail")
       ),
       password1: passwordValidation(
-        "Password must contain at least 8 characters",
-        "Create your password"
+        t("Password must contain at least 8 characters"),
+        t("Create your password")
       ),
       password2: passwordValidation(
-        "Password must contain at least 8 characters",
-        "Repeat your password"
+        t("Password must contain at least 8 characters"),
+        t("Repeat your password")
       ),
     }),
     onSubmit,

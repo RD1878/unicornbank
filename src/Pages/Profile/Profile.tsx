@@ -148,12 +148,12 @@ const Profile: FC = () => {
     },
     validationSchema: yup.object({
       email: emailValidation(
-        "Please enter mail in correct format",
-        "Enter mail"
+        t("Please enter mail in correct format"),
+        t("Enter mail")
       ),
       password: phoneValidation(
-        "Please enter valid phone number",
-        REQUIRED_MESSAGE
+        t("Please enter valid phone number"),
+        t(REQUIRED_MESSAGE)
       ),
     }),
     onSubmit,

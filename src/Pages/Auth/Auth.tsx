@@ -110,7 +110,7 @@ const Auth: FC = () => {
       await firebaseAuth.signInWithEmailAndPassword(email, password);
       const uid = firebaseAuth?.currentUser?.uid;
       if (!uid) {
-        throw new Error("Некорректный id");
+        throw new Error(t("Invalid id"));
       }
       const data = await readUserData(uid);
       dispatch(saveUser(data));
