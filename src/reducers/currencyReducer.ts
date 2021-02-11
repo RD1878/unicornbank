@@ -9,14 +9,16 @@ const initialState = {
   errorMessage: "",
 };
 
+export interface ICurrencyChar {
+  charCode: string;
+  value: number;
+  previous: number;
+  id: string;
+  name: string;
+}
+
 export interface ICurrency {
-  currency: {
-    charCode: string;
-    value: number;
-    previous: number;
-    id: string;
-    name: string;
-  }[];
+  currency: ICurrencyChar[];
   errorMessage: string;
 }
 

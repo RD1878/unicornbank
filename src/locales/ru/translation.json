@@ -34,5 +34,6 @@
   "Auto payments": "Автоплатежи",
   "Loading payments": "Загрузка платежей",
   "Translation completed successfully!" :"Перевод успешно выполнен!" ,
-  "The translation will take place at the rate": "Перевод произойдет по курсу"
+  "The translation will take place at the rate": "Перевод произойдет по курсу",
+  "Currency conversion": "Конвертация валюты"
 }

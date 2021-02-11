@@ -27,6 +27,10 @@ import * as yup from "yup";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
 import { useAlert } from "../utils/useAlert";
 import { NOT_NUMBER_REGEX } from ".././Pages/Profile/Profile";
+import {
+  calculateOfTransfer,
+  findCardId,
+} from "../helpers/calculateOfTransfer";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
   <FormControl
@@ -81,19 +85,14 @@ const DialogTransaction: FC = () => {
     setOpenDialog(false);
   };
 
-  const findCardId = (cardNumber: string): string => {
-    const idsArray = Object.keys(products.cards);
-
-    return idsArray.find(
-      (key: string) => products.cards[key].number === cardNumber
-    ) as string;
-  };
-
   const onSubmit = async ({ card1, card2, sum, calculatedSum }: IFormData) => {
     try {
       const amount = Number(sum);
       const uid = currentUser?.uid;
-      const [id1, id2] = [findCardId(card1), findCardId(card2)];
+      const [id1, id2] = [
+        findCardId(card1, products),
+        findCardId(card2, products),
+      ];
 
       if (card1 === card2) {
         throw new Error(t("Accounts for debiting and depositing are the same"));
@@ -120,6 +119,7 @@ const DialogTransaction: FC = () => {
       dispatch(requestUser());
       setOpenDialog(false);
       resetForm();
+      setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
@@ -148,43 +148,37 @@ const DialogTransaction: FC = () => {
   });
 
   const handleSumChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
     const { card1, card2 } = values;
-    const [id1, id2] = [findCardId(card1), findCardId(card2)];
+    const [id1, id2] = [
+      findCardId(card1, products),
+      findCardId(card2, products),
+    ];
     const cardCurrency1 = products.cards[id1].currency;
     const cardCurrency2 = products.cards[id2].currency;
     const currency1 = currency.find(
       ({ charCode }) => charCode === cardCurrency1
     );
+
     const currency2 = currency.find(
       ({ charCode }) => charCode === cardCurrency2
     );
-    const calculateOfTransfer = (): number => {
-      // Если переводим в рубли нерубли
-      if (cardCurrency2 === "RUB" && currency1) {
-        return value * currency1.value;
-      }
-
-      if (!currency1 && currency2) return value / currency2.previous;
-      if (!currency1 || !currency2) return value;
-
-      if (cardCurrency1 === cardCurrency2) {
-        return value;
-      }
-
-      if (cardCurrency1 === "EUR" || cardCurrency1 === "USD") {
-        return (value * currency1.value) / currency2.previous;
-      }
-
-      return (value * currency1.previous) / currency2.previous;
-    };
+    const num = calculateOfTransfer({
+      sum: event.target.value,
+      cardCurrency1,
+      cardCurrency2,
+      currency1,
+      currency2,
+    });
     setFieldValue("sum", event.target.value.replace(NOT_NUMBER_REGEX, ""));
-    setFieldValue("calculatedSum", calculateOfTransfer());
+    setFieldValue("calculatedSum", num);
   };
 
   useEffect(() => {
     const { card1, card2 } = values;
-    const [id1, id2] = [findCardId(card1), findCardId(card2)];
+    const [id1, id2] = [
+      findCardId(card1, products),
+      findCardId(card2, products),
+    ];
     const cardCurrency1 = products.cards[id1]?.currency;
     const cardCurrency2 = products.cards[id2]?.currency;
 
@@ -282,7 +276,7 @@ const DialogTransaction: FC = () => {
               <TextField
                 disabled
                 fullWidth
-                label="Конвертация валюты"
+                label={t("Currency conversion")}
                 name="calculatedSum"
                 value={values.calculatedSum}
               />
