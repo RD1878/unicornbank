@@ -26,11 +26,11 @@ import { TAlert } from "../interfaces/main";
 import * as yup from "yup";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
 import { useAlert } from "../utils/useAlert";
-import { NOT_NUMBER_REGEX } from ".././Pages/Profile/Profile";
 import {
   calculateOfTransfer,
   findCardId,
 } from "../helpers/calculateOfTransfer";
+import { NOT_A_LETTER } from "./../constants";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
   <FormControl
@@ -68,6 +68,7 @@ const DialogTransaction: FC = () => {
   const [currentCurrency, setCurrentCurrency] = useState("");
   const [num, setNum] = useState<number | undefined>(0);
   const [isOpenDialog, setOpenDialog] = useState(false);
+  const [same, setSame] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
@@ -155,6 +156,7 @@ const DialogTransaction: FC = () => {
     ];
     const cardCurrency1 = products.cards[id1].currency;
     const cardCurrency2 = products.cards[id2].currency;
+
     const currency1 = currency.find(
       ({ charCode }) => charCode === cardCurrency1
     );
@@ -169,7 +171,8 @@ const DialogTransaction: FC = () => {
       currency1,
       currency2,
     });
-    setFieldValue("sum", event.target.value.replace(NOT_NUMBER_REGEX, ""));
+
+    setFieldValue("sum", event.target.value.replace(NOT_A_LETTER, ""));
     setFieldValue("calculatedSum", num);
   };
 
@@ -182,12 +185,26 @@ const DialogTransaction: FC = () => {
     const cardCurrency1 = products.cards[id1]?.currency;
     const cardCurrency2 = products.cards[id2]?.currency;
 
+    const bothExist =
+      (cardCurrency1 === "USD" && cardCurrency2 === "EUR") ||
+      (cardCurrency1 === "EUR" && cardCurrency2 === "USD");
+
+    if (cardCurrency1 === cardCurrency2) {
+      setSame(true);
+    } else {
+      setSame(false);
+    }
+
     const currentValue1 = currency.find(
       ({ charCode }) => charCode === cardCurrency1
     );
     const currentValue2 = currency.find(
       ({ charCode }) => charCode === cardCurrency2
     );
+
+    if (bothExist && currentValue1 && currentValue2) {
+      return setNum(currentValue1.previous / currentValue2.value);
+    }
 
     if (currentValue1) {
       setCurrentCurrency(cardCurrency1);
@@ -258,16 +275,24 @@ const DialogTransaction: FC = () => {
                 <FormHelperText>{touched.card2 && errors.card2}</FormHelperText>
               </StyledFormControl>
             </Box>
-            <Typography variant="body1">
-              {t("The translation will take place at the rate")} {num}{" "}
-              {currentCurrency}
-            </Typography>
+            {!same && (
+              <Typography variant="body1">
+                {t("The translation will take place at the rate")} {num}{" "}
+                {currentCurrency}
+              </Typography>
+            )}
 
             <Box display="flex" justifyContent="space-between" mt={2}>
               <TextField
+                disabled={!values.card1 || !values.card2}
                 fullWidth
                 label={t("Amount")}
                 name="sum"
+                type="number"
+                inputProps={{
+                  min: "0",
+                  step: "0.1",
+                }}
                 value={values.sum}
                 onChange={handleSumChange}
                 error={touched.sum && Boolean(errors.sum)}

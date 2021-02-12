@@ -27,5 +27,5 @@ export const selectValidation = yup
 
 export const sumValidation = yup
   .number()
-  .min(1, "Введите cумму")
+  .min(0, "Введите cумму")
   .required(REQUIRED_MESSAGE);
