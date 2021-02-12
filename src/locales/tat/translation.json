@@ -36,8 +36,8 @@
   "Pick a password" : "Парольне уйлагыз",
   "Card" : "Карта",
   "All": "Барча", 
-  "Отделение офиса" :"Офислар",
-  "Банкоматы": "Банкоматы", 
+  "Offices" :"Офислар",
+  "ATM": "Банкоматы", 
   "Password must contain at least 8 characters": "Пароль кимендә 8 символны үз эченә алырга тиеш", 
   "Enter mail" : "Языгыз, почта", 
   "Please enter mail in correct format" : "Языгыз, почта дөрес форматында",
@@ -63,5 +63,7 @@
   "New Product": "Яңа продукт",
   "Passwords do not match": "Серсүзләр туры килми",
   "Invalid id" : "Чын идентификатор",
-  "Data changed successfully!" : "Әлеге мәгълүматлар уңышлы үзгәртелде!"
+  "Data changed successfully!" : "Әлеге мәгълүматлар уңышлы үзгәртелде!",
+  "An error occured, failed to exit!" : "Хата килеп чыкты, чыга алмады!",
+  "Currency rates": "Валюта курслары"
 }

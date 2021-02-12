@@ -36,8 +36,8 @@
   "Pick a password" : "Придумайте пароль",
   "Card" : "Карта", 
   "All": "Все", 
-  "Отделение офиса" :"Отделение офиса",
-  "Банкоматы": "Банкоматы",
+  "Offices"  :"Отделение офиса",
+  "ATM": "Банкоматы",
   "Password must contain at least 8 characters": "Пароль должен содержать в себе миниму 8 символов",
   "Enter mail": "Введите почту", 
   "Please enter mail in correct format" : "Введите почту в правильном формате",
@@ -63,5 +63,7 @@
   "New Product" : "Новый продукт",
   "Passwords do not match": "Пароли не совпадают",
   "Invalid id": "Некорректный id",
-  "Data changed successfully!" : "Данные успешно изменены!"
+  "Data changed successfully!" : "Данные успешно изменены!",
+  "An error occured, failed to exit!" : "Произошла ошибка, не получилось выйти!",
+  "Currency rates": "Курсы валют"
 }

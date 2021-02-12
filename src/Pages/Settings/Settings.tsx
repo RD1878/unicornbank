@@ -103,16 +103,16 @@ const Settings: FC = () => {
       },
       validationSchema: yup.object({
         password: passwordValidation(
-          "Enter the current password",
-          "Enter password"
+          t("Enter the current password"),
+          t("Enter the current password")
         ),
         newPassword1: passwordValidation(
-          "Password must contain at least 8 characters",
-          "Create your password"
+          t("Password must contain at least 8 characters"),
+          t("Create your password")
         ),
         newPassword2: passwordValidation(
-          "Password must contain at least 8 characters",
-          "Repeat your password"
+          t("Password must contain at least 8 characters"),
+          t("Repeat your password")
         ),
       }),
       onSubmit,

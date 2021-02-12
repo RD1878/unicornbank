@@ -25,8 +25,8 @@ interface ICategory {
 
 const CATEGORIES: ICategory[] = [
   { type: "all", name: "All" },
-  { type: "offices", name: "Offices", target: "Отделение офиса" },
-  { type: "atm", name: "ATM", target: "Банкоматы" },
+  { type: "offices", name: "Offices", target: "Offices" },
+  { type: "atm", name: "ATM", target: "ATM" },
 ];
 
 const KAZAN_CENTER = [55.798551, 49.136325];
