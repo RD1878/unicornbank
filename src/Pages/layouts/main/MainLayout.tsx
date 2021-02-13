@@ -53,19 +53,11 @@ const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
               onToggleMobileDrawer={toggleMobileDrawer}
             />
           )}
-          {matches ? (
-            <Sidebar
-              view="mobile"
-              isOpenDrawer={isOpenMobileDrawer}
-              onToggleMobileDrawer={toggleMobileDrawer}
-            />
-          ) : (
-            <Sidebar
-              view="desktop"
-              isOpenDrawer={isOpenMobileDrawer}
-              onToggleMobileDrawer={toggleMobileDrawer}
-            />
-          )}
+          <Sidebar
+            view={matches ? "mobile" : "desktop"}
+            isOpenDrawer={isOpenMobileDrawer}
+            onToggleMobileDrawer={toggleMobileDrawer}
+          />
           <Container>{children}</Container>
           {matches && <SimpleBottomNavigation />}
         </ContentContainer>

@@ -28,12 +28,11 @@ export default (
 ): IUser => {
   switch (type) {
     case SAVE_USER:
-      const newState = {
+      return {
         ...state,
         ...payload.user,
+        isLoading: false,
       };
-      newState.isLoading = false;
-      return newState;
     default:
       return state;
   }

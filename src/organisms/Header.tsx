@@ -10,7 +10,7 @@ import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { useTranslation } from "react-i18next";
-import { LanguageForm } from "../molecules";
+import { LanguageDesktopSelect } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
@@ -84,7 +84,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
         <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
-      <LanguageForm />
+      <LanguageDesktopSelect />
       <IconButton onClick={onToggleTheme}>
         {theme.palette.type === "dark" ? (
           <Brightness4RoundedIcon />

@@ -11,9 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import { withTheme, useTheme } from "@material-ui/core/styles";
 import {
   Box,
-  Avatar,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Collapse,
   useMediaQuery,
@@ -21,7 +19,6 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
-import { CardItem } from "./../atoms";
 import IconButton from "@material-ui/core/IconButton";
 import FormatIndentDecreaseRoundedIcon from "@material-ui/icons/FormatIndentDecreaseRounded";
 import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncreaseRounded";
@@ -32,26 +29,23 @@ import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import { ROUTES } from ".././routes";
 import { Alert } from "@material-ui/lab";
-import { ICard } from "../interfaces/card";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
-import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector, authSelector } from "../selectors";
 import firebase from "firebase";
 import { db } from "./../firebase/firebase";
 import { requestUser } from "../actions";
-import { SHACKBAR_SHOW_DURATION } from "../constants";
+import { DRAWER_WIDTH, SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/tAlert";
 import DialogNewProduct from "../molecules/DialogNewProduct";
+import { CardsList, LanguageMobileSelect } from "../molecules";
+import { AddAvatar, CardIconItem, UserAvatar } from "../atoms";
 
 interface IWithOpen {
   open: boolean;
 }
-
-const DRAWER_WIDTH = 350;
 
 const StyledDrawer = withTheme(styled(({ open, width, ...props }) => (
   <Drawer classes={{ paper: "paper" }} open={open} width={width} {...props} />
@@ -112,12 +106,6 @@ const StyledWrap = styled(Box)<IWithOpen>`
   width: ${(props) => (props.open ? `${DRAWER_WIDTH}px` : "auto")};
 `;
 
-const StyledAvatar = styled(Avatar)`
-  width: 100px;
-  min-height: 100px;
-  margin-bottom: 20px;
-`;
-
 const StyledIcon = withTheme(styled(PersonRoundedIcon)`
   width: 100px;
   min-height: 100px;
@@ -126,20 +114,6 @@ const StyledIcon = withTheme(styled(PersonRoundedIcon)`
   border: 2px solid ${(props) => props.theme.palette.textPrimary.main};
   margin-bottom: 20px;
 `);
-
-const StyledAddAvatar = styled("div")`
-  position: relative;
-  overflow: hidden;
-  & > input {
-    cursor: pointer;
-    position: absolute;
-    opacity: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0px;
-  }
-`;
 
 const StyledLink = withTheme(styled(Link)`
   display: flex;
@@ -157,11 +131,6 @@ const StyledContainer = styled("div")`
   align-items: flex-end;
   margin-bottom: 20px;
   position: relative;
-`;
-
-const StyledCardLink = styled(Link)`
-  text-decoration: none;
-  width: 100%;
 `;
 
 const StyledIconButtonDecrease = withTheme(styled(
@@ -190,7 +159,7 @@ interface IProps {
 
 const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
   const user = useSelector(userSelector);
-  const { firstName, lastName, patronymic, products, avatarUrl } = user;
+  const { firstName, lastName, patronymic, avatarUrl } = user;
   const { currentUser } = useSelector(authSelector);
   const dispatch = useDispatch();
   const [isOpenAlert, setIsOpenAlert] = useState(false);
@@ -198,7 +167,6 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
-  const cards = Object.entries(products.cards);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
@@ -267,14 +235,11 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
               <Grid container justify="center" alignItems="center">
                 <StyledContainer>
                   {avatarUrl ? (
-                    <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
+                    <UserAvatar avatarUrl={avatarUrl} />
                   ) : (
                     <StyledIcon sizes="large" />
                   )}
-                  <StyledAddAvatar>
-                    <input onChange={addPhoto} type="file" />
-                    <AddAPhotoRoundedIcon />
-                  </StyledAddAvatar>
+                  <AddAvatar addPhoto={addPhoto} />
                 </StyledContainer>
                 <Typography variant="h2" color="textPrimary" align="center">
                   {`${firstName} ${patronymic} ${lastName} `}
@@ -294,15 +259,13 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
             <StyledProductsContainer>
               <List>
                 <ListItem button onClick={handleClick}>
-                  <ListItemIcon>
-                    <PaymentRoundedIcon color="secondary" fontSize="large" />
-                  </ListItemIcon>
+                  <CardIconItem />
                   <ListItemText>
-                    {open ? (
+                    {open ?? (
                       <Typography variant="h2" color="textPrimary">
                         Карты
                       </Typography>
-                    ) : null}
+                    )}
                   </ListItemText>
                   {isOpenCards ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
@@ -310,18 +273,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
                   <LinearProgress color="secondary" />
                 ) : (
                   <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      {cards.map(([key, value]: [string, ICard]) => (
-                        <StyledCardLink to={`/card/${key}`} key={key}>
-                          <CardItem
-                            open={open}
-                            number={value.number}
-                            balance={value.balance}
-                            currency={value.currency}
-                          />
-                        </StyledCardLink>
-                      ))}
-                    </List>
+                    <CardsList open={open} />
                   </Collapse>
                 )}
               </List>
@@ -339,16 +291,6 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
               </Tooltip>
             </Grid>
           </StyledWrap>
-          <Snackbar
-            open={isOpenAlert}
-            autoHideDuration={SHACKBAR_SHOW_DURATION}
-            onClose={handleCloseAlert}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          >
-            <Alert severity={alertType} onClose={handleCloseAlert}>
-              {alertMessage}
-            </Alert>
-          </Snackbar>
         </StyledDrawer>
       ) : (
         <StyledDrawer
@@ -359,13 +301,12 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
           <StyledIconButton onClick={onToggleMobileDrawer}>
             <ChevronLeftIcon fontSize="large" />
           </StyledIconButton>
+          <LanguageMobileSelect />
           <Link to={ROUTES.PROFILE}>
             {avatarUrl ? (
-              <StyledAvatar
-                sizes="large"
-                alt="name"
-                src={avatarUrl}
-                onClick={onToggleMobileDrawer}
+              <UserAvatar
+                avatarUrl={avatarUrl}
+                onToggleMobileDrawer={onToggleMobileDrawer}
               />
             ) : (
               <StyledIcon sizes="large" onClick={onToggleMobileDrawer} />
@@ -374,15 +315,10 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
           <Typography variant="h1" color="textPrimary" align="center">
             {`${firstName} ${patronymic} ${lastName} `}
           </Typography>
-          <StyledAddAvatar>
-            <input onChange={addPhoto} type="file" />
-            <AddAPhotoRoundedIcon />
-          </StyledAddAvatar>
+          <AddAvatar addPhoto={addPhoto} />
           <StyledList>
             <ListItem button onClick={handleClick}>
-              <ListItemIcon>
-                <PaymentRoundedIcon color="secondary" fontSize="large" />
-              </ListItemIcon>
+              <CardIconItem />
               <ListItemText>
                 <Typography variant="h1" color="textPrimary">
                   Карты
@@ -391,26 +327,24 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                {cards.map(([key, value]: [string, ICard]) => (
-                  <StyledCardLink
-                    to={`/card/${key}`}
-                    key={key}
-                    onClick={onToggleMobileDrawer}
-                  >
-                    <CardItem
-                      open={isOpenDrawer}
-                      number={value.number}
-                      balance={value.balance}
-                      currency={value.currency}
-                    />
-                  </StyledCardLink>
-                ))}
-              </List>
+              <CardsList
+                open={isOpenDrawer}
+                onToggleMobileDrawer={onToggleMobileDrawer}
+              />
             </Collapse>
           </StyledList>
         </StyledDrawer>
       )}
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={alertType} onClose={handleCloseAlert}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

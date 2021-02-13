@@ -10,7 +10,6 @@ import { Snackbar } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
-import { LanguageForm } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
@@ -22,14 +21,6 @@ const StyledToolbar = withTheme(styled(({ ...props }) => (
     justify-content: space-between;
   }
 `);
-
-const StyledContainer = styled("div")`
-  position: absolute;
-  right: 70px;
-  width: 140px;
-  display: flex;
-  justify-content: space-between;
-`;
 
 interface IHeader {
   onToggleTheme: () => void;
@@ -76,16 +67,13 @@ const ProminentAppBar: FC<IHeader> = ({
         >
           <MenuIcon />
         </IconButton>
-        <StyledContainer>
-          <IconButton onClick={onToggleTheme}>
-            {theme.palette.type === "dark" ? (
-              <Brightness4RoundedIcon />
-            ) : (
-              <Brightness7RoundedIcon />
-            )}
-          </IconButton>
-          <LanguageForm />
-        </StyledContainer>
+        <IconButton onClick={onToggleTheme}>
+          {theme.palette.type === "dark" ? (
+            <Brightness4RoundedIcon />
+          ) : (
+            <Brightness7RoundedIcon />
+          )}
+        </IconButton>
         <IconButton edge="end" onClick={signOut}>
           <ExitToAppRoundedIcon />
         </IconButton>
