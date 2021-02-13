@@ -149,13 +149,17 @@ const DialogTransaction: FC = () => {
   });
 
   const handleSumChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { card1, card2 } = values;
+    setFieldValue("sum", event.target.value.replace(NOT_A_LETTER, ""));
+  };
+
+  useEffect(() => {
+    const { card1, card2, sum } = values;
     const [id1, id2] = [
       findCardId(card1, products),
       findCardId(card2, products),
     ];
-    const cardCurrency1 = products.cards[id1].currency;
-    const cardCurrency2 = products.cards[id2].currency;
+    const cardCurrency1 = products.cards[id1]?.currency;
+    const cardCurrency2 = products.cards[id2]?.currency;
 
     const currency1 = currency.find(
       ({ charCode }) => charCode === cardCurrency1
@@ -164,26 +168,6 @@ const DialogTransaction: FC = () => {
     const currency2 = currency.find(
       ({ charCode }) => charCode === cardCurrency2
     );
-    const num = calculateOfTransfer({
-      sum: event.target.value,
-      cardCurrency1,
-      cardCurrency2,
-      currency1,
-      currency2,
-    });
-
-    setFieldValue("sum", event.target.value.replace(NOT_A_LETTER, ""));
-    setFieldValue("calculatedSum", num);
-  };
-
-  useEffect(() => {
-    const { card1, card2 } = values;
-    const [id1, id2] = [
-      findCardId(card1, products),
-      findCardId(card2, products),
-    ];
-    const cardCurrency1 = products.cards[id1]?.currency;
-    const cardCurrency2 = products.cards[id2]?.currency;
 
     const bothExist =
       (cardCurrency1 === "USD" && cardCurrency2 === "EUR") ||
@@ -208,12 +192,21 @@ const DialogTransaction: FC = () => {
 
     if (currentValue1) {
       setCurrentCurrency(cardCurrency1);
-      setNum(currentValue1?.previous);
+      setNum(currentValue1?.value);
       return;
     }
 
+    const num = calculateOfTransfer({
+      sum,
+      cardCurrency1,
+      cardCurrency2,
+      currency1,
+      currency2,
+    });
+
     setCurrentCurrency(cardCurrency2);
-    setNum(currentValue2?.previous);
+    setNum(currentValue2?.value);
+    setFieldValue("calculatedSum", num);
   }, [values]);
 
   return (
@@ -282,7 +275,7 @@ const DialogTransaction: FC = () => {
               </Typography>
             )}
 
-            <Box display="flex" justifyContent="space-between" mt={2}>
+            <Box display="flex" mt={2} mb={2}>
               <TextField
                 disabled={!values.card1 || !values.card2}
                 fullWidth
@@ -298,14 +291,14 @@ const DialogTransaction: FC = () => {
                 error={touched.sum && Boolean(errors.sum)}
                 helperText={touched.sum && errors.sum}
               />
-              <TextField
-                disabled
-                fullWidth
-                label={t("Currency conversion")}
-                name="calculatedSum"
-                value={values.calculatedSum}
-              />
             </Box>
+            <TextField
+              disabled
+              fullWidth
+              label={t("Currency conversion")}
+              name="calculatedSum"
+              value={values.calculatedSum}
+            />
             <DialogActions>
               <Box mt={3} display="flex">
                 <PrimaryButton type="submit" color="primary">
