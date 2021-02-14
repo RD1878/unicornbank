@@ -37,17 +37,15 @@ export interface IActionSaveUser {
   };
 }
 
-export interface IChatMessages {
-  [key: string]: {
-    date: number;
-    type: string;
-    value: string;
-  };
+export interface IChatMessage {
+  date: number;
+  type: string;
+  value: string;
 }
 
 export interface IActionSaveChatMessage {
   type: string;
   payload: {
-    chatMessages: IChatMessages;
+    chatMessages: IChatMessage[];
   };
 }

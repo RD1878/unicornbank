@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/database";
 import { firebaseConfig } from "./firebaseConfig";
-import { IUser, IChatMessages } from "../interfaces/redux";
+import { IUser, IChatMessage } from "../interfaces/redux";
 
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const firebaseAuth = firebase.auth();
@@ -19,13 +19,14 @@ export const readUserData = async (uid: string): Promise<IUser> => {
 };
 
 export const readChatMessagesData = async (
-  uid: string
-): Promise<IChatMessages> => {
-  const result = await db
+  uid: string,
+  callback: (snapshot: firebase.database.DataSnapshot) => void
+): Promise<IChatMessage[]> => {
+  const result = db
     .ref("chatMessages/" + uid)
-    .orderByChild("date")
     .limitToLast(10)
-    .once("value");
-  const data = await result.val();
-  return data;
+    .on("value", callback);
+  /* const data = await result.val(); */
+  /* return data; */
+  return new Promise(() => result);
 };

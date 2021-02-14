@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
 import { useSelector, useDispatch } from "react-redux";
-import { chatMessagesSelector } from "../../selectors/chatMessagesSelector";
+import { chatMessagesSelector } from "../../selectors";
 import {
   db,
   firebaseAuth,
@@ -12,6 +12,7 @@ import {
 } from "../../firebase/firebase";
 import { saveChatMessages } from "../../actions/chatMessages";
 import { randomId } from "../../utils/randomId";
+import { IChatMessage } from "../../interfaces/redux";
 
 const StyledList = styled(List)`
   display: flex;
@@ -53,20 +54,21 @@ const Chat: FC = () => {
       if (!uid) {
         throw new Error("Пользователь не найден");
       }
-
       await db.ref().update({
-        [`chatMessages/${uid}`]: {
+        [`chatMessages/${uid}`]: [
           ...messages,
-          [randomId()]: {
+          {
             date: Date.now(),
             type: "user",
             value: message,
           },
-        },
+        ],
       });
-
-      const updatedChatMessages = await readChatMessagesData(uid);
-      dispatch(saveChatMessages(updatedChatMessages));
+      readChatMessagesData(uid, (data) => {
+        dispatch(saveChatMessages(data.val()));
+      });
+      /* const updatedChatMessages = await readChatMessagesData(uid); */
+      /* dispatch(saveChatMessages(updatedChatMessages)); */
     } catch (error) {}
   };
 
@@ -77,8 +79,11 @@ const Chat: FC = () => {
         if (!uid) {
           throw new Error("Некорректный id");
         }
-        const data = await readChatMessagesData(uid);
-        dispatch(saveChatMessages(data));
+        /* const data = await readChatMessagesData(uid); */
+        readChatMessagesData(uid, (data) => {
+          dispatch(saveChatMessages(data.val()));
+        });
+        /* dispatch(saveChatMessages(data)); */
       } catch (error) {
         /* console.log(error); */
       }
@@ -86,15 +91,16 @@ const Chat: FC = () => {
     fetchData();
   }, []);
 
-  const arrayMessages = Object.entries(messages);
+  /* const arrayMessages = Object.entries(messages); */
+  /* console.log(messages); */
   return (
     <>
       <Typography variant="h1" color="textPrimary">
         {t("Chat with an employee")}
       </Typography>
       <StyledList>
-        {arrayMessages.map(([key, message]) => (
-          <React.Fragment key={key}>
+        {messages.map((message: IChatMessage) => (
+          <React.Fragment key={`${randomId()}`}>
             <ChatMessage message={message} />
           </React.Fragment>
         ))}
