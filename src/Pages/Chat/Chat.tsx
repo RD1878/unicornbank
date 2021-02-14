@@ -67,32 +67,33 @@ const Chat: FC = () => {
       readChatMessagesData(uid, (data) => {
         dispatch(saveChatMessages(data.val()));
       });
-      /* const updatedChatMessages = await readChatMessagesData(uid); */
-      /* dispatch(saveChatMessages(updatedChatMessages)); */
     } catch (error) {}
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const uid = await firebaseAuth?.currentUser?.uid;
-        if (!uid) {
-          throw new Error("Некорректный id");
-        }
-        /* const data = await readChatMessagesData(uid); */
-        readChatMessagesData(uid, (data) => {
-          dispatch(saveChatMessages(data.val()));
-        });
-        /* dispatch(saveChatMessages(data)); */
-      } catch (error) {
-        /* console.log(error); */
-      }
-    };
-    fetchData();
-  }, []);
+  const useChatMessages = () => {
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const uid = await firebaseAuth?.currentUser?.uid;
+          if (!uid) {
+            throw new Error("Некорректный id");
+          }
+          const ref = await db.ref("chatMessages/" + uid);
+          await ref.limitToLast(10).on("value", (data) => {
+            dispatch(saveChatMessages(data.val()));
+          });
+          return async () => {
+            await ref.off("value");
+          };
+        } catch (error) {}
+      };
+      fetchData();
+    }, []);
+  };
 
-  /* const arrayMessages = Object.entries(messages); */
+  useChatMessages();
   /* console.log(messages); */
+
   return (
     <>
       <Typography variant="h1" color="textPrimary">
