@@ -6,7 +6,7 @@ import { Logo, PrimaryLink } from "../atoms";
 import { navigation } from "../routes";
 import { Link } from "react-router-dom";
 import { PHONE_BANK, EMAIL_BANK } from "../constants";
-
+import { useTranslation } from "react-i18next";
 const Container = withTheme(styled("div")`
   display: flex;
   justify-content: space-between;
@@ -43,28 +43,34 @@ const RightNavigation = withTheme(styled("div")`
   }
 `);
 
-const Footer: FC = () => (
-  <Container>
-    <LeftNavigation>
-      <Logo />
-      <LinksContainer>
-        {navigation.map((item) => (
-          <Link to={item.path} key={item.path}>
-            <PrimaryLink component="span">{item.name}</PrimaryLink>
-          </Link>
-        ))}
-      </LinksContainer>
-      <Typography color="textSecondary">
-        Россия, Республика Татарстан, г.Казань ул. Пушкина, 66
-      </Typography>
-    </LeftNavigation>
+const Footer: FC = () => {
+  const { t } = useTranslation();
 
-    <RightNavigation>
-      <PrimaryLink href={PHONE_BANK}>{PHONE_BANK}</PrimaryLink>
-      <Typography color="textSecondary">Для звонков по России</Typography>
-      <PrimaryLink href={EMAIL_BANK}>{EMAIL_BANK}</PrimaryLink>
-    </RightNavigation>
-  </Container>
-);
+  return (
+    <Container>
+      <LeftNavigation>
+        <Logo />
+        <LinksContainer>
+          {navigation.map((item) => (
+            <Link to={item.path} key={item.path}>
+              <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
+            </Link>
+          ))}
+        </LinksContainer>
+        <Typography color="textSecondary">
+          {t("Russia, Republic of Tatarstan, Kazan, Pushkin st., 66")}
+        </Typography>
+      </LeftNavigation>
+
+      <RightNavigation>
+        <PrimaryLink href={PHONE_BANK}>{PHONE_BANK}</PrimaryLink>
+        <Typography color="textSecondary">
+          {t("For calls within Russia")}
+        </Typography>
+        <PrimaryLink href={EMAIL_BANK}>{EMAIL_BANK}</PrimaryLink>
+      </RightNavigation>
+    </Container>
+  );
+};
 
 export default Footer;

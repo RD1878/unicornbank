@@ -21,12 +21,18 @@ const PasswordField: FC<IPasswordField> = ({
   error,
   helperText,
   fullWidth,
+  classes,
   ...rest
 }: IPasswordField) => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <FormControl fullWidth={fullWidth} error={error} variant="outlined">
+    <FormControl
+      classes={classes}
+      fullWidth={fullWidth}
+      error={error}
+      variant="outlined"
+    >
       <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
       <OutlinedInput
         label={label}

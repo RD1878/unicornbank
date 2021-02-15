@@ -18,13 +18,14 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
 import { TAlert } from "../../interfaces/main";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
 import {
   emailValidation,
   phoneValidation,
 } from "./../../utils/validationSchemas";
 import { userSelector } from "../../recoilState/recoilSelectors/userSelector";
 import { useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 const NOT_NUMBER_REGEX = /\D/g;
@@ -67,11 +68,6 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
-const validationSchema = yup.object({
-  email: emailValidation,
-  phone: phoneValidation,
-});
-
 interface IFormValues {
   phone: string;
   email: string;
@@ -85,6 +81,8 @@ const Profile: FC = () => {
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
+
+  const { t } = useTranslation();
 
   const phoneMask = (phone: string): string => {
     const cleaned = cleanPhone(phone);
@@ -143,7 +141,16 @@ const Profile: FC = () => {
       email: contact.email,
       phone: phoneMask(contact.phone),
     },
-    validationSchema,
+    validationSchema: yup.object({
+      email: emailValidation(
+        t("Please enter mail in correct format"),
+        t("Enter mail")
+      ),
+      password: phoneValidation(
+        t("Please enter valid phone number"),
+        t(REQUIRED_MESSAGE)
+      ),
+    }),
     onSubmit,
   });
   useEffect(() => {
@@ -166,17 +173,17 @@ const Profile: FC = () => {
     <Container>
       <Box mt={5}>
         <Typography variant="h1" color="textPrimary">
-          Профиль
+          {t("Profile")}
         </Typography>
         <FormContact mt={6} onSubmit={handleSubmit}>
           <Typography variant="h2" color="textPrimary">
-            Контакты
+            {t("Contacts")}
           </Typography>
           <StyledRow>
             <PhoneRoundedIcon color="action" fontSize="large" />
             <TextField
               fullWidth
-              label="Телефон"
+              label={t("Phone")}
               id="phone"
               name="phone"
               value={values.phone}
@@ -189,7 +196,7 @@ const Profile: FC = () => {
             <EmailRoundedIcon color="action" fontSize="large" />
             <TextField
               fullWidth
-              label="Email"
+              label={t("Email")}
               id="email"
               {...getFieldProps("email")}
               error={touched.email && Boolean(errors.email)}
@@ -198,13 +205,13 @@ const Profile: FC = () => {
           </StyledRow>
           <Box mt={10}>
             <Typography variant="h2" color="textPrimary">
-              Документы
+              {t("Documents")}
             </Typography>
             <StyledRow>
               <ListAltRoundedIcon color="action" fontSize="large" />
               <TextField
                 fullWidth
-                label="Паспорт"
+                label={t("Passport")}
                 disabled
                 defaultValue={passport}
               />
@@ -213,7 +220,7 @@ const Profile: FC = () => {
               <ListAltRoundedIcon color="action" fontSize="large" />
               <TextField
                 fullWidth
-                label="СНИЛС"
+                label={t("SNILS")}
                 disabled
                 defaultValue={snils}
               />
@@ -221,11 +228,12 @@ const Profile: FC = () => {
           </Box>
           <StyledBox>
             <Typography variant="body2" color="textSecondary">
-              Если у вас поменялось ФИО, обратитесь в отделение банка. Для
-              изменения других данных Вы можете обратиться в чат.
+              {t(
+                "If your name has changed, contact the bank branch. For changes in other data, you can contact the chat."
+              )}
             </Typography>
             <PrimaryButton size="large" type="submit">
-              Сохранить изменения
+              {t("Save changes")}
             </PrimaryButton>
           </StyledBox>
         </FormContact>
