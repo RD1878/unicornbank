@@ -49,3 +49,8 @@ export interface IActionSaveChatMessage {
     chatMessages: IChatMessage[];
   };
 }
+
+export interface IMessages {
+  isLoading: boolean;
+  chatMessages: IChatMessage[];
+}

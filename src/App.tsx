@@ -33,7 +33,6 @@ const App: FC = () => {
       if (!user) {
         dispatch(getSessionError("Нет активной сессии"));
       }
-
       dispatch(getSession(user));
       dispatch(requestUser());
     });

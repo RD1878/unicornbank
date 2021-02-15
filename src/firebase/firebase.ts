@@ -22,11 +22,12 @@ export const readChatMessagesData = async (
   uid: string,
   callback: (snapshot: firebase.database.DataSnapshot) => void
 ): Promise<IChatMessage[]> => {
-  const result = db
-    .ref("chatMessages/" + uid)
-    .limitToLast(10)
-    .on("value", callback);
-  /* const data = await result.val(); */
-  /* return data; */
-  return new Promise(() => result);
+  const promise = new Promise((resolve) => {
+    const result = db
+      .ref("chatMessages/" + uid)
+      .limitToLast(10)
+      .on("value", callback);
+    resolve(result);
+  });
+  return promise.then();
 };

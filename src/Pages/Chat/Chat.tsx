@@ -1,5 +1,18 @@
-import { List, TextField, Typography, withTheme } from "@material-ui/core";
-import React, { FC, useState, ChangeEvent, useEffect } from "react";
+import {
+  LinearProgress,
+  List,
+  Snackbar,
+  TextField,
+  Typography,
+  withTheme,
+} from "@material-ui/core";
+import React, {
+  FC,
+  useState,
+  ChangeEvent,
+  useEffect,
+  SyntheticEvent,
+} from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
@@ -13,6 +26,9 @@ import {
 import { saveChatMessages } from "../../actions/chatMessages";
 import { randomId } from "../../utils/randomId";
 import { IChatMessage } from "../../interfaces/redux";
+import { authSelector } from "../../selectors/authSelector";
+import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { Alert } from "@material-ui/lab";
 
 const StyledList = styled(List)`
   display: flex;
@@ -37,9 +53,10 @@ const StyledTextField = withTheme(styled(TextField)`
 
 const Chat: FC = () => {
   const [message, setMessage] = useState("");
-  const messages = useSelector(chatMessagesSelector);
-  /*   const [errorMessage, setErrorMessage] = useState("");
-   */ const dispatch = useDispatch();
+  const { isLoading, chatMessages } = useSelector(chatMessagesSelector);
+  const { loading } = useSelector(authSelector);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +73,7 @@ const Chat: FC = () => {
       }
       await db.ref().update({
         [`chatMessages/${uid}`]: [
-          ...messages,
+          ...chatMessages,
           {
             date: Date.now(),
             type: "user",
@@ -69,30 +86,36 @@ const Chat: FC = () => {
       });
     } catch (error) {}
   };
-
   const useChatMessages = () => {
     useEffect(() => {
       const fetchData = async () => {
-        try {
-          const uid = await firebaseAuth?.currentUser?.uid;
-          if (!uid) {
-            throw new Error("Некорректный id");
+        if (!loading) {
+          try {
+            const uid = firebaseAuth?.currentUser?.uid;
+            if (!uid) {
+              throw new Error("Некорректный id");
+            }
+            readChatMessagesData(uid, (data) => {
+              dispatch(saveChatMessages(data.val()));
+            });
+          } catch (error) {
+            setIsOpenAlert(true);
           }
-          const ref = await db.ref("chatMessages/" + uid);
-          await ref.limitToLast(10).on("value", (data) => {
-            dispatch(saveChatMessages(data.val()));
-          });
-          return async () => {
-            await ref.off("value");
-          };
-        } catch (error) {}
+        }
       };
       fetchData();
-    }, []);
+      return () => {
+        fetchData();
+      };
+    }, [loading]);
+  };
+
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setIsOpenAlert(false);
   };
 
   useChatMessages();
-  /* console.log(messages); */
 
   return (
     <>
@@ -100,11 +123,15 @@ const Chat: FC = () => {
         {t("Chat with an employee")}
       </Typography>
       <StyledList>
-        {messages.map((message: IChatMessage) => (
-          <React.Fragment key={`${randomId()}`}>
-            <ChatMessage message={message} />
-          </React.Fragment>
-        ))}
+        {isLoading ? (
+          <LinearProgress color="secondary" />
+        ) : (
+          chatMessages.map((message: IChatMessage) => (
+            <React.Fragment key={`${randomId()}`}>
+              <ChatMessage message={message} />
+            </React.Fragment>
+          ))
+        )}
       </StyledList>
       <StyledForm>
         <StyledTextField
@@ -116,6 +143,16 @@ const Chat: FC = () => {
         />
         <PrimaryButton onClick={handleClick}>{t("Send")}</PrimaryButton>
       </StyledForm>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={handleCloseAlert}>
+          Ошибка загрузки данных
+        </Alert>
+      </Snackbar>
     </>
   );
 };

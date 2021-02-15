@@ -1,15 +1,27 @@
 import { SAVE_CHATMESSAGES } from "../actions";
 import { IChatMessage, IActionSaveChatMessage } from "../interfaces/redux";
 
-const initialState: [] = [];
+interface IMessages {
+  isLoading: boolean;
+  chatMessages: IChatMessage[];
+}
+
+const initialState = {
+  isLoading: true,
+  chatMessages: [],
+};
 
 export default (
-  state: IChatMessage[] = initialState,
+  state: IMessages = initialState,
   { type, payload }: IActionSaveChatMessage
-): IChatMessage[] => {
+): IMessages => {
   switch (type) {
     case SAVE_CHATMESSAGES:
-      return payload.chatMessages;
+      return {
+        ...state,
+        isLoading: false,
+        chatMessages: payload.chatMessages,
+      };
     default:
       return state;
   }
