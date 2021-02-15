@@ -22,7 +22,7 @@ import {
 import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
-import { FormControl, NativeSelect, Typography } from "@material-ui/core";
+import { FormControl, Link, NativeSelect, Typography } from "@material-ui/core";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -231,9 +231,9 @@ const Register: FC = () => {
           <PrimaryButton type="submit" size="large">
             {t("Register")}
           </PrimaryButton>
-          {/* <Link href={ROUTES.AUTH} color="textPrimary">
+          <Link href={ROUTES.AUTH} color="textPrimary">
             {t("Do you already have an account?")}
-          </Link> */}
+          </Link>
         </div>
       </FormAuth>
       <PrimaryAlert
