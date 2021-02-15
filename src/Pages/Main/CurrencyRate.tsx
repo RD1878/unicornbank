@@ -13,6 +13,7 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const StyledContainer = withTheme(styled(TableContainer)`
   background-color: ${(props) => `${props.theme.palette.primary.main}50`};
@@ -33,11 +34,12 @@ const formatDate = (date: string | Date): string => {
 
 export const CurrencyRate: FC = () => {
   const { currency } = useSelector(currencySelector);
+  const { t } = useTranslation();
 
   return (
     <Box mt={7} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
-        Курсы валют
+        {t("Currency rates")}
       </Typography>
       <Typography variant="body1" color="textSecondary">
         на {formatDate(new Date())}
