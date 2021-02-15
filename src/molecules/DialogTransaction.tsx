@@ -186,16 +186,6 @@ const DialogTransaction: FC = () => {
       ({ charCode }) => charCode === cardCurrency2
     );
 
-    if (bothExist && currentValue1 && currentValue2) {
-      return setNum(currentValue1.previous / currentValue2.value);
-    }
-
-    if (currentValue1) {
-      setCurrentCurrency(cardCurrency1);
-      setNum(currentValue1?.value);
-      return;
-    }
-
     const num = calculateOfTransfer({
       sum,
       cardCurrency1,
@@ -204,9 +194,21 @@ const DialogTransaction: FC = () => {
       currency2,
     });
 
+    setFieldValue("calculatedSum", num);
+
+    if (bothExist && currentValue1 && currentValue2) {
+      return setNum(currentValue1.previous / currentValue2.value);
+    }
+
+    if (currentValue1) {
+      setCurrentCurrency(cardCurrency1);
+      setNum(currentValue1?.value);
+
+      return;
+    }
+
     setCurrentCurrency(cardCurrency2);
     setNum(currentValue2?.value);
-    setFieldValue("calculatedSum", num);
   }, [values]);
 
   return (
