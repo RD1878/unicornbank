@@ -23,9 +23,9 @@ import {
   emailValidation,
   phoneValidation,
 } from "./../../utils/validationSchemas";
-import { userSelector } from "../../recoilState/recoilSelectors/userSelector";
 import { useRecoilValue } from "recoil";
 import { useTranslation } from "react-i18next";
+import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 const NOT_NUMBER_REGEX = /\D/g;
@@ -74,7 +74,7 @@ interface IFormValues {
 }
 
 const Profile: FC = () => {
-  const user = useRecoilValue(userSelector);
+  const user = useRecoilValue(userState);
   const { passport, snils, contact } = user;
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -146,7 +146,7 @@ const Profile: FC = () => {
         t("Please enter mail in correct format"),
         t("Enter mail")
       ),
-      password: phoneValidation(
+      phone: phoneValidation(
         t("Please enter valid phone number"),
         t(REQUIRED_MESSAGE)
       ),

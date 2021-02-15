@@ -18,7 +18,6 @@ const userState = atom<IUser>({
       cards: [],
     },
   },
-  dangerouslyAllowMutability: true,
 });
 
 export default userState;
