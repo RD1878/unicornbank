@@ -4,6 +4,8 @@ import {
   Snackbar,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
   withTheme,
 } from "@material-ui/core";
 import React, {
@@ -29,11 +31,12 @@ import { IChatMessage } from "../../interfaces/redux";
 import { authSelector } from "../../selectors/authSelector";
 import { SHACKBAR_SHOW_DURATION } from "../../constants";
 import { Alert } from "@material-ui/lab";
+import SendIcon from "@material-ui/icons/Send";
 
 const StyledList = styled(List)`
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 250px);
   overflow-y: auto;
 `;
 
@@ -41,8 +44,8 @@ const StyledForm = withTheme(styled("form")`
   align-self: flex-end;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   margin-top: 20px;
 `);
 
@@ -58,6 +61,8 @@ const Chat: FC = () => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -141,7 +146,9 @@ const Chat: FC = () => {
           autoFocus={true}
           placeholder={t("Enter message")}
         />
-        <PrimaryButton onClick={handleClick}>{t("Send")}</PrimaryButton>
+        <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
+          {matches && t("Send")}
+        </PrimaryButton>
       </StyledForm>
       <Snackbar
         open={isOpenAlert}
