@@ -42,6 +42,7 @@ import { db } from "./../firebase/firebase";
 import { requestUser } from "../actions";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/main";
+import { useTranslation } from "react-i18next";
 import DialogNewProduct from "../molecules/DialogNewProduct";
 
 interface IWithOpen {
@@ -181,6 +182,7 @@ const Sidebar: FC = () => {
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const { t } = useTranslation();
 
   const addPhoto = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     try {
@@ -255,7 +257,7 @@ const Sidebar: FC = () => {
           <StyledLink to={ROUTES.PROFILE}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
-              Редактировать профиль
+              {t("Edit profile")}
             </Typography>
           </StyledLink>
         </StyledProfileInfo>
@@ -268,7 +270,7 @@ const Sidebar: FC = () => {
               <ListItemText>
                 {open ? (
                   <Typography variant="h2" color="textPrimary">
-                    Карты
+                    {t("Cards")}
                   </Typography>
                 ) : null}
               </ListItemText>
@@ -287,7 +289,7 @@ const Sidebar: FC = () => {
           {open ? <DialogNewProduct /> : null}
         </StyledProductsContainer>
         <Grid container justify="center">
-          <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
+          <Tooltip title={open ? `${t("Hide")}` : `${t("Expand")}`} arrow>
             <IconButton onClick={handleDrawerCollapse}>
               {open ? (
                 <StyledIconButtonDecrease />

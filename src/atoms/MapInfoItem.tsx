@@ -4,6 +4,7 @@ import { withTheme } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { IAtm } from "./../Pages/Map/Map";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
+import { useTranslation } from "react-i18next";
 
 interface IMapInfo extends IAtm {
   onClose: () => void;
@@ -36,21 +37,24 @@ const MapInfoItem: FC<IMapInfo> = ({
   timeEnd,
   onClose,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <StyledItem>
       <Typography variant="h2" color="initial">
         {address}
       </Typography>
       <Typography variant="subtitle1" color="initial">
-        {name}
+        {t(name)}
       </Typography>
       <Typography variant="subtitle2" color="initial">
         пн-чт {timeStart} - {timeEnd}
       </Typography>
       <StyledWrap>
-        <CloseRoundedIcon onClick={onClose} color="secondary">
-          Close
-        </CloseRoundedIcon>
+        <CloseRoundedIcon
+          onClick={onClose}
+          color="secondary"
+        ></CloseRoundedIcon>
       </StyledWrap>
     </StyledItem>
   );
