@@ -6,6 +6,7 @@ import ListItem from "@material-ui/core/ListItem";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import Tooltip from "@material-ui/core/Tooltip";
 import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
+import { useTranslation } from "react-i18next";
 
 interface ICardItem {
   number: string;
@@ -31,8 +32,9 @@ const StyledColumn = withTheme(styled("div")<ICardItem>`
 `);
 
 const CardItem: FC<ICardItem> = ({ number, balance, currency, open }) => {
+  const { t } = useTranslation();
   return (
-    <Tooltip title={`Карта ${number}`} arrow>
+    <Tooltip title={`${t("Card")} ${number}`} arrow>
       <StyledListItem button open={open}>
         <StyledColumn open={open}>
           <Typography
@@ -44,7 +46,7 @@ const CardItem: FC<ICardItem> = ({ number, balance, currency, open }) => {
           </Typography>
           {open && (
             <Typography variant="body1" color="textSecondary" align="left">
-              {`Карта ${number}`}
+              {`${t("Card")} ${number}`}
             </Typography>
           )}
         </StyledColumn>

@@ -5,6 +5,7 @@ import { Map as YMap, Placemark, YMaps, ZoomControl } from "react-yandex-maps";
 import { db } from "../../firebase/firebase";
 import MapInfoItem from "./../../atoms/MapInfoItem";
 import { withTheme } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 export interface IAtm {
   id: number;
@@ -23,9 +24,9 @@ interface ICategory {
 }
 
 const CATEGORIES: ICategory[] = [
-  { type: "all", name: "Все" },
-  { type: "offices", name: "Отделения", target: "Отделение офиса" },
-  { type: "atm", name: "Банкоматы", target: "Банкоматы" },
+  { type: "all", name: "All" },
+  { type: "offices", name: "Offices", target: "Offices" },
+  { type: "atm", name: "ATM", target: "ATM" },
 ];
 
 const KAZAN_CENTER = [55.798551, 49.136325];
@@ -96,6 +97,7 @@ const Map: FC = () => {
   const [branches, setBranches] = useState<IAtm[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<IAtm | null>(null);
   const branchesArray = filterBranches(tab, branches);
+  const { t } = useTranslation();
 
   const getMapInfo = () => {
     db.ref("ATM")
@@ -123,7 +125,7 @@ const Map: FC = () => {
       <StyledContainer>
         <Box mt={2}>
           <Typography variant="h1" color="textPrimary">
-            Карта отделений и банкоматов
+            {t("Offices and ATMs")}
           </Typography>
           <Tabs
             value={tab}
@@ -134,7 +136,7 @@ const Map: FC = () => {
             scrollButtons="on"
           >
             {CATEGORIES.map(({ name, type }) => (
-              <StyledTab label={name} key={type} />
+              <StyledTab label={t(name)} key={type} />
             ))}
           </Tabs>
         </Box>

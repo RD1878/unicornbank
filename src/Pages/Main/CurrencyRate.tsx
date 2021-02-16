@@ -11,6 +11,7 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const APIURL = "https://www.cbr-xml-daily.ru/daily_json.js";
 
@@ -49,6 +50,7 @@ const filterCurrencies = (data: { string: ISingleCurrency }) => {
 };
 
 export const CurrencyRate: FC = () => {
+  const { t } = useTranslation();
   const [currencyRates, setRates] = useState<ICurrencyInfo>(
     {} as ICurrencyInfo
   );
@@ -65,7 +67,7 @@ export const CurrencyRate: FC = () => {
   return (
     <Box mt={2} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
-        Курсы валют
+        {t("Currency rates")}
       </Typography>
       <Typography variant="body1" color="textSecondary">
         на {formatDate(currencyRates.date || new Date())}

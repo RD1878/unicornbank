@@ -39,6 +39,7 @@ import { db } from "./../firebase/firebase";
 import { requestUser } from "../actions";
 import { DRAWER_WIDTH, SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/tAlert";
+import { useTranslation } from "react-i18next";
 import DialogNewProduct from "../molecules/DialogNewProduct";
 import { CardsList, LanguageMobileSelect } from "../molecules";
 import { AddAvatar, CardIconItem, UserAvatar } from "../atoms";
@@ -171,6 +172,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const { t } = useTranslation();
   const addPhoto = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     try {
       const file = e?.target?.files?.[0];
@@ -252,7 +254,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
                   color="textSecondary"
                   align="center"
                 >
-                  Редактировать профиль
+                  {t("Edit profile")}
                 </Typography>
               </StyledLink>
             </StyledProfileInfo>
@@ -263,7 +265,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
                   <ListItemText>
                     {open ?? (
                       <Typography variant="h2" color="textPrimary">
-                        Карты
+                        {t("Cards")}
                       </Typography>
                     )}
                   </ListItemText>
@@ -280,7 +282,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
               {open ? <DialogNewProduct /> : null}
             </StyledProductsContainer>
             <Grid container justify="center">
-              <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
+              <Tooltip title={open ? `${t("Hide")}` : `${t("Expand")}`} arrow>
                 <IconButton onClick={handleDrawerCollapse}>
                   {open ? (
                     <StyledIconButtonDecrease />
@@ -321,7 +323,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
               <CardIconItem />
               <ListItemText>
                 <Typography variant="h1" color="textPrimary">
-                  Карты
+                  {t("Cards")}
                 </Typography>
               </ListItemText>
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}

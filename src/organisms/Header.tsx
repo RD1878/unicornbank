@@ -16,20 +16,12 @@ import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
 const Container = withTheme(styled("div")`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   height: 85px;
+  margin: auto;
   padding: 0px 30px 0px 50px;
   background-color: ${(props) => props.theme.palette.primary.dark};
-`);
-
-const SidebarHeader = withTheme(styled("div")`
-  max-width: 300px;
-  display: flex;
-
-  a {
-    margin-left: 40px;
-  }
 `);
 
 const LinksContainer = styled.div`
@@ -68,11 +60,9 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         onClose={handleCloseAlert}
       >
         <Alert severity="error" onClose={handleCloseAlert}>
-          Произошла ошибка, не получилось выйти!
+          {t("An error occured, failed to exit!")}
         </Alert>
       </Snackbar>
-
-      <SidebarHeader></SidebarHeader>
       <LinksContainer>
         <Logo />
 
