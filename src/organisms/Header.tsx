@@ -14,21 +14,17 @@ import i18next from "i18next";
 
 const Container = withTheme(styled("div")`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   height: 85px;
+  margin: auto;
   padding: 0px 30px 0px 50px;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);
 
-const SidebarHeader = withTheme(styled("div")`
-  max-width: 300px;
-  display: flex;
-
-  a {
-    margin-left: 40px;
-  }
-`);
+const StyledFormControl = styled(FormControl)`
+  margin: 0 10px;
+`;
 
 const LinksContainer = styled.div`
   display: flex;
@@ -69,11 +65,9 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         onClose={handleCloseAlert}
       >
         <Alert severity="error" onClose={handleCloseAlert}>
-          Произошла ошибка, не получилось выйти!
+          {t("An error occured, failed to exit!")}
         </Alert>
       </Snackbar>
-
-      <SidebarHeader></SidebarHeader>
       <LinksContainer>
         <Logo />
 
@@ -85,13 +79,13 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
         <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
-      <FormControl>
+      <StyledFormControl>
         <NativeSelect defaultValue="ru" onChange={handleChange}>
           <option value="ru">Русский</option>
           <option value="en">English</option>
           <option value="tat">Татарча</option>
         </NativeSelect>
-      </FormControl>
+      </StyledFormControl>
       <Switch onChange={onToggleTheme} />
     </Container>
   );
