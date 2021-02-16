@@ -8,6 +8,8 @@ export const CURRENCIES = {
 export const PHONE_BANK = "8 800 555-35-35";
 
 export const EMAIL_BANK = "mailto:unicorn@email.com";
+
+export const REQUIRED_MESSAGE = "Required";
 export const KPP = "363354378";
 export const INN = "562645787591";
 export const BIK = "509339151";
