@@ -24,7 +24,11 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../utils/validationSchemas";
-import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
+import {
+  REQUIRED_MESSAGE,
+  SHACKBAR_SHOW_DURATION,
+  ELEMENT,
+} from "../../constants";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
@@ -167,6 +171,7 @@ const Auth: FC = () => {
           {t("Login to your personal account")}
         </Typography>
         <TextField
+          data-test-id={ELEMENT.loginEmail}
           fullWidth
           error={touched.email && Boolean(errors.email)}
           label={t("Email")}
@@ -174,12 +179,17 @@ const Auth: FC = () => {
           helperText={touched.email && errors.email}
         />
         <PasswordField
+          data-test-id={ELEMENT.password}
           label={t("Password")}
           error={touched.password && Boolean(errors.password)}
           {...getFieldProps("password")}
           helperText={touched.password && errors.password}
         />
-        <PrimaryButton size="large" type="submit">
+        <PrimaryButton
+          data-test-id={ELEMENT.loginButton}
+          size="large"
+          type="submit"
+        >
           {t("Login")}
         </PrimaryButton>
         <Link href={ROUTES.REGISTER} color="textPrimary">
