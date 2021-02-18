@@ -6,50 +6,15 @@ import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { firebaseAuth } from "./firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import authState, { IAuthSession } from "./recoilState/recoilAtoms/authAtom";
-import userState from "./recoilState/recoilAtoms/userAtom";
-import api from "./api";
+import { useRecoilValue } from "recoil";
+import authState from "./recoilState/recoilAtoms/authAtom";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
   const { errorMessage } = useRecoilValue(authState);
-  const setSession = useSetRecoilState(authState);
-  const setUserData = useSetRecoilState(userState);
-
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged(async (user) => {
-      try {
-        if (!user) {
-          setSession({
-            loading: false,
-            currentUser: null,
-            errorMessage: "Нет активной сессии",
-          });
-        }
-
-        setSession((prevState: IAuthSession) => ({
-          ...prevState,
-          loading: false,
-          currentUser: user,
-        }));
-
-        const userData = await api.fetchUser();
-
-        setUserData(userData);
-      } catch ({ message }) {
-        setSession({
-          loading: false,
-          currentUser: null,
-          errorMessage: message,
-        });
-      }
-    });
-  }, []);
 
   useEffect(() => {
     if (errorMessage.length) {
