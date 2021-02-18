@@ -75,7 +75,8 @@ interface IFormValues {
 
 const Profile: FC = () => {
   const user = useRecoilValue(userState);
-  const { passport, snils, contact } = user;
+  const { userData } = user;
+  const { passport, snils, contact } = userData;
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -111,7 +112,7 @@ const Profile: FC = () => {
 
       db.ref().update({
         [`users/${uid}`]: {
-          ...user,
+          ...userData,
           contact: {
             email,
             phone: cleanedPhone,

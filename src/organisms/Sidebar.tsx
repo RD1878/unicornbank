@@ -169,7 +169,8 @@ const StyledProductsContainer = styled("div")`
 
 const Sidebar: FC = () => {
   const [user, setUser] = useRecoilState(userState);
-  const { firstName, lastName, patronymic, products, avatarUrl } = user;
+  const { userData } = user;
+  const { firstName, lastName, patronymic, products, avatarUrl } = userData;
   const { currentUser } = useRecoilValue(authState);
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
@@ -204,14 +205,17 @@ const Sidebar: FC = () => {
 
       db.ref().update({
         [`users/${uid}`]: {
-          ...user,
+          ...userData,
           avatarUrl,
         },
       });
 
       const updatedData = await api.fetchUser();
 
-      setUser(updatedData);
+      setUser({
+        ...user,
+        userData: updatedData,
+      });
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);

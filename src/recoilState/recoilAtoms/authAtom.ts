@@ -7,29 +7,22 @@ export interface IAuthSession {
 }
 
 const authEffect: AtomEffect<IAuthSession> = ({ setSelf }) => {
-  firebaseAuth.onAuthStateChanged(async (user) => {
-    try {
-      if (!user) {
-        setSelf({
-          loading: false,
-          currentUser: null,
-          errorMessage: "Нет активной сессии",
-        });
-      }
-
-      setSelf({
-        errorMessage: "",
-        loading: false,
-        currentUser: user,
-      });
-    } catch ({ message }) {
+  const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+    if (!user) {
       setSelf({
         loading: false,
         currentUser: null,
-        errorMessage: message,
+        errorMessage: "Нет активной сессии",
       });
     }
+
+    setSelf({
+      errorMessage: "",
+      loading: false,
+      currentUser: user,
+    });
   });
+  return () => unsubscribe();
 };
 
 const authState = atom<IAuthSession>({

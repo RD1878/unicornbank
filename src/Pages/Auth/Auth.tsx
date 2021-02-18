@@ -103,7 +103,7 @@ const Auth: FC = () => {
       ? `${t("You have successfully signed in to your account!")}`
       : errorMessage;
   const history = useHistory();
-  const setUserData = useSetRecoilState(userState);
+  const setUserState = useSetRecoilState(userState);
 
   const onSubmit = async (formData: IFormValues) => {
     try {
@@ -115,7 +115,10 @@ const Auth: FC = () => {
       }
       const data = await readUserData(uid);
 
-      setUserData(data);
+      setUserState({
+        userData: data,
+        errorMessage: "",
+      });
 
       history.push(ROUTES.MAIN);
     } catch (error) {

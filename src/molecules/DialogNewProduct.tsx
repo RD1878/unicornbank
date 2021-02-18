@@ -70,6 +70,7 @@ interface IFormRadio {
 const DialogNewProduct: FC = () => {
   const { t } = useTranslation();
   const [user, setUser] = useRecoilState(userState);
+  const { userData } = user;
   const { currentUser } = useRecoilValue(authState);
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
@@ -95,7 +96,7 @@ const DialogNewProduct: FC = () => {
 
   const onSubmit = async ({ currency }: IFormRadio) => {
     try {
-      const { lastName, firstName, patronymic } = user;
+      const { lastName, firstName, patronymic } = userData;
       const account = getRandomNumber(20);
       const newCard = {
         currency,
@@ -119,11 +120,11 @@ const DialogNewProduct: FC = () => {
       };
 
       const updateUser = {
-        ...user,
+        ...userData,
         products: {
-          ...user.products,
+          ...userData.products,
           cards: {
-            ...user.products.cards,
+            ...userData.products.cards,
             [randomId()]: newCard,
           },
         },
@@ -136,7 +137,11 @@ const DialogNewProduct: FC = () => {
         [`users/${currentUser.uid}`]: updateUser,
       });
 
-      setUser(updateUser);
+      setUser({
+        ...user,
+        userData: updateUser,
+      });
+
       setOpenDialog(false);
       setAlertType("success");
       resetForm();

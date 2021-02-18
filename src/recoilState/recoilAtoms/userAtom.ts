@@ -3,35 +3,57 @@ import api from "../../api";
 import { firebaseAuth } from "../../firebase/firebase";
 import { IUser } from "../../interfaces/user";
 
-const authEffect: AtomEffect<IUser> = ({ setSelf }) => {
-  firebaseAuth.onAuthStateChanged(async (user) => {
-    if (!user) {
-      return;
-    }
+interface IUserState {
+  userData: IUser;
+  errorMessage: string;
+}
 
-    const userData = await api.fetchUser();
-    setSelf(userData);
-  });
+const initialData = {
+  firstName: "",
+  lastName: "",
+  patronymic: "",
+  avatarUrl: "",
+  passport: "",
+  snils: "",
+  contact: {
+    phone: "",
+    email: "",
+  },
+  products: {
+    cards: [],
+  },
 };
 
-const userState = atom<IUser>({
+const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {
+  const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+    try {
+      if (!user) {
+        return;
+      }
+
+      const userData = await api.fetchUser();
+
+      setSelf({
+        userData,
+        errorMessage: "",
+      });
+    } catch ({ message }) {
+      setSelf({
+        userData: initialData,
+        errorMessage: message,
+      });
+    }
+  });
+  return () => unsubscribe();
+};
+
+const userState = atom<IUserState>({
   key: "userRequestState",
   default: {
-    firstName: "",
-    lastName: "",
-    patronymic: "",
-    avatarUrl: "",
-    passport: "",
-    snils: "",
-    contact: {
-      phone: "",
-      email: "",
-    },
-    products: {
-      cards: [],
-    },
+    userData: initialData,
+    errorMessage: "",
   },
-  effects_UNSTABLE: [authEffect],
+  effects_UNSTABLE: [userEffect],
 });
 
 export default userState;
