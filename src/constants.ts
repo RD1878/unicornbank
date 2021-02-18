@@ -20,4 +20,8 @@ export enum ELEMENT {
   loginEmail = "login-email",
   password = "password",
   loginButton = "login-button",
+  currentPassword = "current-password",
+  newPassword = "new-password",
+  repeatNewPassword = "repeat-new-password",
+  saveChangesButton = "save-changes-button",
 }

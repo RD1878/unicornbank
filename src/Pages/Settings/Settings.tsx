@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/main";
 import { passwordValidation } from "../../utils/validationSchemas";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { ELEMENT, SHACKBAR_SHOW_DURATION } from "../../constants";
 import { ROUTES } from "../../routes";
 import { Link } from "react-router-dom";
 import PrimaryLink from "../../atoms/PrimaryLink";
@@ -130,18 +130,21 @@ const Settings: FC = () => {
         </Typography>
         <StyledColumn onSubmit={handleSubmit}>
           <PasswordField
+            data-test-id={ELEMENT.currentPassword}
             {...getFieldProps("password")}
             label={t("Enter the current password")}
             helperText={touched.password && errors.password}
             error={touched.password && Boolean(errors.password)}
           />
           <PasswordField
+            data-test-id={ELEMENT.newPassword}
             {...getFieldProps("newPassword1")}
             label={t("Enter a new password")}
             error={touched.newPassword1 && Boolean(errors.newPassword1)}
             helperText={touched.newPassword1 && errors.newPassword1}
           />
           <PasswordField
+            data-test-id={ELEMENT.repeatNewPassword}
             {...getFieldProps("newPassword2")}
             label={t("Repeat new password")}
             error={touched.newPassword2 && Boolean(errors.newPassword2)}
@@ -153,7 +156,11 @@ const Settings: FC = () => {
                 "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
               )}
             </Typography>
-            <PrimaryButton size="large" type="submit">
+            <PrimaryButton
+              size="large"
+              type="submit"
+              data-test-id={ELEMENT.saveChangesButton}
+            >
               {t("Save changes")}
             </PrimaryButton>
             <Box mt={5}>
