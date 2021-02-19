@@ -6,5 +6,8 @@
   "shortPassword": "dummy",
   "withoutPasswordErrorMessage": "Придумайте ваш пароль",
   "repeatPasswordErrorMessage": "Повторите ваш пароль",
-  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов"
+  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов",
+  "textCurrentPasswordField": "Введите текущий пароль",
+  "textNewPasswordField": "Введите новый пароль",
+  "textRepeatPasswordField": "Повторите новый пароль"
 }
