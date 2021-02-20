@@ -15,6 +15,7 @@ import { SHACKBAR_SHOW_DURATION } from "../../constants";
 import { ROUTES } from "../../routes";
 import { Link } from "react-router-dom";
 import PrimaryLink from "../../atoms/PrimaryLink";
+import { useTranslation } from "react-i18next";
 
 const StyledColumn = styled("form")`
   display: flex;
@@ -45,12 +46,6 @@ const StyledBox = styled(Box)`
   margin-bottom: 80px;
 `;
 
-const validationSchema = yup.object({
-  password: passwordValidation("Введите текущий пароль"),
-  newPassword1: passwordValidation("Введите новый пароль"),
-  newPassword2: passwordValidation("Повторите новый пароль"),
-});
-
 interface IFormValues {
   password: string;
   newPassword1: string;
@@ -63,6 +58,7 @@ const Settings: FC = () => {
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Пароль успешно изменён!" : errorMessage;
+  const { t } = useTranslation();
 
   const reauthenticate = (password: string) => {
     const user = firebaseAuth.currentUser;
@@ -105,7 +101,20 @@ const Settings: FC = () => {
         newPassword1: "",
         newPassword2: "",
       },
-      validationSchema,
+      validationSchema: yup.object({
+        password: passwordValidation(
+          t("Enter the current password"),
+          t("Enter the current password")
+        ),
+        newPassword1: passwordValidation(
+          t("Password must contain at least 8 characters"),
+          t("Create your password")
+        ),
+        newPassword2: passwordValidation(
+          t("Password must contain at least 8 characters"),
+          t("Repeat your password")
+        ),
+      }),
       onSubmit,
     }
   );
@@ -114,44 +123,44 @@ const Settings: FC = () => {
     <Container>
       <Box mt={5}>
         <Typography variant="h1" color="textPrimary">
-          Настройки
+          {t("Settings")}
         </Typography>
         <Typography variant="subtitle1" color="textPrimary">
-          Смена пароля
+          {t("A change of the pin code")}
         </Typography>
         <StyledColumn onSubmit={handleSubmit}>
           <PasswordField
             {...getFieldProps("password")}
-            label="Введите текущий пароль"
+            label={t("Enter the current password")}
             helperText={touched.password && errors.password}
             error={touched.password && Boolean(errors.password)}
           />
           <PasswordField
             {...getFieldProps("newPassword1")}
-            label="Введите новый пароль"
+            label={t("Enter a new password")}
             error={touched.newPassword1 && Boolean(errors.newPassword1)}
             helperText={touched.newPassword1 && errors.newPassword1}
           />
           <PasswordField
             {...getFieldProps("newPassword2")}
-            label="Повторите новый пароль"
+            label={t("Repeat new password")}
             error={touched.newPassword2 && Boolean(errors.newPassword2)}
             helperText={touched.newPassword2 && errors.newPassword2}
           />
           <StyledBox>
             <Typography variant="body2" color="textSecondary">
-              Если у вас поменялся логин или вы забыли пароль, обратитесь в
-              отделение банка. Для изменения других данных Вы можете обратиться
-              в чат.
+              {t(
+                "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
+              )}
             </Typography>
             <PrimaryButton size="large" type="submit">
-              Сохранить изменения
+              {t("Save changes")}
             </PrimaryButton>
             <Box mt={5}>
               <PrimaryButton size="large">
                 <Link to={ROUTES.OFFICES}>
                   <PrimaryLink component="span">
-                    Карта отделений и банкоматов
+                    {t("Offices and ATMs")}
                   </PrimaryLink>
                 </Link>
               </PrimaryButton>

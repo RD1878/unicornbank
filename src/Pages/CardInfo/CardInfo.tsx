@@ -4,13 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import { CardInfoTitle, DialogActionCard } from "../../molecules";
 import { PrimaryButton } from "../../atoms";
 import TransactionsList from "../../organisms/TransactionsList";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/operation";
 import { IOperationItem } from "../../interfaces/operationItem";
 import { useTranslation } from "react-i18next";
 import { LinearProgress } from "@material-ui/core";
 import { IParams } from "../../interfaces/params";
+import { useRecoilValue } from "recoil";
+import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const phrases = {
   block: "Block",
@@ -45,7 +45,9 @@ const StyledWraper = styled("div")`
 const CardInfo: FC = () => {
   const { id } = useParams<IParams>();
   const { t } = useTranslation();
-  const { isLoading, products } = useSelector(userSelector);
+  const { userData } = useRecoilValue(userState);
+  const { isLoading, products } = userData;
+
   const currentCard = products.cards[id];
 
   const operations = currentCard?.operations ?? {};

@@ -36,13 +36,15 @@ import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import AddAPhotoRoundedIcon from "@material-ui/icons/AddAPhotoRounded";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { userSelector, authSelector } from "../selectors";
 import firebase from "firebase";
 import { db } from "./../firebase/firebase";
-import { requestUser } from "../actions";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/tAlert";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
+import authState from "../recoilState/recoilAtoms/authAtom";
+import api from "../api";
+import { useTranslation } from "react-i18next";
 import DialogNewProduct from "../molecules/DialogNewProduct";
 
 interface IWithOpen {
@@ -172,10 +174,17 @@ const StyledProductsContainer = styled("div")`
 `;
 
 const Sidebar: FC = () => {
-  const user = useSelector(userSelector);
-  const { firstName, lastName, patronymic, products, avatarUrl } = user;
-  const { currentUser } = useSelector(authSelector);
-  const dispatch = useDispatch();
+  const [user, setUser] = useRecoilState(userState);
+  const { userData } = user;
+  const {
+    firstName,
+    lastName,
+    patronymic,
+    products,
+    avatarUrl,
+    isLoading,
+  } = userData;
+  const { currentUser } = useRecoilValue(authState);
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -187,6 +196,7 @@ const Sidebar: FC = () => {
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const { t } = useTranslation();
 
   const addPhoto = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     try {
@@ -208,12 +218,17 @@ const Sidebar: FC = () => {
 
       db.ref().update({
         [`users/${uid}`]: {
-          ...user,
+          ...userData,
           avatarUrl,
         },
       });
 
-      dispatch(requestUser());
+      const updatedData = await api.fetchUser();
+
+      setUser({
+        ...user,
+        userData: updatedData,
+      });
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);
@@ -261,7 +276,7 @@ const Sidebar: FC = () => {
           <StyledLink to={ROUTES.PROFILE}>
             <CreateRoundedIcon color="action" />
             <Typography variant="body1" color="textSecondary" align="center">
-              Редактировать профиль
+              {t("Edit profile")}
             </Typography>
           </StyledLink>
         </StyledProfileInfo>
@@ -274,13 +289,13 @@ const Sidebar: FC = () => {
               <ListItemText>
                 {open && (
                   <Typography variant="h2" color="textPrimary">
-                    Карты
+                    {t("Cards")}
                   </Typography>
                 )}
               </ListItemText>
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            {user.isLoading ? (
+            {isLoading ? (
               <LinearProgress color="secondary" />
             ) : (
               <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
@@ -304,7 +319,7 @@ const Sidebar: FC = () => {
           {open ? <DialogNewProduct /> : null}
         </StyledProductsContainer>
         <Grid container justify="center">
-          <Tooltip title={open ? "Свернуть" : "Развернуть"} arrow>
+          <Tooltip title={open ? `${t("Hide")}` : `${t("Expand")}`} arrow>
             <IconButton onClick={handleDrawerCollapse}>
               {open ? (
                 <StyledIconButtonDecrease />

@@ -3,10 +3,9 @@ import React, { FC, useState } from "react";
 import { PrimaryButton } from "../atoms";
 import styled from "styled-components";
 import { db, firebaseAuth, readUserData } from "../firebase/firebase";
-import { useDispatch, useSelector } from "react-redux";
-import { saveUser } from "../actions";
-import { userSelector } from "../selectors";
 import { useTranslation } from "react-i18next";
+import { useRecoilState } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
 
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: 265px;
@@ -29,7 +28,8 @@ const DialogActionCard: FC<IProps> = ({
   const { t } = useTranslation();
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [isConfirm, setConfirm] = useState(false);
-  const dispatch = useDispatch();
+  const [user, setUser] = useRecoilState(userState);
+  const { userData } = user;
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -51,7 +51,10 @@ const DialogActionCard: FC<IProps> = ({
       isActive: false,
     });
     const updatedCardStatus = await readUserData(uid);
-    dispatch(saveUser(updatedCardStatus));
+    setUser({
+      ...user,
+      userData: updatedCardStatus,
+    });
   };
   const {
     products: {
@@ -59,7 +62,7 @@ const DialogActionCard: FC<IProps> = ({
         [`${idCurrentCard}`]: { isActive },
       },
     },
-  } = useSelector(userSelector);
+  } = userData;
   return (
     <>
       <StyledPrimaryButton onClick={handleOpenDialog} disabled={!isActive}>

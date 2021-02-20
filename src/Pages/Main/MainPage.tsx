@@ -1,13 +1,14 @@
 import React, { FC } from "react";
 import { Offers, CurrencyRate } from "../../molecules";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../selectors";
 import { IOperation } from "../../interfaces/operation";
 import TransactionsList from "../../organisms/TransactionsList";
 import { ICard } from "../../interfaces/card";
+import { useRecoilValue } from "recoil";
+import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const MainPage: FC = () => {
-  const { products } = useSelector(userSelector);
+  const { userData } = useRecoilValue(userState);
+  const { products } = userData;
   const cards = Object.entries(products.cards);
   const allCardsTransactions = cards.reduce(
     (

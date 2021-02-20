@@ -35,21 +35,14 @@ export interface IUser {
         requisites: {
           account: number;
           bankOfRecipient: string;
-          bik: number;
-          correspondentAccount: number;
-          inn: number;
-          kpp: number;
+          bik: string;
+          correspondentAccount: string;
+          inn: string;
+          kpp: string;
           purposeOfPayment: string;
           recipient: string;
         };
       };
     };
-  };
-}
-
-export interface IActionSaveUser {
-  type: string;
-  payload: {
-    user: IUser;
   };
 }

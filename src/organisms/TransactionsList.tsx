@@ -6,8 +6,8 @@ import { Box, Tabs, Tab, Typography, LinearProgress } from "@material-ui/core";
 import { IOperation } from "../interfaces/operation";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { userSelector } from "../selectors/userSelector";
-import { useSelector } from "react-redux";
+import { useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -53,7 +53,8 @@ interface IProps {
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
-  const user = useSelector(userSelector);
+  /*  const user = useSelector(userSelector); */
+  const { userData } = useRecoilValue(userState);
   const [tab, setTab] = useState(0);
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setTab(newVal);
@@ -97,7 +98,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
       <Typography variant="h2" color="textPrimary">
         {t("Last operations")}
       </Typography>
-      {user.isLoading ? (
+      {userData.isLoading ? (
         <LinearProgress color="secondary" />
       ) : (
         <StyledOperationsContainer>

@@ -1,6 +1,4 @@
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../selectors";
 import styled from "styled-components";
 import {
   Table,
@@ -13,6 +11,8 @@ import { PrimaryButton } from "../../atoms";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IParams } from "../../interfaces/params";
+import { useRecoilValue } from "recoil";
+import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -36,7 +36,8 @@ const StyledPrimaryButton = styled(PrimaryButton)`
 const Requisites: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<IParams>();
-  const { products } = useSelector(userSelector);
+  const { userData } = useRecoilValue(userState);
+  const { products } = userData;
   const currentCard = products.cards[id];
   const { number, requisites } = currentCard;
   const {

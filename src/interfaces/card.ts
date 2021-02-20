@@ -22,11 +22,11 @@ interface ICard {
     recipient: string;
     account: number;
     purposeOfPayment: string;
-    bik: number;
+    bik: string;
     bankOfRecipient: string;
-    correspondentAccount: number;
-    inn: number;
-    kpp: number;
+    correspondentAccount: string;
+    inn: string;
+    kpp: string;
   };
 }
 
