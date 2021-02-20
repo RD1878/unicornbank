@@ -12,8 +12,6 @@ import {
   PrimaryAlert,
 } from "../../atoms";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -24,7 +22,9 @@ import {
   passwordValidation,
 } from "../../utils/validationSchemas";
 import { useAlert } from "../../utils/useAlert";
-import { REQUIRED_MESSAGE } from "../../constants";
+import { useSetRecoilState } from "recoil";
+import userState from "./../../recoilState/recoilAtoms/userAtom";
+import { REQUIRED_MESSAGE, ELEMENT } from "../../constants";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
@@ -102,7 +102,7 @@ const Auth: FC = () => {
       ? `${t("You have successfully signed in to your account!")}`
       : errorMessage;
   const history = useHistory();
-  const dispatch = useDispatch();
+  const setUserState = useSetRecoilState(userState);
 
   const onSubmit = async (formData: IFormValues) => {
     try {
@@ -113,8 +113,14 @@ const Auth: FC = () => {
         throw new Error(t("Invalid id"));
       }
       const data = await readUserData(uid);
-      dispatch(saveUser(data));
+
+      setUserState({
+        userData: data,
+        errorMessage: "",
+      });
+
       onAlertOpen();
+
       history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);
@@ -161,6 +167,7 @@ const Auth: FC = () => {
           {t("Login to your personal account")}
         </Typography>
         <TextField
+          data-test-id={ELEMENT.loginEmail}
           fullWidth
           error={touched.email && Boolean(errors.email)}
           label={t("Email")}
@@ -168,12 +175,17 @@ const Auth: FC = () => {
           helperText={touched.email && errors.email}
         />
         <PasswordField
+          data-test-id={ELEMENT.password}
           label={t("Password")}
           error={touched.password && Boolean(errors.password)}
           {...getFieldProps("password")}
           helperText={touched.password && errors.password}
         />
-        <PrimaryButton size="large" type="submit">
+        <PrimaryButton
+          data-test-id={ELEMENT.loginButton}
+          size="large"
+          type="submit"
+        >
           {t("Login")}
         </PrimaryButton>
         <Link href={ROUTES.REGISTER} color="textPrimary">

@@ -2,43 +2,23 @@ import React, { FC, useState, useEffect } from "react";
 import { Snackbar, ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import { Auth, MainPage, Profile, Register, Settings, Map } from "./Pages";
-import { useDispatch, useSelector } from "react-redux";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import {
-  getSession,
-  getSessionError,
-  requestUser,
-  getCurrency,
-} from "./actions";
-import { firebaseAuth } from "./firebase/firebase";
 import { Alert } from "@material-ui/lab";
-import { authSelector } from "./selectors";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
+import { useRecoilValue } from "recoil";
+import authState from "./recoilState/recoilAtoms/authAtom";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
-  const { errorMessage } = useSelector(authSelector);
+  const { errorMessage } = useRecoilValue(authState);
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        dispatch(getSessionError("Нет активной сессии"));
-      }
-
-      dispatch(getSession(user));
-      dispatch(requestUser());
-    });
-  }, []);
-
-  useEffect(() => {
-    dispatch(getCurrency());
-  }, []);
+  // useEffect(() => {
+  //   getCurrency();
+  // }, []);
 
   useEffect(() => {
     if (errorMessage.length) {

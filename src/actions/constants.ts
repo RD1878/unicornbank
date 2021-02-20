@@ -1,8 +1,0 @@
-export const REQUEST_USER = "REQUEST_USER";
-export const SAVE_USER = "SAVE_USER";
-
-export const GET_SESSION = "GET_SESSION";
-export const GET_SESSION_ERROR = "GET_SESSION_ERROR";
-export const GET_CURRENCY = "GET_CURRENCY";
-export const SAVE_CURRENCY = "SAVE_CURRENCY";
-export const GET_CURRENCY_ERROR = "GET_CURRENCY_ERROR";
