@@ -1,8 +1,7 @@
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../selectors";
 import styled from "styled-components";
 import {
+  LinearProgress,
   Table,
   TableBody,
   TableCell,
@@ -12,6 +11,16 @@ import {
 import { PrimaryButton } from "../../atoms";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { IParams } from "../../interfaces/params";
+import { useRecoilValue } from "recoil";
+import userState from "../../recoilState/recoilAtoms/userAtom";
+import {
+  BANKOFRECIPIENT,
+  BIK,
+  CORRESPONDENTACCOUNT,
+  INN,
+  KPP,
+} from "../../constants";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -23,15 +32,8 @@ const StyledTable = styled(Table)`
   margin-top: 30px;
 `;
 
-const StyledTableCellValue = styled(TableCell)`
+const StyledTableCell = styled(TableCell)`
   font-weight: 600;
-  display: flex;
-  font-size: 16px;
-`;
-
-const StyledTableCellName = styled(TableCell)`
-  font-size: 14px;
-  padding-bottom: 5px;
 `;
 
 const StyledPrimaryButton = styled(PrimaryButton)`
@@ -41,20 +43,12 @@ const StyledPrimaryButton = styled(PrimaryButton)`
 
 const Requisites: FC = () => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const { products } = useSelector(userSelector);
+  const { id } = useParams<IParams>();
+  const { userData } = useRecoilValue(userState);
+  const { products, isLoading } = userData;
   const currentCard = products.cards[id];
-  const { number, requisites } = currentCard;
-  const {
-    account,
-    bankOfRecipient,
-    bik,
-    correspondentAccount,
-    inn,
-    kpp,
-    purposeOfPayment,
-    recipient,
-  } = requisites;
+  const { number, requisites } = currentCard ?? {};
+  const { account, purposeOfPayment, recipient } = requisites ?? {};
 
   const rows = [
     {
@@ -71,42 +65,48 @@ const Requisites: FC = () => {
     },
     {
       name: "БИК",
-      value: bik,
+      value: BIK,
     },
     {
       name: "Банк получатель",
-      value: bankOfRecipient,
+      value: BANKOFRECIPIENT,
     },
     {
       name: "Корреспондентский счет",
-      value: correspondentAccount,
+      value: CORRESPONDENTACCOUNT,
     },
     {
       name: "ИНН",
-      value: inn,
+      value: INN,
     },
     {
       name: "КПП",
-      value: kpp,
+      value: KPP,
     },
   ];
 
   return (
     <StyledWraper>
-      <Typography variant="h1" color="textPrimary">
-        {`${t("Details for transfer")}\u00A0\u00A0${number.slice(-7)}`}
-      </Typography>
-      <StyledTable>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <StyledTableCellName>{row.name}</StyledTableCellName>
-              <StyledTableCellValue>{row.value}</StyledTableCellValue>
-            </TableRow>
-          ))}
-        </TableBody>
-      </StyledTable>
-      <StyledPrimaryButton>{t("Send email")}</StyledPrimaryButton>
+      {isLoading ? (
+        <LinearProgress color="secondary" />
+      ) : (
+        <>
+          <Typography variant="h1" color="textPrimary">
+            {`${t("Details for transfer")}\u00A0\u00A0${number.slice(-7)}`}
+          </Typography>
+          <StyledTable>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell>{row.name}</TableCell>
+                  <StyledTableCell align="right">{row.value}</StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </StyledTable>
+          <StyledPrimaryButton>{t("Send email")}</StyledPrimaryButton>
+        </>
+      )}
     </StyledWraper>
   );
 };

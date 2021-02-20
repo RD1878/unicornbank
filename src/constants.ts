@@ -17,3 +17,9 @@ export const BANKOFRECIPIENT = 'АО "Юни Корн Банк"';
 export const CORRESPONDENTACCOUNT = "36002524538195927000";
 
 export const DRAWER_WIDTH = 350;
+
+export enum ELEMENT {
+  loginEmail = "login-email",
+  password = "password",
+  loginButton = "login-button",
+}

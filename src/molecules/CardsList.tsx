@@ -1,11 +1,11 @@
 import { List } from "@material-ui/core";
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CardItem } from "../atoms";
 import { ICard } from "../interfaces/card";
-import { userSelector } from "../selectors";
+import { useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
 
 const StyledCardLink = styled(Link)`
   text-decoration: none;
@@ -18,8 +18,9 @@ interface IProps {
 }
 
 const CardsList: FC<IProps> = ({ open, onToggleMobileDrawer }) => {
-  const user = useSelector(userSelector);
-  const { products } = user;
+  const { userData } = useRecoilValue(userState);
+  const { products } = userData;
+
   const cards = Object.entries(products.cards);
 
   return (

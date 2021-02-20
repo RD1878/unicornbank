@@ -32,13 +32,14 @@ import { Alert } from "@material-ui/lab";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { userSelector, authSelector } from "../selectors";
 import firebase from "firebase";
 import { db } from "./../firebase/firebase";
-import { requestUser } from "../actions";
 import { DRAWER_WIDTH, SHACKBAR_SHOW_DURATION } from "../constants";
 import { TAlert } from "../interfaces/tAlert";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
+import authState from "../recoilState/recoilAtoms/authAtom";
+import api from "../api";
 import { useTranslation } from "react-i18next";
 import DialogNewProduct from "../molecules/DialogNewProduct";
 import { CardsList, LanguageMobileSelect } from "../molecules";
@@ -159,10 +160,10 @@ interface IProps {
 }
 
 const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
-  const user = useSelector(userSelector);
-  const { firstName, lastName, patronymic, avatarUrl } = user;
-  const { currentUser } = useSelector(authSelector);
-  const dispatch = useDispatch();
+  const [user, setUser] = useRecoilState(userState);
+  const { userData } = user;
+  const { firstName, lastName, patronymic, isLoading, avatarUrl } = userData;
+  const { currentUser } = useRecoilValue(authState);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -193,12 +194,17 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
 
       db.ref().update({
         [`users/${uid}`]: {
-          ...user,
+          ...userData,
           avatarUrl,
         },
       });
 
-      dispatch(requestUser());
+      const updatedData = await api.fetchUser();
+
+      setUser({
+        ...user,
+        userData: updatedData,
+      });
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);
@@ -271,7 +277,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
                   </ListItemText>
                   {isOpenCards ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                {user.isLoading ? (
+                {isLoading ? (
                   <LinearProgress color="secondary" />
                 ) : (
                   <Collapse in={isOpenCards} timeout="auto" unmountOnExit>

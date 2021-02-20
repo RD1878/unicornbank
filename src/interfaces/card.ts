@@ -3,15 +3,30 @@ interface ICard {
   currency: string;
   balance: number;
   isActive: boolean;
+  validity: {
+    month: number;
+    year: number;
+  };
+  operations: {
+    [key: string]: {
+      amount: number;
+      category: string;
+      currency: string;
+      date: string;
+      description: string;
+      name: string;
+      type: string;
+    };
+  };
   requisites: {
     recipient: string;
     account: number;
     purposeOfPayment: string;
-    bik: number;
+    bik: string;
     bankOfRecipient: string;
-    correspondentAccount: number;
-    inn: number;
-    kpp: number;
+    correspondentAccount: string;
+    inn: string;
+    kpp: string;
   };
 }
 
