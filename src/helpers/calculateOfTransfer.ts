@@ -1,5 +1,5 @@
-import { IUserProducts } from "../interfaces/redux";
-import { ICurrencyChar } from "../reducers/currencyReducer";
+import { IUserProducts } from "../interfaces/user";
+import { ICurrencyChar } from "../recoilState/recoilAtoms/currencyAtom";
 
 export const findCardId = (
   cardNumber: string,

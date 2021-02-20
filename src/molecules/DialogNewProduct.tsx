@@ -93,6 +93,7 @@ const DialogNewProduct: FC = () => {
       const account = getRandomNumber(20);
       const newCard = {
         currency,
+        id: getRandomNumber(4),
         balance: 0,
         isActive: true,
         number: `**** **** **** ${getRandomNumber(4)}`,
@@ -126,7 +127,7 @@ const DialogNewProduct: FC = () => {
         return;
       }
 
-      db.ref().update({
+      await db.ref().update({
         [`users/${currentUser.uid}`]: updateUser,
       });
 

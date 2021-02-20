@@ -18,10 +18,7 @@ import { PrimaryAlert, PrimaryButton, TextField } from "../atoms";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { useFormik } from "formik";
-import { userSelector, authSelector, currencySelector } from "../selectors";
-import { useDispatch, useSelector } from "react-redux";
 import { db } from "../firebase/firebase";
-import { requestUser } from "../actions";
 import { TAlert } from "../interfaces/main";
 import * as yup from "yup";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
@@ -31,6 +28,10 @@ import {
   findCardId,
 } from "../helpers/calculateOfTransfer";
 import { NOT_A_LETTER } from "./../constants";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
+import authState from "../recoilState/recoilAtoms/authAtom";
+import currencyState from "../recoilState/recoilAtoms/currencyAtom";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
   <FormControl
@@ -60,9 +61,11 @@ const validationSchema = yup.object({
 
 const DialogTransaction: FC = () => {
   const { t } = useTranslation();
-  const { currentUser } = useSelector(authSelector);
-  const { currency } = useSelector(currencySelector);
-  const { products } = useSelector(userSelector);
+  const { currentUser } = useRecoilValue(authState);
+  const [user, setUser] = useRecoilState(userState);
+  const { userData } = user;
+  const { products } = userData;
+  const { currency } = useRecoilValue(currencyState);
   const cards = Object.values(products.cards);
   const arrayNumberCard = cards.map((value) => value.number);
   const [currentCurrency, setCurrentCurrency] = useState("");
@@ -75,7 +78,6 @@ const DialogTransaction: FC = () => {
     alertType === "success"
       ? `${t("Translation completed successfully!")}`
       : errorMessage;
-  const dispatch = useDispatch();
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
 
   const handleOpenDialog = () => {
@@ -103,7 +105,7 @@ const DialogTransaction: FC = () => {
         throw new Error(t("There are not enough funds on your card"));
       }
 
-      db.ref().update({
+      const updateCurrency = await db.ref().update({
         [`users/${uid}/products/cards`]: {
           ...products.cards,
           [id1]: {
@@ -117,7 +119,11 @@ const DialogTransaction: FC = () => {
         },
       });
 
-      dispatch(requestUser());
+      setUser({
+        ...user,
+        userData: updateCurrency,
+      });
+
       setOpenDialog(false);
       resetForm();
       setAlertType("success");
