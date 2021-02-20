@@ -1,11 +1,18 @@
-import { Dialog, DialogActions, DialogTitle } from "@material-ui/core";
-import React, { FC, useState } from "react";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Snackbar,
+} from "@material-ui/core";
+import React, { FC, SyntheticEvent, useState } from "react";
 import { PrimaryButton } from "../atoms";
 import styled from "styled-components";
 import { db, firebaseAuth, readUserData } from "../firebase/firebase";
 import { useTranslation } from "react-i18next";
 import { useRecoilState } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
+import { Alert } from "@material-ui/lab";
+import { SHACKBAR_SHOW_DURATION } from "../constants";
 
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: 265px;
@@ -33,29 +40,39 @@ const DialogActionCard: FC<IProps> = ({
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setConfirm(false);
   };
-  const handleConfirm = () => {
-    handleDisactiveCard();
-    setConfirm(true);
+
+  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") return;
+    setIsOpenAlert(false);
   };
-  const handleDisactiveCard = async (): Promise<void> => {
-    const uid = firebaseAuth?.currentUser?.uid;
-    if (!uid) {
-      throw new Error("Пользователь не найден");
+
+  const handleConfirm = async (): Promise<void> => {
+    try {
+      const uid = firebaseAuth?.currentUser?.uid;
+      if (!uid) {
+        throw new Error("Пользователь не найден");
+      }
+      await db.ref(`users/${uid}/products/cards/${idCurrentCard}`).update({
+        isActive: false,
+      });
+      const updatedCardStatus = await readUserData(uid);
+      setUser({
+        ...user,
+        userData: updatedCardStatus,
+      });
+      setConfirm(true);
+    } catch (error) {
+      setErrorMessage(error.message);
     }
-    await db.ref(`users/${uid}/products/cards/${idCurrentCard}`).update({
-      isActive: false,
-    });
-    const updatedCardStatus = await readUserData(uid);
-    setUser({
-      ...user,
-      userData: updatedCardStatus,
-    });
   };
+
   const {
     products: {
       cards: {
@@ -63,6 +80,7 @@ const DialogActionCard: FC<IProps> = ({
       },
     },
   } = userData;
+
   return (
     <>
       <StyledPrimaryButton onClick={handleOpenDialog} disabled={!isActive}>
@@ -88,6 +106,16 @@ const DialogActionCard: FC<IProps> = ({
           ) : null}
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={SHACKBAR_SHOW_DURATION}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={handleCloseAlert}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

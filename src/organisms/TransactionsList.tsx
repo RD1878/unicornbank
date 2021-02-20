@@ -53,7 +53,6 @@ interface IProps {
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
-  /*  const user = useSelector(userSelector); */
   const { userData } = useRecoilValue(userState);
   const [tab, setTab] = useState(0);
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {

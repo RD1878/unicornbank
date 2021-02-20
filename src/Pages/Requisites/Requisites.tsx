@@ -13,6 +13,13 @@ import { useTranslation } from "react-i18next";
 import { IParams } from "../../interfaces/params";
 import { useRecoilValue } from "recoil";
 import userState from "../../recoilState/recoilAtoms/userAtom";
+import {
+  BANKOFRECIPIENT,
+  BIK,
+  CORRESPONDENTACCOUNT,
+  INN,
+  KPP,
+} from "../../constants";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -40,16 +47,7 @@ const Requisites: FC = () => {
   const { products } = userData;
   const currentCard = products.cards[id];
   const { number, requisites } = currentCard;
-  const {
-    account,
-    bankOfRecipient,
-    bik,
-    correspondentAccount,
-    inn,
-    kpp,
-    purposeOfPayment,
-    recipient,
-  } = requisites;
+  const { account, purposeOfPayment, recipient } = requisites;
 
   const rows = [
     {
@@ -66,23 +64,23 @@ const Requisites: FC = () => {
     },
     {
       name: "БИК",
-      value: bik,
+      value: BIK,
     },
     {
       name: "Банк получатель",
-      value: bankOfRecipient,
+      value: BANKOFRECIPIENT,
     },
     {
       name: "Корреспондентский счет",
-      value: correspondentAccount,
+      value: CORRESPONDENTACCOUNT,
     },
     {
       name: "ИНН",
-      value: inn,
+      value: INN,
     },
     {
       name: "КПП",
-      value: kpp,
+      value: KPP,
     },
   ];
 
