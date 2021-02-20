@@ -17,11 +17,8 @@ import { Alert } from "@material-ui/lab";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
-import { useSelector } from "react-redux";
-import { userSelector } from "../selectors/userSelector";
 import { useFormik } from "formik";
 import { db } from "../firebase/firebase";
-import { useDispatch } from "react-redux";
 import {
   BANKOFRECIPIENT,
   CURRENCIES,
@@ -30,8 +27,6 @@ import {
   SHACKBAR_SHOW_DURATION,
   CORRESPONDENTACCOUNT,
 } from "../constants";
-import { requestUser } from "./../actions/user";
-import { authSelector } from "../selectors";
 import { TAlert } from "../interfaces/main";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
@@ -39,6 +34,9 @@ import { getRandomNumber } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
 import { useTranslation } from "react-i18next";
 import { BIK } from "./../constants";
+import { useRecoilState, useRecoilValue } from "recoil";
+import authState from "../recoilState/recoilAtoms/authAtom";
+import userState from "../recoilState/recoilAtoms/userAtom";
 
 const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
   width: fit-content;
@@ -71,8 +69,9 @@ interface IFormRadio {
 
 const DialogNewProduct: FC = () => {
   const { t } = useTranslation();
-  const user = useSelector(userSelector);
-  const { currentUser } = useSelector(authSelector);
+  const [user, setUser] = useRecoilState(userState);
+  const { userData } = user;
+  const { currentUser } = useRecoilValue(authState);
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -81,7 +80,6 @@ const DialogNewProduct: FC = () => {
     alertType === "success"
       ? `${t("The card has been successfully issued!")}`
       : errorMessage;
-  const dispatch = useDispatch();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -98,12 +96,12 @@ const DialogNewProduct: FC = () => {
 
   const onSubmit = async ({ currency }: IFormRadio) => {
     try {
-      const { lastName, firstName, patronymic } = user;
+      const { lastName, firstName, patronymic } = userData;
       const account = getRandomNumber(20);
       const newCard = {
         currency,
         balance: 0,
-        isActive: false,
+        isActive: true,
         number: `**** **** **** ${getRandomNumber(4)}`,
         requisites: {
           account,
@@ -122,11 +120,11 @@ const DialogNewProduct: FC = () => {
       };
 
       const updateUser = {
-        ...user,
+        ...userData,
         products: {
-          ...user.products,
+          ...userData.products,
           cards: {
-            ...user.products.cards,
+            ...userData.products.cards,
             [randomId()]: newCard,
           },
         },
@@ -139,9 +137,14 @@ const DialogNewProduct: FC = () => {
         [`users/${currentUser.uid}`]: updateUser,
       });
 
-      dispatch(requestUser());
+      setUser({
+        ...user,
+        userData: updateUser,
+      });
+
       setOpenDialog(false);
       setAlertType("success");
+      resetForm();
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
@@ -150,7 +153,7 @@ const DialogNewProduct: FC = () => {
     }
   };
 
-  const { handleSubmit, getFieldProps } = useFormik({
+  const { handleSubmit, getFieldProps, resetForm } = useFormik({
     initialValues: {
       product: t("Debit card"),
       currency: "RUB",

@@ -13,8 +13,6 @@ import { Alert } from "@material-ui/lab";
 import background from "../../assets/images/1-2.png";
 import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -24,6 +22,8 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../utils/validationSchemas";
+import { useSetRecoilState } from "recoil";
+import userState from "./../../recoilState/recoilAtoms/userAtom";
 import {
   REQUIRED_MESSAGE,
   SHACKBAR_SHOW_DURATION,
@@ -106,7 +106,7 @@ const Auth: FC = () => {
       ? `${t("You have successfully signed in to your account!")}`
       : errorMessage;
   const history = useHistory();
-  const dispatch = useDispatch();
+  const setUserState = useSetRecoilState(userState);
 
   const onSubmit = async (formData: IFormValues) => {
     try {
@@ -117,7 +117,12 @@ const Auth: FC = () => {
         throw new Error(t("Invalid id"));
       }
       const data = await readUserData(uid);
-      dispatch(saveUser(data));
+
+      setUserState({
+        userData: data,
+        errorMessage: "",
+      });
+
       history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);
