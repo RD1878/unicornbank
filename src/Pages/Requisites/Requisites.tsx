@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import {
+  LinearProgress,
   Table,
   TableBody,
   TableCell,
@@ -44,10 +45,10 @@ const Requisites: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<IParams>();
   const { userData } = useRecoilValue(userState);
-  const { products } = userData;
+  const { products, isLoading } = userData;
   const currentCard = products.cards[id];
-  const { number, requisites } = currentCard;
-  const { account, purposeOfPayment, recipient } = requisites;
+  const { number, requisites } = currentCard ?? {};
+  const { account, purposeOfPayment, recipient } = requisites ?? {};
 
   const rows = [
     {
@@ -86,20 +87,26 @@ const Requisites: FC = () => {
 
   return (
     <StyledWraper>
-      <Typography variant="h1" color="textPrimary">
-        {`${t("Details for transfer")}\u00A0\u00A0${number.slice(-7)}`}
-      </Typography>
-      <StyledTable>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell>{row.name}</TableCell>
-              <StyledTableCell align="right">{row.value}</StyledTableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </StyledTable>
-      <StyledPrimaryButton>{t("Send email")}</StyledPrimaryButton>
+      {isLoading ? (
+        <LinearProgress color="secondary" />
+      ) : (
+        <>
+          <Typography variant="h1" color="textPrimary">
+            {`${t("Details for transfer")}\u00A0\u00A0${number.slice(-7)}`}
+          </Typography>
+          <StyledTable>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell>{row.name}</TableCell>
+                  <StyledTableCell align="right">{row.value}</StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </StyledTable>
+          <StyledPrimaryButton>{t("Send email")}</StyledPrimaryButton>
+        </>
+      )}
     </StyledWraper>
   );
 };
