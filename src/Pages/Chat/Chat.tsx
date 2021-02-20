@@ -86,9 +86,6 @@ const Chat: FC = () => {
           },
         ],
       });
-      readChatMessagesData(uid, (data) => {
-        dispatch(saveChatMessages(data.val()));
-      });
     } catch (error) {}
   };
   const useChatMessages = () => {
