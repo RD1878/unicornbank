@@ -18,11 +18,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
-import {
-  db,
-  firebaseAuth,
-  readChatMessagesData,
-} from "../../firebase/firebase";
+import { db, firebaseAuth } from "../../firebase/firebase";
 import { randomId } from "../../utils/randomId";
 import { IChatMessage } from "../../interfaces/chatMessage";
 import { SHACKBAR_SHOW_DURATION } from "../../constants";
@@ -98,13 +94,16 @@ const Chat: FC = () => {
             if (!uid) {
               throw new Error("Некорректный id");
             }
-            readChatMessagesData(uid, (data) => {
-              setChatMessages({
-                chatMessages: data.val(),
-                isLoading: false,
-                errorMessage: "",
+            await db
+              .ref("chatMessages/" + uid)
+              .limitToLast(10)
+              .on("value", (data) => {
+                setChatMessages({
+                  chatMessages: data.val(),
+                  isLoading: false,
+                  errorMessage: "",
+                });
               });
-            });
           } catch (error) {
             setIsOpenAlert(true);
           }

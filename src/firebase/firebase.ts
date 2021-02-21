@@ -17,13 +17,3 @@ export const readUserData = async (uid: string): Promise<IUser> => {
   const data = await result.val();
   return data;
 };
-
-export const readChatMessagesData = async (
-  uid: string,
-  callback: (snapshot: firebase.database.DataSnapshot) => void
-): Promise<void> => {
-  await db
-    .ref("chatMessages/" + uid)
-    .limitToLast(10)
-    .on("value", callback);
-};
