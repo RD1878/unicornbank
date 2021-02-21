@@ -44,6 +44,7 @@ const StyledTypography = withTheme(styled(({ ...props }) => (
   <Typography {...props} />
 ))`
   align-self: flex-end;
+  overflow-wrap: anywhere;
   color: ${(props) =>
     props.type === "admin"
       ? props.theme.palette.textPrimary.main
