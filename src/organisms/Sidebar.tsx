@@ -42,7 +42,7 @@ import authState from "../recoilState/recoilAtoms/authAtom";
 import api from "../api";
 import { useTranslation } from "react-i18next";
 import DialogNewProduct from "../molecules/DialogNewProduct";
-import { CardsList, LanguageMobileSelect } from "../molecules";
+import { CardsList, LanguageSelect } from "../molecules";
 import { AddAvatar, CardIconItem, UserAvatar } from "../atoms";
 
 interface IWithOpen {
@@ -309,7 +309,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
           <StyledIconButton onClick={onToggleMobileDrawer}>
             <ChevronLeftIcon fontSize="large" />
           </StyledIconButton>
-          <LanguageMobileSelect />
+          <LanguageSelect />
           <Link to={ROUTES.PROFILE}>
             {avatarUrl ? (
               <UserAvatar
