@@ -32,6 +32,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import currencyState from "../recoilState/recoilAtoms/currencyAtom";
+import api from "../api";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
   <FormControl
@@ -105,7 +106,7 @@ const DialogTransaction: FC = () => {
         throw new Error(t("There are not enough funds on your card"));
       }
 
-      const updateCurrency = await db.ref().update({
+      await db.ref().update({
         [`users/${uid}/products/cards`]: {
           ...products.cards,
           [id1]: {
@@ -119,9 +120,11 @@ const DialogTransaction: FC = () => {
         },
       });
 
+      const updatedUser = await api.fetchUser();
+
       setUser({
         ...user,
-        userData: updateCurrency,
+        userData: updatedUser,
       });
 
       setOpenDialog(false);
