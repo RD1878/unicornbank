@@ -1,5 +1,5 @@
 import { firebaseAuth } from "../firebase/firebase";
-import { IChatMessage } from "../interfaces/redux";
+import { IChatMessage } from "../interfaces/chatMessage";
 import { db } from "../firebase/firebase";
 
 export const fetchChatMessages = async (): Promise<IChatMessage[]> => {

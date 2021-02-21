@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/database";
 import { firebaseConfig } from "./firebaseConfig";
-import { IUser } from "../interfaces/redux";
+import { IUser } from "../interfaces/user";
 
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const firebaseAuth = firebase.auth();

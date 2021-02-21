@@ -10,33 +10,19 @@ import {
   Map,
   Chat,
 } from "./Pages";
-import { useDispatch, useSelector } from "react-redux";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, getSessionError, requestUser } from "./actions";
-import { firebaseAuth } from "./firebase/firebase";
 import { Alert } from "@material-ui/lab";
-import { authSelector } from "./selectors";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
+import { useRecoilValue } from "recoil";
+import authState from "./recoilState/recoilAtoms/authAtom";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
-  const { errorMessage } = useSelector(authSelector);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        dispatch(getSessionError("Нет активной сессии"));
-      }
-      dispatch(getSession(user));
-      dispatch(requestUser());
-    });
-  }, []);
+  const { errorMessage } = useRecoilValue(authState);
 
   useEffect(() => {
     if (errorMessage.length) {

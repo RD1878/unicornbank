@@ -29,28 +29,3 @@ export interface IUser {
     }[];
   };
 }
-
-export interface IActionSaveUser {
-  type: string;
-  payload: {
-    user: IUser;
-  };
-}
-
-export interface IChatMessage {
-  date: number;
-  type: string;
-  value: string;
-}
-
-export interface IActionSaveChatMessage {
-  type: string;
-  payload: {
-    chatMessages: IChatMessage[];
-  };
-}
-
-export interface IMessages {
-  isLoading: boolean;
-  chatMessages: IChatMessage[];
-}

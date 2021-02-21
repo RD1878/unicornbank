@@ -18,20 +18,19 @@ import React, {
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
-import { useSelector, useDispatch } from "react-redux";
-import { chatMessagesSelector } from "../../selectors";
 import {
   db,
   firebaseAuth,
   readChatMessagesData,
 } from "../../firebase/firebase";
-import { saveChatMessages } from "../../actions/chatMessages";
 import { randomId } from "../../utils/randomId";
-import { IChatMessage } from "../../interfaces/redux";
-import { authSelector } from "../../selectors/authSelector";
+import { IChatMessage } from "../../interfaces/chatMessage";
 import { SHACKBAR_SHOW_DURATION } from "../../constants";
 import { Alert } from "@material-ui/lab";
 import SendIcon from "@material-ui/icons/Send";
+import { useRecoilState, useRecoilValue } from "recoil";
+import authState from "../../recoilState/recoilAtoms/authAtom";
+import chatMessagesState from "../../recoilState/recoilAtoms/chatMessagesAtom";
 
 const StyledList = styled(List)`
   display: flex;
@@ -56,13 +55,15 @@ const StyledTextField = withTheme(styled(TextField)`
 
 const Chat: FC = () => {
   const [message, setMessage] = useState("");
-  const { isLoading, chatMessages } = useSelector(chatMessagesSelector);
-  const { loading } = useSelector(authSelector);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const dispatch = useDispatch();
+
   const { t } = useTranslation();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
+
+  const [chatMessagesData, setChatMessages] = useRecoilState(chatMessagesState);
+  const { isLoading, chatMessages, errorMessage } = chatMessagesData;
+  const { loading } = useRecoilValue(authState);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -98,7 +99,11 @@ const Chat: FC = () => {
               throw new Error("Некорректный id");
             }
             readChatMessagesData(uid, (data) => {
-              dispatch(saveChatMessages(data.val()));
+              setChatMessages({
+                chatMessages: data.val(),
+                isLoading: false,
+                errorMessage: "",
+              });
             });
           } catch (error) {
             setIsOpenAlert(true);
@@ -154,7 +159,7 @@ const Chat: FC = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert severity="error" onClose={handleCloseAlert}>
-          Ошибка загрузки данных
+          {errorMessage}
         </Alert>
       </Snackbar>
     </>
