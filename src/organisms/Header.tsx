@@ -17,7 +17,7 @@ import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 const Container = withTheme(styled("div")`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   height: 85px;
   margin: auto;
   padding: 0px 30px 0px 50px;
@@ -26,10 +26,22 @@ const Container = withTheme(styled("div")`
 
 const LinksContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   flex-grow: 0.5;
+  width: 45vw;
+  max-width: 600px;
 `;
+
+const ControlsContainer = styled("div")`
+  display: flex;
+  flex-direction: row;
+  width: 15vw;
+  max-width: 150px;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
 interface IHeader {
   onToggleTheme: () => void;
 }
@@ -63,25 +75,25 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
           {t("An error occured, failed to exit!")}
         </Alert>
       </Snackbar>
+      <Logo />
       <LinksContainer>
-        <Logo />
-
         {navigation.map((item) => (
           <Link to={item.path} key={item.path}>
             <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
           </Link>
         ))}
-
-        <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
-      <LanguageSelect />
-      <IconButton onClick={onToggleTheme}>
-        {theme.palette.type === "dark" ? (
-          <Brightness4RoundedIcon />
-        ) : (
-          <Brightness7RoundedIcon />
-        )}
-      </IconButton>
+      <ControlsContainer>
+        <LanguageSelect />
+        <IconButton onClick={onToggleTheme}>
+          {theme.palette.type === "dark" ? (
+            <Brightness4RoundedIcon />
+          ) : (
+            <Brightness7RoundedIcon />
+          )}
+        </IconButton>
+      </ControlsContainer>
+      <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
     </Container>
   );
 };

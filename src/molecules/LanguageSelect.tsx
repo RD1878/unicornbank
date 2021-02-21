@@ -31,13 +31,17 @@ const LanguageSelect: FC = () => {
     i18next.changeLanguage(e.target.value as string);
   };
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <>
       {matches ? (
         <FormControl>
-          <Select value={language.language} onChange={handleChange}>
+          <Select
+            value={language.language}
+            onChange={handleChange}
+            disableUnderline
+          >
             <MenuItem value="" disabled>
               {t("Language")}
             </MenuItem>
@@ -48,7 +52,11 @@ const LanguageSelect: FC = () => {
         </FormControl>
       ) : (
         <StyledFormControl>
-          <NativeSelect value={language.language} onChange={handleChange}>
+          <NativeSelect
+            value={language.language}
+            onChange={handleChange}
+            disableUnderline
+          >
             <option value="" disabled>
               {t("Language")}
             </option>
