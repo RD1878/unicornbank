@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { ICard } from "../../interfaces/card";
 import { IOperation } from "../../interfaces/operation";
-import TransactionsList from "../../organisms/TransactionsList";
+import TransactionsListHistoryPage from "../../organisms/TransactionsListHistoryPage";
 import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const StyledWraper = styled("div")`
@@ -38,7 +38,7 @@ const History: FC = () => {
       <Typography variant="h1" color="textPrimary">
         {`${t("Operations History")}`}
       </Typography>
-      <TransactionsList cardsTransactions={allCardsTransactions} />
+      <TransactionsListHistoryPage cardsTransactions={allCardsTransactions} />
     </StyledWraper>
   );
 };

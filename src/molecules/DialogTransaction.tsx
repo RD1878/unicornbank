@@ -23,10 +23,7 @@ import { TAlert } from "../interfaces/tAlert";
 import * as yup from "yup";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
 import { useAlert } from "../utils/useAlert";
-import {
-  calculateOfTransfer,
-  findCardId,
-} from "../helpers/calculateOfTransfer";
+import { calculateOfTransfer, findCardId } from "../utils/calculateOfTransfer";
 import { NOT_A_LETTER } from "./../constants";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
