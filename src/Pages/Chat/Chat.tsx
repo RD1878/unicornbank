@@ -1,32 +1,25 @@
 import {
   LinearProgress,
   List,
-  Snackbar,
   TextField,
   Typography,
   useMediaQuery,
   useTheme,
   withTheme,
 } from "@material-ui/core";
-import React, {
-  FC,
-  useState,
-  ChangeEvent,
-  useEffect,
-  SyntheticEvent,
-} from "react";
+import React, { FC, useState, ChangeEvent, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
 import { db, firebaseAuth } from "../../firebase/firebase";
 import { randomId } from "../../utils/randomId";
 import { IChatMessage } from "../../interfaces/chatMessage";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
-import { Alert } from "@material-ui/lab";
 import SendIcon from "@material-ui/icons/Send";
 import { useRecoilState, useRecoilValue } from "recoil";
 import authState from "../../recoilState/recoilAtoms/authAtom";
 import chatMessagesState from "../../recoilState/recoilAtoms/chatMessagesAtom";
+import PrimaryAlert from "../../atoms/PrimaryAlert";
+import { useAlert } from "../../utils/useAlert";
 
 const StyledList = styled(List)`
   display: flex;
@@ -51,14 +44,15 @@ const StyledTextField = withTheme(styled(TextField)`
 
 const Chat: FC = () => {
   const [message, setMessage] = useState("");
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
+  const [errorText, setErrorText] = useState("");
 
   const { t } = useTranslation();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
   const [chatMessagesData, setChatMessages] = useRecoilState(chatMessagesState);
-  const { isLoading, chatMessages, errorMessage } = chatMessagesData;
+  const { isLoading, chatMessages } = chatMessagesData;
   const { loading } = useRecoilValue(authState);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -83,8 +77,12 @@ const Chat: FC = () => {
           },
         ],
       });
-    } catch (error) {}
+    } catch (error) {
+      setErrorText(error.message);
+      onAlertOpen();
+    }
   };
+
   const useChatMessages = () => {
     useEffect(() => {
       const fetchData = async () => {
@@ -101,11 +99,11 @@ const Chat: FC = () => {
                 setChatMessages({
                   chatMessages: data.val(),
                   isLoading: false,
-                  errorMessage: "",
                 });
               });
           } catch (error) {
-            setIsOpenAlert(true);
+            setErrorText(error.message);
+            onAlertOpen();
           }
         }
       };
@@ -114,11 +112,6 @@ const Chat: FC = () => {
         fetchData();
       };
     }, [loading]);
-  };
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
   };
 
   useChatMessages();
@@ -151,16 +144,12 @@ const Chat: FC = () => {
           {matches && t("Send")}
         </PrimaryButton>
       </StyledForm>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleCloseAlert}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity="error" onClose={handleCloseAlert}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={errorText}
+        alertType="error"
+      />
     </>
   );
 };

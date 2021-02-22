@@ -6,7 +6,6 @@ import { IChatMessage } from "../../interfaces/chatMessage";
 interface IChatMessagesState {
   isLoading: boolean;
   chatMessages: IChatMessage[];
-  errorMessage: string;
 }
 
 const chatMessagesEffect: AtomEffect<IChatMessagesState> = ({ setSelf }) => {
@@ -21,13 +20,11 @@ const chatMessagesEffect: AtomEffect<IChatMessagesState> = ({ setSelf }) => {
       setSelf({
         isLoading: false,
         chatMessages: chatMessagesData,
-        errorMessage: "",
       });
-    } catch ({ message }) {
+    } catch (error) {
       setSelf({
         isLoading: true,
         chatMessages: [],
-        errorMessage: message,
       });
     }
   });
@@ -39,7 +36,6 @@ const chatMessagesState = atom<IChatMessagesState>({
   default: {
     isLoading: true,
     chatMessages: [],
-    errorMessage: "",
   },
   effects_UNSTABLE: [chatMessagesEffect],
 });
