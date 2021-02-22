@@ -1,17 +1,16 @@
-import React, { FC, useState, SyntheticEvent, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import {
-  Typography,
-  Snackbar,
-  FormControl,
-  Link,
-  NativeSelect,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { FormControl, Link, NativeSelect, Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
-import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
+import {
+  TextField,
+  PrimaryButton,
+  PasswordField,
+  Logo,
+  PrimaryAlert,
+} from "../../atoms";
 import { useHistory } from "react-router-dom";
 import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
@@ -22,13 +21,10 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../utils/validationSchemas";
+import { useAlert } from "../../utils/useAlert";
 import { useSetRecoilState } from "recoil";
 import userState from "./../../recoilState/recoilAtoms/userAtom";
-import {
-  REQUIRED_MESSAGE,
-  SHACKBAR_SHOW_DURATION,
-  ELEMENT,
-} from "../../constants";
+import { REQUIRED_MESSAGE, ELEMENT } from "../../constants";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
@@ -97,7 +93,7 @@ interface IFormValues {
 }
 
 const Auth: FC = () => {
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const { t } = useTranslation();
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -123,6 +119,8 @@ const Auth: FC = () => {
         errorMessage: "",
       });
 
+      onAlertOpen();
+
       history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);
@@ -147,13 +145,6 @@ const Auth: FC = () => {
     }),
     onSubmit,
   });
-
-  const handleClose = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsOpenAlert(false);
-  };
 
   const handleChange = (e: ChangeEvent<{ value: string }>) => {
     i18next.changeLanguage(e.target.value);
@@ -203,16 +194,12 @@ const Auth: FC = () => {
           </Typography>
         </Link>
       </FormAuth>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleClose}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </BackGround>
   );
 };

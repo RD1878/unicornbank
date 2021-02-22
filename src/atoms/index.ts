@@ -5,6 +5,7 @@ import TextField from "./TextField";
 import Logo from "./Logo";
 import CardItem from "./CardItem";
 import ChatMessage from "./ChatMessage";
+import PrimaryAlert from "./PrimaryAlert";
 
 export {
   PrimaryButton,
@@ -14,4 +15,5 @@ export {
   Logo,
   CardItem,
   ChatMessage,
+  PrimaryAlert,
 };

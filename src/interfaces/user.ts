@@ -1,3 +1,13 @@
+import { ICard } from "./card";
+
+export interface IUserCards {
+  [key: string]: ICard;
+}
+
+export interface IUserProducts {
+  cards: IUserCards;
+}
+
 export interface IUser {
   firstName: string;
   lastName: string;
@@ -9,23 +19,5 @@ export interface IUser {
     phone: string;
     email: string;
   };
-  products: {
-    cards: {
-      balance: number;
-      currency: string;
-      id: number;
-      isActive: boolean;
-      number: string;
-      requisites: {
-        account: number;
-        bankOfRecipient: string;
-        bik: number;
-        correspondentAccount: number;
-        inn: number;
-        kpp: number;
-        purposeOfPayment: string;
-        recipient: string;
-      };
-    }[];
-  };
+  products: IUserProducts;
 }
