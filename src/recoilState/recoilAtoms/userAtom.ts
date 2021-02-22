@@ -20,8 +20,9 @@ const initialData = {
     email: "",
   },
   products: {
-    cards: [],
+    cards: {},
   },
+  isLoading: true,
 };
 
 const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {

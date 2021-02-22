@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { IOperation } from "../interfaces/main";
+import { IOperation } from "../interfaces/operation";
 import { Avatar, Box, Card, Typography } from "@material-ui/core";
 import { withTheme } from "@material-ui/core/styles";
 

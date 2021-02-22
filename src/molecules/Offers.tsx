@@ -1,6 +1,6 @@
 import React, { FC, ChangeEvent, useState, useEffect } from "react";
 import firebase from "firebase/app";
-import { TabPanel } from "../../molecules";
+import { TabPanel } from "../molecules";
 import { withTheme } from "@material-ui/core/styles";
 import {
   Box,

@@ -17,7 +17,7 @@ import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
 import {
   emailValidation,

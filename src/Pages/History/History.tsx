@@ -1,15 +1,24 @@
+import { Typography } from "@material-ui/core";
 import React, { FC } from "react";
-import { Offers, CurrencyRate } from "../../molecules";
+import { useTranslation } from "react-i18next";
+import { useRecoilValue } from "recoil";
+import styled from "styled-components";
+import { ICard } from "../../interfaces/card";
 import { IOperation } from "../../interfaces/operation";
 import TransactionsList from "../../organisms/TransactionsList";
-import { ICard } from "../../interfaces/card";
-import { useRecoilValue } from "recoil";
 import userState from "../../recoilState/recoilAtoms/userAtom";
 
-const MainPage: FC = () => {
+const StyledWraper = styled("div")`
+  display: flex;
+  flex-direction: column;
+`;
+
+const History: FC = () => {
+  const { t } = useTranslation();
   const { userData } = useRecoilValue(userState);
   const { products } = userData;
   const cards = Object.entries(products.cards);
+
   const allCardsTransactions = cards.reduce(
     (
       acc: { id: string; key: string; operation: IOperation }[],
@@ -25,12 +34,13 @@ const MainPage: FC = () => {
   );
 
   return (
-    <>
-      <Offers />
+    <StyledWraper>
+      <Typography variant="h1" color="textPrimary">
+        {`${t("Operations History")}`}
+      </Typography>
       <TransactionsList cardsTransactions={allCardsTransactions} />
-      <CurrencyRate />
-    </>
+    </StyledWraper>
   );
 };
 
-export default MainPage;
+export default History;
