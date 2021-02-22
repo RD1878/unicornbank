@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, FC, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   Box,
   Dialog,
@@ -9,11 +9,9 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  Snackbar,
   IconButton,
 } from "@material-ui/core";
-import { PrimaryButton } from "../atoms";
-import { Alert } from "@material-ui/lab";
+import { PrimaryButton, PrimaryAlert } from "../atoms";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -24,7 +22,6 @@ import {
   CURRENCIES,
   INN,
   KPP,
-  SHACKBAR_SHOW_DURATION,
   CORRESPONDENTACCOUNT,
 } from "../constants";
 import { TAlert } from "../interfaces/main";
@@ -34,6 +31,7 @@ import { getRandomNumber } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
 import { useTranslation } from "react-i18next";
 import { BIK } from "./../constants";
+import { useAlert } from "../utils/useAlert";
 import { useRecoilState, useRecoilValue } from "recoil";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import userState from "../recoilState/recoilAtoms/userAtom";
@@ -73,7 +71,7 @@ const DialogNewProduct: FC = () => {
   const { userData } = user;
   const { currentUser } = useRecoilValue(authState);
   const [isOpenDialog, setOpenDialog] = useState(false);
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
@@ -89,17 +87,13 @@ const DialogNewProduct: FC = () => {
     setOpenDialog(false);
   };
 
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
-  };
-
   const onSubmit = async ({ currency }: IFormRadio) => {
     try {
       const { lastName, firstName, patronymic } = userData;
       const account = getRandomNumber(20);
       const newCard = {
         currency,
+        id: getRandomNumber(4),
         balance: 0,
         isActive: true,
         number: `**** **** **** ${getRandomNumber(4)}`,
@@ -133,7 +127,7 @@ const DialogNewProduct: FC = () => {
         return;
       }
 
-      db.ref().update({
+      await db.ref().update({
         [`users/${currentUser.uid}`]: updateUser,
       });
 
@@ -149,7 +143,7 @@ const DialogNewProduct: FC = () => {
       setErrorMessage(error.message);
       setAlertType("error");
     } finally {
-      setIsOpenAlert(true);
+      onAlertOpen();
     }
   };
 
@@ -227,16 +221,12 @@ const DialogNewProduct: FC = () => {
           </form>
         </DialogContent>
       </Dialog>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleCloseAlert}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleCloseAlert}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </>
   );
 };

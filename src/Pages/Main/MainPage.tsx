@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { Offers } from "./Offers";
+import { Payments } from "./Payments";
 import { Operations } from "./Operations";
 import { CurrencyRate } from "./CurrencyRate";
 
 const MainPage: FC = () => (
   <>
-    <Offers />
+    <Payments />
     <Operations />
     <CurrencyRate />
   </>
