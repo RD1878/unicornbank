@@ -7,6 +7,7 @@ import CardItem from "./CardItem";
 import AddAvatar from "./AddAvatar";
 import CardIconItem from "./CardIconItem";
 import UserAvatar from "./UserAvatar";
+import PrimaryAlert from "./PrimaryAlert";
 
 export {
   PrimaryButton,
@@ -18,4 +19,5 @@ export {
   AddAvatar,
   CardIconItem,
   UserAvatar,
+  PrimaryAlert,
 };
