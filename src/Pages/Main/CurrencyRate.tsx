@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
-import currencyState from "../../recoilState/recoilAtoms/currencyAtom";
+import currencySelector from "../../recoilState/recoilSelectors/currencySelector";
 
 const StyledContainer = withTheme(styled(TableContainer)`
   background-color: ${(props) => `${props.theme.palette.primary.main}50`};
@@ -33,7 +33,7 @@ const formatDate = (date: string | Date): string => {
 };
 
 export const CurrencyRate: FC = () => {
-  const { currency } = useRecoilValue(currencyState);
+  const { currency } = useRecoilValue(currencySelector);
   const { t } = useTranslation();
 
   return (

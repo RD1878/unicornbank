@@ -31,8 +31,8 @@ import { NOT_A_LETTER } from "./../constants";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
-import currencyState from "../recoilState/recoilAtoms/currencyAtom";
 import api from "../api";
+import currencySelector from "../recoilState/recoilSelectors/currencySelector";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
   <FormControl
@@ -66,7 +66,7 @@ const DialogTransaction: FC = () => {
   const [user, setUser] = useRecoilState(userState);
   const { userData } = user;
   const { products } = userData;
-  const { currency } = useRecoilValue(currencyState);
+  const { currency } = useRecoilValue(currencySelector);
   const cards = Object.values(products.cards);
   const arrayNumberCard = cards.map((value) => value.number);
   const [currentCurrency, setCurrentCurrency] = useState("");

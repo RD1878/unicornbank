@@ -16,10 +16,6 @@ const App: FC = () => {
   const [isOpen, setOpen] = useState(false);
   const { errorMessage } = useRecoilValue(authState);
 
-  // useEffect(() => {
-  //   getCurrency();
-  // }, []);
-
   useEffect(() => {
     if (errorMessage.length) {
       setOpen(true);
