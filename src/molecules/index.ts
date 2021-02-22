@@ -1,6 +1,7 @@
 import OperationCard from "./OperationCard";
 import TabPanel from "./TabPanel";
 import { CurrencyRate } from "./CurrencyRate";
-import { Offers } from "./Offers";
+import { Payments } from "./Payments";
+import DialogTransaction from "./DialogTransaction";
 
-export { OperationCard, TabPanel, CurrencyRate, Offers };
+export { OperationCard, TabPanel, CurrencyRate, Payments, DialogTransaction };

@@ -1,34 +1,28 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  SyntheticEvent,
-  ChangeEvent,
-} from "react";
-import { Container, Typography, Snackbar } from "@material-ui/core";
+import React, { FC, useState, useEffect, ChangeEvent } from "react";
+import { Container, Typography } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import styled from "styled-components";
 import { Box } from "@material-ui/core";
-import { PrimaryButton, TextField } from "../../atoms";
+import { PrimaryAlert, PrimaryButton, TextField } from "../../atoms";
 import { db, firebaseAuth } from "../../firebase/firebase";
-import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
 import { TAlert } from "../../interfaces/tAlert";
-import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
+import { REQUIRED_MESSAGE } from "../../constants";
 import {
   emailValidation,
   phoneValidation,
 } from "./../../utils/validationSchemas";
+import { useAlert } from "../../utils/useAlert";
 import { useRecoilValue } from "recoil";
 import { useTranslation } from "react-i18next";
 import userState from "../../recoilState/recoilAtoms/userAtom";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
-const NOT_NUMBER_REGEX = /\D/g;
+export const NOT_NUMBER_REGEX = /\D/g;
 
 const cleanPhone = (phone: string): string =>
   phone.replace(NOT_NUMBER_REGEX, "");
@@ -77,8 +71,8 @@ const Profile: FC = () => {
   const user = useRecoilValue(userState);
   const { userData } = user;
   const { passport, snils, contact } = userData;
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
@@ -110,7 +104,7 @@ const Profile: FC = () => {
         throw new Error("Пользователь не найден");
       }
 
-      db.ref().update({
+      await db.ref().update({
         [`users/${uid}`]: {
           ...userData,
           contact: {
@@ -125,7 +119,7 @@ const Profile: FC = () => {
       setErrorMessage(error.message);
       setAlertType("error");
     } finally {
-      setIsOpenAlert(true);
+      onAlertOpen();
     }
   };
 
@@ -160,11 +154,6 @@ const Profile: FC = () => {
       phone: phoneMask(contact.phone),
     });
   }, [contact]);
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
-  };
 
   const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFieldValue("phone", phoneMask(event.target.value));
@@ -238,16 +227,12 @@ const Profile: FC = () => {
             </PrimaryButton>
           </StyledBox>
         </FormContact>
-        <Snackbar
-          open={isOpenAlert}
-          autoHideDuration={SHACKBAR_SHOW_DURATION}
-          onClose={handleCloseAlert}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
+        <PrimaryAlert
+          open={isAlertOpen}
+          onClose={onAlertClose}
+          alertMessage={alertMessage}
+          alertType={alertType}
+        />
       </Box>
     </Container>
   );
