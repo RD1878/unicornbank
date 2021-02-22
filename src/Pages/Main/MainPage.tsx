@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Offers, CurrencyRate } from "../../molecules";
+import { Payments, CurrencyRate } from "../../molecules";
 import { IOperation } from "../../interfaces/operation";
 import TransactionsList from "../../organisms/TransactionsList";
 import { ICard } from "../../interfaces/card";
@@ -26,11 +26,10 @@ const MainPage: FC = () => {
 
   return (
     <>
-      <Offers />
+      <Payments />
       <TransactionsList cardsTransactions={allCardsTransactions} />
       <CurrencyRate />
     </>
   );
 };
-
 export default MainPage;

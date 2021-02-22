@@ -174,6 +174,7 @@ const StyledProductsContainer = styled("div")`
 `;
 
 const Sidebar: FC = () => {
+  const { currentUser } = useRecoilValue(authState);
   const [user, setUser] = useRecoilState(userState);
   const { userData } = user;
   const {
@@ -184,7 +185,6 @@ const Sidebar: FC = () => {
     avatarUrl,
     isLoading,
   } = userData;
-  const { currentUser } = useRecoilValue(authState);
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -216,7 +216,7 @@ const Sidebar: FC = () => {
         throw new Error("Пользователь не найден");
       }
 
-      db.ref().update({
+      await db.ref().update({
         [`users/${uid}`]: {
           ...userData,
           avatarUrl,
@@ -229,6 +229,7 @@ const Sidebar: FC = () => {
         ...user,
         userData: updatedData,
       });
+
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);
@@ -270,7 +271,7 @@ const Sidebar: FC = () => {
               </StyledAddAvatar>
             </StyledContainer>
             <Typography variant="h2" color="textPrimary" align="center">
-              {`${firstName} ${patronymic} ${lastName} `}
+              {`${lastName} ${firstName} ${patronymic}`}
             </Typography>
           </Grid>
           <StyledLink to={ROUTES.PROFILE}>
