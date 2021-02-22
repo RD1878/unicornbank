@@ -92,7 +92,7 @@ const DesktopSidebar: FC<IProps> = ({
             <ListItem button onClick={handleClick}>
               <CardIconItem />
               <ListItemText>
-                {open ?? (
+                {open && (
                   <Typography variant="h2" color="textPrimary">
                     {t("Cards")}
                   </Typography>
