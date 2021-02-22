@@ -51,7 +51,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
         throw new Error("Пользователь не найден");
       }
 
-      db.ref().update({
+      await db.ref().update({
         [`users/${uid}`]: {
           ...userData,
           avatarUrl,
@@ -64,6 +64,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
         ...user,
         userData: updatedData,
       });
+
       setAlertType("success");
     } catch (error) {
       setErrorMessage(error.message);

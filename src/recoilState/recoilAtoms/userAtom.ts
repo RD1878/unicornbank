@@ -1,7 +1,7 @@
 import { atom, AtomEffect } from "recoil";
 import api from "../../api";
 import { firebaseAuth } from "../../firebase/firebase";
-import { IUser } from "../../interfaces/user";
+import { IUser, IUserCards } from "../../interfaces/user";
 
 interface IUserState {
   userData: IUser;
@@ -20,7 +20,7 @@ const initialData = {
     email: "",
   },
   products: {
-    cards: {},
+    cards: {} as IUserCards,
   },
   isLoading: true,
 };

@@ -1,17 +1,16 @@
-import React, { FC, useState, SyntheticEvent } from "react";
-import { Typography, Snackbar } from "@material-ui/core";
+import React, { FC, useState } from "react";
+import { Typography } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
-import { PrimaryButton, PasswordField } from "../../atoms";
+import { PrimaryButton, PasswordField, PrimaryAlert } from "../../atoms";
 import { firebaseAuth } from "../../firebase/firebase";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/tAlert";
 import { passwordValidation } from "../../utils/validationSchemas";
-import { SHACKBAR_SHOW_DURATION } from "../../constants";
+import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 
 const StyledColumn = styled("form")`
@@ -57,7 +56,7 @@ interface IFormValues {
 }
 
 const Settings: FC = () => {
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
@@ -72,11 +71,6 @@ const Settings: FC = () => {
     );
 
     return user?.reauthenticateWithCredential(cred);
-  };
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
   };
 
   const onSubmit = async (formData: IFormValues) => {
@@ -94,7 +88,7 @@ const Settings: FC = () => {
       setAlertType("error");
       setErrorMessage(error.message);
     } finally {
-      setIsOpenAlert(true);
+      onAlertOpen();
     }
   };
 
@@ -163,16 +157,12 @@ const Settings: FC = () => {
             <Box mt={5}></Box>
           </StyledBox>
         </StyledColumn>
-        <Snackbar
-          open={isOpenAlert}
-          autoHideDuration={SHACKBAR_SHOW_DURATION}
-          onClose={handleCloseAlert}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
+        <PrimaryAlert
+          open={isAlertOpen}
+          onClose={onAlertClose}
+          alertMessage={alertMessage}
+          alertType={alertType}
+        />
       </Box>
     </>
   );

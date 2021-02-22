@@ -12,6 +12,8 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
+import DialogTransaction from "../../molecules/DialogTransaction";
+import { useTranslation } from "react-i18next";
 
 interface TabPanelProps {
   title: string;
@@ -26,11 +28,7 @@ const StyledContainer = withTheme(styled(Container)`
   margin-left: 0;
 `);
 
-const StyledTab = styled(Tab)`
-  font-size: 12px;
-`;
-
-function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
+const TabPanelWrapper: FC<TabPanelProps> = ({ title, value, index }) => {
   return (
     <TabPanel
       type="vertical-tabpanel"
@@ -42,13 +40,13 @@ function TabPanelWrapper({ title, subtitle, value, index }: TabPanelProps) {
         <Typography variant="h1" color="textPrimary">
           {title}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {subtitle}
-        </Typography>
+        <Box mt={3}>
+          <DialogTransaction />
+        </Box>
       </Box>
     </TabPanel>
   );
-}
+};
 
 interface IOffer {
   id: number;
@@ -57,10 +55,11 @@ interface IOffer {
   type: string;
 }
 
-export const Offers: FC = () => {
+export const Payments: FC = () => {
   const [offerTab, setOfferTab] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [offers, setOffers] = useState<IOffer[]>([]);
+  const { t } = useTranslation();
 
   const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
     setOfferTab(newVal);
@@ -92,7 +91,7 @@ export const Offers: FC = () => {
       ) : (
         <Box p={8}>
           <Typography variant="h2" color="textPrimary">
-            Загрузка персональных предложений
+            {t("Loading payments")}
           </Typography>
         </Box>
       )}
@@ -107,9 +106,9 @@ export const Offers: FC = () => {
             variant="fullWidth"
             centered={true}
           >
-            <StyledTab label="Вклады" />
-            <StyledTab label="Кредиты" />
-            <StyledTab label="Для бизнеса" />
+            <Tab label={t("Payments")} />
+            <Tab label={t("Transaction")} />
+            <Tab label={t("Auto payments")} />
           </Tabs>
         </Paper>
       </Box>
