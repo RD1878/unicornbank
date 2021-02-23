@@ -82,5 +82,11 @@
   "Invalid id" : "Чын идентификатор",
   "Data changed successfully!" : "Әлеге мәгълүматлар уңышлы үзгәртелде!",
   "An error occured, failed to exit!" : "Хата килеп чыкты, чыга алмады!",
-  "Currency rates": "Валюта курслары"
+  "Currency rates": "Валюта курслары",
+  "Transfer between bank users": "Банктан файдаланучылар арасында яңа Тәрҗемә",
+    "In order to transfer money to another bank user": "Күчерү өчен акча башка кулланучыга билгеләнә ала банк, тутырыгыз басулар формалары һәм төймәгә басыгыз күчерергә.",
+    "Card number" :"Карта номеры",
+    "Enter the last 4 digits of the user card to which the transfer will be made": "Языгыз, соңгы 4 саннар кулланучының картасы, анда булачак переводом",
+    "Transfer between your accounts" :"Тәрҗемә арасында үз счетами",
+    "Enter the phone number of the user to whom you want to transfer funds": "Языгыз, телефон номеры кулланучының, аның телисез икән, күчерергә акча"
 }
