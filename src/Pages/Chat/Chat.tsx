@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
 import { db, firebaseAuth } from "../../firebase/firebase";
-import { randomId } from "../../utils/randomId";
 import { IChatMessage } from "../../interfaces/chatMessage";
 import SendIcon from "@material-ui/icons/Send";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -20,6 +19,7 @@ import authState from "../../recoilState/recoilAtoms/authAtom";
 import chatMessagesState from "../../recoilState/recoilAtoms/chatMessagesAtom";
 import PrimaryAlert from "../../atoms/PrimaryAlert";
 import { useAlert } from "../../utils/useAlert";
+import { randomId } from "../../utils/randomId";
 
 const StyledList = styled(List)`
   display: flex;
@@ -74,6 +74,7 @@ const Chat: FC = () => {
             date: Date.now(),
             type: "user",
             value: message,
+            id: randomId(),
           },
         ],
       });
@@ -126,9 +127,7 @@ const Chat: FC = () => {
           <LinearProgress color="secondary" />
         ) : (
           chatMessages.map((message: IChatMessage) => (
-            <React.Fragment key={`${randomId()}`}>
-              <ChatMessage message={message} />
-            </React.Fragment>
+            <ChatMessage key={message.id} message={message} />
           ))
         )}
       </StyledList>
