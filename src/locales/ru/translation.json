@@ -88,6 +88,9 @@
   "Card number" :"Номер карты",
   "Enter the last 4 digits of the user card to which the transfer will be made": "Введите последние 4 цифры карты пользователя на которую будет осуществлен перевод",
     "Transfer between your accounts" :"Перевод между своими счетами",
-    "Enter the phone number of the user to whom you want to transfer funds": "Введите номер телефона пользователя которому хотите перевести средства"
+    "Enter the phone number of the user to whom you want to transfer funds": "Введите номер телефона пользователя которому хотите перевести средства",
+    "Between your accounts" :"Между своими счетами",
+    "To another bank user": "Другому пользователю банка",
+    "User is not found" :"Пользователь не найден"
 
 }

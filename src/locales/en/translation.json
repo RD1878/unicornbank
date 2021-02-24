@@ -87,5 +87,7 @@
   "In order to transfer money to another bank user": "In order to transfer money to another bank user, fill in the form fields and click the Transfer button.",
   "Card number" :"Card number",
    "Enter the phone number of the user to whom you want to transfer funds": "Enter the phone number of the user to whom you want to transfer funds",
-  "Transfer between your accounts" :"Transfer between your accounts"
+  "Between your accounts" :"Between your accounts",
+  "To another bank user": "To another bank user",
+  "User is not found" :"User is not found"
 }

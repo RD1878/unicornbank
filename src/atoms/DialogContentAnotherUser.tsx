@@ -44,6 +44,7 @@ import { TAlert } from "../interfaces/main";
 import { REQUIRED_MESSAGE, NOT_A_LETTER } from ".././constants";
 import { NOT_NUMBER_REGEX } from "../Pages/Profile/Profile";
 import { PATTERN } from "./../Pages/Profile/Profile";
+import { getInfoAboutAnotherUser } from "../helpers/getInfoAboutAnotherUser";
 
 interface IDialogContentAnotherUser extends IFormData {
   phone: string;
@@ -71,11 +72,6 @@ const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
     margin-top: 10px;
   }
 `);
-
-const validationSchema = yup.object({
-  card1: selectValidation,
-  sum: sumValidation,
-});
 
 const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
   closeDialog,
@@ -113,28 +109,23 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
 
   const onSubmit = async ({
     card1,
-    card2,
     sum,
     calculatedSum,
     phone,
   }: IDialogContentAnotherUser) => {
     try {
-      const cleanedPhone = cleanPhone(phone);
       const amount = Number(sum);
       const uid = currentUser?.uid;
+      const {
+        uid: anotherUserUid,
+        products: anotherUserProducts,
+      } = await getInfoAboutAnotherUser(phone);
 
-      const res = await db.ref("users").once("value");
-      const users = await res.val();
-      const arrayUid = Object.keys(users);
-      const arrayInfo = arrayUid.map((uid) => ({
-        ...users[uid],
-        uid,
-      }));
+      if (!anotherUserUid) {
+        throw new Error(t("User is not found"));
+      }
 
-      const anotherUserInfo = arrayInfo.find(
-        (user) => user.contact?.phone === cleanedPhone
-      );
-      const cards = anotherUserInfo.products.cards;
+      const cards = anotherUserProducts.cards;
       const arrayCards = Object.keys(cards);
       const cardsInfo = arrayCards.map((id) => ({
         ...cards[id],
@@ -142,13 +133,14 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       }));
 
       const anotherCardInfo = cardsInfo.find((card) => card.isActive === true);
-      const card2Id = anotherCardInfo.id;
-      const { uid: anotherUserUid } = anotherUserInfo;
-      const id1 = findCardId(card1, products);
 
-      if (card1 === card2) {
-        throw new Error(t("Accounts for debiting and depositing are the same"));
+      if (!anotherCardInfo) {
+        throw new Error("Карта не найдена");
       }
+
+      const card2Id = anotherCardInfo.id;
+
+      const id1 = findCardId(card1, products);
 
       if (products.cards[id1].balance < Number(sum)) {
         throw new Error(t("There are not enough funds on your card"));
@@ -207,11 +199,12 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       phone: "",
     },
     validationSchema: yup.object({
+      card1: selectValidation,
+      sum: sumValidation,
       phone: phoneValidation(
         t("Please enter valid phone number"),
         t(REQUIRED_MESSAGE)
       ),
-      validationSchema,
     }),
     onSubmit,
   });
@@ -225,62 +218,92 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
   };
 
   useEffect(() => {
-    const { card1, card2, sum } = values;
-    const [id1, id2] = [
-      findCardId(card1, products),
-      findCardId(card2, products),
-    ];
-    const cardCurrency1 = products.cards[id1]?.currency;
-    const cardCurrency2 = products.cards[id2]?.currency;
+    const countSumForTransaction = async () => {
+      const { card1, sum, phone } = values;
 
-    const currency1 = currency.find(
-      ({ charCode }) => charCode === cardCurrency1
-    );
+      if (!phone.length) {
+        return;
+      }
 
-    const currency2 = currency.find(
-      ({ charCode }) => charCode === cardCurrency2
-    );
+      const id1 = findCardId(card1, products);
+      const {
+        uid: anotherUserUid,
+        products: anotherUserProducts,
+      } = await getInfoAboutAnotherUser(phone);
 
-    const bothExist =
-      (cardCurrency1 === "USD" && cardCurrency2 === "EUR") ||
-      (cardCurrency1 === "EUR" && cardCurrency2 === "USD");
+      if (!anotherUserUid) {
+        throw new Error(t("User is not found"));
+      }
 
-    if (cardCurrency1 === cardCurrency2) {
-      setSame(true);
-    } else {
-      setSame(false);
-    }
+      const cards = anotherUserProducts.cards;
+      const arrayCards = Object.keys(cards);
+      const cardsInfo = arrayCards.map((id) => ({
+        ...cards[id],
+        id,
+      }));
 
-    const currentValue1 = currency.find(
-      ({ charCode }) => charCode === cardCurrency1
-    );
-    const currentValue2 = currency.find(
-      ({ charCode }) => charCode === cardCurrency2
-    );
+      const anotherCardInfo = cardsInfo.find((card) => card.isActive === true);
 
-    const num = calculateOfTransfer({
-      sum,
-      cardCurrency1,
-      cardCurrency2,
-      currency1,
-      currency2,
-    });
+      if (!anotherCardInfo) {
+        throw new Error("Карта не найдена");
+      }
 
-    setFieldValue("calculatedSum", num);
+      const card2Id = anotherCardInfo.id;
 
-    if (bothExist && currentValue1 && currentValue2) {
-      return setNum(currentValue1.previous / currentValue2.value);
-    }
+      const cardCurrency1 = products.cards[id1]?.currency;
+      const cardCurrency2 = anotherUserProducts.cards[card2Id].currency;
 
-    if (currentValue1) {
-      setCurrentCurrency(cardCurrency1);
-      setNum(currentValue1?.value);
+      const currency1 = currency.find(
+        ({ charCode }) => charCode === cardCurrency1
+      );
 
-      return;
-    }
+      const currency2 = currency.find(
+        ({ charCode }) => charCode === cardCurrency2
+      );
 
-    setCurrentCurrency(cardCurrency2);
-    setNum(currentValue2?.value);
+      const bothExist =
+        (cardCurrency1 === "USD" && cardCurrency2 === "EUR") ||
+        (cardCurrency1 === "EUR" && cardCurrency2 === "USD");
+
+      if (cardCurrency1 === cardCurrency2) {
+        setSame(true);
+      } else {
+        setSame(false);
+      }
+
+      const currentValue1 = currency.find(
+        ({ charCode }) => charCode === cardCurrency1
+      );
+      const currentValue2 = currency.find(
+        ({ charCode }) => charCode === cardCurrency2
+      );
+
+      const num = calculateOfTransfer({
+        sum,
+        cardCurrency1,
+        cardCurrency2,
+        currency1,
+        currency2,
+      });
+
+      setFieldValue("calculatedSum", num);
+
+      if (bothExist && currentValue1 && currentValue2) {
+        return setNum(currentValue1.previous / currentValue2.value);
+      }
+
+      if (currentValue1) {
+        setCurrentCurrency(cardCurrency1);
+        setNum(currentValue1?.value);
+
+        return;
+      }
+
+      setCurrentCurrency(cardCurrency2);
+      setNum(currentValue2?.value);
+    };
+
+    countSumForTransaction();
   }, [values]);
 
   return (

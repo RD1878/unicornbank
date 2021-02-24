@@ -88,5 +88,8 @@
     "Card number" :"Карта номеры",
     "Enter the last 4 digits of the user card to which the transfer will be made": "Языгыз, соңгы 4 саннар кулланучының картасы, анда булачак переводом",
     "Transfer between your accounts" :"Тәрҗемә арасында үз счетами",
-    "Enter the phone number of the user to whom you want to transfer funds": "Языгыз, телефон номеры кулланучының, аның телисез икән, күчерергә акча"
+    "Enter the phone number of the user to whom you want to transfer funds": "Языгыз, телефон номеры кулланучының, аның телисез икән, күчерергә акча",
+    "Between your accounts" :"Исәп-хисап",
+    "To another bank user": "Банкның башка кулланучысына",
+    "User is not found" :"Кулланучы табылмады"
 }

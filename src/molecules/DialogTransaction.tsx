@@ -1,5 +1,5 @@
 import React, { FC, useState, ChangeEvent } from "react";
-import { Dialog, DialogTitle, Tab } from "@material-ui/core";
+import { Dialog, DialogTitle, Tab, withTheme } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { PrimaryAlert, PrimaryButton } from "../atoms";
 import { TAlert } from "../interfaces/main";
@@ -7,13 +7,46 @@ import { useAlert } from "../utils/useAlert";
 import DialogContentYourAccounts from "./../atoms/DialogContentYourAccounts";
 import DialogContentAnotherUser from "./../atoms/DialogContentAnotherUser";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import styled from "styled-components";
 export interface IFormData {
   card1: string;
   card2: string;
   sum: string;
   calculatedSum: string;
-  cardNumber: string;
+  cardNumber?: string;
 }
+
+const StyledTabContext = withTheme(styled(({ ...props }) => (
+  <TabContext classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    padding: 16px 48px;
+  }
+`);
+
+const StyledTabPanel = withTheme(styled(({ ...props }) => (
+  <TabPanel classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    padding: 7px;
+  }
+`);
+
+const StyledTabList = withTheme(styled(({ ...props }) => (
+  <TabList classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    padding: 7px 30px;
+  }
+`);
+
+const StyledDialogTitle = withTheme(styled(({ ...props }) => (
+  <DialogTitle classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    padding: 17px 30px;
+  }
+`);
 
 const DialogTransaction: FC = () => {
   const [tab, setTab] = useState("0");
@@ -49,32 +82,29 @@ const DialogTransaction: FC = () => {
         {t("Money transaction")}
       </PrimaryButton>
       <Dialog open={isOpenDialog} onClose={handleCloseDialog}>
-        <DialogTitle>{t("Transaction")}</DialogTitle>
-        <TabContext value={tab}>
-          <TabList onChange={handleChange}>
-            <Tab label="In order to transfer money to your card" value="0" />
-            <Tab
-              label="In order to transfer money to another bank user"
-              value="1"
-            />
-          </TabList>
-          <TabPanel value="0">
+        <StyledDialogTitle>{t("Transaction")}</StyledDialogTitle>
+        <StyledTabContext value={tab}>
+          <StyledTabList onChange={handleChange}>
+            <Tab label={t("Between your accounts")} value="0" />
+            <Tab label={t("To another bank user")} value="1" />
+          </StyledTabList>
+          <StyledTabPanel value="0">
             <DialogContentYourAccounts
               closeDialog={handleCloseDialog}
               openAlert={onAlertOpen}
               setAlertType={setAlertType}
               setErrorMessage={setErrorMessage}
             />
-          </TabPanel>
-          <TabPanel value="1">
+          </StyledTabPanel>
+          <StyledTabPanel value="1">
             <DialogContentAnotherUser
               closeDialog={handleCloseDialog}
               openAlert={onAlertOpen}
               setAlertType={setAlertType}
               setErrorMessage={setErrorMessage}
             />
-          </TabPanel>
-        </TabContext>
+          </StyledTabPanel>
+        </StyledTabContext>
       </Dialog>
 
       <PrimaryAlert
