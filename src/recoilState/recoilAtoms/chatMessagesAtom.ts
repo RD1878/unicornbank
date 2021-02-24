@@ -1,32 +1,45 @@
 import { atom, AtomEffect } from "recoil";
-import { fetchChatMessages } from "../../api";
-import { firebaseAuth } from "../../firebase/firebase";
+import { db, firebaseAuth } from "../../firebase/firebase";
 import { IChatMessage } from "../../interfaces/chatMessage";
 
 interface IChatMessagesState {
   isLoading: boolean;
   chatMessages: IChatMessage[];
+  errorMessage: string;
 }
 
 const chatMessagesEffect: AtomEffect<IChatMessagesState> = ({ setSelf }) => {
-  const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
-    try {
-      if (!user) {
-        return;
+  const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+    const fetchMessagesData = async () => {
+      try {
+        if (!user) {
+          setSelf({
+            isLoading: false,
+            chatMessages: [],
+            errorMessage: "Нет активной сессии",
+          });
+        } else {
+          const { uid } = user;
+          await db
+            .ref("chatMessages/" + uid)
+            .limitToLast(10)
+            .on("value", (data) => {
+              setSelf({
+                chatMessages: data.val(),
+                isLoading: false,
+                errorMessage: "",
+              });
+            });
+        }
+      } catch ({ message }) {
+        setSelf({
+          chatMessages: [],
+          isLoading: false,
+          errorMessage: message,
+        });
       }
-
-      const chatMessagesData = await fetchChatMessages();
-
-      setSelf({
-        isLoading: false,
-        chatMessages: chatMessagesData,
-      });
-    } catch (error) {
-      setSelf({
-        isLoading: true,
-        chatMessages: [],
-      });
-    }
+    };
+    fetchMessagesData();
   });
   return () => unsubscribe();
 };
@@ -36,6 +49,7 @@ const chatMessagesState = atom<IChatMessagesState>({
   default: {
     isLoading: true,
     chatMessages: [],
+    errorMessage: "",
   },
   effects_UNSTABLE: [chatMessagesEffect],
 });

@@ -7,19 +7,19 @@ import {
   useTheme,
   withTheme,
 } from "@material-ui/core";
-import React, { FC, useState, ChangeEvent, useEffect } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
 import { db, firebaseAuth } from "../../firebase/firebase";
 import { IChatMessage } from "../../interfaces/chatMessage";
 import SendIcon from "@material-ui/icons/Send";
-import { useRecoilState, useRecoilValue } from "recoil";
-import authState from "../../recoilState/recoilAtoms/authAtom";
+import { useRecoilValue } from "recoil";
 import chatMessagesState from "../../recoilState/recoilAtoms/chatMessagesAtom";
 import PrimaryAlert from "../../atoms/PrimaryAlert";
 import { useAlert } from "../../utils/useAlert";
 import { randomId } from "../../utils/randomId";
+import useChatMessages from "../../utils/useChatMessages";
 
 const StyledList = styled(List)`
   display: flex;
@@ -51,9 +51,8 @@ const Chat: FC = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const [chatMessagesData, setChatMessages] = useRecoilState(chatMessagesState);
+  const chatMessagesData = useRecoilValue(chatMessagesState);
   const { isLoading, chatMessages } = chatMessagesData;
-  const { loading } = useRecoilValue(authState);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -82,37 +81,6 @@ const Chat: FC = () => {
       setErrorText(error.message);
       onAlertOpen();
     }
-  };
-
-  const useChatMessages = () => {
-    useEffect(() => {
-      const fetchData = async () => {
-        if (!loading) {
-          try {
-            const uid = firebaseAuth?.currentUser?.uid;
-            if (!uid) {
-              throw new Error("Некорректный id");
-            }
-            await db
-              .ref("chatMessages/" + uid)
-              .limitToLast(10)
-              .on("value", (data) => {
-                setChatMessages({
-                  chatMessages: data.val(),
-                  isLoading: false,
-                });
-              });
-          } catch (error) {
-            setErrorText(error.message);
-            onAlertOpen();
-          }
-        }
-      };
-      fetchData();
-      return () => {
-        fetchData();
-      };
-    }, [loading]);
   };
 
   useChatMessages();
