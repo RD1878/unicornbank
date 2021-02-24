@@ -16,13 +16,6 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { IFormData } from "./../molecules/DialogTransaction";
 import { useTranslation } from "react-i18next";
-// import {
-//   FieldInputProps,
-//   FormikErrors,
-//   FormikTouched,
-//   FormikValues,
-//   useFormik,
-// } from "formik";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
@@ -42,16 +35,12 @@ import {
 import { useFormik } from "formik";
 import { TAlert } from "../interfaces/main";
 import { REQUIRED_MESSAGE, NOT_A_LETTER } from ".././constants";
-import { NOT_NUMBER_REGEX } from "../Pages/Profile/Profile";
-import { PATTERN } from "./../Pages/Profile/Profile";
 import { getInfoAboutAnotherUser } from "../helpers/getInfoAboutAnotherUser";
+import { cleanPhone, phoneMask } from "./../helpers/phoneMask";
 
 interface IDialogContentAnotherUser extends IFormData {
   phone: string;
 }
-
-const cleanPhone = (phone: string): string =>
-  phone.replace(NOT_NUMBER_REGEX, "");
 
 interface IDialogContentYourAccounts {
   closeDialog: () => void;
@@ -91,22 +80,6 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
   const [num, setNum] = useState<number | undefined>(0);
   const [same, setSame] = useState(false);
 
-  const phoneMask = (phone: string): string => {
-    const cleaned = cleanPhone(phone);
-    const match = cleaned.match(PATTERN);
-
-    if (!match) {
-      return "+7";
-    }
-
-    const first = match[2] && `(${match[2]}`;
-    const second = match[3] && `)${match[3]}`;
-    const third = match[4] && `-${match[4]}`;
-    const fourth = match[5] && `-${match[5]}`;
-
-    return ["+7", first, second, third, fourth].join("");
-  };
-
   const onSubmit = async ({
     card1,
     sum,
@@ -116,10 +89,11 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
     try {
       const amount = Number(sum);
       const uid = currentUser?.uid;
+      const clearedPhone = cleanPhone(phone);
       const {
         uid: anotherUserUid,
         products: anotherUserProducts,
-      } = await getInfoAboutAnotherUser(phone);
+      } = await getInfoAboutAnotherUser(clearedPhone);
 
       if (!anotherUserUid) {
         throw new Error(t("User is not found"));
@@ -220,8 +194,9 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
   useEffect(() => {
     const countSumForTransaction = async () => {
       const { card1, sum, phone } = values;
+      const clearedPhone = cleanPhone(phone);
 
-      if (!phone.length) {
+      if (clearedPhone?.length < 11) {
         return;
       }
 
@@ -229,7 +204,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       const {
         uid: anotherUserUid,
         products: anotherUserProducts,
-      } = await getInfoAboutAnotherUser(phone);
+      } = await getInfoAboutAnotherUser(clearedPhone);
 
       if (!anotherUserUid) {
         throw new Error(t("User is not found"));

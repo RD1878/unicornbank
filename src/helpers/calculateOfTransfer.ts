@@ -27,18 +27,13 @@ export const calculateOfTransfer = ({
   cardCurrency2,
   currency1,
   currency2,
-}: // card2Currency,
-IProps): number => {
+}: IProps): number => {
   const value = Number(sum);
 
   // Если переводим в рубли нерубли
   if (cardCurrency2 === "RUB" && currency1) {
     return value * currency1.value;
   }
-
-  // if (cardCurrency1 === "EUR" || card2Currency === "USD") {
-  //   return (value * currency1.value) / currency2.previous;
-  // }
 
   if (!currency1 && currency2) return value / currency2.previous;
   if (!currency1 || !currency2) return value;

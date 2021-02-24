@@ -1,5 +1,4 @@
 import { db } from "../firebase/firebase";
-// import { ICard } from "../interfaces/card";
 import { IUser } from "../interfaces/user";
 import { NOT_NUMBER_REGEX } from "../Pages/Profile/Profile";
 
@@ -25,19 +24,6 @@ export const getInfoAboutAnotherUser = async (
   const anotherUserInfo = arrayInfo.find(
     (user) => user.contact?.phone === cleanedPhone
   );
-
-  // const cards = anotherUserInfo.products.cards;
-  // const arrayCards = Object.keys(cards);
-  // const cardsInfo = arrayCards.map((id) => ({
-  //   ...cards[id],
-  //   id,
-  // }));
-
-  // const anotherCardInfo = cardsInfo.find((card) => card.isActive === true);
-  // const card2Id = anotherCardInfo.id;
-
-  // const card2Info = anotherCardInfo.products.cards[card2Id];
-  // const { uid: anotherUserUid } = anotherUserInfo;
 
   return anotherUserInfo;
 };
