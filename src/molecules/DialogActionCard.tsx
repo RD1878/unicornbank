@@ -84,7 +84,7 @@ const DialogActionCard: FC<IProps> = ({
   return (
     <>
       <StyledPrimaryButton onClick={handleOpenDialog} disabled={!isActive}>
-        {t(actionType)}
+        {actionType}
       </StyledPrimaryButton>
       <Dialog
         open={isOpenDialog}
@@ -93,7 +93,7 @@ const DialogActionCard: FC<IProps> = ({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {!isConfirm ? t(confirmType) : t(message)}
+          {!isConfirm ? confirmType : message}
         </DialogTitle>
         <DialogActions>
           <PrimaryButton onClick={handleCloseDialog}>

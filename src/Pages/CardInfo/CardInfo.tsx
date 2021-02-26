@@ -12,15 +12,6 @@ import { IParams } from "../../interfaces/params";
 import { useRecoilValue } from "recoil";
 import userState from "../../recoilState/recoilAtoms/userAtom";
 
-const phrases = {
-  block: "Block",
-  confirmBlock: "Are you sure block",
-  blocked: "Blocked message",
-  reissue: "Reissue",
-  confirmReissue: "Are you sure reissue",
-  reissued: "Blocked message with reissue",
-};
-
 const StyledButtonsWraper = styled("div")`
   display: flex;
   flex-direction: column;
@@ -70,15 +61,15 @@ const CardInfo: FC = () => {
           <StyledButtonsWraper>
             <DialogActionCard
               idCurrentCard={id}
-              actionType={phrases.block}
-              confirmType={phrases.confirmBlock}
-              message={phrases.blocked}
+              actionType={t("Block")}
+              confirmType={t("Are you sure block")}
+              message={t("Blocked message")}
             />
             <DialogActionCard
               idCurrentCard={id}
-              actionType={phrases.reissue}
-              confirmType={phrases.confirmReissue}
-              message={phrases.reissued}
+              actionType={t("Reissue")}
+              confirmType={t("Are you sure reissue")}
+              message={t("Blocked message with reissue")}
             />
             <StyledLink to={`/card/${id}/requisites`}>
               <StyledPrimaryButton>{t("Requisites")}</StyledPrimaryButton>
