@@ -1,6 +1,6 @@
 import React, { FC, ChangeEvent, useState, useEffect } from "react";
 import firebase from "firebase/app";
-import { TabPanel } from "../../molecules";
+import { TabPanel } from ".";
 import { withTheme } from "@material-ui/core/styles";
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
-import DialogTransaction from "../../molecules/DialogTransaction";
+import { DialogTransaction } from "../molecules";
 import { useTranslation } from "react-i18next";
 
 interface TabPanelProps {
@@ -55,7 +55,7 @@ interface IOffer {
   type: string;
 }
 
-export const Payments: FC = () => {
+const Payments: FC = () => {
   const [offerTab, setOfferTab] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [offers, setOffers] = useState<IOffer[]>([]);
@@ -115,3 +115,5 @@ export const Payments: FC = () => {
     </StyledContainer>
   );
 };
+
+export default Payments;
