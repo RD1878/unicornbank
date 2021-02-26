@@ -8,7 +8,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { passwordValidation } from "../../utils/validationSchemas";
 import { ROUTES } from "../../routes";
 import { Link } from "react-router-dom";

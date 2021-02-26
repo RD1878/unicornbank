@@ -22,6 +22,7 @@ const initialData = {
   products: {
     cards: {} as IUserCards,
   },
+  isLoading: true,
 };
 
 const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {

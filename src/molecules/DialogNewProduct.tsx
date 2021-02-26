@@ -24,7 +24,7 @@ import {
   KPP,
   CORRESPONDENTACCOUNT,
 } from "../constants";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { getRandomNumber } from "../utils/randomNumber";
@@ -111,6 +111,7 @@ const DialogNewProduct: FC = () => {
           month: new Date().getMonth() + 1,
           year: new Date().getFullYear() + 3,
         },
+        operations: {},
       };
 
       const updateUser = {

@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import Tooltip from "@material-ui/core/Tooltip";
-import getCurrencyTypeBalance from "../helpers/getCurrencyTypeBalance";
+import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
 import { useTranslation } from "react-i18next";
 
 interface ICardItem {

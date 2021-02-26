@@ -1,8 +1,11 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { IOperation } from "../interfaces/main";
 import { Avatar, Box, Card, Typography } from "@material-ui/core";
+import { IOperation } from "../interfaces/operation";
+import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
 import { withTheme } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 const StyledCard = withTheme(styled(Card)`
   display: flex;
@@ -35,22 +38,36 @@ const StyledBox = withTheme(styled(Box)`
   }
 `);
 
-interface IOperationCard {
+interface IProps {
   operation: IOperation;
 }
 
-const OperationCard: FC<IOperationCard> = ({ operation }) => {
-  const { name, type, date, description, amount, currency } = operation;
-
+const OperationCard: FC<IProps> = ({ operation }) => {
+  const { t } = useTranslation();
+  const { amount, category, currency, date, name, type } = operation;
   const formatDate = (date: string): string => {
     const obj = new Date(date);
-    return obj.toLocaleDateString(undefined, {
-      month: "long",
-      weekday: "long",
-      day: "numeric",
-    });
+    switch (i18next.language) {
+      case "tat":
+        return obj.toLocaleDateString("tt", {
+          month: "numeric",
+          year: "numeric",
+          day: "numeric",
+        });
+      case "en":
+        return obj.toLocaleDateString("en-Us", {
+          month: "long",
+          weekday: "long",
+          day: "numeric",
+        });
+      default:
+        return obj.toLocaleDateString("ru-Ru", {
+          month: "long",
+          weekday: "long",
+          day: "numeric",
+        });
+    }
   };
-
   return (
     <Box my={3}>
       <Typography variant="caption" color="textSecondary">
@@ -61,7 +78,7 @@ const OperationCard: FC<IOperationCard> = ({ operation }) => {
         <StyledBox>
           <TypographyName variant="button">{name}</TypographyName>
           <TypographyDescription variant="body1" color="textSecondary">
-            {description}
+            {t(category)}
           </TypographyDescription>
         </StyledBox>
         <Typography
@@ -69,9 +86,8 @@ const OperationCard: FC<IOperationCard> = ({ operation }) => {
           color={type === "income" ? "secondary" : "textPrimary"}
           align="right"
         >
-          {type === "expense" && "-"}
-          {amount.toLocaleString()}
-          {currency}
+          {type === "writeOff" && "-"}
+          {getCurrencyTypeBalance(amount, currency)}
         </Typography>
       </StyledCard>
     </Box>

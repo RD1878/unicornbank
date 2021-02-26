@@ -18,9 +18,10 @@ import {
   Collapse,
   useMediaQuery,
   Snackbar,
+  LinearProgress,
 } from "@material-ui/core";
 import CreateRoundedIcon from "@material-ui/icons/CreateRounded";
-import CardItem from "./../atoms/CardItem";
+import { CardItem } from "./../atoms";
 import IconButton from "@material-ui/core/IconButton";
 import FormatIndentDecreaseRoundedIcon from "@material-ui/icons/FormatIndentDecreaseRounded";
 import FormatIndentIncreaseRoundedIcon from "@material-ui/icons/FormatIndentIncreaseRounded";
@@ -38,7 +39,7 @@ import { Link } from "react-router-dom";
 import firebase from "firebase";
 import { db } from "./../firebase/firebase";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
@@ -149,6 +150,11 @@ const StyledContainer = styled("div")`
   position: relative;
 `;
 
+const StyledCardLink = styled(Link)`
+  text-decoration: none;
+  width: 100%;
+`;
+
 const StyledIconButtonDecrease = withTheme(styled(
   FormatIndentDecreaseRoundedIcon
 )`
@@ -171,13 +177,21 @@ const Sidebar: FC = () => {
   const { currentUser } = useRecoilValue(authState);
   const [user, setUser] = useRecoilState(userState);
   const { userData } = user;
-  const { firstName, lastName, patronymic, products, avatarUrl } = userData;
+  const {
+    firstName,
+    lastName,
+    patronymic,
+    products,
+    avatarUrl,
+    isLoading,
+  } = userData;
+
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
     alertType === "success" ? "Данные успешно изменены!" : errorMessage;
-  const cards = Object.values(products.cards);
+  const cards = Object.entries(products.cards);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [isOpenCards, setOpenCards] = useState(true);
@@ -274,23 +288,34 @@ const Sidebar: FC = () => {
                 <PaymentRoundedIcon color="secondary" fontSize="large" />
               </ListItemIcon>
               <ListItemText>
-                {open ? (
+                {open && (
                   <Typography variant="h2" color="textPrimary">
                     {t("Cards")}
                   </Typography>
-                ) : null}
+                )}
               </ListItemText>
               {isOpenCards ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <StyledListItem button>
-                  {cards.map((card: ICard) => (
-                    <CardItem key={card.number} open={open} {...card} />
-                  ))}
-                </StyledListItem>
-              </List>
-            </Collapse>
+            {isLoading ? (
+              <LinearProgress color="secondary" />
+            ) : (
+              <Collapse in={isOpenCards} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <StyledListItem button>
+                    {cards.map(([key, value]: [string, ICard]) => (
+                      <StyledCardLink to={`/card/${key}`} key={key}>
+                        <CardItem
+                          open={open}
+                          number={value.number}
+                          balance={value.balance}
+                          currency={value.currency}
+                        />
+                      </StyledCardLink>
+                    ))}
+                  </StyledListItem>
+                </List>
+              </Collapse>
+            )}
           </List>
           {open ? <DialogNewProduct /> : null}
         </StyledProductsContainer>

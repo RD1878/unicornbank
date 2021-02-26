@@ -7,6 +7,8 @@ enum ROUTES {
   SETTINGS = "/settings",
   OFFICES = "/offices",
   PROFILE = "/profile",
+  CARD = "/card/:id",
+  REQUISITES = "/card/:id/requisites",
 }
 
 const navigation = [
