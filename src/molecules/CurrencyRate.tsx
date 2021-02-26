@@ -37,7 +37,7 @@ const CurrencyRate: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Box mt={7} maxWidth={800}>
+    <Box mt={2} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
         {t("Currency rates")}
       </Typography>

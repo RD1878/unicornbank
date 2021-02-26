@@ -25,6 +25,7 @@ interface TabPanelProps {
 const StyledContainer = withTheme(styled(Container)`
   min-width: 200px;
   width: 100%;
+  margin-left: 0;
 `);
 
 const TabPanelWrapper: FC<TabPanelProps> = ({ title, value, index }) => {
@@ -95,7 +96,7 @@ const Payments: FC = () => {
         </Box>
       )}
       {!loaded && <LinearProgress color="secondary" />}
-      <Box mb={7}>
+      <Box mb={2}>
         <Paper>
           <Tabs
             value={offerTab}

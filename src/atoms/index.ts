@@ -4,6 +4,9 @@ import PasswordField from "./PasswordField";
 import TextField from "./TextField";
 import Logo from "./Logo";
 import CardItem from "./CardItem";
+import AddAvatar from "./AddAvatar";
+import CardIconItem from "./CardIconItem";
+import UserAvatar from "./UserAvatar";
 import PrimaryAlert from "./PrimaryAlert";
 
 export {
@@ -13,5 +16,8 @@ export {
   TextField,
   Logo,
   CardItem,
+  AddAvatar,
+  CardIconItem,
+  UserAvatar,
   PrimaryAlert,
 };
