@@ -16,6 +16,12 @@ export interface IFormData {
   cardNumber?: string;
 }
 
+const StyledTab = styled(({ ...props }) => (
+  <Tab classes={{ wrapper: "wrapper" }} {...props} />
+))`
+  text-transform: none;
+`;
+
 const StyledTabContext = withTheme(styled(({ ...props }) => (
   <TabContext classes={{ root: "root" }} {...props} />
 ))`
@@ -85,8 +91,8 @@ const DialogTransaction: FC = () => {
         <StyledDialogTitle>{t("Transaction")}</StyledDialogTitle>
         <StyledTabContext value={tab}>
           <StyledTabList onChange={handleChange}>
-            <Tab label={t("Between your accounts")} value="0" />
-            <Tab label={t("To another bank user")} value="1" />
+            <StyledTab label={t("Between your accounts")} value="0" />
+            <StyledTab label={t("To another bank user")} value="1" />
           </StyledTabList>
           <StyledTabPanel value="0">
             <DialogContentYourAccounts

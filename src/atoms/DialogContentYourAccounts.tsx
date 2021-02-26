@@ -103,7 +103,7 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
           },
           [id2]: {
             ...products.cards[id2],
-            balance: products.cards[id2].balance + calculatedSum,
+            balance: products.cards[id2].balance + Number(calculatedSum),
           },
         },
       });
@@ -192,7 +192,7 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
       currency2,
     });
 
-    setFieldValue("calculatedSum", num);
+    setFieldValue("calculatedSum", num.toFixed(2));
 
     if (bothExist && currentValue1 && currentValue2) {
       return setNum(currentValue1.previous / currentValue2.value);
@@ -272,7 +272,7 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
             type="number"
             inputProps={{
               min: "0",
-              step: "0.1",
+              step: "0.01",
             }}
             value={values.sum}
             onChange={handleSumChange}

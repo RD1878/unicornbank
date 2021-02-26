@@ -1,19 +1,4 @@
 import React, { FC, useState, ChangeEvent, useEffect } from "react";
-import {
-  DialogContentText,
-  DialogActions,
-  DialogContent,
-  Box,
-  Typography,
-  FormHelperText,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-} from "@material-ui/core";
-import { PrimaryButton, TextField } from ".";
-import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
 import { IFormData } from "./../molecules/DialogTransaction";
 import { useTranslation } from "react-i18next";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -37,8 +22,9 @@ import { TAlert } from "../interfaces/main";
 import { REQUIRED_MESSAGE, NOT_A_LETTER } from ".././constants";
 import { getInfoAboutAnotherUser } from "../helpers/getInfoAboutAnotherUser";
 import { cleanPhone, phoneMask } from "./../helpers/phoneMask";
+import { FormItemTransfer } from "./FormItemTransfer";
 
-interface IDialogContentAnotherUser extends IFormData {
+export interface IDialogContentAnotherUser extends IFormData {
   phone: string;
 }
 
@@ -48,19 +34,6 @@ interface IDialogContentYourAccounts {
   setAlertType: (type: TAlert) => void;
   setErrorMessage: (message: string) => void;
 }
-
-const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
-  <FormControl
-    classes={{ root: "root" }}
-    open={open}
-    width={width}
-    {...props}
-  />
-))`
-  & .select {
-    margin-top: 10px;
-  }
-`);
 
 const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
   closeDialog,
@@ -133,7 +106,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       await db.ref().update({
         [`users/${anotherUserUid}/products/cards/${card2Id}`]: {
           ...cards[card2Id],
-          balance: anotherCardInfo.balance + calculatedSum,
+          balance: anotherCardInfo.balance + Number(calculatedSum),
         },
       });
 
@@ -200,7 +173,6 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
         return;
       }
 
-      const id1 = findCardId(card1, products);
       const {
         uid: anotherUserUid,
         products: anotherUserProducts,
@@ -209,6 +181,8 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       if (!anotherUserUid) {
         throw new Error(t("User is not found"));
       }
+
+      const id1 = findCardId(card1, products);
 
       const cards = anotherUserProducts.cards;
       const arrayCards = Object.keys(cards);
@@ -261,7 +235,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
         currency2,
       });
 
-      setFieldValue("calculatedSum", num);
+      setFieldValue("calculatedSum", num.toFixed());
 
       if (bothExist && currentValue1 && currentValue2) {
         return setNum(currentValue1.previous / currentValue2.value);
@@ -282,92 +256,20 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
   }, [values]);
 
   return (
-    <DialogContent>
-      <DialogContentText>
-        {t("In order to transfer money to another bank user")}
-      </DialogContentText>
-      <form onSubmit={handleSubmit}>
-        <Typography variant="body2">{t("Filling in requisites")}</Typography>
-        <Box mt={3}>
-          <StyledFormControl
-            variant="outlined"
-            fullWidth
-            error={touched.card1 && Boolean(errors.card1)}
-          >
-            <InputLabel>{t("Debit account number")}</InputLabel>
-            <Select
-              label={t("Debit account number")}
-              {...getFieldProps("card1")}
-            >
-              {arrayNumberCard.map((number: string) => (
-                <MenuItem value={number} key={number}>
-                  {number}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>{touched.card1 && errors.card1}</FormHelperText>
-          </StyledFormControl>
-        </Box>
-        <Box mt={3} mb={3}>
-          <DialogContentText>
-            {t(
-              "Enter the phone number of the user to whom you want to transfer funds"
-            )}
-          </DialogContentText>
-          <TextField
-            fullWidth
-            label={t("Phone")}
-            id="phone"
-            name="phone"
-            value={values.phone}
-            onChange={handlePhoneChange}
-            error={touched.phone && Boolean(errors.phone)}
-            helperText={touched.phone && errors.phone}
-          />
-        </Box>
-        {!same && (
-          <Typography variant="body1">
-            {t("The translation will take place at the rate")} {num}{" "}
-            {currentCurrency}
-          </Typography>
-        )}
-        <Box display="flex" mt={2} mb={2}>
-          <TextField
-            fullWidth
-            label={t("Amount")}
-            name="sum"
-            type="number"
-            inputProps={{
-              min: "0",
-              step: "0.1",
-            }}
-            value={values.sum}
-            onChange={handleSumChange}
-            error={touched.sum && Boolean(errors.sum)}
-            helperText={touched.sum && errors.sum}
-          />
-        </Box>
-        <TextField
-          disabled
-          fullWidth
-          label={t("Currency conversion")}
-          name="calculatedSum"
-          value={values.calculatedSum}
-        />
-        <DialogActions>
-          <Box mt={3} display="flex">
-            <PrimaryButton type="submit" color="primary">
-              {t("Transfer")}
-            </PrimaryButton>
-            <Box ml={2}>
-              <PrimaryButton color="primary" onClick={closeDialog}>
-                {t("Cancel")}
-              </PrimaryButton>
-            </Box>
-          </Box>
-        </DialogActions>
-      </form>
-    </DialogContent>
+    <FormItemTransfer
+      errors={errors}
+      touched={touched}
+      handleSubmit={handleSubmit}
+      handleSumChange={handleSumChange}
+      handlePhoneChange={handlePhoneChange}
+      same={same}
+      arrayNumberCard={arrayNumberCard}
+      getFieldProps={getFieldProps}
+      currentCurrency={currentCurrency}
+      num={num}
+      values={values}
+      closeDialog={closeDialog}
+    />
   );
 };
 
