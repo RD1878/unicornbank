@@ -54,7 +54,8 @@ const StyledTab = styled(({ ...props }) => (
 `;
 
 const StyledWrap = withTheme(styled("div")`
-  margin: -40px;
+  margin-left: -40px;
+  margin-right: -40px;
   display: flex;
   flex-direction: column;
 
@@ -77,6 +78,11 @@ const StyleMapContainer = withTheme(styled("div")`
     min-height: calc(100vh - 253px);
   }
 `);
+
+const StyledContainer = styled(Container)`
+  margin-left: 0;
+  padding-left: 0;
+`;
 
 const StyledYMap = styled(YMap)`
   position: absolute;
@@ -115,9 +121,9 @@ const Map: FC = () => {
   };
 
   return (
-    <StyledWrap>
-      <Container>
-        <Box mt={5}>
+    <>
+      <StyledContainer>
+        <Box mt={2}>
           <Typography variant="h1" color="textPrimary">
             {t("Offices and ATMs")}
           </Typography>
@@ -134,33 +140,35 @@ const Map: FC = () => {
             ))}
           </Tabs>
         </Box>
-      </Container>
-      <StyleMapContainer>
-        <YMaps>
-          <StyledYMap
-            width="100%"
-            height="100%"
-            defaultState={{
-              center: KAZAN_CENTER,
-              zoom: 12,
-              controls: [],
-            }}
-          >
-            {branchesArray.map((branch) => (
-              <Placemark
-                key={branch.id}
-                geometry={[branch.latitude, branch.longitude]}
-                onClick={() => setSelectedBranch(branch)}
-              />
-            ))}
-            <ZoomControl />
-          </StyledYMap>
-        </YMaps>
-        {selectedBranch && (
-          <MapInfoItem {...selectedBranch} onClose={onMapInfoClose} />
-        )}
-      </StyleMapContainer>
-    </StyledWrap>
+      </StyledContainer>
+      <StyledWrap>
+        <StyleMapContainer>
+          <YMaps>
+            <StyledYMap
+              width="100%"
+              height="100%"
+              defaultState={{
+                center: KAZAN_CENTER,
+                zoom: 12,
+                controls: [],
+              }}
+            >
+              {branchesArray.map((branch) => (
+                <Placemark
+                  key={branch.id}
+                  geometry={[branch.latitude, branch.longitude]}
+                  onClick={() => setSelectedBranch(branch)}
+                />
+              ))}
+              <ZoomControl />
+            </StyledYMap>
+          </YMaps>
+          {selectedBranch && (
+            <MapInfoItem {...selectedBranch} onClose={onMapInfoClose} />
+          )}
+        </StyleMapContainer>
+      </StyledWrap>
+    </>
   );
 };
 

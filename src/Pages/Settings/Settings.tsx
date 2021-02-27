@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Container, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
 import { PrimaryButton, PasswordField, PrimaryAlert } from "../../atoms";
@@ -8,18 +8,15 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { passwordValidation } from "../../utils/validationSchemas";
-import { ROUTES } from "../../routes";
-import { Link } from "react-router-dom";
-import PrimaryLink from "../../atoms/PrimaryLink";
 import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 
 const StyledColumn = styled("form")`
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
+  margin-top: 20px;
   max-width: 496px;
 
   & > div {
@@ -41,8 +38,15 @@ const StyledBox = styled(Box)`
     margin-bottom: 60px;
   }
   max-width: 496px;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledPrimaryButton = styled(PrimaryButton)`
+  width: fit-content;
+  align-self: center;
 `;
 
 interface IFormValues {
@@ -114,8 +118,8 @@ const Settings: FC = () => {
   );
 
   return (
-    <Container>
-      <Box mt={5}>
+    <>
+      <Box mt={2}>
         <Typography variant="h1" color="textPrimary">
           {t("Settings")}
         </Typography>
@@ -147,18 +151,10 @@ const Settings: FC = () => {
                 "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
               )}
             </Typography>
-            <PrimaryButton size="large" type="submit">
+            <StyledPrimaryButton size="large" type="submit">
               {t("Save changes")}
-            </PrimaryButton>
-            <Box mt={5}>
-              <PrimaryButton size="large">
-                <Link to={ROUTES.OFFICES}>
-                  <PrimaryLink component="span">
-                    {t("Offices and ATMs")}
-                  </PrimaryLink>
-                </Link>
-              </PrimaryButton>
-            </Box>
+            </StyledPrimaryButton>
+            <Box mt={5}></Box>
           </StyledBox>
         </StyledColumn>
         <PrimaryAlert
@@ -168,7 +164,7 @@ const Settings: FC = () => {
           alertType={alertType}
         />
       </Box>
-    </Container>
+    </>
   );
 };
 

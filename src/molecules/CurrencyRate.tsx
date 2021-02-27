@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
-import currencySelector from "../../recoilState/recoilSelectors/currencySelector";
+import currencySelector from "../recoilState/recoilSelectors/currencySelector";
 
 const StyledContainer = withTheme(styled(TableContainer)`
   background-color: ${(props) => `${props.theme.palette.primary.main}50`};
@@ -32,12 +32,12 @@ const formatDate = (date: string | Date): string => {
   });
 };
 
-export const CurrencyRate: FC = () => {
+const CurrencyRate: FC = () => {
   const { currency } = useRecoilValue(currencySelector);
   const { t } = useTranslation();
 
   return (
-    <Box mt={7} maxWidth={800}>
+    <Box mt={2} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
         {t("Currency rates")}
       </Typography>
@@ -81,3 +81,5 @@ export const CurrencyRate: FC = () => {
     </Box>
   );
 };
+
+export default CurrencyRate;

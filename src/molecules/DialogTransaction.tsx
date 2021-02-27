@@ -2,7 +2,7 @@ import React, { FC, useState, ChangeEvent } from "react";
 import { Dialog, DialogTitle, Tab, withTheme } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { PrimaryAlert, PrimaryButton } from "../atoms";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
 import { useAlert } from "../utils/useAlert";
 import DialogContentYourAccounts from "./../atoms/DialogContentYourAccounts";
 import DialogContentAnotherUser from "./../atoms/DialogContentAnotherUser";
