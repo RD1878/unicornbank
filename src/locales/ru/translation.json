@@ -4,6 +4,7 @@
   "Chat": "Чат",
   "Settings": "Настройки",
   "Offices and ATMs": "Офисы и банкоматы",
+  "Language": "Язык",
   "Russia, Republic of Tatarstan, Kazan, Pushkin st., 66": "Россия, Республика Татарстан, г.Казань ул. Пушкина, 66",
   "For calls within Russia": "Для звонков по России",
   "Edit profile": "Редактировать профиль",
@@ -107,6 +108,6 @@
   "Not found": "Не найдено",
   "Details for transfer": "Реквизиты для перевода на счет карты",
   "Send email": "Отправить на e-mail",
-  "New Product": "Новый продукт",
-  "Currency": "Валюта"
+  "Currency": "Валюта",
+  "New Product": "Новый продукт"
 }

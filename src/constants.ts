@@ -17,7 +17,10 @@ export const BIK = 509339151;
 export const BANKOFRECIPIENT = 'АО "Юни Корн Банк"';
 export const CORRESPONDENTACCOUNT = 36002524538195927000;
 
+export const DRAWER_WIDTH = 350;
+
 export const NOT_A_LETTER = /[^0-9.]*/g;
+
 export enum ELEMENT {
   loginEmail = "login-email",
   password = "password",

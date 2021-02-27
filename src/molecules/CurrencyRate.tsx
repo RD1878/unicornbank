@@ -32,12 +32,12 @@ const formatDate = (date: string | Date): string => {
   });
 };
 
-export const CurrencyRate: FC = () => {
+const CurrencyRate: FC = () => {
   const { currency } = useRecoilValue(currencySelector);
   const { t } = useTranslation();
 
   return (
-    <Box mt={7} maxWidth={800}>
+    <Box mt={2} maxWidth={800}>
       <Typography variant="h1" color="textPrimary">
         {t("Currency rates")}
       </Typography>
@@ -81,3 +81,5 @@ export const CurrencyRate: FC = () => {
     </Box>
   );
 };
+
+export default CurrencyRate;

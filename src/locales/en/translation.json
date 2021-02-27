@@ -60,6 +60,7 @@
   "Euro": "Euro",
   "Dollar": "Dollar",
   "Rubles": "Rubles",
+  "Language": "Language",
   "Money transaction": "Money transaction",
   "Transaction": "Transaction",
   "In order to transfer money to your card": "In order to transfer money to your card, deposit or account, fill in the form fields and click the Translate button.",
@@ -81,7 +82,6 @@
   "Invalid id": "Invalid id",
   "Data changed successfully!": "Data changed successfully!",
   "An error occured, failed to exit!": "An error occured, failed to exit!",
-  "Currency rates": "Currency rates",
   "Operations History": "Operations history",
   "Last operations": "Last operations",
   "Requisites": "Requisites",
@@ -108,5 +108,6 @@
   "Not found": "Not found",
   "Details for transfer": "Details for transfer to card account",
   "Send email": "Send by e-mail",
-  "Currency": "Currency"
+  "Currency": "Currency",
+  "Currency rates": "Currency rates"
 }

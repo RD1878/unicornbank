@@ -3,15 +3,15 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import { useTheme, withTheme } from "@material-ui/core/styles";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
-import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../routes";
 import { firebaseAuth } from "../firebase/firebase";
 import { Snackbar } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
+import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
+import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
 const StyledToolbar = withTheme(styled(({ ...props }) => (
   <Toolbar classes={{ regular: "regular" }} {...props} />
@@ -22,8 +22,17 @@ const StyledToolbar = withTheme(styled(({ ...props }) => (
   }
 `);
 
-const ProminentAppBar: FC = () => {
+interface IHeader {
+  onToggleTheme: () => void;
+  onToggleMobileDrawer: () => void;
+}
+
+const ProminentAppBar: FC<IHeader> = ({
+  onToggleTheme,
+  onToggleMobileDrawer,
+}) => {
   const [error, setError] = useState(false);
+  const theme = useTheme();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -37,6 +46,7 @@ const ProminentAppBar: FC = () => {
       setError(true);
     }
   };
+
   return (
     <AppBar position="fixed">
       <Snackbar
@@ -49,11 +59,21 @@ const ProminentAppBar: FC = () => {
         </Alert>
       </Snackbar>
       <StyledToolbar>
-        <Link to={ROUTES.PROFILE}>
-          <IconButton edge="start" aria-label="open drawer">
-            <AccountCircleRoundedIcon />
-          </IconButton>
-        </Link>
+        <IconButton
+          onClick={onToggleMobileDrawer}
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+        >
+          <MenuIcon />
+        </IconButton>
+        <IconButton onClick={onToggleTheme}>
+          {theme.palette.type === "dark" ? (
+            <Brightness4RoundedIcon />
+          ) : (
+            <Brightness7RoundedIcon />
+          )}
+        </IconButton>
         <IconButton edge="end" onClick={signOut}>
           <ExitToAppRoundedIcon />
         </IconButton>

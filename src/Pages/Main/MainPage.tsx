@@ -32,5 +32,4 @@ const MainPage: FC = () => {
     </>
   );
 };
-
 export default MainPage;

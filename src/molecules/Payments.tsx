@@ -12,7 +12,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
-import DialogTransaction from "./DialogTransaction";
+import { DialogTransaction } from "../molecules";
 import { useTranslation } from "react-i18next";
 
 interface TabPanelProps {
@@ -25,6 +25,7 @@ interface TabPanelProps {
 const StyledContainer = withTheme(styled(Container)`
   min-width: 200px;
   width: 100%;
+  margin-left: 0;
 `);
 
 const TabPanelWrapper: FC<TabPanelProps> = ({ title, value, index }) => {
@@ -54,7 +55,7 @@ interface IOffer {
   type: string;
 }
 
-export const Payments: FC = () => {
+const Payments: FC = () => {
   const [offerTab, setOfferTab] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [offers, setOffers] = useState<IOffer[]>([]);
@@ -95,7 +96,7 @@ export const Payments: FC = () => {
         </Box>
       )}
       {!loaded && <LinearProgress color="secondary" />}
-      <Box mb={7}>
+      <Box mb={2}>
         <Paper>
           <Tabs
             value={offerTab}
@@ -114,3 +115,5 @@ export const Payments: FC = () => {
     </StyledContainer>
   );
 };
+
+export default Payments;

@@ -74,10 +74,6 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
   const { userData } = useRecoilValue(userState);
   const [tab, setTab] = useState(0);
-  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
-    setTab(newVal);
-  };
-
   const [card, setCard] = useState("all");
   const [currency, setCurrency] = useState("all");
   const [selectedDateFrom, setSelectedDateFrom] = useState<Date | null>(
@@ -86,6 +82,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const [selectedDateTo, setSelectedDateTo] = useState<Date | null>(
     getEndToday()
   );
+
   const { products } = userData;
   const { cards } = products;
   const dataCards = Object.entries(cards);
@@ -96,6 +93,10 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
     { type: "income", name: t("Incomes") },
     { type: "writeOff", name: t("Write off") },
   ];
+
+  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
+    setTab(newVal);
+  };
 
   const formattedOperations = (operations: ICardTransaction[]) =>
     operations
