@@ -14,6 +14,8 @@ import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
+import CardInfo from "./Pages/CardInfo/CardInfo";
+import Requisites from "./Pages/Requisites";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
 import { useRecoilValue } from "recoil";
@@ -51,6 +53,8 @@ const App: FC = () => {
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
             <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
+            <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
+            <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
           </MainLayout>
         </ProtectedRoute>
       </Switch>

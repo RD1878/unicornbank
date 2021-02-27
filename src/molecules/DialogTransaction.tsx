@@ -19,7 +19,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { useFormik } from "formik";
 import { db } from "../firebase/firebase";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
 import * as yup from "yup";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
 import { useAlert } from "../utils/useAlert";

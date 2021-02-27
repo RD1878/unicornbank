@@ -10,7 +10,7 @@ import { db, firebaseAuth } from "../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { withTheme } from "@material-ui/core/styles";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { REQUIRED_MESSAGE } from "../../constants";
 import {
   emailValidation,
