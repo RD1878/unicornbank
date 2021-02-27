@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
+import { ROUTES } from "../routes";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -128,7 +129,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                 </TabPanel>
               )
           )}
-          <StyledLink to="*">
+          <StyledLink to={ROUTES.HISTORY}>
             <PrimaryButton>{t("More")}</PrimaryButton>
           </StyledLink>
         </StyledOperationsContainer>

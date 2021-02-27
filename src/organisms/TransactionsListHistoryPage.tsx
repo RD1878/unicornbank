@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import styled from "styled-components";
-import { PrimaryButton } from "../atoms";
 import { OperationCard, TabPanel } from "../molecules";
 import {
   Box,
@@ -15,17 +14,17 @@ import {
   Grid,
 } from "@material-ui/core";
 import { IOperation } from "../interfaces/operation";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
-import { CURRENCIES } from "../constants";
+import { CURRENCIES, sevenDaysAgo } from "../constants";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import { getEndToday } from "../utils/getEndToday";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -51,11 +50,6 @@ const StyledOperationsContainer = styled("div")`
   max-width: 800px;
   display: flex;
   flex-direction: column;
-`;
-
-const StyledLink = styled(Link)`
-  align-self: center;
-  text-decoration: none;
 `;
 
 interface ICardTransaction {
@@ -86,10 +80,12 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
 
   const [card, setCard] = useState("all");
   const [currency, setCurrency] = useState("all");
-  const [selectedDateFrom, setSelectedDateFrom] = useState<Date | null>(null);
-
-  const [selectedDateTo, setSelectedDateTo] = useState<Date | null>(null);
-
+  const [selectedDateFrom, setSelectedDateFrom] = useState<Date | null>(
+    sevenDaysAgo
+  );
+  const [selectedDateTo, setSelectedDateTo] = useState<Date | null>(
+    getEndToday()
+  );
   const { products } = userData;
   const { cards } = products;
   const dataCards = Object.entries(cards);
@@ -107,15 +103,31 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
         (itemA, itemB) =>
           Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
       )
-      .slice(0, 10)
+      .filter(({ id }) => (card === "all" ? true : id === card))
+      .filter(({ operation }) =>
+        currency === "all" ? true : operation.currency === currency
+      )
+      .filter(({ operation }) => {
+        if (selectedDateFrom !== null) {
+          return Date.parse(operation.date) >= selectedDateFrom.getTime();
+        }
+      })
+      .filter(({ operation }) => {
+        if (selectedDateTo !== null) {
+          return Date.parse(operation.date) <= selectedDateTo.getTime();
+        }
+      })
       .map(({ key, operation }) => (
         <OperationCard operation={operation} key={key} />
       ));
 
   const filteredOperationsByType = (type: string) => {
-    const filtered = cardsTransactions.filter(
-      ({ operation }) => operation.type === type
-    );
+    const filtered = cardsTransactions
+      .filter(({ operation }) => operation.type === type)
+      .filter(({ id }) => (card === "all" ? true : id === card))
+      .filter(({ operation }) =>
+        currency === "all" ? true : operation.currency === currency
+      );
     if (filtered.length) {
       return formattedOperations(filtered);
     } else
@@ -156,7 +168,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                 <MenuItem value="" disabled>
                   {t("Card")}
                 </MenuItem>
-                <MenuItem value={card}>{t("All")}</MenuItem>
+                <MenuItem value={"all"}>{t("All")}</MenuItem>
                 {dataCards.map(([key, { number }]) => (
                   <MenuItem key={key} value={key}>
                     {number.slice(-7)}
@@ -174,7 +186,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                 <MenuItem value="" disabled>
                   {t("Currency")}
                 </MenuItem>
-                <MenuItem value={card}>{t("All")}</MenuItem>
+                <MenuItem value={"all"}>{t("All")}</MenuItem>
                 {currencies.map((currency) => (
                   <MenuItem key={currency} value={currency}>
                     {currency}
@@ -242,9 +254,6 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                 </TabPanel>
               )
           )}
-          <StyledLink to="*">
-            <PrimaryButton>{t("More")}</PrimaryButton>
-          </StyledLink>
         </StyledOperationsContainer>
       )}
     </StyledContainer>

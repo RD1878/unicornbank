@@ -1,3 +1,4 @@
+import { getEndToday } from "./utils/getEndToday";
 export const SHACKBAR_SHOW_DURATION = 6000;
 
 export const CURRENCIES = {
@@ -22,3 +23,5 @@ export enum ELEMENT {
   password = "password",
   loginButton = "login-button",
 }
+
+export const sevenDaysAgo = new Date(getEndToday().getTime() - 691199999);
