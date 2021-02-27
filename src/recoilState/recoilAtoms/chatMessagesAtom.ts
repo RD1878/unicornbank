@@ -14,29 +14,31 @@ const chatMessagesEffect: (
   const ref = db.ref(`chatMessages/${uid}`);
   const fetchMessagesData = async () => {
     if (trigger === "get") {
-      const response = await ref.once("value");
-      const data = await response.val();
-      setSelf({
-        chatMessages: data,
-        isLoading: false,
-        errorMessage: "",
-      });
+      try {
+        const response = await ref.once("value");
+        const data = response.val();
+        setSelf({
+          chatMessages: data,
+          isLoading: false,
+          errorMessage: "",
+        });
+      } catch ({ message }) {
+        setSelf({
+          chatMessages: [],
+          isLoading: false,
+          errorMessage: message,
+        });
+      }
     }
     try {
-      await ref.on("value", (data) => {
+      ref.on("value", (data) => {
         setSelf({
           chatMessages: data.val(),
           isLoading: false,
           errorMessage: "",
         });
       });
-    } catch ({ message }) {
-      setSelf({
-        chatMessages: [],
-        isLoading: false,
-        errorMessage: message,
-      });
-    }
+    } catch ({ message }) {}
   };
   fetchMessagesData();
   return () => {
