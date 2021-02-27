@@ -171,7 +171,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           {isQueryPathHistory() && (
             <>
               <Typography variant="h2" color="textPrimary">
-                Фильтры
+                {t("Filters")}
               </Typography>
               <Grid container justify="flex-start">
                 <StyledFormControl>
