@@ -117,5 +117,7 @@
   "Enter the phone number of the user to whom you want to transfer funds": "Языгыз, телефон номеры кулланучының, аның телисез икән, күчерергә акча",
   "Between your accounts": "Исәп-хисап",
   "To another bank user": "Банкның башка кулланучысына",
-  "User is not found": "Кулланучы табылмады"
+  "User is not found": "Кулланучы табылмады",
+  "Transaction between your accounts": "Транзакция арасында сезнең счетлары",
+  "Transaction to another bank user": "Башка банктан файдаланучы белән операция"
 }

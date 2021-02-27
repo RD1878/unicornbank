@@ -5,10 +5,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import currencySelector from "../recoilState/recoilSelectors/currencySelector";
-import {
-  calculateOfTransfer,
-  findCardId,
-} from "../helpers/calculateOfTransfer";
+import { calculateOfTransfer } from "../utils/calculateOfTransfer";
+import { findCardId } from "../utils/calculateOfTransfer";
 import * as yup from "yup";
 import { db } from "../firebase/firebase";
 import api from "../api";
@@ -18,11 +16,19 @@ import {
   sumValidation,
 } from "../utils/validationSchemas";
 import { useFormik } from "formik";
-import { TAlert } from "../interfaces/main";
-import { REQUIRED_MESSAGE, NOT_A_LETTER } from ".././constants";
-import { getInfoAboutAnotherUser } from "../helpers/getInfoAboutAnotherUser";
-import { cleanPhone, phoneMask } from "./../helpers/phoneMask";
+import { TAlert } from "../interfaces/tAlert";
+import {
+  REQUIRED_MESSAGE,
+  NOT_A_LETTER,
+  CATEGORY2,
+  DESCRIPTION,
+  WRITTINGOFF,
+  INCOMES,
+} from ".././constants";
+import { getInfoAboutAnotherUser } from "../utils/getInfoAboutAnotherUser";
+import { cleanPhone, phoneMask } from "./../utils/phoneMask";
 import { FormItemTransfer } from "./FormItemTransfer";
+import { randomId } from "../utils/randomId";
 
 export interface IDialogContentAnotherUser extends IFormData {
   phone: string;
@@ -99,6 +105,18 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
           [id1]: {
             ...products.cards[id1],
             balance: products.cards[id1].balance - amount,
+            operations: {
+              ...products.cards[id1].operations,
+              [randomId()]: {
+                amount,
+                category: CATEGORY2,
+                currency: products.cards[id1].currency,
+                date: new Date(),
+                description: DESCRIPTION,
+                name: t(WRITTINGOFF),
+                type: "writeOff",
+              },
+            },
           },
         },
       });
@@ -107,6 +125,18 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
         [`users/${anotherUserUid}/products/cards/${card2Id}`]: {
           ...cards[card2Id],
           balance: anotherCardInfo.balance + Number(calculatedSum),
+          operations: {
+            ...anotherCardInfo.operations,
+            [randomId()]: {
+              amount,
+              category: CATEGORY2,
+              currency: anotherCardInfo.currency,
+              date: new Date(),
+              description: DESCRIPTION,
+              name: t(INCOMES),
+              type: "income",
+            },
+          },
         },
       });
 

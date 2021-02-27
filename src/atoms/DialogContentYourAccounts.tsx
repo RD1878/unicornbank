@@ -20,17 +20,22 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import currencySelector from "../recoilState/recoilSelectors/currencySelector";
-import {
-  calculateOfTransfer,
-  findCardId,
-} from "../helpers/calculateOfTransfer";
+import { calculateOfTransfer } from "../utils/calculateOfTransfer";
+import { findCardId } from "../utils/calculateOfTransfer";
 import * as yup from "yup";
-import { NOT_A_LETTER } from "../constants";
+import {
+  NOT_A_LETTER,
+  CATEGORY,
+  DESCRIPTION,
+  WRITTINGOFF,
+  INCOMES,
+} from ".././constants";
 import { db } from "../firebase/firebase";
 import api from "../api";
 import { selectValidation, sumValidation } from "../utils/validationSchemas";
 import { useFormik } from "formik";
-import { TAlert } from "../interfaces/main";
+import { TAlert } from "../interfaces/tAlert";
+import { randomId } from "../utils/randomId";
 
 interface IDialogContentYourAccounts {
   closeDialog: () => void;
@@ -100,10 +105,34 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
           [id1]: {
             ...products.cards[id1],
             balance: products.cards[id1].balance - amount,
+            operations: {
+              ...products.cards[id1].operations,
+              [randomId()]: {
+                amount,
+                category: CATEGORY,
+                currency: products.cards[id1].currency,
+                date: new Date(),
+                description: DESCRIPTION,
+                name: t(WRITTINGOFF),
+                type: "writeOff",
+              },
+            },
           },
           [id2]: {
             ...products.cards[id2],
             balance: products.cards[id2].balance + Number(calculatedSum),
+            operations: {
+              ...products.cards[id2].operations,
+              [randomId()]: {
+                amount,
+                category: CATEGORY,
+                currency: products.cards[id2].currency,
+                date: new Date(),
+                description: DESCRIPTION,
+                name: t(INCOMES),
+                type: "income",
+              },
+            },
           },
         },
       });

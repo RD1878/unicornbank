@@ -15,6 +15,11 @@ export const INN = 562645787591;
 export const BIK = 509339151;
 export const BANKOFRECIPIENT = 'АО "Юни Корн Банк"';
 export const CORRESPONDENTACCOUNT = 36002524538195927000;
+export const CATEGORY = "Transaction between your accounts";
+export const CATEGORY2 = "Transaction to another bank user";
+export const DESCRIPTION = "Transfers UniCorn";
+export const WRITTINGOFF = "Write off";
+export const INCOMES = "Incomes";
 
 export const DRAWER_WIDTH = 350;
 

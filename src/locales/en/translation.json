@@ -114,5 +114,7 @@
   "Enter the phone number of the user to whom you want to transfer funds": "Enter the phone number of the user to whom you want to transfer funds",
   "Between your accounts": "Between your accounts",
   "To another bank user": "To another bank user",
-  "User is not found": "User is not found"
+  "User is not found": "User is not found",
+  "Transaction between your accounts": "Transaction between your accounts",
+  "Transaction to another bank user": "Transaction to another bank user"
 }

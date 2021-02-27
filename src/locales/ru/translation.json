@@ -116,5 +116,7 @@
   "Between your accounts": "Между своими счетами",
   "To another bank user": "Другому пользователю банка",
   "User is not found": "Пользователь не найден",
-  "New Product": "Новый продукт"
+  "New Product": "Новый продукт",
+  "Transaction between your accounts": "Перевод между счетами",
+  "Transaction to another bank user": "Перевод пользователю банка"
 }
