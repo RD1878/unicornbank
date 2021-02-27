@@ -1,13 +1,15 @@
-import React, { FC, useState, SyntheticEvent, ChangeEvent } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
-import { Switch, Snackbar, FormControl, NativeSelect } from "@material-ui/core";
+import { useTheme, withTheme } from "@material-ui/core/styles";
+import { Snackbar, IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { DRAWER_BANKCHATS_WIDTH, SHACKBAR_SHOW_DURATION } from "../constants";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
+import { LanguageSelect } from "../molecules";
+import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
+import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -20,12 +22,15 @@ const Container = withTheme(styled("div")`
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);
 
-const LinksContainer = styled.div`
+const ControlsContainer = styled("div")`
   display: flex;
+  flex-direction: row;
+  width: 15vw;
+  max-width: 150px;
   justify-content: space-evenly;
   align-items: center;
-  flex-grow: 0.5;
 `;
+
 interface IHeaderBank {
   onToggleTheme: () => void;
 }
@@ -33,6 +38,7 @@ interface IHeaderBank {
 const HeaderBank: FC<IHeaderBank> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -47,10 +53,6 @@ const HeaderBank: FC<IHeaderBank> = ({ onToggleTheme }) => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<{ value: string }>) => {
-    i18next.changeLanguage(e.target.value);
-  };
-
   return (
     <Container>
       <Snackbar
@@ -59,22 +61,21 @@ const HeaderBank: FC<IHeaderBank> = ({ onToggleTheme }) => {
         onClose={handleCloseAlert}
       >
         <Alert severity="error" onClose={handleCloseAlert}>
-          Произошла ошибка, не получилось выйти!
+          {t("An error occured, failed to exit!")}
         </Alert>
       </Snackbar>
-
-      <LinksContainer>
-        <Logo />
-        <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
-      </LinksContainer>
-      <FormControl>
-        <NativeSelect defaultValue="ru" onChange={handleChange}>
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
-          <option value="tat">Татарча</option>
-        </NativeSelect>
-      </FormControl>
-      <Switch onChange={onToggleTheme} />
+      <Logo />
+      <ControlsContainer>
+        <LanguageSelect />
+        <IconButton onClick={onToggleTheme}>
+          {theme.palette.type === "dark" ? (
+            <Brightness4RoundedIcon />
+          ) : (
+            <Brightness7RoundedIcon />
+          )}
+        </IconButton>
+      </ControlsContainer>
+      <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
     </Container>
   );
 };
