@@ -55,6 +55,12 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
+const StyledFormControl = styled(FormControl)`
+  width: 100px;
+  margin-top: 20px;
+  margin-right: 20px;
+`;
+
 interface IProps {
   cardsTransactions: IOperationItem[];
 }
@@ -164,8 +170,11 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
         <StyledOperationsContainer>
           {isQueryPathHistory() && (
             <>
-              <Grid container justify="space-evenly" spacing={1}>
-                <FormControl>
+              <Typography variant="h2" color="textPrimary">
+                Фильтры
+              </Typography>
+              <Grid container justify="flex-start">
+                <StyledFormControl>
                   <Select value={card} onChange={handleChangeCard} displayEmpty>
                     <MenuItem value="" disabled>
                       {t("Card")}
@@ -178,8 +187,8 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                     ))}
                   </Select>
                   <FormHelperText>{t("Card")}</FormHelperText>
-                </FormControl>
-                <FormControl>
+                </StyledFormControl>
+                <StyledFormControl>
                   <Select
                     value={currency}
                     onChange={handleChangeCurrency}
@@ -196,7 +205,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                     ))}
                   </Select>
                   <FormHelperText>{t("Currency")}</FormHelperText>
-                </FormControl>
+                </StyledFormControl>
               </Grid>
               <DatePickers
                 selectedDateFrom={selectedDateFrom}

@@ -6,6 +6,7 @@ import {
 } from "@material-ui/pickers";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 
 type DateType = Date | null;
 
@@ -15,6 +16,10 @@ interface IProps {
   handleDateChangeFrom: (date: DateType) => void;
   handleDateChangeTo: (date: DateType) => void;
 }
+
+const StyledKeyboardDatePicker = styled(KeyboardDatePicker)`
+  margin-right: 20px;
+`;
 
 const DatePickers: FC<IProps> = ({
   selectedDateFrom,
@@ -26,8 +31,8 @@ const DatePickers: FC<IProps> = ({
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container justify="space-evenly">
-        <KeyboardDatePicker
+      <Grid container justify="flex-start">
+        <StyledKeyboardDatePicker
           variant="inline"
           autoOk
           format="dd/MM/yyyy"
@@ -40,7 +45,7 @@ const DatePickers: FC<IProps> = ({
             "aria-label": "change date",
           }}
         />
-        <KeyboardDatePicker
+        <StyledKeyboardDatePicker
           variant="inline"
           autoOk
           margin="normal"
