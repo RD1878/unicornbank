@@ -19,7 +19,7 @@ import chatMessagesState from "../../recoilState/recoilAtoms/chatMessagesAtom";
 import PrimaryAlert from "../../atoms/PrimaryAlert";
 import { useAlert } from "../../utils/useAlert";
 import { randomId } from "../../utils/randomId";
-import useChatMessages from "../../utils/useChatMessages";
+import authState from "../../recoilState/recoilAtoms/authAtom";
 
 const StyledList = styled(List)`
   display: flex;
@@ -50,9 +50,10 @@ const Chat: FC = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
-
-  const chatMessagesData = useRecoilValue(chatMessagesState);
-  const { isLoading, chatMessages } = chatMessagesData;
+  const user = useRecoilValue(authState);
+  const { isLoading, chatMessages } = useRecoilValue(
+    chatMessagesState(user?.currentUser?.uid)
+  );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -82,8 +83,6 @@ const Chat: FC = () => {
       onAlertOpen();
     }
   };
-
-  useChatMessages();
 
   return (
     <>

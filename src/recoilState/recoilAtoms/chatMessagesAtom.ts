@@ -1,5 +1,5 @@
-import { atom, AtomEffect } from "recoil";
-import { db, firebaseAuth } from "../../firebase/firebase";
+import { AtomEffect, atomFamily } from "recoil";
+import { db } from "../../firebase/firebase";
 import { IChatMessage } from "../../interfaces/chatMessage";
 
 interface IChatMessagesState {
@@ -8,50 +8,50 @@ interface IChatMessagesState {
   errorMessage: string;
 }
 
-const chatMessagesEffect: AtomEffect<IChatMessagesState> = ({ setSelf }) => {
-  const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-    const fetchMessagesData = async () => {
-      try {
-        if (!user) {
-          setSelf({
-            isLoading: false,
-            chatMessages: [],
-            errorMessage: "Нет активной сессии",
-          });
-        } else {
-          const { uid } = user;
-          await db
-            .ref("chatMessages/" + uid)
-            .limitToLast(10)
-            .on("value", (data) => {
-              setSelf({
-                chatMessages: data.val(),
-                isLoading: false,
-                errorMessage: "",
-              });
-            });
-        }
-      } catch ({ message }) {
+const chatMessagesEffect: (
+  uid: string | undefined
+) => AtomEffect<IChatMessagesState> = (uid) => ({ setSelf, trigger }) => {
+  const ref = db.ref(`chatMessages/${uid}`);
+  const fetchMessagesData = async () => {
+    if (trigger === "get") {
+      const response = await ref.once("value");
+      const data = await response.val();
+      setSelf({
+        chatMessages: data,
+        isLoading: false,
+        errorMessage: "",
+      });
+    }
+    try {
+      await ref.on("value", (data) => {
         setSelf({
-          chatMessages: [],
+          chatMessages: data.val(),
           isLoading: false,
-          errorMessage: message,
+          errorMessage: "",
         });
-      }
-    };
-    fetchMessagesData();
-  });
-  return () => unsubscribe();
+      });
+    } catch ({ message }) {
+      setSelf({
+        chatMessages: [],
+        isLoading: false,
+        errorMessage: message,
+      });
+    }
+  };
+  fetchMessagesData();
+  return () => {
+    ref.off("value");
+  };
 };
 
-const chatMessagesState = atom<IChatMessagesState>({
+const chatMessagesState = atomFamily<IChatMessagesState, string | undefined>({
   key: "chatMessagesState",
   default: {
     isLoading: true,
     chatMessages: [],
     errorMessage: "",
   },
-  effects_UNSTABLE: [chatMessagesEffect],
+  effects_UNSTABLE: (uid) => [chatMessagesEffect(uid)],
 });
 
 export default chatMessagesState;
