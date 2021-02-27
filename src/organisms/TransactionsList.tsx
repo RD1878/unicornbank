@@ -1,14 +1,28 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../atoms";
-import { OperationCard, TabPanel } from "../molecules";
-import { Box, Tabs, Tab, Typography, LinearProgress } from "@material-ui/core";
-import { IOperation } from "../interfaces/operation";
-import { Link } from "react-router-dom";
+import { DatePickers, OperationCard, TabPanel } from "../molecules";
+import {
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  LinearProgress,
+  Grid,
+  FormControl,
+  MenuItem,
+  Select,
+  FormHelperText,
+} from "@material-ui/core";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import { ROUTES } from "../routes";
+import { IOperationItem } from "../interfaces/operationItem";
+import { categories, CURRENCIES, sevenDaysAgo } from "../constants";
+import { getEndToday } from "../utils/getEndToday";
+import { getFiltredOperations } from "../utils/getFiltredOperations";
 
 const StyledTab = styled(({ ...props }) => (
   <Tab classes={{ wrapper: "wrapper" }} {...props} />
@@ -41,47 +55,56 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-interface ICardTransaction {
-  id: string;
-  key: string;
-  operation: IOperation;
+interface IProps {
+  cardsTransactions: IOperationItem[];
 }
 
-interface IProps {
-  cardsTransactions: ICardTransaction[];
+interface ICardValue {
+  value: unknown;
+}
+
+interface ICardCurrency {
+  value: unknown;
 }
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
   const { userData } = useRecoilValue(userState);
   const [tab, setTab] = useState(0);
-  const handleChange = (e: ChangeEvent<unknown>, newVal: number) => {
-    setTab(newVal);
-  };
+  const [card, setCard] = useState("all");
+  const [currency, setCurrency] = useState("all");
+  const [selectedDateFrom, setSelectedDateFrom] = useState<Date | null>(
+    sevenDaysAgo
+  );
+  const [selectedDateTo, setSelectedDateTo] = useState<Date | null>(
+    getEndToday()
+  );
 
-  const categories: { type: string; name: string }[] = [
-    { type: "all", name: t("All") },
-    { type: "income", name: t("Incomes") },
-    { type: "writeOff", name: t("Write off") },
-  ];
+  const { products } = userData;
+  const { cards } = products;
+  const dataCards = Object.entries(cards);
+  const currencies = Object.keys(CURRENCIES);
 
-  const formattedOperations = (operations: ICardTransaction[]) =>
-    operations
-      .sort(
-        (itemA, itemB) =>
-          Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
-      )
-      .slice(0, 10)
-      .map(({ key, operation }) => (
-        <OperationCard operation={operation} key={key} />
-      ));
-
-  const filteredOperationsByType = (type: string) => {
-    const filtered = cardsTransactions.filter(
-      ({ operation }) => operation.type === type
-    );
-    if (filtered.length) {
-      return formattedOperations(filtered);
+  const formattedOperations = (operations: IOperationItem[]) => {
+    const resultOperations =
+      useLocation().pathname === ROUTES.HISTORY
+        ? getFiltredOperations(
+            operations,
+            card,
+            currency,
+            selectedDateFrom,
+            selectedDateTo
+          )
+        : operations;
+    if (resultOperations.length) {
+      return resultOperations
+        .sort(
+          (itemA, itemB) =>
+            Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+        )
+        .map(({ key, operation }) => (
+          <OperationCard operation={operation} key={key} />
+        ));
     } else
       return (
         <Box p={4}>
@@ -92,25 +115,107 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
       );
   };
 
+  const isQueryPathHistory = () => useLocation().pathname === ROUTES.HISTORY;
+
+  const filteredOperationsByType = (type: string) => {
+    const transactions = isQueryPathHistory()
+      ? getFiltredOperations(
+          cardsTransactions,
+          card,
+          currency,
+          selectedDateFrom,
+          selectedDateTo
+        )
+      : cardsTransactions;
+    const filtered = transactions.filter(
+      ({ operation }) => operation.type === type
+    );
+
+    return formattedOperations(filtered);
+  };
+
+  const handleChangeTab = (e: ChangeEvent<unknown>, newVal: number) => {
+    setTab(newVal);
+  };
+
+  const handleChangeCard = (event: ChangeEvent<ICardValue>) => {
+    setCard(event.target.value as string);
+  };
+  const handleChangeCurrency = (event: ChangeEvent<ICardCurrency>) => {
+    setCurrency(event.target.value as string);
+  };
+  const handleDateChangeFrom = (date: Date | null) => {
+    setSelectedDateFrom(date);
+  };
+  const handleDateChangeTo = (date: Date | null) => {
+    setSelectedDateTo(date);
+  };
+
   return (
     <StyledContainer>
-      <Typography variant="h2" color="textPrimary">
-        {t("Last operations")}
-      </Typography>
+      {!isQueryPathHistory() && (
+        <Typography variant="h2" color="textPrimary">
+          {t("Last operations")}
+        </Typography>
+      )}
       {userData.isLoading ? (
         <LinearProgress color="secondary" />
       ) : (
         <StyledOperationsContainer>
+          {isQueryPathHistory() && (
+            <>
+              <Grid container justify="space-evenly" spacing={1}>
+                <FormControl>
+                  <Select value={card} onChange={handleChangeCard} displayEmpty>
+                    <MenuItem value="" disabled>
+                      {t("Card")}
+                    </MenuItem>
+                    <MenuItem value={"all"}>{t("All")}</MenuItem>
+                    {dataCards.map(([key, { number }]) => (
+                      <MenuItem key={key} value={key}>
+                        {number.slice(-7)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{t("Card")}</FormHelperText>
+                </FormControl>
+                <FormControl>
+                  <Select
+                    value={currency}
+                    onChange={handleChangeCurrency}
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      {t("Currency")}
+                    </MenuItem>
+                    <MenuItem value={"all"}>{t("All")}</MenuItem>
+                    {currencies.map((currency) => (
+                      <MenuItem key={currency} value={currency}>
+                        {currency}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{t("Currency")}</FormHelperText>
+                </FormControl>
+              </Grid>
+              <DatePickers
+                selectedDateFrom={selectedDateFrom}
+                selectedDateTo={selectedDateTo}
+                handleDateChangeFrom={handleDateChangeFrom}
+                handleDateChangeTo={handleDateChangeTo}
+              />
+            </>
+          )}
           <Tabs
             value={tab}
-            onChange={handleChange}
+            onChange={handleChangeTab}
             indicatorColor="secondary"
             textColor="secondary"
             variant="fullWidth"
             scrollButtons="on"
           >
             {categories.map((item) => (
-              <StyledTab label={item.name} key={item.type} />
+              <StyledTab label={t(item.name)} key={item.type} />
             ))}
           </Tabs>
           <TabPanel type="scrollable-force" value={tab} index={0}>
@@ -129,9 +234,11 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                 </TabPanel>
               )
           )}
-          <StyledLink to={ROUTES.HISTORY}>
-            <PrimaryButton>{t("More")}</PrimaryButton>
-          </StyledLink>
+          {!isQueryPathHistory() && (
+            <StyledLink to={ROUTES.HISTORY}>
+              <PrimaryButton>{t("More")}</PrimaryButton>
+            </StyledLink>
+          )}
         </StyledOperationsContainer>
       )}
     </StyledContainer>

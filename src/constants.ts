@@ -27,4 +27,10 @@ export enum ELEMENT {
   loginButton = "login-button",
 }
 
+export const categories: { type: string; name: string }[] = [
+  { type: "all", name: "All" },
+  { type: "income", name: "Incomes" },
+  { type: "writeOff", name: "Write off" },
+];
+
 export const sevenDaysAgo = new Date(getEndToday().getTime() - 691199999);

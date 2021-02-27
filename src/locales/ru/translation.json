@@ -109,5 +109,7 @@
   "Details for transfer": "Реквизиты для перевода на счет карты",
   "Send email": "Отправить на e-mail",
   "Currency": "Валюта",
-  "New Product": "Новый продукт"
+  "New Product": "Новый продукт",
+  "Period from": "Период с",
+  "Period to": "Период по"
 }

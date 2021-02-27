@@ -110,5 +110,7 @@
   "An error occured, failed to exit!": "Хата килеп чыкты, чыга алмады!",
   "Operations History": "Операцияләр тарихы",
   "Currency": "Валюта",
-  "Currency rates": "Валюта курслары"
+  "Currency rates": "Валюта курслары",
+  "Period from": "Вакыт башлап",
+  "Period to": "Вакыт буенча"
 }
