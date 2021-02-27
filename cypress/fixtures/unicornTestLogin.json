@@ -1,0 +1,7 @@
+{
+  "main_url": "http://localhost:3000",
+  "email": "hello@cypress.io",
+  "password": "dummy@dummy",
+  "shortPassword": "dummy",
+  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов"
+}

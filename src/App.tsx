@@ -3,42 +3,29 @@ import { Snackbar, ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import {
   Auth,
-  /*  MainPage,
+  /* MainPage,
   Profile, */
   Register,
-  /* Settings,
+  /*  Settings,
   Map, */
   ChatBank,
 } from "./Pages";
-import { useDispatch, useSelector } from "react-redux";
 /* import { MainLayout } from "./Pages/layouts/main/MainLayout";
  */ import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, getSessionError, requestUser } from "./actions";
-import { firebaseAuth } from "./firebase/firebase";
-import { Alert } from "@material-ui/lab";
-import { authSelector } from "./selectors";
+/* import CardInfo from "./Pages/CardInfo/CardInfo";
+import Requisites from "./Pages/Requisites";
+ */ import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
 import { MainLayoutBank } from "./Pages/layouts/main/MainLayoutBank";
+import { useRecoilValue } from "recoil";
+import authState from "./recoilState/recoilAtoms/authAtom";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
-  const { errorMessage } = useSelector(authSelector);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        dispatch(getSessionError("Нет активной сессии"));
-      }
-
-      dispatch(getSession(user));
-      dispatch(requestUser());
-    });
-  }, []);
+  const { errorMessage } = useRecoilValue(authState);
 
   useEffect(() => {
     if (errorMessage.length) {
@@ -64,12 +51,15 @@ const App: FC = () => {
           <MainLayoutBank onToggleTheme={toggleTheme}>
             <ProtectedRoute path={ROUTES.CHATBANK} exact component={ChatBank} />
           </MainLayoutBank>
-          {/* <MainLayout onToggleTheme={toggleTheme}>
+          {/*           <MainLayout onToggleTheme={toggleTheme}>
             <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
             <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
-          </MainLayout> */}
+            <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
+            <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
+          </MainLayout>
+ */}
         </ProtectedRoute>
       </Switch>
       <Snackbar

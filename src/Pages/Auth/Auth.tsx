@@ -1,30 +1,30 @@
-import React, { FC, useState, SyntheticEvent, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import {
-  Typography,
-  Snackbar,
-  FormControl,
-  Link,
-  NativeSelect,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { FormControl, Link, NativeSelect, Typography } from "@material-ui/core";
 import background from "../../assets/images/1-2.png";
-import { TextField, PrimaryButton, PasswordField, Logo } from "../../atoms";
+import {
+  TextField,
+  PrimaryButton,
+  PasswordField,
+  Logo,
+  PrimaryAlert,
+} from "../../atoms";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { saveUser } from "../../actions/user";
 import { readUserData } from "./../../firebase/firebase";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { ROUTES } from "../../routes";
 import {
   emailValidation,
   passwordValidation,
 } from "../../utils/validationSchemas";
-import { REQUIRED_MESSAGE, SHACKBAR_SHOW_DURATION } from "../../constants";
+import { useAlert } from "../../utils/useAlert";
+import { useSetRecoilState } from "recoil";
+import userState from "./../../recoilState/recoilAtoms/userAtom";
+import { REQUIRED_MESSAGE, ELEMENT } from "../../constants";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
@@ -93,7 +93,7 @@ interface IFormValues {
 }
 
 const Auth: FC = () => {
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const { t } = useTranslation();
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -102,7 +102,7 @@ const Auth: FC = () => {
       ? `${t("You have successfully signed in to your account!")}`
       : errorMessage;
   const history = useHistory();
-  const dispatch = useDispatch();
+  const setUserState = useSetRecoilState(userState);
 
   const onSubmit = async (formData: IFormValues) => {
     try {
@@ -113,7 +113,14 @@ const Auth: FC = () => {
         throw new Error(t("Invalid id"));
       }
       const data = await readUserData(uid);
-      dispatch(saveUser(data));
+
+      setUserState({
+        userData: data,
+        errorMessage: "",
+      });
+
+      onAlertOpen();
+
       history.push(ROUTES.MAIN);
     } catch (error) {
       setErrorMessage(error.message);
@@ -139,13 +146,6 @@ const Auth: FC = () => {
     onSubmit,
   });
 
-  const handleClose = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsOpenAlert(false);
-  };
-
   const handleChange = (e: ChangeEvent<{ value: string }>) => {
     i18next.changeLanguage(e.target.value);
   };
@@ -167,6 +167,7 @@ const Auth: FC = () => {
           {t("Login to your personal account")}
         </Typography>
         <TextField
+          data-test-id={ELEMENT.loginEmail}
           fullWidth
           error={touched.email && Boolean(errors.email)}
           label={t("Email")}
@@ -174,12 +175,17 @@ const Auth: FC = () => {
           helperText={touched.email && errors.email}
         />
         <PasswordField
+          data-test-id={ELEMENT.password}
           label={t("Password")}
           error={touched.password && Boolean(errors.password)}
           {...getFieldProps("password")}
           helperText={touched.password && errors.password}
         />
-        <PrimaryButton size="large" type="submit">
+        <PrimaryButton
+          data-test-id={ELEMENT.loginButton}
+          size="large"
+          type="submit"
+        >
           {t("Login")}
         </PrimaryButton>
         <Link href={ROUTES.REGISTER} color="textPrimary">
@@ -188,16 +194,12 @@ const Auth: FC = () => {
           </Typography>
         </Link>
       </FormAuth>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleClose}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </BackGround>
   );
 };
