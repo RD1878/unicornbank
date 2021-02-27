@@ -13,8 +13,8 @@ const chatMessagesEffect: (
 ) => AtomEffect<IChatMessagesState> = (uid) => ({ setSelf, trigger }) => {
   const ref = db.ref(`chatMessages/${uid}`);
   const fetchMessagesData = async () => {
-    if (trigger === "get") {
-      try {
+    try {
+      if (trigger === "get") {
         const response = await ref.once("value");
         const data = response.val();
         setSelf({
@@ -22,15 +22,7 @@ const chatMessagesEffect: (
           isLoading: false,
           errorMessage: "",
         });
-      } catch ({ message }) {
-        setSelf({
-          chatMessages: [],
-          isLoading: false,
-          errorMessage: message,
-        });
       }
-    }
-    try {
       ref.on("value", (data) => {
         setSelf({
           chatMessages: data.val(),
@@ -38,7 +30,13 @@ const chatMessagesEffect: (
           errorMessage: "",
         });
       });
-    } catch ({ message }) {}
+    } catch ({ message }) {
+      setSelf({
+        chatMessages: [],
+        isLoading: false,
+        errorMessage: message,
+      });
+    }
   };
   fetchMessagesData();
   return () => {
