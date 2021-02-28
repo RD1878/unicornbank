@@ -28,7 +28,7 @@ import { NOT_A_LETTER } from "./../constants";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
-import api from "../api";
+import { fetchUser } from "../api";
 import currencySelector from "../recoilState/recoilSelectors/currencySelector";
 
 const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
@@ -117,7 +117,7 @@ const DialogTransaction: FC = () => {
         },
       });
 
-      const updatedUser = await api.fetchUser();
+      const updatedUser = await fetchUser();
 
       setUser({
         ...user,

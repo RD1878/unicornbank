@@ -21,6 +21,7 @@ const StyledButton = withTheme(styled(Button)`
   font-weight: 600;
   padding: 5px 30px;
   border-radius: 2em;
+  width: fit-content;
   box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.25);
   ${(props) => getSize(props.size)};
 `);

@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import api from "../../api";
+import { fetchCurrency } from "../../api";
 import currencyState, { ICurrency } from "../recoilAtoms/currencyAtom";
 
 const requiredChars = ["USD", "EUR", "JPY", "CNY"];
@@ -9,7 +9,7 @@ export const currencySelector = selector<ICurrency>({
   get: async ({ get }) => {
     try {
       const data = get(currencyState);
-      const currencyData = await api.fetchCurrency();
+      const currencyData = await fetchCurrency();
 
       return {
         ...data,

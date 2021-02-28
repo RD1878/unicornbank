@@ -1,7 +1,15 @@
 import React, { FC, useState, useEffect } from "react";
 import { Snackbar, ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
-import { Auth, MainPage, Profile, Register, Settings, Map } from "./Pages";
+import {
+  Auth,
+  MainPage,
+  Profile,
+  Register,
+  Settings,
+  Map,
+  Chat,
+} from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
@@ -46,6 +54,7 @@ const App: FC = () => {
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
             <ProtectedRoute path={ROUTES.HISTORY} component={History} />
+            <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
             <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
             <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
           </MainLayout>
