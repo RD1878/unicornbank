@@ -1,3 +1,4 @@
+import ICategories from "./interfaces/categories";
 import { getEndToday } from "./utils/getEndToday";
 export const SHACKBAR_SHOW_DURATION = 6000;
 
@@ -27,10 +28,14 @@ export enum ELEMENT {
   loginButton = "login-button",
 }
 
-export const categories: { type: string; name: string }[] = [
+export const CATEGORIES: ICategories[] = [
   { type: "all", name: "All" },
   { type: "income", name: "Incomes" },
   { type: "writeOff", name: "Write off" },
 ];
 
-export const sevenDaysAgo = new Date(getEndToday().getTime() - 691199999);
+const SEVENDAYSINMILLISECONDS = 691199999;
+
+export const sevenDaysAgo = new Date(
+  getEndToday().getTime() - SEVENDAYSINMILLISECONDS
+);

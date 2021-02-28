@@ -20,7 +20,7 @@ import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import { ROUTES } from "../routes";
 import { IOperationItem } from "../interfaces/operationItem";
-import { categories, CURRENCIES, sevenDaysAgo } from "../constants";
+import { CATEGORIES, CURRENCIES, sevenDaysAgo } from "../constants";
 import { getEndToday } from "../utils/getEndToday";
 import { getFiltredOperations } from "../utils/getFiltredOperations";
 
@@ -91,17 +91,18 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const dataCards = Object.entries(cards);
   const currencies = Object.keys(CURRENCIES);
 
+  const isQueryPathHistory = useLocation().pathname === ROUTES.HISTORY;
+
   const formattedOperations = (operations: IOperationItem[]) => {
-    const resultOperations =
-      useLocation().pathname === ROUTES.HISTORY
-        ? getFiltredOperations(
-            operations,
-            card,
-            currency,
-            selectedDateFrom,
-            selectedDateTo
-          )
-        : operations;
+    const resultOperations = isQueryPathHistory
+      ? getFiltredOperations(
+          operations,
+          card,
+          currency,
+          selectedDateFrom,
+          selectedDateTo
+        )
+      : operations;
     if (resultOperations.length) {
       return resultOperations
         .sort(
@@ -121,10 +122,8 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
       );
   };
 
-  const isQueryPathHistory = () => useLocation().pathname === ROUTES.HISTORY;
-
   const filteredOperationsByType = (type: string) => {
-    const transactions = isQueryPathHistory()
+    const transactions = isQueryPathHistory
       ? getFiltredOperations(
           cardsTransactions,
           card,
@@ -144,11 +143,11 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
     setTab(newVal);
   };
 
-  const handleChangeCard = (event: ChangeEvent<ICardValue>) => {
-    setCard(event.target.value as string);
+  const handleChangeCard = (e: ChangeEvent<ICardValue>) => {
+    setCard(e.target.value as string);
   };
-  const handleChangeCurrency = (event: ChangeEvent<ICardCurrency>) => {
-    setCurrency(event.target.value as string);
+  const handleChangeCurrency = (e: ChangeEvent<ICardCurrency>) => {
+    setCurrency(e.target.value as string);
   };
   const handleDateChangeFrom = (date: Date | null) => {
     setSelectedDateFrom(date);
@@ -159,7 +158,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
 
   return (
     <StyledContainer>
-      {!isQueryPathHistory() && (
+      {!isQueryPathHistory && (
         <Typography variant="h2" color="textPrimary">
           {t("Last operations")}
         </Typography>
@@ -168,7 +167,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
         <LinearProgress color="secondary" />
       ) : (
         <StyledOperationsContainer>
-          {isQueryPathHistory() && (
+          {isQueryPathHistory && (
             <>
               <Typography variant="h2" color="textPrimary">
                 {t("Filters")}
@@ -223,14 +222,14 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
             variant="fullWidth"
             scrollButtons="on"
           >
-            {categories.map((item) => (
+            {CATEGORIES.map((item) => (
               <StyledTab label={t(item.name)} key={item.type} />
             ))}
           </Tabs>
           <TabPanel type="scrollable-force" value={tab} index={0}>
             {formattedOperations(cardsTransactions)}
           </TabPanel>
-          {categories.map(
+          {CATEGORIES.map(
             (category, index) =>
               category.type !== "all" && (
                 <TabPanel
@@ -243,7 +242,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
                 </TabPanel>
               )
           )}
-          {!isQueryPathHistory() && (
+          {!isQueryPathHistory && (
             <StyledLink to={ROUTES.HISTORY}>
               <PrimaryButton>{t("More")}</PrimaryButton>
             </StyledLink>
