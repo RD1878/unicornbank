@@ -62,7 +62,12 @@ const SimpleBottomNavigation: FC = () => {
         label="История"
         icon={<HistoryRoundedIcon />}
       />
-      <StyledBottomNavigationAction label="Чат" icon={<ChatRoundedIcon />} />
+      <StyledBottomNavigationAction
+        label="Чат"
+        component={Link}
+        to={ROUTES.CHAT}
+        icon={<ChatRoundedIcon />}
+      />
       <StyledBottomNavigationAction
         component={Link}
         to={ROUTES.SETTINGS}

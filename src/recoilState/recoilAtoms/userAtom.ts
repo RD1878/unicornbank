@@ -1,5 +1,5 @@
 import { atom, AtomEffect } from "recoil";
-import api from "../../api";
+import { fetchUser } from "../../api";
 import { firebaseAuth } from "../../firebase/firebase";
 import { IUser, IUserCards } from "../../interfaces/user";
 
@@ -32,7 +32,7 @@ const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {
         return;
       }
 
-      const userData = await api.fetchUser();
+      const userData = await fetchUser();
 
       setSelf({
         userData,

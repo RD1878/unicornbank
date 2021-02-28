@@ -7,7 +7,7 @@ import { TAlert } from "../interfaces/tAlert";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import authState from "../recoilState/recoilAtoms/authAtom";
-import api from "../api";
+import { fetchUser } from "../api";
 import MobileSidebar from "./MobileSidebar";
 import DesktopSidebar from "./DesktopSidebar";
 import { PrimaryAlert } from "../atoms";
@@ -58,7 +58,7 @@ const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
         },
       });
 
-      const updatedData = await api.fetchUser();
+      const updatedData = await fetchUser();
 
       setUser({
         ...user,
