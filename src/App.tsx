@@ -3,22 +3,23 @@ import { Snackbar, ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import {
   Auth,
-  /* MainPage,
-  Profile, */
+  MainPage,
+  Profile,
   Register,
-  /*  Settings,
-  Map, */
-  ChatBank,
+  Settings,
+  Map,
+  /* ChatBank, */
+  Chat,
 } from "./Pages";
-/* import { MainLayout } from "./Pages/layouts/main/MainLayout";
- */ import { ROUTES } from "./routes";
+import { MainLayout } from "./Pages/layouts/main/MainLayout";
+import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-/* import CardInfo from "./Pages/CardInfo/CardInfo";
+import CardInfo from "./Pages/CardInfo/CardInfo";
 import Requisites from "./Pages/Requisites";
- */ import { Alert } from "@material-ui/lab";
+import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
-import { MainLayoutBank } from "./Pages/layouts/main/MainLayoutBank";
+//import { MainLayoutBank } from "./Pages/layouts/main/MainLayoutBank";
 import { useRecoilValue } from "recoil";
 import authState from "./recoilState/recoilAtoms/authAtom";
 
@@ -48,18 +49,18 @@ const App: FC = () => {
         <Route path={ROUTES.AUTH} exact component={Auth} />
         <Route path={ROUTES.REGISTER} exact component={Register} />
         <ProtectedRoute path="*">
-          <MainLayoutBank onToggleTheme={toggleTheme}>
+          {/*  <MainLayoutBank onToggleTheme={toggleTheme}>
             <ProtectedRoute path={ROUTES.CHATBANK} exact component={ChatBank} />
-          </MainLayoutBank>
-          {/*           <MainLayout onToggleTheme={toggleTheme}>
+          </MainLayoutBank> */}
+          <MainLayout onToggleTheme={toggleTheme}>
             <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
             <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
+            <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
             <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
             <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
           </MainLayout>
- */}
         </ProtectedRoute>
       </Switch>
       <Snackbar
