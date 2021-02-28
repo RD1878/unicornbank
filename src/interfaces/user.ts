@@ -21,4 +21,5 @@ export interface IUser {
   };
   isLoading: boolean;
   products: IUserProducts;
+  isAdmin: boolean;
 }

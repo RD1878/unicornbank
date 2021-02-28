@@ -3,11 +3,14 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { HeaderBank, SidebarBank } from "../../../organisms";
 import { ErrorBoundary } from "../../../errorBoundaries";
+import { DRAWER_BANKCHATS_WIDTH } from "../../../constants";
 
 const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
-  min-height: calc(100vh - 370px);
+  min-height: calc(100vh - 85px);
+  width: calc(100% - ${DRAWER_BANKCHATS_WIDTH}px);
+  margin-left: auto;
 `);
 
 const Container = withTheme(styled("div")`

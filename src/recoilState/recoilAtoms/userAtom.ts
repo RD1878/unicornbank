@@ -23,6 +23,7 @@ const initialData = {
     cards: {} as IUserCards,
   },
   isLoading: true,
+  isAdmin: false,
 };
 
 const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {

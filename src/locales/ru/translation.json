@@ -111,5 +111,6 @@
   "Invalid id": "Некорректный id",
   "Data changed successfully!": "Данные успешно изменены!",
   "An error occured, failed to exit!": "Произошла ошибка, не получилось выйти!",
-  "Currency rates": "Курсы валют"
+  "Currency rates": "Курсы валют",
+  "Chat with a client": "Чат с клиентом"
 }
