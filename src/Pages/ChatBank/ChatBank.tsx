@@ -38,14 +38,18 @@ const StyledTextField = withTheme(styled(TextField)`
   margin-bottom: 20px;
 `);
 
-const ChatBank: FC = () => {
+interface IProps {
+  clientId: string;
+}
+
+const ChatBank: FC<IProps> = ({ clientId }) => {
   const [message, setMessage] = useState("");
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorText, setErrorText] = useState("");
 
   const { t } = useTranslation();
   const { isLoading, chatMessages } = useRecoilValue(
-    chatMessagesState("AXWUCpTAxhfHb7nWfoS2Nk7DqZa2")
+    chatMessagesState(clientId)
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +65,7 @@ const ChatBank: FC = () => {
         throw new Error("Пользователь не найден");
       }
       await db.ref().update({
-        [`chatMessages/AXWUCpTAxhfHb7nWfoS2Nk7DqZa2`]: [
+        [`chatMessages/${clientId}`]: [
           ...chatMessages,
           {
             date: Date.now(),
@@ -82,27 +86,33 @@ const ChatBank: FC = () => {
       <Typography variant="h1" color="textPrimary">
         {t("Chat with a client")}
       </Typography>
-      <StyledList>
-        {isLoading ? (
-          <LinearProgress color="secondary" />
-        ) : (
-          chatMessages.map((message: IChatMessage) => (
-            <ChatMessage key={message.id} message={message} />
-          ))
-        )}
-      </StyledList>
-      <StyledForm>
-        <StyledTextField
-          multiline
-          value={message}
-          onChange={handleChange}
-          autoFocus={true}
-          placeholder={t("Enter message")}
-        />
-        <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
-          {t("Send")}
-        </PrimaryButton>
-      </StyledForm>
+      {isLoading ? (
+        <LinearProgress color="secondary" />
+      ) : clientId.length ? (
+        <>
+          <StyledList>
+            {chatMessages.map((message: IChatMessage) => (
+              <ChatMessage key={message.id} message={message} />
+            ))}
+          </StyledList>
+          <StyledForm>
+            <StyledTextField
+              multiline
+              value={message}
+              onChange={handleChange}
+              autoFocus={true}
+              placeholder={t("Enter message")}
+            />
+            <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
+              {t("Send")}
+            </PrimaryButton>
+          </StyledForm>
+        </>
+      ) : (
+        <Typography variant="body1" color="textPrimary">
+          Выберите диалог с клиентом
+        </Typography>
+      )}
       <PrimaryAlert
         open={isAlertOpen}
         onClose={onAlertClose}

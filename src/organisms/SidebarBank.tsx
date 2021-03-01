@@ -7,6 +7,9 @@ import { IconButton, Input, Typography } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import Grid from "@material-ui/core/Grid";
 import { ChatsBankList } from "../molecules";
+import { ChatsBankItem } from "../atoms";
+import { useRecoilValue } from "recoil";
+import chatsAtomState from "../recoilState/recoilAtoms/chatsAtom";
 
 const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
   <Drawer
@@ -40,6 +43,9 @@ const StyledGrid = styled(Grid)`
 `;
 
 const SidebarBank: FC = () => {
+  const { chats } = useRecoilValue(chatsAtomState);
+  const chatsArray = Object.entries(chats);
+
   return (
     <StyledDrawer
       variant="permanent"
@@ -71,7 +77,7 @@ const SidebarBank: FC = () => {
         <Grid container spacing={1}>
           <Grid item xs={10}>
             <Typography variant="body2" color="textPrimary">
-              Активных чатов:
+              Всего чатов:
             </Typography>
           </Grid>
           <Grid item>
@@ -81,7 +87,15 @@ const SidebarBank: FC = () => {
           </Grid>
         </Grid>
       </StyledGrid>
-      <ChatsBankList />
+      <ChatsBankList>
+        {chatsArray.map(([id, dialog]) => (
+          <ChatsBankItem
+            key={id}
+            lastMessage={dialog[dialog.length - 1].value}
+            clientId={id}
+          />
+        ))}
+      </ChatsBankList>
     </StyledDrawer>
   );
 };

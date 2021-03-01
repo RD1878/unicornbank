@@ -23,12 +23,14 @@ import { MainLayoutBank } from "./Pages/layouts/main/MainLayoutBank";
 import { useRecoilValue } from "recoil";
 import authState from "./recoilState/recoilAtoms/authAtom";
 import userState from "./recoilState/recoilAtoms/userAtom";
+import clientIdState from "../src/recoilState/recoilAtoms/clientIdAtom";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
   const { errorMessage } = useRecoilValue(authState);
   const { userData } = useRecoilValue(userState);
+  const { clientId } = useRecoilValue(clientIdState);
   const { isAdmin } = userData;
 
   useEffect(() => {
@@ -54,7 +56,9 @@ const App: FC = () => {
         <ProtectedRoute path="*">
           {isAdmin ? (
             <MainLayoutBank onToggleTheme={toggleTheme}>
-              <ProtectedRoute path={ROUTES.MAIN} exact component={ChatBank} />
+              <ProtectedRoute path={ROUTES.MAIN} exact>
+                <ChatBank clientId={clientId} />
+              </ProtectedRoute>
             </MainLayoutBank>
           ) : (
             <MainLayout onToggleTheme={toggleTheme}>
