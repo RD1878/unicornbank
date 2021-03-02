@@ -68,7 +68,7 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
         throw new Error("Пользователь не найден");
       }
       await db.ref().update({
-        [`chatMessages/${clientId}`]: [
+        [`chatMessages/${clientId}/dialog`]: [
           ...chatMessages,
           {
             date: Date.now(),

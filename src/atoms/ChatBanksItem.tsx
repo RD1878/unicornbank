@@ -52,6 +52,13 @@ const StyledTypography = styled(Typography)`
   align-self: flex-end;
 `;
 
+const StyledTextTypography = styled(Typography)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 265px;
+`;
+
 interface IProps {
   lastMessage: string;
   clientId: string;
@@ -88,10 +95,10 @@ const ChatsBankItem: FC<IProps> = ({
     <StyledListItem onClick={handleClientId} isRead={isRead}>
       <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
       <Container>
-        <Typography variant="body2">
+        <StyledTextTypography variant="body2">
           {`${firstName} ${lastName} ${patronymic}`}
-        </Typography>
-        <Typography>{`${lastMessage}`}</Typography>
+        </StyledTextTypography>
+        <StyledTextTypography variant="body1">{`${lastMessage}`}</StyledTextTypography>
         <StyledTypography variant="overline">{`${formatDate(
           date
         )}`}</StyledTypography>
