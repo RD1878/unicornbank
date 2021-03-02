@@ -7,7 +7,7 @@ import {
   useTheme,
   withTheme,
 } from "@material-ui/core";
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { ChatMessage, PrimaryButton } from "../../atoms";
@@ -85,6 +85,16 @@ const Chat: FC = () => {
     }
   };
 
+  const messagesEndRef = useRef<HTMLInputElement>(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(scrollToBottom, [chatMessages]);
+
   return (
     <>
       <Typography variant="h1" color="textPrimary">
@@ -98,6 +108,7 @@ const Chat: FC = () => {
             <ChatMessage key={message.id} message={message} />
           ))
         )}
+        <div ref={messagesEndRef} />
       </StyledList>
       <StyledForm>
         <StyledTextField

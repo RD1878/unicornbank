@@ -5,7 +5,7 @@ import {
   Typography,
   withTheme,
 } from "@material-ui/core";
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -84,6 +84,16 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
     }
   };
 
+  const messagesEndRef = useRef<HTMLInputElement>(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(scrollToBottom, [chatMessages]);
+
   return (
     <>
       {Object.keys(clientData).length !== 0 && (
@@ -102,6 +112,7 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
             {chatMessages.map((message: IChatMessage) => (
               <ChatMessage key={message.id} message={message} />
             ))}
+            <div ref={messagesEndRef} />
           </StyledList>
           <StyledForm>
             <StyledTextField
