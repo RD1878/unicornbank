@@ -11,7 +11,7 @@ interface IChatMessagesState {
 const chatMessagesEffect: (
   uid: string | undefined
 ) => AtomEffect<IChatMessagesState> = (uid) => ({ setSelf, trigger }) => {
-  const ref = db.ref(`chatMessages/${uid}`);
+  const ref = db.ref(`chatMessages/${uid}/dialog`);
   const fetchMessagesData = async () => {
     try {
       if (trigger === "get") {
