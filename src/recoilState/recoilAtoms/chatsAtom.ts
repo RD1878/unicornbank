@@ -1,15 +1,6 @@
 import { atom, AtomEffect } from "recoil";
 import { db } from "../../firebase/firebase";
-import { IChatMessage } from "../../interfaces/chatMessage";
-import { IHeadUserData } from "../../interfaces/user";
-
-interface IChats {
-  [key: string]: {
-    clientData: IHeadUserData;
-    dialog: IChatMessage[];
-    isRead: boolean;
-  };
-}
+import { IChats } from "../../interfaces/chats";
 
 interface IChatMessagesState {
   isLoading: boolean;

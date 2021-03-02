@@ -1,10 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, useState, ChangeEvent } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { DRAWER_BANKCHATS_WIDTH } from "../constants";
-import { Button, IconButton, Input, Typography } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
+import { Button, Input, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { ChatsBankList } from "../molecules";
 import { ChatsBankItem } from "../atoms";
@@ -12,6 +11,7 @@ import { useRecoilValue } from "recoil";
 import chatsAtomState from "../recoilState/recoilAtoms/chatsAtom";
 import { getLastArrayIndex } from "../utils/getLastArrayIndex";
 import { useTranslation } from "react-i18next";
+import { IChat } from "../interfaces/chats";
 
 const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
   <Drawer
@@ -60,11 +60,34 @@ const StyledGrid = styled(Grid)`
 
 const SidebarBank: FC = () => {
   const { chats } = useRecoilValue(chatsAtomState);
-  const dataChatsArray = Object.entries(chats);
+  const [searchData, setSearchData] = useState("");
   const { t } = useTranslation();
-
+  const dataChatsArray = Object.entries(chats);
   const countNotReadChats = dataChatsArray.filter(([, { isRead }]) => !isRead)
     .length;
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchData(e.target.value);
+  };
+
+  const sortedChatsArray = (array: [string, IChat][]) =>
+    array.sort((a, b) =>
+      a[1].isRead === b[1].isRead ? 0 : a[1].isRead ? 1 : -1
+    );
+
+  const filtredChatsArray = (array: [string, IChat][]) =>
+    array.filter(([, { clientData }]) => {
+      const { firstName, lastName, patronymic } = clientData;
+      if (
+        firstName.toLowerCase().includes(searchData.toLowerCase()) ||
+        lastName.toLowerCase().includes(searchData.toLowerCase()) ||
+        patronymic.toLowerCase().includes(searchData.toLowerCase())
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 
   return (
     <StyledDrawer
@@ -76,10 +99,11 @@ const SidebarBank: FC = () => {
         {t("Chats with bank clients")}
       </Typography>
       <Styledform noValidate autoComplete="off">
-        <Input placeholder={t("Enter client details")} />
-        <IconButton type="submit" aria-label="search">
-          <SearchIcon />
-        </IconButton>
+        <Input
+          placeholder={t("Enter client details")}
+          value={searchData}
+          onChange={handleChange}
+        />
       </Styledform>
       <StyledGrid container>
         <Grid container spacing={1}>
@@ -108,11 +132,8 @@ const SidebarBank: FC = () => {
         </Grid>
       </StyledGrid>
       <ChatsBankList>
-        {dataChatsArray
-          .sort((a, b) =>
-            a[1].isRead === b[1].isRead ? 0 : a[1].isRead ? 1 : -1
-          )
-          .map(([id, { clientData, dialog, isRead }]) => (
+        {filtredChatsArray(sortedChatsArray(dataChatsArray)).map(
+          ([id, { clientData, dialog, isRead }]) => (
             <StyledButton key={id}>
               <ChatsBankItem
                 lastMessage={dialog[getLastArrayIndex(dialog)].value}
@@ -122,7 +143,8 @@ const SidebarBank: FC = () => {
                 isRead={isRead}
               />
             </StyledButton>
-          ))}
+          )
+        )}
       </ChatsBankList>
     </StyledDrawer>
   );

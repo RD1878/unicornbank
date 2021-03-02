@@ -68,7 +68,7 @@ const Chat: FC = () => {
         throw new Error("Пользователь не найден");
       }
       await db.ref().update({
-        [`chatMessages/${uid}`]: [
+        [`chatMessages/${uid}/dialog`]: [
           ...chatMessages,
           {
             date: Date.now(),
@@ -77,6 +77,7 @@ const Chat: FC = () => {
             id: randomId(),
           },
         ],
+        [`chatMessages/${uid}/isRead`]: false,
       });
     } catch (error) {
       setErrorText(error.message);
