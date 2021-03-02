@@ -10,6 +10,7 @@ import React, { FC } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import userState from "../recoilState/recoilAtoms/userAtom";
+import { formatDate } from "../utils/formatDate";
 
 const StyledListItem = withTheme(styled(({ ...props }) => (
   <ListItem {...props} />
@@ -84,17 +85,6 @@ const ChatMessage: FC<IMessage> = ({ message }) => {
   const { date, type, value } = message;
   const { userData } = useRecoilValue(userState);
   const { isAdmin } = userData;
-
-  const formatDate = (date: number): string => {
-    const obj = new Date(date);
-    return obj.toLocaleDateString(undefined, {
-      day: "numeric",
-      month: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    });
-  };
 
   return (
     <StyledListItem type={type} isAdmin={isAdmin}>

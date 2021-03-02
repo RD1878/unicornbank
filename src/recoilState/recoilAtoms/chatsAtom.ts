@@ -1,9 +1,13 @@
 import { atom, AtomEffect } from "recoil";
 import { db } from "../../firebase/firebase";
 import { IChatMessage } from "../../interfaces/chatMessage";
+import { IHeadUserData } from "../../interfaces/user";
 
 interface IChats {
-  [key: string]: IChatMessage[];
+  [key: string]: {
+    clientData: IHeadUserData;
+    dialog: IChatMessage[];
+  };
 }
 
 interface IChatMessagesState {

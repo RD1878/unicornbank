@@ -3,13 +3,14 @@ import Drawer from "@material-ui/core/Drawer";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { DRAWER_BANKCHATS_WIDTH } from "../constants";
-import { IconButton, Input, Typography } from "@material-ui/core";
+import { Button, IconButton, Input, Typography } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import Grid from "@material-ui/core/Grid";
 import { ChatsBankList } from "../molecules";
 import { ChatsBankItem } from "../atoms";
 import { useRecoilValue } from "recoil";
 import chatsAtomState from "../recoilState/recoilAtoms/chatsAtom";
+import { getLastArrayIndex } from "../utils/getLastArrayIndex";
 
 const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
   <Drawer
@@ -34,6 +35,20 @@ const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
   }
 `);
 
+const StyledButton = styled(({ ...props }) => (
+  <Button classes={{ root: "root" }} {...props} />
+))`
+  &.root {
+    padding: 0;
+    width: 100%;
+    height: 80px;
+    margin-top: 15px;
+  }
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
 const Styledform = styled("form")`
   margin-top: 20px;
 `;
@@ -44,7 +59,7 @@ const StyledGrid = styled(Grid)`
 
 const SidebarBank: FC = () => {
   const { chats } = useRecoilValue(chatsAtomState);
-  const chatsArray = Object.entries(chats);
+  const dataChatsArray = Object.entries(chats);
 
   return (
     <StyledDrawer
@@ -88,12 +103,15 @@ const SidebarBank: FC = () => {
         </Grid>
       </StyledGrid>
       <ChatsBankList>
-        {chatsArray.map(([id, dialog]) => (
-          <ChatsBankItem
-            key={id}
-            lastMessage={dialog[dialog.length - 1].value}
-            clientId={id}
-          />
+        {dataChatsArray.map(([id, { clientData, dialog }]) => (
+          <StyledButton key={id}>
+            <ChatsBankItem
+              lastMessage={dialog[getLastArrayIndex(dialog)].value}
+              date={dialog[getLastArrayIndex(dialog)].date}
+              clientId={id}
+              clientData={clientData}
+            />
+          </StyledButton>
         ))}
       </ChatsBankList>
     </StyledDrawer>

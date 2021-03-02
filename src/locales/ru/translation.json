@@ -112,5 +112,6 @@
   "Data changed successfully!": "Данные успешно изменены!",
   "An error occured, failed to exit!": "Произошла ошибка, не получилось выйти!",
   "Currency rates": "Курсы валют",
-  "Chat with a client": "Чат с клиентом"
+  "Chat with a client": "Чат с клиентом",
+  "Select customer chat": "Выберите чат с клиентом"
 }

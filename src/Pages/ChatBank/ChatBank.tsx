@@ -16,6 +16,7 @@ import SendIcon from "@material-ui/icons/Send";
 import { useAlert } from "../../utils/useAlert";
 import { db, firebaseAuth } from "../../firebase/firebase";
 import { randomId } from "../../utils/randomId";
+import chatsAtomState from "../../recoilState/recoilAtoms/chatsAtom";
 
 const StyledList = styled(List)`
   display: flex;
@@ -46,6 +47,8 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
   const [message, setMessage] = useState("");
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorText, setErrorText] = useState("");
+  const { chats } = useRecoilValue(chatsAtomState);
+  const clientData = chats[clientId]?.clientData ?? {};
 
   const { t } = useTranslation();
   const { isLoading, chatMessages } = useRecoilValue(
@@ -83,9 +86,14 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
 
   return (
     <>
-      <Typography variant="h1" color="textPrimary">
-        {t("Chat with a client")}
-      </Typography>
+      {Object.keys(clientData).length !== 0 && (
+        <Typography variant="h1" color="textPrimary">
+          {`${t("Chat with a client")} ${clientData.lastName} ${
+            clientData.firstName
+          } ${clientData.patronymic}`}
+        </Typography>
+      )}
+
       {isLoading ? (
         <LinearProgress color="secondary" />
       ) : clientId.length ? (
@@ -109,8 +117,8 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
           </StyledForm>
         </>
       ) : (
-        <Typography variant="body1" color="textPrimary">
-          Выберите диалог с клиентом
+        <Typography variant="h1" color="textPrimary">
+          {t("Выберите чат с клиентом")}
         </Typography>
       )}
       <PrimaryAlert
