@@ -108,7 +108,6 @@ const Payments: FC = () => {
           >
             <Tab label={t("Payments")} />
             <Tab label={t("Transaction")} />
-            <Tab label={t("Auto payments")} />
           </Tabs>
         </Paper>
       </Box>

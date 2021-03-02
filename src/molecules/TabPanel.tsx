@@ -1,8 +1,8 @@
+/* eslint-disable prettier/prettier */
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Box, BoxProps } from "@material-ui/core";
 import img1 from "../assets/images/offers/offer-1.jpg";
-import img2 from "../assets/images/offers/offer-2.jpg";
 import img3 from "../assets/images/offers/offer-3.jpg";
 
 interface TabPanelProps {
@@ -16,27 +16,35 @@ interface IContainer extends BoxProps {
   imagesrc?: number;
 }
 
-const StyledContainer = styled(Box)`
-  background-image: ${(props) =>
-      props.imagesrc
-        ? "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))"
-        : "none"},
-    url(${(props: IContainer) => {
-      switch (props.imagesrc) {
-        case 1:
-          return img1;
-          break;
-        case 2:
-          return img2;
-        case 3:
-          return img3;
-        default:
-          break;
-      }
-    }});
+const someFunc = (index: number): string => {
+  if (index === 1) {
+    return img1;
+  }
+
+  return img3;
+};
+
+const BackgroundImage = styled("img")`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+`;
+
+const StyledContainer = styled(Box)<IContainer>`
+  position: relative;
+  overflow: hidden;
+  background: ${(props) =>
+    props.imagesrc
+      ? "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))"
+      : "none"};
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+
+  & > div {
+    position: relative;
+  }
 `;
 
 const TabPanel: FC<TabPanelProps> = ({
@@ -48,6 +56,7 @@ const TabPanel: FC<TabPanelProps> = ({
   ...other
 }) => (
   <StyledContainer imagesrc={imagesrc}>
+    {imagesrc && <BackgroundImage src={someFunc(imagesrc)} />}
     <div
       role="tabpanel"
       hidden={value !== index}

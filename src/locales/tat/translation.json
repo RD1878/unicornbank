@@ -122,5 +122,6 @@
   "To another bank user": "Банкның башка кулланучысына",
   "User is not found": "Кулланучы табылмады",
   "Transaction between your accounts": "Транзакция арасында сезнең счетлары",
-  "Transaction to another bank user": "Башка банктан файдаланучы белән операция"
+  "Transaction to another bank user": "Башка банктан файдаланучы белән операция",
+  "Choose a card": "Сайлагыз картасын"
 }

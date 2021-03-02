@@ -123,5 +123,6 @@
   "User is not found": "Пользователь не найден",
   "New Product": "Новый продукт",
   "Transaction between your accounts": "Перевод между счетами",
-  "Transaction to another bank user": "Перевод пользователю банка"
+  "Transaction to another bank user": "Перевод пользователю банка",
+  "Choose a card": "Выберите карту"
 }

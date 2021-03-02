@@ -9,7 +9,6 @@ import { calculateOfTransfer } from "../utils/calculateOfTransfer";
 import { findCardId } from "../utils/calculateOfTransfer";
 import * as yup from "yup";
 import { db } from "../firebase/firebase";
-import api from "../api";
 import {
   phoneValidation,
   selectValidation,
@@ -29,6 +28,9 @@ import { getInfoAboutAnotherUser } from "../utils/getInfoAboutAnotherUser";
 import { cleanPhone, phoneMask } from "./../utils/phoneMask";
 import { FormItemTransfer } from "./FormItemTransfer";
 import { randomId } from "../utils/randomId";
+import { fetchUser } from "../api";
+import { getCurrencies } from "../utils/getCurrencies";
+import { findBothCurrencies } from "../utils/findBothCurrencies";
 
 export interface IDialogContentAnotherUser extends IFormData {
   phone: string;
@@ -140,7 +142,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
         },
       });
 
-      const updatedUser = await api.fetchUser();
+      const updatedUser = await fetchUser();
 
       setUser({
         ...user,
@@ -176,9 +178,12 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       phone: "",
     },
     validationSchema: yup.object({
-      card1: selectValidation,
-      sum: sumValidation,
+      card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
       phone: phoneValidation(
+        t("Please enter valid phone number"),
+        t(REQUIRED_MESSAGE)
+      ),
+      sum: sumValidation(
         t("Please enter valid phone number"),
         t(REQUIRED_MESSAGE)
       ),
@@ -232,30 +237,22 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       const cardCurrency1 = products.cards[id1]?.currency;
       const cardCurrency2 = anotherUserProducts.cards[card2Id].currency;
 
-      const currency1 = currency.find(
-        ({ charCode }) => charCode === cardCurrency1
-      );
+      const { currency1, currency2 } = getCurrencies({
+        cardCurrency1,
+        cardCurrency2,
+        currency,
+      });
 
-      const currency2 = currency.find(
-        ({ charCode }) => charCode === cardCurrency2
-      );
-
-      const bothExist =
-        (cardCurrency1 === "USD" && cardCurrency2 === "EUR") ||
-        (cardCurrency1 === "EUR" && cardCurrency2 === "USD");
+      const bothExist = findBothCurrencies({
+        cardCurrency1,
+        cardCurrency2,
+      });
 
       if (cardCurrency1 === cardCurrency2) {
         setSame(true);
       } else {
         setSame(false);
       }
-
-      const currentValue1 = currency.find(
-        ({ charCode }) => charCode === cardCurrency1
-      );
-      const currentValue2 = currency.find(
-        ({ charCode }) => charCode === cardCurrency2
-      );
 
       const num = calculateOfTransfer({
         sum,
@@ -267,19 +264,19 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
 
       setFieldValue("calculatedSum", num.toFixed());
 
-      if (bothExist && currentValue1 && currentValue2) {
-        return setNum(currentValue1.previous / currentValue2.value);
+      if (bothExist && currency1 && currency2) {
+        return setNum(currency1.previous / currency2.value);
       }
 
-      if (currentValue1) {
+      if (currency1) {
         setCurrentCurrency(cardCurrency1);
-        setNum(currentValue1?.value);
+        setNum(currency1?.value);
 
         return;
       }
 
       setCurrentCurrency(cardCurrency2);
-      setNum(currentValue2?.value);
+      setNum(currency2?.value);
     };
 
     countSumForTransaction();
