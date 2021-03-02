@@ -1,38 +1,63 @@
-import { ListItem, withTheme } from "@material-ui/core";
-import React, { FC } from "react";
+import { Avatar, ListItem, Typography, withTheme } from "@material-ui/core";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import clientIdState from "../recoilState/recoilAtoms/clientIdAtom";
 import { formatDate } from "../utils/formatDate";
 import { IHeadUserData } from "../interfaces/user";
+import { db } from "../firebase/firebase";
+import PrimaryAlert from "./PrimaryAlert";
+import { useAlert } from "../utils/useAlert";
 
 const StyledListItem = withTheme(styled(({ ...props }) => (
   <ListItem {...props} />
 ))`
   width: 100%;
   height: 80px;
-  background-color: ${(props) => props.theme.palette.secondary.main};
-  color: ${(props) => props.theme.palette.primary.dark};
-  border-radius: 10px;
-  /* align-self: ${(props) => {
-    if (props.isAdmin) {
-      return props.type === "admin" ? "flex-end" : "flex-start";
+  background-color: ${(props) => {
+    if (props.isRead) {
+      return props.theme.palette.secondary.main;
     } else {
-      return props.type === "admin" ? "flex-start" : "flex-end";
+      return props.theme.palette.primary.dark;
     }
-  }}; */
+  }};
+  color: ${(props) => {
+    if (props.isRead) {
+      return props.theme.palette.primary.dark;
+    } else {
+      return props.theme.palette.textPrimary.main;
+    }
+  }};
+  border-radius: 10px;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 10px;
   text-transform: none;
 `);
+
+const StyledAvatar = styled(Avatar)`
+  width: 50px;
+  height: 50px;
+`;
+
+const Container = styled("div")`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  width: 100%;
+`;
+
+const StyledTypography = styled(Typography)`
+  align-self: flex-end;
+`;
 
 interface IProps {
   lastMessage: string;
   clientId: string;
   date: number;
   clientData: IHeadUserData;
+  isRead: boolean;
 }
 
 const ChatsBankItem: FC<IProps> = ({
@@ -40,18 +65,44 @@ const ChatsBankItem: FC<IProps> = ({
   clientId,
   date,
   clientData,
+  isRead,
 }) => {
   const setClientId = useSetRecoilState(clientIdState);
-  const { firstName, lastName, patronymic /* avatarUrl */ } = clientData;
+  const [errorMessage, setErrorMessage] = useState("");
+  const { isAlertOpen, onAlertClose } = useAlert();
 
-  const handleClientId = () => {
+  const { firstName, lastName, patronymic, avatarUrl } = clientData;
+
+  const handleClientId = async () => {
     setClientId({ clientId });
+    try {
+      await db.ref().update({
+        [`chatMessages/${clientId}/isRead`]: true,
+      });
+    } catch ({ message }) {
+      setErrorMessage(message);
+    }
   };
 
   return (
-    <StyledListItem onClick={handleClientId}>{`${lastMessage} ${formatDate(
-      date
-    )} ${firstName} ${lastName} ${patronymic}`}</StyledListItem>
+    <StyledListItem onClick={handleClientId} isRead={isRead}>
+      <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
+      <Container>
+        <Typography variant="body2">
+          {`${firstName} ${lastName} ${patronymic}`}
+        </Typography>
+        <Typography>{`${lastMessage}`}</Typography>
+        <StyledTypography variant="overline">{`${formatDate(
+          date
+        )}`}</StyledTypography>
+      </Container>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={errorMessage}
+        alertType={"error"}
+      />
+    </StyledListItem>
   );
 };
 

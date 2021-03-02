@@ -112,5 +112,9 @@
   "An error occured, failed to exit!": "An error occured, failed to exit!",
   "Currency rates": "Currency rates",
   "Chat with a client": "Chat with a client",
-  "Select customer chat": "Select customer chat"
+  "Select customer chat": "Select customer chat",
+  "Total chats": "Total chats",
+  "Chats with bank clients": "Chats with bank clients",
+  "Unopened chats": "Unopened chats",
+  "Enter client details": "Enter client details"
 }

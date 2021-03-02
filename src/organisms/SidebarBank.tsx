@@ -11,6 +11,7 @@ import { ChatsBankItem } from "../atoms";
 import { useRecoilValue } from "recoil";
 import chatsAtomState from "../recoilState/recoilAtoms/chatsAtom";
 import { getLastArrayIndex } from "../utils/getLastArrayIndex";
+import { useTranslation } from "react-i18next";
 
 const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
   <Drawer
@@ -60,6 +61,10 @@ const StyledGrid = styled(Grid)`
 const SidebarBank: FC = () => {
   const { chats } = useRecoilValue(chatsAtomState);
   const dataChatsArray = Object.entries(chats);
+  const { t } = useTranslation();
+
+  const countNotReadChats = dataChatsArray.filter(([, { isRead }]) => !isRead)
+    .length;
 
   return (
     <StyledDrawer
@@ -68,10 +73,10 @@ const SidebarBank: FC = () => {
       width={DRAWER_BANKCHATS_WIDTH}
     >
       <Typography variant="h2" color="textPrimary">
-        Чаты с клиентами банка
+        {t("Chats with bank clients")}
       </Typography>
       <Styledform noValidate autoComplete="off">
-        <Input placeholder="Введите данные клиента" />
+        <Input placeholder={t("Enter client details")} />
         <IconButton type="submit" aria-label="search">
           <SearchIcon />
         </IconButton>
@@ -80,39 +85,44 @@ const SidebarBank: FC = () => {
         <Grid container spacing={1}>
           <Grid item xs={10}>
             <Typography variant="body2" color="textPrimary">
-              Непрочитанных сообщений:
+              {`${t("Unopened chats")}:`}
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="body2" color="secondary">
-              5
+              {countNotReadChats}
             </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={1}>
           <Grid item xs={10}>
             <Typography variant="body2" color="textPrimary">
-              Всего чатов:
+              {`${t("Total chats")}:`}
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="body2" color="secondary">
-              31
+              {dataChatsArray.length}
             </Typography>
           </Grid>
         </Grid>
       </StyledGrid>
       <ChatsBankList>
-        {dataChatsArray.map(([id, { clientData, dialog }]) => (
-          <StyledButton key={id}>
-            <ChatsBankItem
-              lastMessage={dialog[getLastArrayIndex(dialog)].value}
-              date={dialog[getLastArrayIndex(dialog)].date}
-              clientId={id}
-              clientData={clientData}
-            />
-          </StyledButton>
-        ))}
+        {dataChatsArray
+          .sort((a, b) =>
+            a[1].isRead === b[1].isRead ? 0 : a[1].isRead ? 1 : -1
+          )
+          .map(([id, { clientData, dialog, isRead }]) => (
+            <StyledButton key={id}>
+              <ChatsBankItem
+                lastMessage={dialog[getLastArrayIndex(dialog)].value}
+                date={dialog[getLastArrayIndex(dialog)].date}
+                clientId={id}
+                clientData={clientData}
+                isRead={isRead}
+              />
+            </StyledButton>
+          ))}
       </ChatsBankList>
     </StyledDrawer>
   );

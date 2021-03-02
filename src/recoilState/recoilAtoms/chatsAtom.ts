@@ -7,6 +7,7 @@ interface IChats {
   [key: string]: {
     clientData: IHeadUserData;
     dialog: IChatMessage[];
+    isRead: boolean;
   };
 }
 

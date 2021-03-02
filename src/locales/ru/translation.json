@@ -113,5 +113,9 @@
   "An error occured, failed to exit!": "Произошла ошибка, не получилось выйти!",
   "Currency rates": "Курсы валют",
   "Chat with a client": "Чат с клиентом",
-  "Select customer chat": "Выберите чат с клиентом"
+  "Select customer chat": "Выберите чат с клиентом",
+  "Total chats": "Всего чатов",
+  "Chats with bank clients": "Чаты с клиентами банка",
+  "Unopened chats": "Неоткрытых чатов",
+  "Enter client details": "Введите данные клиента"
 }
