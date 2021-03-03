@@ -43,6 +43,14 @@ const StyledTextField = withTheme(styled(TextField)`
   margin-bottom: 20px;
 `);
 
+const StyledPrimaryButton = styled(({ ...props }) => (
+  <PrimaryButton {...props} />
+))`
+  & > span > span {
+    margin-right: ${(props) => (props.matches ? "8px" : "0")};
+  }
+`;
+
 const Chat: FC = () => {
   const [message, setMessage] = useState("");
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
@@ -107,9 +115,13 @@ const Chat: FC = () => {
           autoFocus={true}
           placeholder={t("Enter message")}
         />
-        <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
+        <StyledPrimaryButton
+          startIcon={<SendIcon />}
+          onClick={handleClick}
+          matches={matches}
+        >
           {matches && t("Send")}
-        </PrimaryButton>
+        </StyledPrimaryButton>
       </StyledForm>
       <PrimaryAlert
         open={isAlertOpen}

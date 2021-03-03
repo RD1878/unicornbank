@@ -5,5 +5,6 @@ import Profile from "./Profile";
 import Settings from "./Settings";
 import Map from "./Map";
 import Chat from "./Chat/Chat";
+import History from "./History";
 
-export { Auth, MainPage, Register, Profile, Settings, Map, Chat };
+export { Auth, MainPage, Register, Profile, Settings, Map, Chat, History };

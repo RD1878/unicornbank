@@ -13,6 +13,8 @@ import { useTranslation } from "react-i18next";
 import { LanguageSelect } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
+import { createBrowserHistory } from "history";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const Container = withTheme(styled("div")`
   display: flex;
@@ -20,7 +22,7 @@ const Container = withTheme(styled("div")`
   justify-content: space-between;
   height: 85px;
   margin: auto;
-  padding: 0px 30px 0px 50px;
+  padding: 0px 30px;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);
 
@@ -42,6 +44,14 @@ const ControlsContainer = styled("div")`
   align-items: center;
 `;
 
+const StyledPrimaryButton = styled(PrimaryButton)`
+  margin-right: 10px;
+  width: 64px;
+  & span {
+    margin-right: 0;
+  }
+`;
+
 interface IHeader {
   onToggleTheme: () => void;
 }
@@ -50,6 +60,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
   const theme = useTheme();
   const { t } = useTranslation();
+  const history = createBrowserHistory();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -64,6 +75,10 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
     }
   };
 
+  const handleClick = (): void => {
+    history.back();
+  };
+
   return (
     <Container>
       <Snackbar
@@ -75,6 +90,10 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
           {t("An error occured, failed to exit!")}
         </Alert>
       </Snackbar>
+      <StyledPrimaryButton
+        startIcon={<ArrowBackIcon />}
+        onClick={handleClick}
+      />
       <Logo />
       <LinksContainer>
         {navigation.map((item) => (

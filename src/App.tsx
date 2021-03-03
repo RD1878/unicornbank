@@ -9,6 +9,7 @@ import {
   Settings,
   Map,
   Chat,
+  History,
 } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
@@ -20,7 +21,6 @@ import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
 import { useRecoilValue } from "recoil";
 import authState from "./recoilState/recoilAtoms/authAtom";
-import History from "./Pages/History";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
