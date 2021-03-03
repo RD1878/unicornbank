@@ -59,6 +59,8 @@ const SimpleBottomNavigation: FC = () => {
         icon={<PaymentRoundedIcon />}
       />
       <StyledBottomNavigationAction
+        component={Link}
+        to={ROUTES.HISTORY}
         label="История"
         icon={<HistoryRoundedIcon />}
       />
