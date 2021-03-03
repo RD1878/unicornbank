@@ -31,9 +31,11 @@ import { randomId } from "../utils/randomId";
 import { fetchUser } from "../api";
 import { getCurrencies } from "../utils/getCurrencies";
 import { findBothCurrencies } from "../utils/findBothCurrencies";
+import { Box, DialogContentText } from "@material-ui/core";
+import { TextField } from ".";
 
 export interface IDialogContentAnotherUser extends IFormData {
-  phone: string;
+  phone?: string;
 }
 
 interface IDialogContentYourAccounts {
@@ -70,6 +72,11 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
     try {
       const amount = Number(sum);
       const uid = currentUser?.uid;
+
+      if (!phone) {
+        return;
+      }
+
       const clearedPhone = cleanPhone(phone);
       const {
         uid: anotherUserUid,
@@ -237,16 +244,13 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       const cardCurrency1 = products.cards[id1]?.currency;
       const cardCurrency2 = anotherUserProducts.cards[card2Id].currency;
 
-      const { currency1, currency2 } = getCurrencies({
+      const { currency1, currency2 } = getCurrencies(
         cardCurrency1,
         cardCurrency2,
-        currency,
-      });
+        currency
+      );
 
-      const bothExist = findBothCurrencies({
-        cardCurrency1,
-        cardCurrency2,
-      });
+      const bothExist = findBothCurrencies(cardCurrency1, cardCurrency2);
 
       if (cardCurrency1 === cardCurrency2) {
         setSame(true);
@@ -288,7 +292,6 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       touched={touched}
       handleSubmit={handleSubmit}
       handleSumChange={handleSumChange}
-      handlePhoneChange={handlePhoneChange}
       same={same}
       arrayNumberCard={arrayNumberCard}
       getFieldProps={getFieldProps}
@@ -296,6 +299,30 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       num={num}
       values={values}
       closeDialog={closeDialog}
+      inputField={
+        <Box mt={3} mb={3}>
+          <DialogContentText>
+            {t(
+              "Enter the phone number of the user to whom you want to transfer funds"
+            )}
+          </DialogContentText>
+          <TextField
+            fullWidth
+            label={t("Phone")}
+            id="phone"
+            name="phone"
+            value={values.phone}
+            onChange={handlePhoneChange}
+            error={touched.phone && Boolean(errors.phone)}
+            helperText={touched.phone && errors.phone}
+          />
+        </Box>
+      }
+      title={
+        <DialogContentText>
+          {t("In order to transfer money to another bank user")}
+        </DialogContentText>
+      }
     />
   );
 };

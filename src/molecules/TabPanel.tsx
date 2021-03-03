@@ -1,9 +1,8 @@
-/* eslint-disable prettier/prettier */
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Box, BoxProps } from "@material-ui/core";
 import img1 from "../assets/images/offers/offer-1.jpg";
-import img3 from "../assets/images/offers/offer-3.jpg";
+import img2 from "../assets/images/offers/offer-2.jpg";
 
 interface TabPanelProps {
   type: string;
@@ -16,12 +15,12 @@ interface IContainer extends BoxProps {
   imagesrc?: number;
 }
 
-const someFunc = (index: number): string => {
+const changePhoto = (index: number): string => {
   if (index === 1) {
     return img1;
   }
 
-  return img3;
+  return img2;
 };
 
 const BackgroundImage = styled("img")`
@@ -31,6 +30,7 @@ const BackgroundImage = styled("img")`
   width: 100%;
 `;
 
+/* eslint-disable prettier/prettier */
 const StyledContainer = styled(Box)<IContainer>`
   position: relative;
   overflow: hidden;
@@ -56,7 +56,7 @@ const TabPanel: FC<TabPanelProps> = ({
   ...other
 }) => (
   <StyledContainer imagesrc={imagesrc}>
-    {imagesrc && <BackgroundImage src={someFunc(imagesrc)} />}
+    {imagesrc && <BackgroundImage src={changePhoto(imagesrc)} />}
     <div
       role="tabpanel"
       hidden={value !== index}

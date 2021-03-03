@@ -1,17 +1,13 @@
 import React, { FC, useState, ChangeEvent, useEffect } from "react";
 import {
   DialogContentText,
-  DialogActions,
-  DialogContent,
   Box,
-  Typography,
   FormHelperText,
   MenuItem,
   FormControl,
   InputLabel,
   Select,
 } from "@material-ui/core";
-import { PrimaryButton, TextField } from ".";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import { IFormData } from "./../molecules/DialogTransaction";
@@ -39,6 +35,7 @@ import { randomId } from "../utils/randomId";
 import { fetchUser } from "../api";
 import { getCurrencies } from "../utils/getCurrencies";
 import { findBothCurrencies } from "../utils/findBothCurrencies";
+import { FormItemTransfer } from "./FormItemTransfer";
 
 interface IDialogContentYourAccounts {
   closeDialog: () => void;
@@ -83,10 +80,8 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
       const amount = Number(sum);
       const uid = currentUser?.uid;
 
-      const [id1, id2] = [
-        findCardId(card1, products),
-        findCardId(card2, products),
-      ];
+      const id1 = findCardId(card1, products);
+      const id2 = findCardId(card2, products);
 
       if (card1 === card2) {
         throw new Error(t("Accounts for debiting and depositing are the same"));
@@ -185,23 +180,18 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
 
   useEffect(() => {
     const { card1, card2, sum } = values;
-    const [id1, id2] = [
-      findCardId(card1, products),
-      findCardId(card2, products),
-    ];
+    const id1 = findCardId(card1, products);
+    const id2 = findCardId(card2, products);
     const cardCurrency1 = products.cards[id1]?.currency;
     const cardCurrency2 = products.cards[id2]?.currency;
 
-    const { currency1, currency2 } = getCurrencies({
+    const { currency1, currency2 } = getCurrencies(
       cardCurrency1,
       cardCurrency2,
-      currency,
-    });
+      currency
+    );
 
-    const bothExist = findBothCurrencies({
-      cardCurrency1,
-      cardCurrency2,
-    });
+    const bothExist = findBothCurrencies(cardCurrency1, cardCurrency2);
 
     if (cardCurrency1 === cardCurrency2) {
       setSame(true);
@@ -235,32 +225,19 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
   }, [values]);
 
   return (
-    <DialogContent>
-      <DialogContentText>
-        {t("In order to transfer money to your card")}
-      </DialogContentText>
-      <form onSubmit={handleSubmit}>
-        <Typography variant="body2">{t("Filling in requisites")}</Typography>
-        <Box mt={3}>
-          <StyledFormControl
-            variant="outlined"
-            fullWidth
-            error={touched.card1 && Boolean(errors.card1)}
-          >
-            <InputLabel>{t("Debit account number")}</InputLabel>
-            <Select
-              label={t("Debit account number")}
-              {...getFieldProps("card1")}
-            >
-              {arrayNumberCard.map((number: string) => (
-                <MenuItem value={number} key={number}>
-                  {number}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>{touched.card1 && errors.card1}</FormHelperText>
-          </StyledFormControl>
-        </Box>
+    <FormItemTransfer
+      errors={errors}
+      touched={touched}
+      handleSubmit={handleSubmit}
+      handleSumChange={handleSumChange}
+      same={same}
+      arrayNumberCard={arrayNumberCard}
+      getFieldProps={getFieldProps}
+      currentCurrency={currentCurrency}
+      num={num}
+      values={values}
+      closeDialog={closeDialog}
+      inputField={
         <Box mt={3} mb={3}>
           <StyledFormControl
             fullWidth
@@ -281,51 +258,13 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
             <FormHelperText>{touched.card2 && errors.card2}</FormHelperText>
           </StyledFormControl>
         </Box>
-        {!same && (
-          <Typography variant="body1">
-            {t("The translation will take place at the rate")} {num}{" "}
-            {currentCurrency}
-          </Typography>
-        )}
-
-        <Box display="flex" mt={2} mb={2}>
-          <TextField
-            disabled={!values.card1 || !values.card2}
-            fullWidth
-            label={t("Amount")}
-            name="sum"
-            type="number"
-            inputProps={{
-              min: "0",
-              step: "0.01",
-            }}
-            value={values.sum}
-            onChange={handleSumChange}
-            error={touched.sum && Boolean(errors.sum)}
-            helperText={touched.sum && errors.sum}
-          />
-        </Box>
-        <TextField
-          disabled
-          fullWidth
-          label={t("Currency conversion")}
-          name="calculatedSum"
-          value={values.calculatedSum}
-        />
-        <DialogActions>
-          <Box mt={3} display="flex">
-            <PrimaryButton type="submit" color="primary">
-              {t("Transfer")}
-            </PrimaryButton>
-            <Box ml={2}>
-              <PrimaryButton color="primary" onClick={closeDialog}>
-                {t("Cancel")}
-              </PrimaryButton>
-            </Box>
-          </Box>
-        </DialogActions>
-      </form>
-    </DialogContent>
+      }
+      title={
+        <DialogContentText>
+          {t("In order to transfer money to your card")}
+        </DialogContentText>
+      }
+    />
   );
 };
 

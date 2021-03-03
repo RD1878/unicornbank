@@ -1,8 +1,7 @@
-import React, { FC, ChangeEvent, FormEvent } from "react";
+import React, { FC, ChangeEvent, FormEvent, ReactElement } from "react";
 import { PrimaryButton, TextField } from ".";
 import styled from "styled-components";
 import {
-  DialogContentText,
   DialogActions,
   Box,
   Typography,
@@ -31,7 +30,6 @@ interface IFormItemTransfer {
   touched: FormikTouched<IDialogContentAnotherUser>;
   handleSubmit: (e?: FormEvent<HTMLFormElement> | undefined) => void;
   handleSumChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handlePhoneChange: (event: ChangeEvent<HTMLInputElement>) => void;
   same: boolean;
   arrayNumberCard: string[];
   getFieldProps: (nameOrOptions: string) => FieldInputProps<string>;
@@ -39,6 +37,8 @@ interface IFormItemTransfer {
   num: number | undefined;
   values: IDialogContentAnotherUser;
   closeDialog: () => void;
+  inputField: ReactElement;
+  title: ReactElement;
 }
 
 export const FormItemTransfer: FC<IFormItemTransfer> = ({
@@ -46,7 +46,6 @@ export const FormItemTransfer: FC<IFormItemTransfer> = ({
   touched,
   handleSubmit,
   handleSumChange,
-  handlePhoneChange,
   same,
   arrayNumberCard,
   getFieldProps,
@@ -54,13 +53,13 @@ export const FormItemTransfer: FC<IFormItemTransfer> = ({
   num,
   values,
   closeDialog,
+  inputField,
+  title,
 }) => {
   const { t } = useTranslation();
   return (
     <DialogContent>
-      <DialogContentText>
-        {t("In order to transfer money to another bank user")}
-      </DialogContentText>
+      {title}
       <form onSubmit={handleSubmit}>
         <Typography variant="body2">{t("Filling in requisites")}</Typography>
         <Box mt={3}>
@@ -83,23 +82,7 @@ export const FormItemTransfer: FC<IFormItemTransfer> = ({
             <FormHelperText>{touched.card1 && errors.card1}</FormHelperText>
           </StyledFormControl>
         </Box>
-        <Box mt={3} mb={3}>
-          <DialogContentText>
-            {t(
-              "Enter the phone number of the user to whom you want to transfer funds"
-            )}
-          </DialogContentText>
-          <TextField
-            fullWidth
-            label={t("Phone")}
-            id="phone"
-            name="phone"
-            value={values.phone}
-            onChange={handlePhoneChange}
-            error={touched.phone && Boolean(errors.phone)}
-            helperText={touched.phone && errors.phone}
-          />
-        </Box>
+        {inputField}
         {!same && (
           <Typography variant="body1">
             {t("The translation will take place at the rate")} {num}{" "}
