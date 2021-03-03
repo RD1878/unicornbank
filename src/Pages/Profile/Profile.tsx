@@ -33,6 +33,9 @@ const StyledRow = styled("div")`
   margin-top: 50px;
   max-width: 280px;
   width: 100%;
+  & label {
+    z-index: 0;
+  }
 
   p {
     margin-left: 5px;
