@@ -119,51 +119,48 @@ const Settings: FC = () => {
 
   return (
     <>
-      <Box mt={2}>
-        <Typography variant="h1" color="textPrimary">
-          {t("Settings")}
-        </Typography>
-        <Typography variant="subtitle1" color="textPrimary">
-          {t("A change of the pin code")}
-        </Typography>
-        <StyledColumn onSubmit={handleSubmit}>
-          <PasswordField
-            {...getFieldProps("password")}
-            label={t("Enter the current password")}
-            helperText={touched.password && errors.password}
-            error={touched.password && Boolean(errors.password)}
-          />
-          <PasswordField
-            {...getFieldProps("newPassword1")}
-            label={t("Enter a new password")}
-            error={touched.newPassword1 && Boolean(errors.newPassword1)}
-            helperText={touched.newPassword1 && errors.newPassword1}
-          />
-          <PasswordField
-            {...getFieldProps("newPassword2")}
-            label={t("Repeat new password")}
-            error={touched.newPassword2 && Boolean(errors.newPassword2)}
-            helperText={touched.newPassword2 && errors.newPassword2}
-          />
-          <StyledBox>
-            <Typography variant="body2" color="textSecondary">
-              {t(
-                "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
-              )}
-            </Typography>
-            <StyledPrimaryButton size="large" type="submit">
-              {t("Save changes")}
-            </StyledPrimaryButton>
-            <Box mt={5}></Box>
-          </StyledBox>
-        </StyledColumn>
-        <PrimaryAlert
-          open={isAlertOpen}
-          onClose={onAlertClose}
-          alertMessage={alertMessage}
-          alertType={alertType}
+      <Typography variant="h1" color="textPrimary">
+        {t("Settings")}
+      </Typography>
+      <Typography variant="subtitle1" color="textPrimary">
+        {t("A change of the pin code")}
+      </Typography>
+      <StyledColumn onSubmit={handleSubmit}>
+        <PasswordField
+          {...getFieldProps("password")}
+          label={t("Enter the current password")}
+          helperText={touched.password && errors.password}
+          error={touched.password && Boolean(errors.password)}
         />
-      </Box>
+        <PasswordField
+          {...getFieldProps("newPassword1")}
+          label={t("Enter a new password")}
+          error={touched.newPassword1 && Boolean(errors.newPassword1)}
+          helperText={touched.newPassword1 && errors.newPassword1}
+        />
+        <PasswordField
+          {...getFieldProps("newPassword2")}
+          label={t("Repeat new password")}
+          error={touched.newPassword2 && Boolean(errors.newPassword2)}
+          helperText={touched.newPassword2 && errors.newPassword2}
+        />
+        <StyledBox>
+          <Typography variant="body2" color="textSecondary">
+            {t(
+              "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
+            )}
+          </Typography>
+          <StyledPrimaryButton size="large" type="submit">
+            {t("Save changes")}
+          </StyledPrimaryButton>
+        </StyledBox>
+      </StyledColumn>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </>
   );
 };
