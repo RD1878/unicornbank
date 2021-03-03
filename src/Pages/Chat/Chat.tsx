@@ -21,11 +21,12 @@ import { useAlert } from "../../utils/useAlert";
 import { randomId } from "../../utils/randomId";
 import authState from "../../recoilState/recoilAtoms/authAtom";
 
-const StyledList = styled(List)`
+const StyledList = styled(({ ...props }) => <List {...props} />)`
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 250px);
   overflow-y: auto;
+  padding-right: ${(props) => (props.matches ? "10px" : "0")};
 `;
 
 const StyledForm = withTheme(styled("form")`
@@ -89,7 +90,7 @@ const Chat: FC = () => {
       <Typography variant="h1" color="textPrimary">
         {t("Chat with an employee")}
       </Typography>
-      <StyledList>
+      <StyledList matches={matches}>
         {isLoading ? (
           <LinearProgress color="secondary" />
         ) : (
