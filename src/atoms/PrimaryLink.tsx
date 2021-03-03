@@ -16,7 +16,6 @@ const StyledLink = withTheme(styled(Link)`
   display: block;
   position: relative;
   font-weight: ${(props: IPrimaryLink) => props.fontWeight};
-  padding: 5px;
 
   &::after {
     content: "";
