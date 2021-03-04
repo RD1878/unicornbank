@@ -242,9 +242,9 @@ const DialogTransaction: FC = () => {
                 fullWidth
                 error={touched.card1 && Boolean(errors.card1)}
               >
-                <InputLabel>{t("Debit account number")}</InputLabel>
+                <InputLabel>{t("Debit card number")}</InputLabel>
                 <Select
-                  label={t("Debit account number")}
+                  label={t("Debit card number")}
                   {...getFieldProps("card1")}
                 >
                   {arrayNumberCard.map((number: string) => (
@@ -262,7 +262,7 @@ const DialogTransaction: FC = () => {
                 error={touched.card2 && Boolean(errors.card2)}
                 variant="outlined"
               >
-                <InputLabel>{t("Crediting account number")}</InputLabel>
+                <InputLabel>{t("Crediting card number")}</InputLabel>
                 <Select
                   label={t("Crediting account number")}
                   {...getFieldProps("card2")}

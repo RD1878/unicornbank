@@ -188,7 +188,7 @@ const Profile: FC = () => {
           <EmailRoundedIcon color="action" fontSize="large" />
           <TextField
             fullWidth
-            label={t("Email")}
+            label={"Email"}
             id="email"
             {...getFieldProps("email")}
             error={touched.email && Boolean(errors.email)}
@@ -221,11 +221,11 @@ const Profile: FC = () => {
         <StyledBox>
           <Typography variant="body2" color="textSecondary">
             {t(
-              "If your name has changed, contact the bank branch. For changes in other data, you can contact the chat."
+              "If your passport information has changed, contact the bank branch. To change other data, you can contact the chat"
             )}
           </Typography>
           <PrimaryButton size="large" type="submit">
-            {t("Save changes")}
+            {t("Save")}
           </PrimaryButton>
         </StyledBox>
       </FormContact>

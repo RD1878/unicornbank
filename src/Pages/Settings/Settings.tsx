@@ -147,11 +147,11 @@ const Settings: FC = () => {
         <StyledBox>
           <Typography variant="body2" color="textSecondary">
             {t(
-              "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
+              "If you have forgotten your password, contact the bank branch. To change other data, you can contact the chat"
             )}
           </Typography>
           <StyledPrimaryButton size="large" type="submit">
-            {t("Save changes")}
+            {t("Save")}
           </StyledPrimaryButton>
         </StyledBox>
       </StyledColumn>
