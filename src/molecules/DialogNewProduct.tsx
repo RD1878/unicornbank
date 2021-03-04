@@ -10,10 +10,11 @@ import {
   Radio,
   RadioGroup,
   IconButton,
+  useMediaQuery,
 } from "@material-ui/core";
 import { PrimaryButton, PrimaryAlert } from "../atoms";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import { withTheme, useTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { useFormik } from "formik";
 import { db } from "../firebase/firebase";
@@ -36,9 +37,14 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import userState from "../recoilState/recoilAtoms/userAtom";
 
-const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
+const StyledPrimaryButton = withTheme(styled(({ ...props }) => (
+  <PrimaryButton {...props} />
+))`
   width: fit-content;
   align-self: center;
+  & > span > span {
+    margin-right: ${(props) => (props.matches ? "8px" : "0")};
+  }
 `);
 
 const ButtonWrap = styled("div")`
@@ -82,6 +88,8 @@ const DialogNewProduct: FC = () => {
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -162,8 +170,9 @@ const DialogNewProduct: FC = () => {
         variant="contained"
         startIcon={<AddIcon />}
         onClick={handleOpenDialog}
+        matches={matches}
       >
-        {t("New Product")}
+        {matches && t("New Product")}
       </StyledPrimaryButton>
       <Dialog
         open={isOpenDialog}
