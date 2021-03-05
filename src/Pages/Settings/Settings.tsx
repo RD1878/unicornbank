@@ -56,12 +56,14 @@ interface IFormValues {
 }
 
 const Settings: FC = () => {
+  const { t } = useTranslation();
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
-    alertType === "success" ? "Пароль успешно изменён!" : errorMessage;
-  const { t } = useTranslation();
+    alertType === "success"
+      ? t("Password changed successfully!")
+      : errorMessage;
 
   const reauthenticate = (password: string) => {
     const user = firebaseAuth.currentUser;

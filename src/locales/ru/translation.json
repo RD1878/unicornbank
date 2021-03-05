@@ -118,5 +118,6 @@
   "Filters": "Фильтры",
   "Back": "Назад",
   "There is no user record corresponding to this identifier. The user may have been deleted.": "Нет записи пользователя, соответствующей этому идентификатору. Возможно, пользователь был удален.",
-  "The password is invalid or the user does not have a password.": "Пароль недействителен или у пользователя нет пароля."
+  "The password is invalid or the user does not have a password.": "Пароль недействителен или у пользователя нет пароля.",
+  "Password changed successfully!": "Пароль успешно изменён!"
 }

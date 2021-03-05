@@ -117,5 +117,6 @@
   "Filters": "Filters",
   "Back": "Back",
   "There is no user record corresponding to this identifier. The user may have been deleted.": "There is no user record corresponding to this identifier. The user may have been deleted.",
-  "The password is invalid or the user does not have a password.": "The password is invalid or the user does not have a password."
+  "The password is invalid or the user does not have a password.": "The password is invalid or the user does not have a password.",
+  "Password changed successfully!": "Password changed successfully!"
 }

@@ -118,5 +118,6 @@
   "Filters": "Фильтрлар",
   "Back": "Кире",
   "There is no user record corresponding to this identifier. The user may have been deleted.": "Бу идентификаторга туры килә торган кулланучы язмасы юк. Бәлки, кулланучы удален.",
-  "The password is invalid or the user does not have a password.": "Пароль недействителен яки кулланучының пароле юк."
+  "The password is invalid or the user does not have a password.": "Пароль недействителен яки кулланучының пароле юк.",
+  "Password changed successfully!": "Пароль уңышлы үзгәртелде!"
 }
