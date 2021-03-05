@@ -1,35 +1,31 @@
 import React, { FC, useState, useEffect } from "react";
 import { Snackbar, ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
-import { Auth, MainPage, Profile, Register, Settings, Map } from "./Pages";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Auth,
+  MainPage,
+  Profile,
+  Register,
+  Settings,
+  Map,
+  Chat,
+} from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
 import { ROUTES } from "./routes";
 import { Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { getSession, getSessionError, requestUser } from "./actions";
-import { firebaseAuth } from "./firebase/firebase";
+import CardInfo from "./Pages/CardInfo/CardInfo";
+import Requisites from "./Pages/Requisites";
 import { Alert } from "@material-ui/lab";
-import { authSelector } from "./selectors";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
+import { useRecoilValue } from "recoil";
+import authState from "./recoilState/recoilAtoms/authAtom";
+import History from "./Pages/History";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
-  const { errorMessage } = useSelector(authSelector);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        dispatch(getSessionError("Нет активной сессии"));
-      }
-
-      dispatch(getSession(user));
-      dispatch(requestUser());
-    });
-  }, []);
+  const { errorMessage } = useRecoilValue(authState);
 
   useEffect(() => {
     if (errorMessage.length) {
@@ -57,6 +53,10 @@ const App: FC = () => {
             <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
+            <ProtectedRoute path={ROUTES.HISTORY} component={History} />
+            <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
+            <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
+            <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
           </MainLayout>
         </ProtectedRoute>
       </Switch>

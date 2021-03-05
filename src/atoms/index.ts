@@ -4,5 +4,22 @@ import PasswordField from "./PasswordField";
 import TextField from "./TextField";
 import Logo from "./Logo";
 import CardItem from "./CardItem";
+import ChatMessage from "./ChatMessage";
+import AddAvatar from "./AddAvatar";
+import CardIconItem from "./CardIconItem";
+import UserAvatar from "./UserAvatar";
+import PrimaryAlert from "./PrimaryAlert";
 
-export { PrimaryButton, PasswordField, PrimaryLink, TextField, Logo, CardItem };
+export {
+  PrimaryButton,
+  PasswordField,
+  PrimaryLink,
+  TextField,
+  Logo,
+  CardItem,
+  ChatMessage,
+  AddAvatar,
+  CardIconItem,
+  UserAvatar,
+  PrimaryAlert,
+};

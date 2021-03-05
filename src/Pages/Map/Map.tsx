@@ -5,6 +5,7 @@ import { Map as YMap, Placemark, YMaps, ZoomControl } from "react-yandex-maps";
 import { db } from "../../firebase/firebase";
 import MapInfoItem from "./../../atoms/MapInfoItem";
 import { withTheme } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 export interface IAtm {
   id: number;
@@ -23,9 +24,9 @@ interface ICategory {
 }
 
 const CATEGORIES: ICategory[] = [
-  { type: "all", name: "Все" },
-  { type: "offices", name: "Отделения", target: "Отделение офиса" },
-  { type: "atm", name: "Банкоматы", target: "Банкоматы" },
+  { type: "all", name: "All" },
+  { type: "offices", name: "Offices", target: "Offices" },
+  { type: "atm", name: "ATM", target: "ATM" },
 ];
 
 const KAZAN_CENTER = [55.798551, 49.136325];
@@ -53,7 +54,8 @@ const StyledTab = styled(({ ...props }) => (
 `;
 
 const StyledWrap = withTheme(styled("div")`
-  margin: -40px;
+  margin-left: -40px;
+  margin-right: -40px;
   display: flex;
   flex-direction: column;
 
@@ -77,6 +79,11 @@ const StyleMapContainer = withTheme(styled("div")`
   }
 `);
 
+const StyledContainer = styled(Container)`
+  margin-left: 0;
+  padding-left: 0;
+`;
+
 const StyledYMap = styled(YMap)`
   position: absolute;
   top: 30px;
@@ -90,6 +97,7 @@ const Map: FC = () => {
   const [branches, setBranches] = useState<IAtm[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<IAtm | null>(null);
   const branchesArray = filterBranches(tab, branches);
+  const { t } = useTranslation();
 
   const getMapInfo = () => {
     db.ref("ATM")
@@ -113,11 +121,11 @@ const Map: FC = () => {
   };
 
   return (
-    <StyledWrap>
-      <Container>
-        <Box mt={5}>
+    <>
+      <StyledContainer>
+        <Box mt={2}>
           <Typography variant="h1" color="textPrimary">
-            Карта отделений и банкоматов
+            {t("Offices and ATMs")}
           </Typography>
           <Tabs
             value={tab}
@@ -128,37 +136,39 @@ const Map: FC = () => {
             scrollButtons="on"
           >
             {CATEGORIES.map(({ name, type }) => (
-              <StyledTab label={name} key={type} />
+              <StyledTab label={t(name)} key={type} />
             ))}
           </Tabs>
         </Box>
-      </Container>
-      <StyleMapContainer>
-        <YMaps>
-          <StyledYMap
-            width="100%"
-            height="100%"
-            defaultState={{
-              center: KAZAN_CENTER,
-              zoom: 12,
-              controls: [],
-            }}
-          >
-            {branchesArray.map((branch) => (
-              <Placemark
-                key={branch.id}
-                geometry={[branch.latitude, branch.longitude]}
-                onClick={() => setSelectedBranch(branch)}
-              />
-            ))}
-            <ZoomControl />
-          </StyledYMap>
-        </YMaps>
-        {selectedBranch && (
-          <MapInfoItem {...selectedBranch} onClose={onMapInfoClose} />
-        )}
-      </StyleMapContainer>
-    </StyledWrap>
+      </StyledContainer>
+      <StyledWrap>
+        <StyleMapContainer>
+          <YMaps>
+            <StyledYMap
+              width="100%"
+              height="100%"
+              defaultState={{
+                center: KAZAN_CENTER,
+                zoom: 12,
+                controls: [],
+              }}
+            >
+              {branchesArray.map((branch) => (
+                <Placemark
+                  key={branch.id}
+                  geometry={[branch.latitude, branch.longitude]}
+                  onClick={() => setSelectedBranch(branch)}
+                />
+              ))}
+              <ZoomControl />
+            </StyledYMap>
+          </YMaps>
+          {selectedBranch && (
+            <MapInfoItem {...selectedBranch} onClose={onMapInfoClose} />
+          )}
+        </StyleMapContainer>
+      </StyledWrap>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
-import React, { FC, useState, SyntheticEvent, ChangeEvent } from "react";
+import React, { FC, useState, SyntheticEvent } from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
-import { Switch, Snackbar, FormControl, NativeSelect } from "@material-ui/core";
+import { useTheme, withTheme } from "@material-ui/core/styles";
+import { Snackbar, IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
@@ -10,38 +10,45 @@ import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
+import { LanguageSelect } from "../molecules";
+import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
+import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 
 const Container = withTheme(styled("div")`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   height: 85px;
+  margin: auto;
   padding: 0px 30px 0px 50px;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);
 
-const SidebarHeader = withTheme(styled("div")`
-  max-width: 300px;
-  display: flex;
-
-  a {
-    margin-left: 40px;
-  }
-`);
-
 const LinksContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   flex-grow: 0.5;
+  width: 45vw;
+  max-width: 600px;
 `;
-export interface IHeader {
+
+const ControlsContainer = styled("div")`
+  display: flex;
+  flex-direction: row;
+  width: 15vw;
+  max-width: 150px;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+interface IHeader {
   onToggleTheme: () => void;
 }
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
   const [error, setError] = useState(false);
+  const theme = useTheme();
   const { t } = useTranslation();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
@@ -57,10 +64,6 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<{ value: string }>) => {
-    i18next.changeLanguage(e.target.value);
-  };
-
   return (
     <Container>
       <Snackbar
@@ -69,29 +72,28 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         onClose={handleCloseAlert}
       >
         <Alert severity="error" onClose={handleCloseAlert}>
-          Произошла ошибка, не получилось выйти!
+          {t("An error occured, failed to exit!")}
         </Alert>
       </Snackbar>
-
-      <SidebarHeader></SidebarHeader>
+      <Logo />
       <LinksContainer>
-        <Logo />
         {navigation.map((item) => (
           <Link to={item.path} key={item.path}>
             <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
           </Link>
         ))}
-
-        <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
       </LinksContainer>
-      <FormControl>
-        <NativeSelect defaultValue="ru" onChange={handleChange}>
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
-          <option value="tat">Татарча</option>
-        </NativeSelect>
-      </FormControl>
-      <Switch onChange={onToggleTheme} />
+      <ControlsContainer>
+        <LanguageSelect />
+        <IconButton onClick={onToggleTheme}>
+          {theme.palette.type === "dark" ? (
+            <Brightness4RoundedIcon />
+          ) : (
+            <Brightness7RoundedIcon />
+          )}
+        </IconButton>
+      </ControlsContainer>
+      <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
     </Container>
   );
 };

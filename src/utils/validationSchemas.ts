@@ -1,21 +1,30 @@
 import * as yup from "yup";
-
-const REQUIRED_MESSAGE = "Обязательно для заполнения";
+import { REQUIRED_MESSAGE } from "../constants";
 
 export const passwordValidation = (
-  message = REQUIRED_MESSAGE
+  ruleMessage: string,
+  requiredMessage: string
 ): yup.SchemaOf<string> =>
-  yup
-    .string()
-    .min(8, "Пароль должен одержать в себе миниму 8 символов")
-    .required(message);
+  yup.string().min(8, ruleMessage).required(requiredMessage);
 
-export const emailValidation = yup
-  .string()
-  .required("Введите почту")
-  .email("Введите почту в правильном формате");
+export const emailValidation = (
+  ruleMessage: string,
+  requiredMessage: string
+): yup.SchemaOf<string> =>
+  yup.string().required(requiredMessage).email(ruleMessage);
 
-export const phoneValidation = yup
+export const selectValidation = yup
   .string()
-  .min(11, "Введите корректный номер телефона")
-  .required("Обязательно для заполнения");
+  .min(11, "Выберите карту")
+  .required(REQUIRED_MESSAGE);
+
+export const sumValidation = yup
+  .number()
+  .min(0, "Введите cумму")
+  .required(REQUIRED_MESSAGE);
+
+export const phoneValidation = (
+  ruleMessage: string,
+  requiredMessage: string
+): yup.SchemaOf<string> =>
+  yup.string().min(11, ruleMessage).required(requiredMessage);
