@@ -82,6 +82,7 @@ const FormAuth = withTheme(styled("form")`
     align-items: center;
 
     & > a {
+      margin-top: 30px;
       & > p {
         margin-top: 30px;
       }
@@ -232,7 +233,7 @@ const Register: FC = () => {
           <PrimaryButton type="submit" size="large">
             {t("Register")}
           </PrimaryButton>
-          <Link href={ROUTES.AUTH} color="textPrimary">
+          <Link href={ROUTES.AUTH} variant="body2" color="textPrimary">
             {t("Do you already have an account?")}
           </Link>
         </div>
