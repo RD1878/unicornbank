@@ -170,7 +170,7 @@ const DialogNewProduct: FC = () => {
         variant="contained"
         startIcon={<AddIcon />}
         onClick={handleOpenDialog}
-        matches={matches}
+        matches={matches.toString()}
       >
         {matches && t("New Product")}
       </StyledPrimaryButton>

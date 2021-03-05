@@ -35,7 +35,11 @@ const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {
       const userData = await fetchUser();
 
       setSelf({
-        userData,
+        userData: {
+          ...initialData,
+          ...userData,
+          isLoading: false,
+        },
         errorMessage: "",
       });
     } catch ({ message }) {

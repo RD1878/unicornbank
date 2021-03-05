@@ -116,5 +116,7 @@
   "Period from": "Вакыт башлап",
   "Period to": "Вакыт буенча",
   "Filters": "Фильтрлар",
-  "Back": "Кире"
+  "Back": "Кире",
+  "There is no user record corresponding to this identifier. The user may have been deleted.": "Бу идентификаторга туры килә торган кулланучы язмасы юк. Бәлки, кулланучы удален.",
+  "The password is invalid or the user does not have a password.": "Пароль недействителен яки кулланучының пароле юк."
 }
