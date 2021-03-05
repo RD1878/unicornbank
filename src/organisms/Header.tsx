@@ -5,7 +5,7 @@ import { Snackbar, IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "../constants";
@@ -57,6 +57,7 @@ interface IHeader {
 }
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
+  const { pathname } = useLocation();
   const [error, setError] = useState(false);
   const theme = useTheme();
   const { t } = useTranslation();
@@ -98,7 +99,9 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
       <LinksContainer>
         {navigation.map((item) => (
           <Link to={item.path} key={item.path}>
-            <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
+            <PrimaryLink component="span" active={pathname === item.path}>
+              {t(item.name)}
+            </PrimaryLink>
           </Link>
         ))}
       </LinksContainer>
