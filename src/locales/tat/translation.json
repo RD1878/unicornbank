@@ -123,5 +123,11 @@
   "User is not found": "Кулланучы табылмады",
   "Transaction between your accounts": "Транзакция арасында сезнең счетлары",
   "Transaction to another bank user": "Башка банктан файдаланучы белән операция",
-  "Choose a card": "Сайлагыз картасын"
+  "Choose a card": "Сайлагыз картасын",
+  "Operations History": "Операцияләр тарихы",
+  "Currency": "Валюта",
+  "Currency rates": "Валюта курслары",
+  "Period from": "Вакыт башлап",
+  "Period to": "Вакыт буенча",
+  "Filters": "Фильтрлар"
 }

@@ -20,6 +20,7 @@ import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
 import { useRecoilValue } from "recoil";
 import authState from "./recoilState/recoilAtoms/authAtom";
+import History from "./Pages/History";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -52,6 +53,7 @@ const App: FC = () => {
             <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
             <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
             <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
+            <ProtectedRoute path={ROUTES.HISTORY} component={History} />
             <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
             <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
             <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
