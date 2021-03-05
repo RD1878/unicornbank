@@ -42,7 +42,7 @@ const ControlsContainer = styled("div")`
   align-items: center;
 `;
 
-interface IHeader {
+export interface IHeader {
   onToggleTheme: () => void;
 }
 

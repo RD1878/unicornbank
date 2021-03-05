@@ -22,7 +22,7 @@ const StyledToolbar = withTheme(styled(({ ...props }) => (
   }
 `);
 
-interface IHeader {
+export interface IHeader {
   onToggleTheme: () => void;
   onToggleMobileDrawer: () => void;
 }

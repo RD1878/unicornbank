@@ -13,7 +13,7 @@ import DesktopSidebar from "./DesktopSidebar";
 import { PrimaryAlert } from "../atoms";
 import { useAlert } from "../utils/useAlert";
 
-interface IProps {
+export interface IProps {
   view: string;
   isOpenDrawer: boolean;
   onToggleMobileDrawer: () => void;

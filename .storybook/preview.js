@@ -1,8 +1,7 @@
 import { ThemeProvider, useTheme } from "@material-ui/core";
 import appThemes from "../src/theme/theme";
 import { MemoryRouter } from "react-router";
-import { Provider } from "react-redux";
-import store from "../src/store/store";
+import { RecoilRoot } from "recoil";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -23,13 +22,13 @@ export const globalTypes = {
 const withThemeProvider = (Story, context) => {
   const theme = appThemes[context.globals.theme];
   return (
-    <Provider store={store}>
+    <RecoilRoot>
       <ThemeProvider theme={theme}>
         <MemoryRouter>
           <Story {...context} />
         </MemoryRouter>
       </ThemeProvider>
-    </Provider>
+    </RecoilRoot>
   );
 };
 export const decorators = [withThemeProvider];
