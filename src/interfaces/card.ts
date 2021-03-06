@@ -24,7 +24,7 @@ interface ICard {
     purposeOfPayment: string;
     bik: number;
     bankOfRecipient: string;
-    correspondentAccount: number;
+    correspondentAccount: string;
     inn: number;
     kpp: number;
   };
