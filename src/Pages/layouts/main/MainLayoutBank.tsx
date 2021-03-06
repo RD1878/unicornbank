@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
-import { HeaderBank, SidebarBank } from "../../../organisms";
+import { Header, SidebarBank } from "../../../organisms";
 import { ErrorBoundary } from "../../../errorBoundaries";
 import { DRAWER_BANKCHATS_WIDTH } from "../../../constants";
 
@@ -27,7 +27,7 @@ interface IMainLayoutBank {
 const MainLayoutBank: FC<IMainLayoutBank> = ({ children, onToggleTheme }) => {
   return (
     <>
-      <HeaderBank onToggleTheme={onToggleTheme} />
+      <Header onToggleTheme={onToggleTheme} />
       <ErrorBoundary>
         <ContentContainer>
           <SidebarBank />
