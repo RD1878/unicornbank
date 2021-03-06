@@ -103,35 +103,34 @@ const ChatBank: FC<IProps> = ({ clientId }) => {
           } ${clientData.patronymic}`}
         </Typography>
       )}
-
-      {isLoading ? (
-        <LinearProgress color="secondary" />
-      ) : clientId.length ? (
-        <>
-          <StyledList>
-            {chatMessages.map((message: IChatMessage) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            <div ref={messagesEndRef} />
-          </StyledList>
-          <StyledForm>
-            <StyledTextField
-              multiline
-              value={message}
-              onChange={handleChange}
-              autoFocus={true}
-              placeholder={t("Enter message")}
-            />
-            <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
-              {t("Send")}
-            </PrimaryButton>
-          </StyledForm>
-        </>
-      ) : (
-        <Typography variant="h1" color="textPrimary">
-          {t("Выберите чат с клиентом")}
-        </Typography>
-      )}
+      {isLoading && <LinearProgress color="secondary" />}
+      {!isLoading &&
+        (clientId.length ? (
+          <>
+            <StyledList>
+              {chatMessages.map((message: IChatMessage) => (
+                <ChatMessage key={message.id} message={message} />
+              ))}
+              <div ref={messagesEndRef} />
+            </StyledList>
+            <StyledForm>
+              <StyledTextField
+                multiline
+                value={message}
+                onChange={handleChange}
+                autoFocus={true}
+                placeholder={t("Enter message")}
+              />
+              <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
+                {t("Send")}
+              </PrimaryButton>
+            </StyledForm>
+          </>
+        ) : (
+          <Typography variant="h1" color="textPrimary">
+            {t("Выберите чат с клиентом")}
+          </Typography>
+        ))}
       <PrimaryAlert
         open={isAlertOpen}
         onClose={onAlertClose}

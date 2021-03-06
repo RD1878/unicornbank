@@ -9,9 +9,11 @@ import { db } from "../firebase/firebase";
 import PrimaryAlert from "./PrimaryAlert";
 import { useAlert } from "../utils/useAlert";
 
-const StyledListItem = withTheme(styled(({ ...props }) => (
-  <ListItem {...props} />
-))`
+interface IListItem {
+  isRead: boolean;
+}
+
+const StyledListItem = withTheme(styled(ListItem)<IListItem>`
   width: 100%;
   height: 80px;
   background-color: ${(props) => {

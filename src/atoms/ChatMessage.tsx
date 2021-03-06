@@ -12,9 +12,12 @@ import styled from "styled-components";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import { formatDate } from "../utils/formatDate";
 
-const StyledListItem = withTheme(styled(({ ...props }) => (
-  <ListItem {...props} />
-))`
+interface IProps {
+  isAdmin: boolean;
+  type: string;
+}
+
+const StyledListItem = withTheme(styled(ListItem)<IProps>`
   width: fit-content;
   max-width: 50%;
   background-color: ${(props) => {
@@ -55,9 +58,7 @@ const StyledWraper = styled("div")`
   flex-direction: column;
 `;
 
-const StyledTypography = withTheme(styled(({ ...props }) => (
-  <Typography {...props} />
-))`
+const StyledTypography = withTheme(styled(Typography)<IProps>`
   align-self: flex-end;
   overflow-wrap: anywhere;
   color: ${(props) => {

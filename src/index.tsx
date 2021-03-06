@@ -9,7 +9,7 @@ import "./i18n";
 import { RecoilRoot } from "recoil";
 
 const application = (
-  <Suspense fallback="loading">
+  <Suspense fallback="">
     <RecoilRoot>
       <BrowserRouter>
         <StylesProvider injectFirst>

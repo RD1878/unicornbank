@@ -117,6 +117,7 @@ const Auth: FC = () => {
       setUserState({
         userData: data,
         errorMessage: "",
+        isLoading: false,
       });
 
       onAlertOpen();

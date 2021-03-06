@@ -16,9 +16,11 @@ import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
 import { DRAWER_BANKCHATS_WIDTH } from "../constants";
 
-const Container = withTheme(styled(({ isAdmin, ...props }) => (
-  <div isAdmin={isAdmin} {...props}></div>
-))`
+interface IContainer {
+  isAdmin: boolean;
+}
+
+const Container = withTheme(styled("div")<IContainer>`
   display: flex;
   justify-content: space-between;
   align-items: center;

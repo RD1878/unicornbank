@@ -26,7 +26,6 @@ export interface IUser {
     phone: string;
     email: string;
   };
-  isLoading: boolean;
   products: IUserProducts;
   isAdmin: boolean;
 }

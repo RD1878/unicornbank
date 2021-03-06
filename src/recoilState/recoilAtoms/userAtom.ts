@@ -6,6 +6,7 @@ import { IUser, IUserCards } from "../../interfaces/user";
 interface IUserState {
   userData: IUser;
   errorMessage: string;
+  isLoading: boolean;
 }
 
 const initialData = {
@@ -22,7 +23,6 @@ const initialData = {
   products: {
     cards: {} as IUserCards,
   },
-  isLoading: true,
   isAdmin: false,
 };
 
@@ -38,11 +38,13 @@ const userEffect: AtomEffect<IUserState> = ({ setSelf }) => {
       setSelf({
         userData,
         errorMessage: "",
+        isLoading: false,
       });
     } catch ({ message }) {
       setSelf({
         userData: initialData,
         errorMessage: message,
+        isLoading: false,
       });
     }
   });
@@ -54,6 +56,7 @@ const userState = atom<IUserState>({
   default: {
     userData: initialData,
     errorMessage: "",
+    isLoading: true,
   },
   effects_UNSTABLE: [userEffect],
 });
