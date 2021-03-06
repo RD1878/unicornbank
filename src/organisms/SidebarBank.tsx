@@ -91,7 +91,7 @@ const SidebarBank: FC = () => {
         <Grid container spacing={1}>
           <Grid item xs={10}>
             <Typography variant="body2" color="textPrimary">
-              {`${t("Unopened chats")}:`}
+              {`${t("Unread chats")}:`}
             </Typography>
           </Grid>
           <Grid item>

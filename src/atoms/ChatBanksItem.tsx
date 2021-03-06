@@ -98,7 +98,7 @@ const ChatsBankItem: FC<IProps> = ({
       <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
       <Container>
         <StyledTextTypography variant="body2">
-          {`${firstName} ${lastName} ${patronymic}`}
+          {`${firstName} ${patronymic} ${lastName}`}
         </StyledTextTypography>
         <StyledTextTypography variant="body1">{`${lastMessage}`}</StyledTextTypography>
         <StyledTypography variant="overline">{`${formatDate(
