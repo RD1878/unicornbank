@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { Avatar, Box, Card, Typography } from "@material-ui/core";
 import { IOperation } from "../interfaces/operation";
+import { Avatar, Box, Card, Typography } from "@material-ui/core";
 import getCurrencyTypeBalance from "../utils/getCurrencyTypeBalance";
 import { withTheme } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";

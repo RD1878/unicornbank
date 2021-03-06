@@ -84,9 +84,8 @@ const SidebarBank: FC = () => {
         patronymic.toLowerCase().includes(searchData.toLowerCase())
       ) {
         return true;
-      } else {
-        return false;
       }
+      return false;
     });
 
   return (
