@@ -1,15 +1,4 @@
 import React, { FC, useState, ChangeEvent, useEffect } from "react";
-import {
-  DialogContentText,
-  Box,
-  FormHelperText,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-} from "@material-ui/core";
-import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
 import { IFormData } from "./../molecules/DialogTransaction";
 import { useTranslation } from "react-i18next";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -44,18 +33,15 @@ interface IDialogContentYourAccounts {
   setErrorMessage: (message: string) => void;
 }
 
-const StyledFormControl = withTheme(styled(({ open, width, ...props }) => (
-  <FormControl
-    classes={{ root: "root" }}
-    open={open}
-    width={width}
-    {...props}
-  />
-))`
-  & .select {
-    margin-top: 10px;
-  }
-`);
+const schema = (t: (text: string) => string) =>
+  yup.object({
+    card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
+    card2: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
+    sum: sumValidation(
+      t("Please enter valid phone number"),
+      t(REQUIRED_MESSAGE)
+    ),
+  });
 
 const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
   closeDialog,
@@ -163,14 +149,7 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
       calculatedSum: "",
       cardNumber: "",
     },
-    validationSchema: yup.object({
-      card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
-      card2: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
-      sum: sumValidation(
-        t("Please enter valid phone number"),
-        t(REQUIRED_MESSAGE)
-      ),
-    }),
+    validationSchema: schema(t),
     onSubmit,
   });
 
@@ -193,11 +172,7 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
 
     const bothExist = findBothCurrencies(cardCurrency1, cardCurrency2);
 
-    if (cardCurrency1 === cardCurrency2) {
-      setSame(true);
-    } else {
-      setSame(false);
-    }
+    setSame(cardCurrency1 === cardCurrency2);
 
     const num = calculateOfTransfer({
       sum,
@@ -237,33 +212,8 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
       num={num}
       values={values}
       closeDialog={closeDialog}
-      inputField={
-        <Box mt={3} mb={3}>
-          <StyledFormControl
-            fullWidth
-            error={touched.card2 && Boolean(errors.card2)}
-            variant="outlined"
-          >
-            <InputLabel>{t("Crediting account number")}</InputLabel>
-            <Select
-              label={t("Crediting account number")}
-              {...getFieldProps("card2")}
-            >
-              {arrayNumberCard.map((number: string) => (
-                <MenuItem value={number} key={number}>
-                  {number}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>{touched.card2 && errors.card2}</FormHelperText>
-          </StyledFormControl>
-        </Box>
-      }
-      title={
-        <DialogContentText>
-          {t("In order to transfer money to your card")}
-        </DialogContentText>
-      }
+      inputFieldType="select"
+      title={t("In order to transfer money to your card")}
     />
   );
 };

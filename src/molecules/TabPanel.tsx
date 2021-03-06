@@ -15,13 +15,7 @@ interface IContainer extends BoxProps {
   imagesrc?: number;
 }
 
-const changePhoto = (index: number): string => {
-  if (index === 1) {
-    return img1;
-  }
-
-  return img2;
-};
+const changePhoto = (index: number): string => (index === 1 ? img1 : img2);
 
 const BackgroundImage = styled("img")`
   position: absolute;

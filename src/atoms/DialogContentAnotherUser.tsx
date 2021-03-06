@@ -31,12 +31,23 @@ import { randomId } from "../utils/randomId";
 import { fetchUser } from "../api";
 import { getCurrencies } from "../utils/getCurrencies";
 import { findBothCurrencies } from "../utils/findBothCurrencies";
-import { Box, DialogContentText } from "@material-ui/core";
-import { TextField } from ".";
 
 export interface IDialogContentAnotherUser extends IFormData {
   phone?: string;
 }
+
+const schema = (t: (text: string) => string) =>
+  yup.object({
+    card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
+    phone: phoneValidation(
+      t("Please enter valid phone number"),
+      t(REQUIRED_MESSAGE)
+    ),
+    sum: sumValidation(
+      t("Please enter valid phone number"),
+      t(REQUIRED_MESSAGE)
+    ),
+  });
 
 interface IDialogContentYourAccounts {
   closeDialog: () => void;
@@ -184,17 +195,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       cardNumber: "",
       phone: "",
     },
-    validationSchema: yup.object({
-      card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
-      phone: phoneValidation(
-        t("Please enter valid phone number"),
-        t(REQUIRED_MESSAGE)
-      ),
-      sum: sumValidation(
-        t("Please enter valid phone number"),
-        t(REQUIRED_MESSAGE)
-      ),
-    }),
+    validationSchema: schema(t),
     onSubmit,
   });
 
@@ -252,11 +253,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
 
       const bothExist = findBothCurrencies(cardCurrency1, cardCurrency2);
 
-      if (cardCurrency1 === cardCurrency2) {
-        setSame(true);
-      } else {
-        setSame(false);
-      }
+      setSame(cardCurrency1 === cardCurrency2);
 
       const num = calculateOfTransfer({
         sum,
@@ -292,6 +289,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       touched={touched}
       handleSubmit={handleSubmit}
       handleSumChange={handleSumChange}
+      handlePhoneChange={handlePhoneChange}
       same={same}
       arrayNumberCard={arrayNumberCard}
       getFieldProps={getFieldProps}
@@ -299,30 +297,8 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       num={num}
       values={values}
       closeDialog={closeDialog}
-      inputField={
-        <Box mt={3} mb={3}>
-          <DialogContentText>
-            {t(
-              "Enter the phone number of the user to whom you want to transfer funds"
-            )}
-          </DialogContentText>
-          <TextField
-            fullWidth
-            label={t("Phone")}
-            id="phone"
-            name="phone"
-            value={values.phone}
-            onChange={handlePhoneChange}
-            error={touched.phone && Boolean(errors.phone)}
-            helperText={touched.phone && errors.phone}
-          />
-        </Box>
-      }
-      title={
-        <DialogContentText>
-          {t("In order to transfer money to another bank user")}
-        </DialogContentText>
-      }
+      inputFieldType="input"
+      title={t("In order to transfer money to another bank user")}
     />
   );
 };
