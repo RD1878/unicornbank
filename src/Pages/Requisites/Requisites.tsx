@@ -49,8 +49,8 @@ const StyledPrimaryButton = styled(PrimaryButton)`
 const Requisites: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<IParams>();
-  const { userData } = useRecoilValue(userState);
-  const { products, isLoading } = userData;
+  const { userData, isLoading } = useRecoilValue(userState);
+  const { products } = userData;
   const currentCard = products.cards[id];
   const { number, requisites } = currentCard ?? {};
   const { account, purposeOfPayment, recipient } = requisites ?? {};

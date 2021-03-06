@@ -1,5 +1,10 @@
 import React, { FC, useState, useEffect } from "react";
-import { Snackbar, ThemeProvider } from "@material-ui/core";
+import {
+  CircularProgress,
+  Snackbar,
+  ThemeProvider,
+  withTheme,
+} from "@material-ui/core";
 import appThemes from "./theme/theme";
 import {
   Auth,
@@ -18,14 +23,30 @@ import CardInfo from "./Pages/CardInfo/CardInfo";
 import Requisites from "./Pages/Requisites";
 import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from "./constants";
+import { MainLayoutBank } from "./Pages/layouts/main/MainLayoutBank";
 import { useRecoilValue } from "recoil";
 import authState from "./recoilState/recoilAtoms/authAtom";
+import userState from "./recoilState/recoilAtoms/userAtom";
+import clientIdState from "../src/recoilState/recoilAtoms/clientIdAtom";
 import History from "./Pages/History";
+import styled from "styled-components";
+
+const LoadingContainer = withTheme(styled("div")`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: ${(props) => props.theme.palette.primary.light};
+`);
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
   const [isOpen, setOpen] = useState(false);
   const { errorMessage } = useRecoilValue(authState);
+  const { userData, isLoading } = useRecoilValue(userState);
+  const { clientId } = useRecoilValue(clientIdState);
+  const { isAdmin } = userData;
 
   useEffect(() => {
     if (errorMessage.length) {
@@ -48,16 +69,33 @@ const App: FC = () => {
         <Route path={ROUTES.AUTH} exact component={Auth} />
         <Route path={ROUTES.REGISTER} exact component={Register} />
         <ProtectedRoute path="*">
-          <MainLayout onToggleTheme={toggleTheme}>
-            <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
-            <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
-            <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
-            <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
-            <ProtectedRoute path={ROUTES.HISTORY} component={History} />
-            <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
-            <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
-            <ProtectedRoute path={ROUTES.REQUISITES} component={Requisites} />
-          </MainLayout>
+          {isLoading && (
+            <LoadingContainer>
+              <CircularProgress color="secondary" />
+            </LoadingContainer>
+          )}
+          {!isLoading &&
+            (isAdmin ? (
+              <MainLayoutBank onToggleTheme={toggleTheme}>
+                <ProtectedRoute path={ROUTES.MAIN} exact>
+                  <Chat clientId={clientId} />
+                </ProtectedRoute>
+              </MainLayoutBank>
+            ) : (
+              <MainLayout onToggleTheme={toggleTheme}>
+                <ProtectedRoute path={ROUTES.MAIN} exact component={MainPage} />
+                <ProtectedRoute path={ROUTES.PROFILE} component={Profile} />
+                <ProtectedRoute path={ROUTES.SETTINGS} component={Settings} />
+                <ProtectedRoute path={ROUTES.HISTORY} component={History} />
+                <ProtectedRoute path={ROUTES.OFFICES} component={Map} />
+                <ProtectedRoute path={ROUTES.CHAT} component={Chat} />
+                <ProtectedRoute path={ROUTES.CARD} exact component={CardInfo} />
+                <ProtectedRoute
+                  path={ROUTES.REQUISITES}
+                  component={Requisites}
+                />
+              </MainLayout>
+            ))}
         </ProtectedRoute>
       </Switch>
       <Snackbar
