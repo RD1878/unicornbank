@@ -1,6 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import {
+  Dialog,
+  DialogContent,
+  IconButton,
   LinearProgress,
   Table,
   TableBody,
@@ -21,6 +24,8 @@ import {
   INN,
   KPP,
 } from "../../constants";
+import CloseIcon from "@material-ui/icons/Close";
+import QRCode from "qrcode.react";
 
 const StyledWraper = styled("div")`
   display: flex;
@@ -49,6 +54,16 @@ const Requisites: FC = () => {
   const currentCard = products.cards[id];
   const { number, requisites } = currentCard ?? {};
   const { account, purposeOfPayment, recipient } = requisites ?? {};
+  const [stringForQr, setStringForQr] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
 
   const rows = [
     {
@@ -85,6 +100,16 @@ const Requisites: FC = () => {
     },
   ];
 
+  const getStringForQr = () =>
+    rows.reduce((acc, item) => {
+      return acc + `${item.name}: ${item.value}\n`;
+    }, "");
+
+  useEffect(() => {
+    const resultString = getStringForQr();
+    setStringForQr(resultString);
+  }, [isLoading]);
+
   return (
     <StyledWraper>
       {isLoading ? (
@@ -104,7 +129,31 @@ const Requisites: FC = () => {
               ))}
             </TableBody>
           </StyledTable>
-          <StyledPrimaryButton>{t("Send email")}</StyledPrimaryButton>
+          <StyledPrimaryButton onClick={handleOpen}>
+            {t("Generate QR Code")}
+          </StyledPrimaryButton>
+          <Dialog
+            open={openDialog}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <IconButton
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <DialogContent>
+              <QRCode
+                value={stringForQr}
+                size={290}
+                level={"H"}
+                includeMargin={true}
+              />
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </StyledWraper>
