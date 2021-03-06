@@ -86,10 +86,12 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
 
   return (
     <Container isAdmin={isAdmin}>
-      <StyledPrimaryButton
-        startIcon={<ArrowBackIcon />}
-        onClick={handleClick}
-      />
+      {!isAdmin && (
+        <StyledPrimaryButton
+          startIcon={<ArrowBackIcon />}
+          onClick={handleClick}
+        />
+      )}
       <Logo />
       {!isAdmin && (
         <LinksContainer>
