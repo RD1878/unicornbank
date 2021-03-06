@@ -1,8 +1,6 @@
 import React, { FC, useState, ChangeEvent } from "react";
-import Drawer from "@material-ui/core/Drawer";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { DRAWER_BANKCHATS_WIDTH } from "../constants";
 import { Button, Input, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { ChatsBankList } from "../molecules";
@@ -13,26 +11,15 @@ import { getLastArrayIndex } from "../utils/getLastArrayIndex";
 import { useTranslation } from "react-i18next";
 import { IChat } from "../interfaces/chats";
 
-const StyledDrawer = withTheme(styled(({ open, width, anchor, ...props }) => (
-  <Drawer
-    classes={{ paper: "paper" }}
-    open={open}
-    width={width}
-    anchor={anchor}
-    {...props}
-  />
-))`
-  & .paper {
-    position: absolute;
-    top: 0;
+const StyledContainer = withTheme(styled("div")`
+   {
     background-color: ${(props) => props.theme.palette.primary.main};
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: unset;
-    overflow-x: hidden;
     padding: 40px 20px;
-    width: ${(props) => props.width}px;
+    width: 400px;
+    height: auto;
   }
 `);
 
@@ -89,11 +76,7 @@ const SidebarBank: FC = () => {
     });
 
   return (
-    <StyledDrawer
-      variant="permanent"
-      anchor="left"
-      width={DRAWER_BANKCHATS_WIDTH}
-    >
+    <StyledContainer>
       <Typography variant="h2" color="textPrimary">
         {t("Chats with bank clients")}
       </Typography>
@@ -145,7 +128,7 @@ const SidebarBank: FC = () => {
           )
         )}
       </ChatsBankList>
-    </StyledDrawer>
+    </StyledContainer>
   );
 };
 

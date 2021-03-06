@@ -14,7 +14,6 @@ import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
 import { useAlert } from "../utils/useAlert";
 import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
-import { DRAWER_BANKCHATS_WIDTH } from "../constants";
 
 interface IContainer {
   isAdmin: boolean;
@@ -26,12 +25,7 @@ const Container = withTheme(styled("div")<IContainer>`
   align-items: center;
   height: 85px;
   padding: 0px 30px 0px 50px;
-  width: ${(props) => {
-    if (props.isAdmin) {
-      return `calc(100% - ${DRAWER_BANKCHATS_WIDTH}px)}`;
-    }
-    return "100%";
-  }};
+  width: 100%;
   margin-left: auto;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);

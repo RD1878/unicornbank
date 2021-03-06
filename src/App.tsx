@@ -13,7 +13,6 @@ import {
   Register,
   Settings,
   Map,
-  ChatBank,
   Chat,
 } from "./Pages";
 import { MainLayout } from "./Pages/layouts/main/MainLayout";
@@ -79,7 +78,7 @@ const App: FC = () => {
             (isAdmin ? (
               <MainLayoutBank onToggleTheme={toggleTheme}>
                 <ProtectedRoute path={ROUTES.MAIN} exact>
-                  <ChatBank clientId={clientId} />
+                  <Chat clientId={clientId} />
                 </ProtectedRoute>
               </MainLayoutBank>
             ) : (
