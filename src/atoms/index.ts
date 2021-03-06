@@ -9,6 +9,7 @@ import AddAvatar from "./AddAvatar";
 import CardIconItem from "./CardIconItem";
 import UserAvatar from "./UserAvatar";
 import PrimaryAlert from "./PrimaryAlert";
+import ChatsBankItem from "./ChatBanksItem";
 
 export {
   PrimaryButton,
@@ -22,4 +23,5 @@ export {
   CardIconItem,
   UserAvatar,
   PrimaryAlert,
+  ChatsBankItem,
 };
