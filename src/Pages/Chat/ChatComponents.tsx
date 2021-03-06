@@ -12,12 +12,16 @@ import { ChatMessage, PrimaryButton } from "../../atoms";
 import { IChatMessage } from "../../interfaces/chatMessage";
 import SendIcon from "@material-ui/icons/Send";
 
-const StyledList = styled(({ ...props }) => <List {...props} />)`
+interface IProps {
+  $matches: boolean;
+}
+
+const StyledList = styled(List)<IProps>`
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 250px);
   overflow-y: auto;
-  padding-right: ${(props) => (props.matches ? "10px" : "0")};
+  padding-right: ${(props) => (props.$matches ? "10px" : "0")};
 `;
 
 const StyledForm = withTheme(styled("form")`
@@ -50,7 +54,7 @@ const Dialog: FC<IDialog> = ({ chatMessages }) => {
 
   useEffect(scrollToBottom, [chatMessages]);
   return (
-    <StyledList matches={matches}>
+    <StyledList $matches={matches}>
       {chatMessages.map((message: IChatMessage) => {
         return <ChatMessage key={message.id} message={message} />;
       })}
@@ -65,11 +69,9 @@ interface IChatForm {
   handleClick: () => void;
 }
 
-const StyledPrimaryButton = styled(({ ...props }) => (
-  <PrimaryButton {...props} />
-))`
+const StyledPrimaryButton = styled(PrimaryButton)<IProps>`
   & > span > span {
-    margin-right: ${(props) => (props.matches ? "8px" : "0")};
+    margin-right: ${(props) => (props.$matches ? "8px" : "0")};
   }
 `;
 
@@ -86,7 +88,11 @@ const ChatForm: FC<IChatForm> = ({ message, handleChange, handleClick }) => {
         autoFocus={true}
         placeholder={t("Enter message")}
       />
-      <StyledPrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
+      <StyledPrimaryButton
+        startIcon={<SendIcon />}
+        onClick={handleClick}
+        $matches={matches}
+      >
         {matches && t("Send")}
       </StyledPrimaryButton>
     </StyledForm>
