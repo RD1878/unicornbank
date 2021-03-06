@@ -64,7 +64,7 @@ const DialogTransaction: FC = () => {
   const { userData } = user;
   const { products } = userData;
   const { currency } = useRecoilValue(currencySelector);
-  const cards = Object.values(products.cards);
+  const cards = Object.values(products?.cards ?? {});
   const arrayNumberCard = cards.map((value) => value.number);
   const [currentCurrency, setCurrentCurrency] = useState("");
   const [num, setNum] = useState<number | undefined>(0);
@@ -159,6 +159,10 @@ const DialogTransaction: FC = () => {
   };
 
   useEffect(() => {
+    if (!products) {
+      return;
+    }
+
     const { card1, card2, sum } = values;
     const [id1, id2] = [
       findCardId(card1, products),

@@ -9,7 +9,7 @@ import userState from "../../recoilState/recoilAtoms/userAtom";
 const MainPage: FC = () => {
   const { userData } = useRecoilValue(userState);
   const { products } = userData;
-  const cards = Object.entries(products.cards);
+  const cards = Object.entries(products?.cards ?? {});
   const allCardsTransactions = cards
     .reduce(
       (
