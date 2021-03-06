@@ -13,7 +13,7 @@ import userState from "../recoilState/recoilAtoms/userAtom";
 import { formatDate } from "../utils/formatDate";
 
 interface IProps {
-  isAdmin: boolean;
+  $isAdmin: boolean;
   type: string;
 }
 
@@ -21,7 +21,7 @@ const StyledListItem = withTheme(styled(ListItem)<IProps>`
   width: fit-content;
   max-width: 50%;
   background-color: ${(props) => {
-    if (props.isAdmin) {
+    if (props.$isAdmin) {
       return props.type === "admin"
         ? props.theme.palette.secondary.main
         : props.theme.palette.primary.dark;
@@ -33,7 +33,7 @@ const StyledListItem = withTheme(styled(ListItem)<IProps>`
   }};
   border-radius: 20px;
   align-self: ${(props) => {
-    if (props.isAdmin) {
+    if (props.$isAdmin) {
       return props.type === "admin" ? "flex-end" : "flex-start";
     } else {
       return props.type === "admin" ? "flex-start" : "flex-end";
@@ -62,7 +62,7 @@ const StyledTypography = withTheme(styled(Typography)<IProps>`
   align-self: flex-end;
   overflow-wrap: anywhere;
   color: ${(props) => {
-    if (props.isAdmin) {
+    if (props.$isAdmin) {
       return props.type === "admin"
         ? props.theme.palette.primary.dark
         : props.theme.palette.textPrimary.main;
@@ -88,7 +88,7 @@ const ChatMessage: FC<IMessage> = ({ message }) => {
   const { isAdmin } = userData;
 
   return (
-    <StyledListItem type={type} isAdmin={isAdmin}>
+    <StyledListItem type={type} $isAdmin={isAdmin}>
       <StyledListItemAvatar>
         <Avatar alt={type} src="#" />
       </StyledListItemAvatar>
@@ -96,14 +96,14 @@ const ChatMessage: FC<IMessage> = ({ message }) => {
         <ListItemText>
           <StyledTypography
             type={type}
-            isAdmin={isAdmin}
+            $isAdmin={isAdmin}
             component="span"
             variant="body1"
           >
             {value}
           </StyledTypography>
         </ListItemText>
-        <StyledTypography type={type} isAdmin={isAdmin} variant="overline">
+        <StyledTypography type={type} $isAdmin={isAdmin} variant="overline">
           {formatDate(date)}
         </StyledTypography>
       </StyledWraper>

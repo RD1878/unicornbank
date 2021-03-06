@@ -48,9 +48,9 @@ const Dialog: FC<IDialog> = ({ chatMessages }) => {
   useEffect(scrollToBottom, [chatMessages]);
   return (
     <StyledList>
-      {chatMessages.map((message: IChatMessage) => (
-        <ChatMessage key={message.id} message={message} />
-      ))}
+      {chatMessages.map((message: IChatMessage) => {
+        return <ChatMessage key={message.id} message={message} />;
+      })}
       <div ref={messagesEndRef} />
     </StyledList>
   );

@@ -36,7 +36,7 @@ const Chat: FC<IProps> = ({ clientId }) => {
     setMessage(e.target.value);
   };
 
-  const handleClickUser = async () => {
+  const handleClick = async () => {
     setMessage("");
     try {
       const uid = firebaseAuth?.currentUser?.uid;
@@ -44,43 +44,34 @@ const Chat: FC<IProps> = ({ clientId }) => {
       if (!uid) {
         throw new Error("Пользователь не найден");
       }
-      await db.ref().update({
-        [`chatMessages/${uid}/dialog`]: [
-          ...chatMessagesCurrentUser,
-          {
-            date: Date.now(),
-            type: "user",
-            value: message,
-            id: randomId(),
-          },
-        ],
-        [`chatMessages/${uid}/isRead`]: false,
-      });
-    } catch (error) {
-      setErrorText(error.message);
-      onAlertOpen();
-    }
-  };
 
-  const handleClickAdmin = async () => {
-    setMessage("");
-    try {
-      const uid = firebaseAuth?.currentUser?.uid;
-
-      if (!uid) {
-        throw new Error("Пользователь не найден");
+      if (isAdmin) {
+        await db.ref().update({
+          [`chatMessages/${clientId}/dialog`]: [
+            ...chatMessagesClient,
+            {
+              date: Date.now(),
+              type: "admin",
+              value: message,
+              id: randomId(),
+            },
+          ],
+        });
       }
-      await db.ref().update({
-        [`chatMessages/${clientId}/dialog`]: [
-          ...chatMessagesClient,
-          {
-            date: Date.now(),
-            type: "admin",
-            value: message,
-            id: randomId(),
-          },
-        ],
-      });
+      if (!isAdmin) {
+        await db.ref().update({
+          [`chatMessages/${uid}/dialog`]: [
+            ...chatMessagesCurrentUser,
+            {
+              date: Date.now(),
+              type: "user",
+              value: message,
+              id: randomId(),
+            },
+          ],
+          [`chatMessages/${uid}/isRead`]: false,
+        });
+      }
     } catch (error) {
       setErrorText(error.message);
       onAlertOpen();
@@ -96,14 +87,14 @@ const Chat: FC<IProps> = ({ clientId }) => {
           chatMessages={chatMessagesClient}
           message={message}
           handleChange={handleChange}
-          handleClick={handleClickAdmin}
+          handleClick={handleClick}
         />
       ) : (
         <ChatUser
           isLoading={isLoadingCurrentUser}
           chatMessages={chatMessagesCurrentUser}
           handleChange={handleChange}
-          handleClick={handleClickUser}
+          handleClick={handleClick}
           message={message}
         />
       )}

@@ -10,21 +10,21 @@ import PrimaryAlert from "./PrimaryAlert";
 import { useAlert } from "../utils/useAlert";
 
 interface IListItem {
-  isRead: boolean;
+  $isRead: boolean;
 }
 
 const StyledListItem = withTheme(styled(ListItem)<IListItem>`
   width: 100%;
   height: 80px;
   background-color: ${(props) => {
-    if (props.isRead) {
+    if (props.$isRead) {
       return props.theme.palette.secondary.main;
     } else {
       return props.theme.palette.primary.dark;
     }
   }};
   color: ${(props) => {
-    if (props.isRead) {
+    if (props.$isRead) {
       return props.theme.palette.primary.dark;
     } else {
       return props.theme.palette.textPrimary.main;
@@ -94,7 +94,7 @@ const ChatsBankItem: FC<IProps> = ({
   };
 
   return (
-    <StyledListItem onClick={handleClientId} isRead={isRead}>
+    <StyledListItem onClick={handleClientId} $isRead={isRead}>
       <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
       <Container>
         <StyledTextTypography variant="body2">
