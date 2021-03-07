@@ -7,12 +7,13 @@ import { navigation } from "../routes";
 import { Link } from "react-router-dom";
 import { PHONE_BANK, EMAIL_BANK } from "../constants";
 import { useTranslation } from "react-i18next";
+
 const Container = withTheme(styled("div")`
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 150px;
-  padding: 0px 50px;
+  padding: 0px 30px;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);
 

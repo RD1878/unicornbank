@@ -78,7 +78,7 @@ const OperationCard: FC<IProps> = ({ operation }) => {
       <StyledCard>
         <Avatar>{name.slice(0, 1)}</Avatar>
         <StyledBox>
-          <TypographyName variant="button2">{name}</TypographyName>
+          <TypographyName variant="body2">{name}</TypographyName>
           <TypographyDescription variant="body1" color="textSecondary">
             {t(category)}
           </TypographyDescription>

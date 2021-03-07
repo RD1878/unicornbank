@@ -12,11 +12,16 @@ import { ChatMessage, PrimaryButton } from "../../atoms";
 import { IChatMessage } from "../../interfaces/chatMessage";
 import SendIcon from "@material-ui/icons/Send";
 
-const StyledList = styled(List)`
+interface IProps {
+  $matches: boolean;
+}
+
+const StyledList = styled(List)<IProps>`
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 250px);
   overflow-y: auto;
+  padding-right: ${(props) => (props.$matches ? "10px" : "0")};
 `;
 
 const StyledForm = withTheme(styled("form")`
@@ -44,10 +49,12 @@ const Dialog: FC<IDialog> = ({ chatMessages }) => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
   useEffect(scrollToBottom, [chatMessages]);
   return (
-    <StyledList>
+    <StyledList $matches={matches}>
       {chatMessages.map((message: IChatMessage) => {
         return <ChatMessage key={message.id} message={message} />;
       })}
@@ -62,6 +69,12 @@ interface IChatForm {
   handleClick: () => void;
 }
 
+const StyledPrimaryButton = styled(PrimaryButton)<IProps>`
+  & > span > span {
+    margin-right: ${(props) => (props.$matches ? "8px" : "0")};
+  }
+`;
+
 const ChatForm: FC<IChatForm> = ({ message, handleChange, handleClick }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -75,9 +88,13 @@ const ChatForm: FC<IChatForm> = ({ message, handleChange, handleClick }) => {
         autoFocus={true}
         placeholder={t("Enter message")}
       />
-      <PrimaryButton startIcon={<SendIcon />} onClick={handleClick}>
+      <StyledPrimaryButton
+        startIcon={<SendIcon />}
+        onClick={handleClick}
+        $matches={matches}
+      >
         {matches && t("Send")}
-      </PrimaryButton>
+      </StyledPrimaryButton>
     </StyledForm>
   );
 };

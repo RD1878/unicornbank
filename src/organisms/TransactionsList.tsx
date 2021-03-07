@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { ChangeEvent, FC, useState } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../atoms";
@@ -85,10 +86,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const [selectedDateTo, setSelectedDateTo] = useState<Date | null>(
     getEndToday()
   );
-
-  const { products } = userData;
-  const { cards } = products;
-  const dataCards = Object.entries(cards);
+  const dataCards = Object.entries(userData.products?.cards ?? {});
   const currencies = Object.keys(CURRENCIES);
 
   const isQueryPathHistory = useLocation().pathname === ROUTES.HISTORY;
@@ -244,7 +242,9 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           )}
           {!isQueryPathHistory && (
             <StyledLink to={ROUTES.HISTORY}>
-              <PrimaryButton>{t("More")}</PrimaryButton>
+              <PrimaryButton disabled={!dataCards.length}>
+                {t("More")}
+              </PrimaryButton>
             </StyledLink>
           )}
         </StyledOperationsContainer>

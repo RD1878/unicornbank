@@ -1,5 +1,5 @@
 import React, { FC, useState, ChangeEvent, useEffect } from "react";
-import { Container, Typography, Box, Tabs, Tab } from "@material-ui/core";
+import { Container, Typography, Tabs, Tab } from "@material-ui/core";
 import styled from "styled-components";
 import { Map as YMap, Placemark, YMaps, ZoomControl } from "react-yandex-maps";
 import { db } from "../../firebase/firebase";
@@ -123,23 +123,21 @@ const Map: FC = () => {
   return (
     <>
       <StyledContainer>
-        <Box mt={2}>
-          <Typography variant="h1" color="textPrimary">
-            {t("Offices and ATMs")}
-          </Typography>
-          <Tabs
-            value={tab}
-            onChange={tabHandleChange}
-            indicatorColor="secondary"
-            textColor="secondary"
-            variant="fullWidth"
-            scrollButtons="on"
-          >
-            {CATEGORIES.map(({ name, type }) => (
-              <StyledTab label={t(name)} key={type} />
-            ))}
-          </Tabs>
-        </Box>
+        <Typography variant="h1" color="textPrimary">
+          {t("Offices and ATMs")}
+        </Typography>
+        <Tabs
+          value={tab}
+          onChange={tabHandleChange}
+          indicatorColor="secondary"
+          textColor="secondary"
+          variant="fullWidth"
+          scrollButtons="on"
+        >
+          {CATEGORIES.map(({ name, type }) => (
+            <StyledTab label={t(name)} key={type} />
+          ))}
+        </Tabs>
       </StyledContainer>
       <StyledWrap>
         <StyleMapContainer>

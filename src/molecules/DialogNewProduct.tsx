@@ -10,35 +10,34 @@ import {
   Radio,
   RadioGroup,
   IconButton,
+  useMediaQuery,
 } from "@material-ui/core";
 import { PrimaryButton, PrimaryAlert } from "../atoms";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import { withTheme, useTheme } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { useFormik } from "formik";
 import { db } from "../firebase/firebase";
-import {
-  BANKOFRECIPIENT,
-  CURRENCIES,
-  INN,
-  KPP,
-  CORRESPONDENTACCOUNT,
-} from "../constants";
+import { CURRENCIES } from "../constants";
 import { TAlert } from "../interfaces/tAlert";
 import { Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { getRandomNumber } from "../utils/randomNumber";
 import { randomId } from "../utils/randomId";
 import { useTranslation } from "react-i18next";
-import { BIK } from "./../constants";
 import { useAlert } from "../utils/useAlert";
 import { useRecoilState, useRecoilValue } from "recoil";
 import authState from "../recoilState/recoilAtoms/authAtom";
 import userState from "../recoilState/recoilAtoms/userAtom";
 
-const StyledPrimaryButton = withTheme(styled(PrimaryButton)`
+const StyledPrimaryButton = withTheme(styled(({ ...props }) => (
+  <PrimaryButton {...props} />
+))`
   width: fit-content;
   align-self: center;
+  & > span > span {
+    margin-right: ${(props) => (props.matches ? "0" : "8px")};
+  }
 `);
 
 const ButtonWrap = styled("div")`
@@ -82,6 +81,8 @@ const DialogNewProduct: FC = () => {
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -99,12 +100,7 @@ const DialogNewProduct: FC = () => {
         number: `**** **** **** ${getRandomNumber(4)}`,
         requisites: {
           account,
-          bankOfRecipient: BANKOFRECIPIENT,
-          correspondentAccount: CORRESPONDENTACCOUNT,
-          bik: BIK,
-          inn: INN,
-          kpp: KPP,
-          purposeOfPayment: `Перевод средств на счет ${account} РУБ`,
+          purposeOfPayment: `Перевод средств на счет ${account} ${currency}`,
           recipient: `${lastName} ${firstName} ${patronymic}`,
         },
         validity: {
@@ -119,7 +115,7 @@ const DialogNewProduct: FC = () => {
         products: {
           ...userData.products,
           cards: {
-            ...userData.products.cards,
+            ...userData.products?.cards,
             [randomId()]: newCard,
           },
         },
@@ -162,8 +158,9 @@ const DialogNewProduct: FC = () => {
         variant="contained"
         startIcon={<AddIcon />}
         onClick={handleOpenDialog}
+        matches={matches.toString()}
       >
-        {t("New Product")}
+        {matches && t("New Product")}
       </StyledPrimaryButton>
       <Dialog
         open={isOpenDialog}
