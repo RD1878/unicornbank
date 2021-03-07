@@ -26,12 +26,11 @@ const ChatUser: FC<IChat> = ({
       <Typography variant="h1" color="textPrimary">
         {t("Chat with an employee")}
       </Typography>
-      {messages.length !== 0 &&
-        (isLoading ? (
-          <LinearProgress color="secondary" />
-        ) : (
-          <Dialog chatMessages={messages} />
-        ))}
+      {isLoading ? (
+        <LinearProgress color="secondary" />
+      ) : (
+        messages.length !== 0 && <Dialog chatMessages={messages} />
+      )}
       <ChatForm
         message={message}
         handleChange={handleChange}
