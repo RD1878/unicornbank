@@ -9,7 +9,7 @@ import {
   Logo,
   PrimaryAlert,
 } from "../../atoms";
-import background from "../../assets/images/1-2.png";
+import background from "../../assets/images/1-2-min.jpg";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
