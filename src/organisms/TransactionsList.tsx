@@ -76,7 +76,7 @@ interface ICardCurrency {
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
-  const { userData } = useRecoilValue(userState);
+  const { userData, isLoading } = useRecoilValue(userState);
   const [tab, setTab] = useState(0);
   const [card, setCard] = useState("all");
   const [currency, setCurrency] = useState("all");
@@ -161,7 +161,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           {t("Last operations")}
         </Typography>
       )}
-      {userData.isLoading ? (
+      {isLoading ? (
         <LinearProgress color="secondary" />
       ) : (
         <StyledOperationsContainer>
