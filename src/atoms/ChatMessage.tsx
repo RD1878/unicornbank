@@ -80,9 +80,10 @@ interface IMessage {
     type: string;
     value: string;
   };
+  avatar: string;
 }
 
-const ChatMessage: FC<IMessage> = ({ message }) => {
+const ChatMessage: FC<IMessage> = ({ message, avatar }) => {
   const { date, type, value } = message;
   const { userData } = useRecoilValue(userState);
   const { isAdmin } = userData;
@@ -90,7 +91,7 @@ const ChatMessage: FC<IMessage> = ({ message }) => {
   return (
     <StyledListItem type={type} $isAdmin={isAdmin}>
       <StyledListItemAvatar>
-        <Avatar alt={type} src="#" />
+        <Avatar alt={type} src={avatar} />
       </StyledListItemAvatar>
       <StyledWraper>
         <ListItemText>

@@ -40,9 +40,11 @@ const StyledTextField = withTheme(styled(TextField)`
 
 interface IDialog {
   chatMessages: IChatMessage[];
+  clientAvatar: string;
+  adminAvatar: string;
 }
 
-const Dialog: FC<IDialog> = ({ chatMessages }) => {
+const Dialog: FC<IDialog> = ({ chatMessages, clientAvatar, adminAvatar }) => {
   const messagesEndRef = useRef<HTMLInputElement>(null);
   const scrollToBottom = () => {
     if (messagesEndRef && messagesEndRef.current) {
@@ -56,7 +58,13 @@ const Dialog: FC<IDialog> = ({ chatMessages }) => {
   return (
     <StyledList $matches={matches}>
       {chatMessages.map((message: IChatMessage) => {
-        return <ChatMessage key={message.id} message={message} />;
+        return (
+          <ChatMessage
+            key={message.id}
+            message={message}
+            avatar={message.type === "user" ? clientAvatar : adminAvatar}
+          />
+        );
       })}
       <div ref={messagesEndRef} />
     </StyledList>

@@ -13,6 +13,7 @@ interface IProps {
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleClick: () => void;
   isLoading: boolean;
+  adminAvatar: string;
 }
 
 const ChatBank: FC<IProps> = ({
@@ -22,6 +23,7 @@ const ChatBank: FC<IProps> = ({
   message,
   handleChange,
   handleClick,
+  adminAvatar,
 }) => {
   const { chats } = useRecoilValue(chatsAtomState);
   const clientData = chats[clientId]?.clientData ?? {};
@@ -40,7 +42,11 @@ const ChatBank: FC<IProps> = ({
       {!isLoading &&
         (clientId.length ? (
           <>
-            <Dialog chatMessages={chatMessages} />
+            <Dialog
+              chatMessages={chatMessages}
+              clientAvatar={clientData.avatarUrl}
+              adminAvatar={adminAvatar}
+            />
             <ChatForm
               message={message}
               handleChange={handleChange}

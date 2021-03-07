@@ -9,6 +9,7 @@ import authState from "../../recoilState/recoilAtoms/authAtom";
 import userState from "../../recoilState/recoilAtoms/userAtom";
 import ChatBank from "./ChatBank";
 import ChatUser from "./ChatUser";
+import adminAtomState from "../../recoilState/recoilAtoms/adminAtom";
 
 interface IProps {
   clientId: string;
@@ -21,7 +22,7 @@ const Chat: FC<IProps> = ({ clientId }) => {
   const { userData } = useRecoilValue(userState);
   const { isAdmin } = userData;
   const user = useRecoilValue(authState);
-
+  const { adminAvatar } = useRecoilValue(adminAtomState);
   const currentUserData = useRecoilValue(
     chatMessagesState(user?.currentUser?.uid)
   );
@@ -88,6 +89,7 @@ const Chat: FC<IProps> = ({ clientId }) => {
           message={message}
           handleChange={handleChange}
           handleClick={handleClick}
+          adminAvatar={adminAvatar}
         />
       ) : (
         <ChatUser
@@ -96,6 +98,7 @@ const Chat: FC<IProps> = ({ clientId }) => {
           handleChange={handleChange}
           handleClick={handleClick}
           message={message}
+          adminAvatar={adminAvatar}
         />
       )}
       <PrimaryAlert

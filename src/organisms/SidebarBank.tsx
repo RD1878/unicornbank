@@ -18,7 +18,7 @@ const StyledContainer = withTheme(styled("div")`
     flex-direction: column;
     align-items: center;
     padding: 40px 20px;
-    width: 400px;
+    min-width: 400px;
     height: auto;
   }
 `);
