@@ -2,9 +2,14 @@ import { LinearProgress, Typography } from "@material-ui/core";
 import React, { ChangeEvent, FC } from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 import { IChatMessage } from "../../interfaces/chatMessage";
 import chatsAtomState from "../../recoilState/recoilAtoms/chatsAtom";
 import { ChatForm, Dialog } from "./ChatComponents";
+
+const StyledTypography = styled(Typography)`
+  flex-grow: 0;
+`;
 
 interface IProps {
   clientId: string;
@@ -32,11 +37,9 @@ const ChatBank: FC<IProps> = ({
   return (
     <>
       {Object.keys(clientData).length !== 0 && (
-        <Typography variant="h1" color="textPrimary">
-          {`${t("Chat with a client")} ${clientData.lastName} ${
-            clientData.firstName
-          } ${clientData.patronymic}`}
-        </Typography>
+        <StyledTypography variant="h1" color="textPrimary">
+          {`${clientData.firstName} ${clientData.patronymic} ${clientData.lastName}`}
+        </StyledTypography>
       )}
       {isLoading && <LinearProgress color="secondary" />}
       {!isLoading &&

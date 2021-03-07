@@ -9,7 +9,7 @@ const ContentContainer = withTheme(styled("div")`
   margin-left: auto;
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
+  min-height: calc(100vh - 85px);
 `);
 
 const Container = withTheme(styled("div")`

@@ -11,6 +11,7 @@ import { useAlert } from "../utils/useAlert";
 
 interface IListItem {
   $isRead: boolean;
+  $isActive: boolean;
 }
 
 const StyledListItem = withTheme(styled(ListItem)<IListItem>`
@@ -18,18 +19,22 @@ const StyledListItem = withTheme(styled(ListItem)<IListItem>`
   height: 80px;
   background-color: ${(props) => {
     if (props.$isRead) {
-      return props.theme.palette.secondary.main;
-    } else {
       return props.theme.palette.primary.dark;
+    } else {
+      return props.theme.palette.secondary.main;
     }
   }};
   color: ${(props) => {
     if (props.$isRead) {
-      return props.theme.palette.primary.dark;
-    } else {
       return props.theme.palette.textPrimary.main;
+    } else {
+      return props.theme.palette.primary.dark;
     }
   }};
+  ${(props) =>
+    props.$isActive
+      ? `border: 2px solid ${props.theme.palette.secondary.main}`
+      : ""};
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -67,6 +72,8 @@ interface IProps {
   date: number;
   clientData: IHeadUserData;
   isRead: boolean;
+  isActive: boolean;
+  onClick: (id: string) => void;
 }
 
 const ChatsBankItem: FC<IProps> = ({
@@ -75,6 +82,8 @@ const ChatsBankItem: FC<IProps> = ({
   date,
   clientData,
   isRead,
+  isActive,
+  onClick,
 }) => {
   const setClientId = useSetRecoilState(clientIdState);
   const [errorMessage, setErrorMessage] = useState("");
@@ -83,6 +92,7 @@ const ChatsBankItem: FC<IProps> = ({
   const { firstName, lastName, patronymic, avatarUrl } = clientData;
 
   const handleClientId = async () => {
+    onClick(clientId);
     setClientId({ clientId });
     try {
       await db.ref().update({
@@ -94,7 +104,11 @@ const ChatsBankItem: FC<IProps> = ({
   };
 
   return (
-    <StyledListItem onClick={handleClientId} $isRead={isRead}>
+    <StyledListItem
+      onClick={handleClientId}
+      $isRead={isActive ? true : isRead}
+      $isActive={isActive}
+    >
       <StyledAvatar sizes="large" alt="name" src={avatarUrl} />
       <Container>
         <StyledTextTypography variant="body2">

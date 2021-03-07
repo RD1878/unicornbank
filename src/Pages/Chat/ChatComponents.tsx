@@ -19,6 +19,7 @@ interface IProps {
 const StyledList = styled(List)<IProps>`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   max-height: calc(100vh - 250px);
   overflow-y: auto;
   padding-right: ${(props) => (props.$matches ? "10px" : "0")};
@@ -31,6 +32,7 @@ const StyledForm = withTheme(styled("form")`
   flex-direction: row;
   align-items: flex-start;
   margin-top: 20px;
+  flex-grow: 0;
 `);
 
 const StyledTextField = withTheme(styled(TextField)`
