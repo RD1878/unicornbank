@@ -10,7 +10,7 @@ import { RecoilRoot } from "recoil";
 import { PrimaryLoader } from "./atoms";
 
 const application = (
-  <Suspense fallback={PrimaryLoader}>
+  <Suspense fallback={<PrimaryLoader />}>
     <RecoilRoot>
       <BrowserRouter>
         <StylesProvider injectFirst>
