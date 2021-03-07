@@ -16,15 +16,14 @@ const StyledWraper = styled("div")`
 const History: FC = () => {
   const { t } = useTranslation();
   const { userData } = useRecoilValue(userState);
-  const { products } = userData;
-  const cards = Object.entries(products.cards);
+  const cards = Object.entries(userData.products?.cards ?? {});
 
   const allCardsTransactions = cards.reduce(
     (
       acc: { id: string; key: string; operation: IOperation }[],
       [id, card]: [string, ICard]
     ) => {
-      const operations = Object.entries(card.operations);
+      const operations = Object.entries(card.operations ?? {});
       for (const [key, operation] of operations) {
         acc = [...acc, { id, key, operation }];
       }

@@ -64,7 +64,7 @@ const DialogTransaction: FC = () => {
   const { userData } = user;
   const { products } = userData;
   const { currency } = useRecoilValue(currencySelector);
-  const cards = Object.values(products.cards);
+  const cards = Object.values(products?.cards ?? {});
   const arrayNumberCard = cards.map((value) => value.number);
   const [currentCurrency, setCurrentCurrency] = useState("");
   const [num, setNum] = useState<number | undefined>(0);
@@ -159,6 +159,10 @@ const DialogTransaction: FC = () => {
   };
 
   useEffect(() => {
+    if (!products) {
+      return;
+    }
+
     const { card1, card2, sum } = values;
     const [id1, id2] = [
       findCardId(card1, products),
@@ -223,6 +227,7 @@ const DialogTransaction: FC = () => {
         variant="outlined"
         color="primary"
         onClick={handleOpenDialog}
+        disabled={!cards.length}
       >
         {t("Money transaction")}
       </PrimaryButton>
@@ -242,9 +247,9 @@ const DialogTransaction: FC = () => {
                 fullWidth
                 error={touched.card1 && Boolean(errors.card1)}
               >
-                <InputLabel>{t("Debit account number")}</InputLabel>
+                <InputLabel>{t("Debit card number")}</InputLabel>
                 <Select
-                  label={t("Debit account number")}
+                  label={t("Debit card number")}
                   {...getFieldProps("card1")}
                 >
                   {arrayNumberCard.map((number: string) => (
@@ -262,7 +267,7 @@ const DialogTransaction: FC = () => {
                 error={touched.card2 && Boolean(errors.card2)}
                 variant="outlined"
               >
-                <InputLabel>{t("Crediting account number")}</InputLabel>
+                <InputLabel>{t("Crediting card number")}</InputLabel>
                 <Select
                   label={t("Crediting account number")}
                   {...getFieldProps("card2")}

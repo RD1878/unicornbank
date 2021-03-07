@@ -26,7 +26,7 @@ const Chat: FC<IProps> = ({ clientId }) => {
     chatMessagesState(user?.currentUser?.uid)
   );
   const isLoadingCurrentUser = currentUserData.isLoading;
-  const chatMessagesCurrentUser = currentUserData.chatMessages;
+  const chatMessagesCurrentUser = currentUserData.chatMessages ?? [];
 
   const clientIdData = useRecoilValue(chatMessagesState(clientId));
   const isLoadingClient = clientIdData.isLoading;

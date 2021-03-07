@@ -19,9 +19,8 @@ interface IProps {
 
 const CardsList: FC<IProps> = ({ open, onToggleMobileDrawer }) => {
   const { userData } = useRecoilValue(userState);
-  const { products } = userData;
 
-  const cards = Object.entries(products.cards);
+  const cards = Object.entries(userData.products?.cards ?? {});
 
   return (
     <List component="div" disablePadding>

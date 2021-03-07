@@ -23,6 +23,10 @@ const StyledFormControl = styled(FormControl)`
   right: 20px;
 `;
 
+const StyledDesktopFormControl = styled(FormControl)`
+  margin-left: 10px;
+`;
+
 const LanguageSelect: FC = () => {
   const [language, setLanguageState] = useRecoilState(languageState);
   const { t } = useTranslation();
@@ -36,7 +40,7 @@ const LanguageSelect: FC = () => {
   return (
     <>
       {matches ? (
-        <FormControl>
+        <StyledDesktopFormControl>
           <Select
             value={language.language}
             onChange={handleChange}
@@ -49,7 +53,7 @@ const LanguageSelect: FC = () => {
             <MenuItem value="en">English</MenuItem>
             <MenuItem value="tat">Татарча</MenuItem>
           </Select>
-        </FormControl>
+        </StyledDesktopFormControl>
       ) : (
         <StyledFormControl>
           <NativeSelect

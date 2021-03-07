@@ -121,11 +121,12 @@ const Auth: FC = () => {
       });
 
       onAlertOpen();
-
+      setAlertType("success");
       history.push(ROUTES.MAIN);
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(t(error.message));
       setAlertType("error");
+      onAlertOpen();
     }
   };
 

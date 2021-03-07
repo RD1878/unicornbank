@@ -5,12 +5,14 @@ import { IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo, PrimaryAlert } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { useTranslation } from "react-i18next";
 import { LanguageSelect } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
+import { createBrowserHistory } from "history";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { useAlert } from "../utils/useAlert";
 import { useRecoilValue } from "recoil";
 import userState from "../recoilState/recoilAtoms/userAtom";
@@ -48,13 +50,24 @@ const ControlsContainer = styled("div")`
   align-items: center;
 `;
 
+const StyledPrimaryButton = styled(PrimaryButton)`
+  margin-right: 10px;
+  width: 64px;
+  & span {
+    margin-right: 0;
+  }
+`;
+
 interface IHeader {
   onToggleTheme: () => void;
 }
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
+  const { pathname } = useLocation();
   const theme = useTheme();
   const { t } = useTranslation();
+  const history = createBrowserHistory();
+
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const { userData } = useRecoilValue(userState);
   const { isAdmin } = userData;
@@ -67,14 +80,26 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
     }
   };
 
+  const handleClick = (): void => {
+    history.back();
+  };
+
   return (
     <Container isAdmin={isAdmin}>
+      {!isAdmin && (
+        <StyledPrimaryButton
+          startIcon={<ArrowBackIcon />}
+          onClick={handleClick}
+        />
+      )}
       <Logo />
       {!isAdmin && (
         <LinksContainer>
           {navigation.map((item) => (
             <Link to={item.path} key={item.path}>
-              <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
+              <PrimaryLink component="span" active={pathname === item.path}>
+                {t(item.name)}
+              </PrimaryLink>
             </Link>
           ))}
         </LinksContainer>

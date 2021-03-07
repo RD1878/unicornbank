@@ -82,6 +82,7 @@ const FormAuth = withTheme(styled("form")`
     align-items: center;
 
     & > a {
+      margin-top: 30px;
       & > p {
         margin-top: 30px;
       }
@@ -142,15 +143,15 @@ const Register: FC = () => {
       if (!res?.user?.uid) {
         throw new Error(t("Error"));
       }
-      const { uid, email: userEmail } = res.user;
-      db.ref("users").child(uid).push().key;
-      db.ref().update({
+      const { uid } = res.user;
+
+      await db.ref("users").child(uid).push().key;
+      await db.ref().update({
         [`users/${uid}`]: {
           contact: {
-            email: userEmail,
+            email,
           },
           createdAt: new Date(),
-          email: email,
         },
       });
       onAlertOpen();
@@ -160,6 +161,7 @@ const Register: FC = () => {
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
+      onAlertOpen();
     }
   };
 
@@ -231,7 +233,7 @@ const Register: FC = () => {
           <PrimaryButton type="submit" size="large">
             {t("Register")}
           </PrimaryButton>
-          <Link href={ROUTES.AUTH} color="textPrimary">
+          <Link href={ROUTES.AUTH} variant="body2" color="textPrimary">
             {t("Do you already have an account?")}
           </Link>
         </div>
