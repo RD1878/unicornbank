@@ -112,7 +112,7 @@ const DialogNewProduct: FC = () => {
           bik: BIK,
           inn: INN,
           kpp: KPP,
-          purposeOfPayment: `Перевод средств на счет ${account} РУБ`,
+          purposeOfPayment: `Перевод средств на счет ${account} ${currency}`,
           recipient: `${lastName} ${firstName} ${patronymic}`,
         },
         validity: {
