@@ -227,6 +227,7 @@ const DialogTransaction: FC = () => {
         variant="outlined"
         color="primary"
         onClick={handleOpenDialog}
+        disabled={!cards.length}
       >
         {t("Money transaction")}
       </PrimaryButton>

@@ -82,7 +82,7 @@ const Profile: FC = () => {
 
   const { t } = useTranslation();
 
-  const phoneMask = (phone: string): string => {
+  const phoneMask = (phone = ""): string => {
     const cleaned = cleanPhone(phone);
     const match = cleaned.match(PATTERN);
 
