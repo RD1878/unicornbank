@@ -7,9 +7,10 @@ import { StylesProvider } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
 import "./i18n";
 import { RecoilRoot } from "recoil";
+import { PrimaryLoader } from "./atoms";
 
 const application = (
-  <Suspense fallback="loading">
+  <Suspense fallback={PrimaryLoader}>
     <RecoilRoot>
       <BrowserRouter>
         <StylesProvider injectFirst>
