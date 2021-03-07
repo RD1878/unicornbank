@@ -24,7 +24,7 @@ const MainPage: FC = () => {
       },
       []
     )
-    .slice(-10);
+    .slice(-5);
 
   return (
     <>

@@ -104,7 +104,7 @@
   "Reissue": "Reissue",
   "Are you sure reissue": "Are you sure you want to reissue the card? After confirmation, this card will be blocked, and the new card will have other details.",
   "Blocked message with reissue": "This card is blocked. A bank employee will contact you within 24 hours to clarify the place of receiving a new card.",
-  "More": "More",
+  "Still": "Still",
   "Incomes": "Incomes",
   "Write off": "Write off",
   "Clothing and shoes": "Clothing and shoes",
@@ -124,5 +124,6 @@
   "Back": "Back",
   "There is no user record corresponding to this identifier. The user may have been deleted.": "There is no user record corresponding to this identifier. The user may have been deleted.",
   "The password is invalid or the user does not have a password.": "The password is invalid or the user does not have a password.",
-  "Password changed successfully!": "Password changed successfully!"
+  "Password changed successfully!": "Password changed successfully!",
+  "Date should not be before minimal date": "Date should not be before minimal date"
 }

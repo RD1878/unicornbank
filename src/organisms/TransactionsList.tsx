@@ -243,7 +243,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           {!isQueryPathHistory && (
             <StyledLink to={ROUTES.HISTORY}>
               <PrimaryButton disabled={!dataCards.length}>
-                {t("More")}
+                {t("Still")}
               </PrimaryButton>
             </StyledLink>
           )}
