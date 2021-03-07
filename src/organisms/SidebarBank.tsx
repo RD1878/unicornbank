@@ -49,7 +49,10 @@ const SidebarBank: FC = () => {
   const { chats } = useRecoilValue(chatsAtomState);
   const [searchData, setSearchData] = useState("");
   const { t } = useTranslation();
-  const dataChatsArray = Object.entries(chats);
+  const dataChatsArray = Object.entries(chats).filter(
+    ([, { dialog }]) => dialog
+  );
+
   const countNotReadChats = dataChatsArray.filter(([, { isRead }]) => !isRead)
     .length;
 

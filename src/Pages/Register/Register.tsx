@@ -152,6 +152,16 @@ const Register: FC = () => {
             email,
           },
           createdAt: new Date(),
+          firstName: "Аноним",
+          lastName: "Аноним",
+          patronymic: "Аноним",
+          avatarUrl: "",
+        },
+        [`chatMessages/${uid}/clientData`]: {
+          firstName: "Аноним",
+          lastName: "Аноним",
+          patronymic: "Аноним",
+          avatarUrl: "",
         },
       });
       onAlertOpen();
