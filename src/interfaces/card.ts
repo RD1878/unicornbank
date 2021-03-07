@@ -22,11 +22,6 @@ interface ICard {
     recipient: string;
     account: number;
     purposeOfPayment: string;
-    bik: number;
-    bankOfRecipient: string;
-    correspondentAccount: string;
-    inn: number;
-    kpp: number;
   };
 }
 
