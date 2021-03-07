@@ -20,17 +20,18 @@ const ChatUser: FC<IChat> = ({
   isLoading,
 }) => {
   const { t } = useTranslation();
-
+  const messages = chatMessages ?? [];
   return (
     <>
       <Typography variant="h1" color="textPrimary">
         {t("Chat with an employee")}
       </Typography>
-      {isLoading ? (
-        <LinearProgress color="secondary" />
-      ) : (
-        <Dialog chatMessages={chatMessages} />
-      )}
+      {messages.length !== 0 &&
+        (isLoading ? (
+          <LinearProgress color="secondary" />
+        ) : (
+          <Dialog chatMessages={messages} />
+        ))}
       <ChatForm
         message={message}
         handleChange={handleChange}
