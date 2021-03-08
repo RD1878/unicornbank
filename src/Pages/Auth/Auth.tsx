@@ -117,14 +117,16 @@ const Auth: FC = () => {
       setUserState({
         userData: data,
         errorMessage: "",
+        isLoading: false,
       });
 
       onAlertOpen();
-
+      setAlertType("success");
       history.push(ROUTES.MAIN);
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(t(error.message));
       setAlertType("error");
+      onAlertOpen();
     }
   };
 

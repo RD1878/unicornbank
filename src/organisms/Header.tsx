@@ -1,26 +1,34 @@
-import React, { FC, useState, SyntheticEvent } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { useTheme, withTheme } from "@material-ui/core/styles";
-import { Snackbar, IconButton } from "@material-ui/core";
-import { PrimaryButton, Logo } from "../atoms";
+import { IconButton } from "@material-ui/core";
+import { PrimaryButton, Logo, PrimaryAlert } from "../atoms";
 import { navigation } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
-import { Alert } from "@material-ui/lab";
-import { SHACKBAR_SHOW_DURATION } from "../constants";
 import { useTranslation } from "react-i18next";
 import { LanguageSelect } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
+import { createBrowserHistory } from "history";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { useAlert } from "../utils/useAlert";
+import { useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
 
-const Container = withTheme(styled("div")`
+interface IContainer {
+  isAdmin: boolean;
+}
+
+const Container = withTheme(styled("div")<IContainer>`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   height: 85px;
-  margin: auto;
   padding: 0px 30px 0px 50px;
+  width: 100%;
+  margin-left: auto;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);
 
@@ -42,47 +50,60 @@ const ControlsContainer = styled("div")`
   align-items: center;
 `;
 
+const StyledPrimaryButton = styled(PrimaryButton)`
+  margin-right: 10px;
+  width: 64px;
+  & span {
+    margin-right: 0;
+  }
+`;
+
 interface IHeader {
   onToggleTheme: () => void;
 }
 
 const Header: FC<IHeader> = ({ onToggleTheme }) => {
-  const [error, setError] = useState(false);
+  const { pathname } = useLocation();
   const theme = useTheme();
   const { t } = useTranslation();
+  const history = createBrowserHistory();
 
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setError(false);
-  };
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
+  const { userData } = useRecoilValue(userState);
+  const { isAdmin } = userData;
 
   const signOut = async () => {
     try {
       await firebaseAuth.signOut();
     } catch (error) {
-      setError(true);
+      onAlertOpen();
     }
   };
 
+  const handleClick = (): void => {
+    history.back();
+  };
+
   return (
-    <Container>
-      <Snackbar
-        open={error}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleCloseAlert}
-      >
-        <Alert severity="error" onClose={handleCloseAlert}>
-          {t("An error occured, failed to exit!")}
-        </Alert>
-      </Snackbar>
+    <Container isAdmin={isAdmin}>
+      {!isAdmin && (
+        <StyledPrimaryButton
+          startIcon={<ArrowBackIcon />}
+          onClick={handleClick}
+        />
+      )}
       <Logo />
-      <LinksContainer>
-        {navigation.map((item) => (
-          <Link to={item.path} key={item.path}>
-            <PrimaryLink component="span">{t(item.name)}</PrimaryLink>
-          </Link>
-        ))}
-      </LinksContainer>
+      {!isAdmin && (
+        <LinksContainer>
+          {navigation.map((item) => (
+            <Link to={item.path} key={item.path}>
+              <PrimaryLink component="span" active={pathname === item.path}>
+                {t(item.name)}
+              </PrimaryLink>
+            </Link>
+          ))}
+        </LinksContainer>
+      )}
       <ControlsContainer>
         <LanguageSelect />
         <IconButton onClick={onToggleTheme}>
@@ -94,6 +115,12 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
         </IconButton>
       </ControlsContainer>
       <PrimaryButton onClick={signOut}>{t("Exit")}</PrimaryButton>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={t("An error occured, failed to exit!")}
+        alertType={"error"}
+      />
     </Container>
   );
 };

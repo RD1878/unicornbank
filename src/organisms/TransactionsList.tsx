@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { ChangeEvent, FC, useState } from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "../atoms";
@@ -75,7 +76,7 @@ interface ICardCurrency {
 
 const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const { t } = useTranslation();
-  const { userData } = useRecoilValue(userState);
+  const { userData, isLoading } = useRecoilValue(userState);
   const [tab, setTab] = useState(0);
   const [card, setCard] = useState("all");
   const [currency, setCurrency] = useState("all");
@@ -85,10 +86,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
   const [selectedDateTo, setSelectedDateTo] = useState<Date | null>(
     getEndToday()
   );
-
-  const { products } = userData;
-  const { cards } = products;
-  const dataCards = Object.entries(cards);
+  const dataCards = Object.entries(userData.products?.cards ?? {});
   const currencies = Object.keys(CURRENCIES);
 
   const isQueryPathHistory = useLocation().pathname === ROUTES.HISTORY;
@@ -163,7 +161,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           {t("Last operations")}
         </Typography>
       )}
-      {userData.isLoading ? (
+      {isLoading ? (
         <LinearProgress color="secondary" />
       ) : (
         <StyledOperationsContainer>
@@ -244,7 +242,9 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           )}
           {!isQueryPathHistory && (
             <StyledLink to={ROUTES.HISTORY}>
-              <PrimaryButton>{t("More")}</PrimaryButton>
+              <PrimaryButton disabled={!dataCards.length}>
+                {t("More")}
+              </PrimaryButton>
             </StyledLink>
           )}
         </StyledOperationsContainer>

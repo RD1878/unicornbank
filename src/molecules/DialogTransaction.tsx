@@ -8,6 +8,8 @@ import DialogContentYourAccounts from "./../atoms/DialogContentYourAccounts";
 import DialogContentAnotherUser from "./../atoms/DialogContentAnotherUser";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import userState from "../recoilState/recoilAtoms/userAtom";
 export interface IFormData {
   card1: string;
   card2: string;
@@ -57,6 +59,9 @@ const StyledDialogTitle = withTheme(styled(({ ...props }) => (
 const DialogTransaction: FC = () => {
   const [tab, setTab] = useState("0");
   const { t } = useTranslation();
+  const { userData } = useRecoilValue(userState);
+  const { products } = userData;
+  const cards = Object.values(products?.cards ?? {});
   const [isOpenDialog, setOpenDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
@@ -84,6 +89,7 @@ const DialogTransaction: FC = () => {
         variant="outlined"
         color="primary"
         onClick={handleOpenDialog}
+        disabled={!cards.length}
       >
         {t("Money transaction")}
       </PrimaryButton>

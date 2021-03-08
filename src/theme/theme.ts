@@ -63,6 +63,11 @@ const overrides = {
         fontSize: 14,
       },
     },
+    button: {
+      fontSize: 12,
+      letterSpacing: 1.25,
+      fontWeight: 600,
+    },
   },
   MuiOutlinedInput: {
     root: {
@@ -119,7 +124,7 @@ const light = createMuiTheme({
     type: "light",
     primary: {
       light: WHITE200,
-      main: WHITE50,
+      main: WHITE100,
       dark: WHITE100,
     },
     secondary: { main: BLUE500 },

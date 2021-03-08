@@ -28,6 +28,10 @@ const StyledContainer = withTheme(styled(Container)`
   margin-left: 0;
 `);
 
+const StyledTitle = withTheme(styled(Typography)`
+  color: ${(props) => props.theme.palette.white.main};
+`);
+
 const TabPanelWrapper: FC<TabPanelProps> = ({ title, value, index }) => {
   return (
     <TabPanel
@@ -37,9 +41,9 @@ const TabPanelWrapper: FC<TabPanelProps> = ({ title, value, index }) => {
       imagesrc={index + 1}
     >
       <Box p={3} minHeight={200}>
-        <Typography variant="h1" color="textPrimary">
+        <StyledTitle variant="h1" color={"textPrimary"}>
           {title}
-        </Typography>
+        </StyledTitle>
         <Box mt={3}>
           <DialogTransaction />
         </Box>

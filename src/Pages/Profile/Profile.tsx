@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, ChangeEvent } from "react";
-import { Container, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import EmailRoundedIcon from "@material-ui/icons/EmailRounded";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
@@ -30,9 +30,12 @@ const cleanPhone = (phone: string): string =>
 const StyledRow = styled("div")`
   display: flex;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 35px;
   max-width: 280px;
   width: 100%;
+  & label {
+    z-index: 0;
+  }
 
   p {
     margin-left: 5px;
@@ -59,7 +62,7 @@ const StyledBox = styled(Box)`
   }
   max-width: 496px;
   margin-top: 40px;
-  margin-bottom: 80px;
+  margin-bottom: 20px;
 `;
 
 interface IFormValues {
@@ -79,7 +82,7 @@ const Profile: FC = () => {
 
   const { t } = useTranslation();
 
-  const phoneMask = (phone: string): string => {
+  const phoneMask = (phone = ""): string => {
     const cleaned = cleanPhone(phone);
     const match = cleaned.match(PATTERN);
 
@@ -160,81 +163,79 @@ const Profile: FC = () => {
   };
 
   return (
-    <Container>
-      <Box mt={5}>
-        <Typography variant="h1" color="textPrimary">
-          {t("Profile")}
+    <>
+      <Typography variant="h1" color="textPrimary">
+        {t("Profile")}
+      </Typography>
+      <FormContact onSubmit={handleSubmit}>
+        <Typography variant="h2" color="textPrimary">
+          {t("Contacts")}
         </Typography>
-        <FormContact mt={6} onSubmit={handleSubmit}>
+        <StyledRow>
+          <PhoneRoundedIcon color="action" fontSize="large" />
+          <TextField
+            fullWidth
+            label={t("Phone")}
+            id="phone"
+            name="phone"
+            value={values.phone}
+            onChange={handlePhoneChange}
+            error={touched.phone && Boolean(errors.phone)}
+            helperText={touched.phone && errors.phone}
+          />
+        </StyledRow>
+        <StyledRow>
+          <EmailRoundedIcon color="action" fontSize="large" />
+          <TextField
+            fullWidth
+            label={"Email"}
+            id="email"
+            {...getFieldProps("email")}
+            error={touched.email && Boolean(errors.email)}
+            helperText={touched.email && errors.email}
+          />
+        </StyledRow>
+        <Box mt={4}>
           <Typography variant="h2" color="textPrimary">
-            {t("Contacts")}
+            {t("Documents")}
           </Typography>
           <StyledRow>
-            <PhoneRoundedIcon color="action" fontSize="large" />
+            <ListAltRoundedIcon color="action" fontSize="large" />
             <TextField
               fullWidth
-              label={t("Phone")}
-              id="phone"
-              name="phone"
-              value={values.phone}
-              onChange={handlePhoneChange}
-              error={touched.phone && Boolean(errors.phone)}
-              helperText={touched.phone && errors.phone}
+              label={t("Passport")}
+              disabled
+              defaultValue={passport}
             />
           </StyledRow>
           <StyledRow>
-            <EmailRoundedIcon color="action" fontSize="large" />
+            <ListAltRoundedIcon color="action" fontSize="large" />
             <TextField
               fullWidth
-              label={t("Email")}
-              id="email"
-              {...getFieldProps("email")}
-              error={touched.email && Boolean(errors.email)}
-              helperText={touched.email && errors.email}
+              label={t("SNILS")}
+              disabled
+              defaultValue={snils}
             />
           </StyledRow>
-          <Box mt={10}>
-            <Typography variant="h2" color="textPrimary">
-              {t("Documents")}
-            </Typography>
-            <StyledRow>
-              <ListAltRoundedIcon color="action" fontSize="large" />
-              <TextField
-                fullWidth
-                label={t("Passport")}
-                disabled
-                defaultValue={passport}
-              />
-            </StyledRow>
-            <StyledRow>
-              <ListAltRoundedIcon color="action" fontSize="large" />
-              <TextField
-                fullWidth
-                label={t("SNILS")}
-                disabled
-                defaultValue={snils}
-              />
-            </StyledRow>
-          </Box>
-          <StyledBox>
-            <Typography variant="body2" color="textSecondary">
-              {t(
-                "If your name has changed, contact the bank branch. For changes in other data, you can contact the chat."
-              )}
-            </Typography>
-            <PrimaryButton size="large" type="submit">
-              {t("Save changes")}
-            </PrimaryButton>
-          </StyledBox>
-        </FormContact>
-        <PrimaryAlert
-          open={isAlertOpen}
-          onClose={onAlertClose}
-          alertMessage={alertMessage}
-          alertType={alertType}
-        />
-      </Box>
-    </Container>
+        </Box>
+        <StyledBox>
+          <Typography variant="body2" color="textSecondary">
+            {t(
+              "If your passport information has changed, contact the bank branch. To change other data, you can contact the chat"
+            )}
+          </Typography>
+          <PrimaryButton size="large" type="submit">
+            {t("Save")}
+          </PrimaryButton>
+        </StyledBox>
+      </FormContact>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
+    </>
   );
 };
 

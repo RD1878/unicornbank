@@ -1,5 +1,6 @@
 import OperationCard from "./OperationCard";
 import TabPanel from "./TabPanel";
+import ChatsBankList from "./ChatsBankList";
 import CurrencyRate from "./CurrencyRate";
 import Payments from "./Payments";
 import DialogTransaction from "./DialogTransaction";
@@ -21,5 +22,6 @@ export {
   CardsList,
   LanguageSelect,
   DialogNewProduct,
+  ChatsBankList,
   DatePickers,
 };
