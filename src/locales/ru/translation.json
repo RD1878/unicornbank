@@ -126,5 +126,6 @@
   "There is no user record corresponding to this identifier. The user may have been deleted.": "Нет записи пользователя, соответствующей этому идентификатору. Возможно, пользователь был удален.",
   "The password is invalid or the user does not have a password.": "Пароль недействителен или у пользователя нет пароля.",
   "Password changed successfully!": "Пароль успешно изменён!",
-  "Date should not be before minimal date": "Дата не должна быть раньше минимальной даты"
+  "Date should not be before minimal date": "Дата не должна быть раньше минимальной даты",
+  "\"Uni Corn Bank\" JSC": "АО \"Юни Корн Банк\""
 }
