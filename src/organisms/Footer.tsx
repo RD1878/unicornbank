@@ -12,7 +12,7 @@ const Container = withTheme(styled("div")`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 120x;
+  height: 120px;
   padding: 20px 30px;
   background-color: ${(props) => props.theme.palette.primary.dark};
 `);

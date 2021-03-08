@@ -10,9 +10,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
-  min-height: calc(100vh - 235px);
+  min-height: calc(100vh - 205px);
   ${(props) => props.theme.breakpoints.down("md")} {
-    min-height: calc(100vh - 235px);
+    min-height: calc(100vh - 205px);
   }
   ${(props) => props.theme.breakpoints.down("sm")} {
     min-height: calc(100vh - 56px);
