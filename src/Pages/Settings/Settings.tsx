@@ -48,6 +48,7 @@ const StyledBox = styled(Box)`
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: fit-content;
   align-self: center;
+  margin-top: 30px;
 `;
 
 interface IFormValues {
