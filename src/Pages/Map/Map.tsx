@@ -56,6 +56,7 @@ const StyledTab = styled(({ ...props }) => (
 const StyledWrap = withTheme(styled("div")`
   margin-left: -40px;
   margin-right: -40px;
+  margin-bottom: -40px;
   display: flex;
   flex-direction: column;
 
@@ -68,14 +69,17 @@ const StyleMapContainer = withTheme(styled("div")`
   width: 100%;
   height: 100%;
   position: relative;
-  min-height: calc(100vh - 370px);
+  min-height: calc(100vh - 330px);
   overflow: hidden;
 
   ${(props) => props.theme.breakpoints.down("lg")} {
-    min-height: calc(100vh - 367px);
+    min-height: calc(100vh - 327px);
   }
   ${(props) => props.theme.breakpoints.down("sm")} {
-    min-height: calc(100vh - 253px);
+    min-height: calc(100vh - 213px);
+  }
+  ${(props) => props.theme.breakpoints.down("xs")} {
+    min-height: calc(100vh - 200px);
   }
 `);
 
