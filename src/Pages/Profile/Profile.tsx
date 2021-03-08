@@ -17,9 +17,10 @@ import {
   phoneValidation,
 } from "./../../utils/validationSchemas";
 import { useAlert } from "../../utils/useAlert";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { useTranslation } from "react-i18next";
 import userState from "../../recoilState/recoilAtoms/userAtom";
+import { fetchUser } from "../../api";
 
 const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 export const NOT_NUMBER_REGEX = /\D/g;
@@ -71,7 +72,7 @@ interface IFormValues {
 }
 
 const Profile: FC = () => {
-  const user = useRecoilValue(userState);
+  const [user, setUser] = useRecoilState(userState);
   const { userData } = user;
   const { passport, snils, contact } = userData;
   const [errorMessage, setErrorMessage] = useState("");
@@ -115,6 +116,13 @@ const Profile: FC = () => {
             phone: cleanedPhone,
           },
         },
+      });
+
+      const updatedData = await fetchUser();
+
+      setUser({
+        ...user,
+        userData: updatedData,
       });
 
       setAlertType("success");
