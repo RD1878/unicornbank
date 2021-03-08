@@ -33,7 +33,7 @@ interface IDialogContentYourAccounts {
   setErrorMessage: (message: string) => void;
 }
 
-const schema = (t: (text: string) => string) =>
+const validationCreator = (t: (text: string) => string) =>
   yup.object({
     card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
     card2: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
@@ -149,7 +149,7 @@ const DialogContentYourAccounts: FC<IDialogContentYourAccounts> = ({
       calculatedSum: "",
       cardNumber: "",
     },
-    validationSchema: schema(t),
+    validationSchema: validationCreator(t),
     onSubmit,
   });
 

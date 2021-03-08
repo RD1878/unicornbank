@@ -36,7 +36,7 @@ export interface IDialogContentAnotherUser extends IFormData {
   phone?: string;
 }
 
-const schema = (t: (text: string) => string) =>
+const validationCreator = (t: (text: string) => string) =>
   yup.object({
     card1: selectValidation(t("Choose a card"), t(REQUIRED_MESSAGE)),
     phone: phoneValidation(
@@ -195,7 +195,7 @@ const DialogContentAnotherUser: FC<IDialogContentYourAccounts> = ({
       cardNumber: "",
       phone: "",
     },
-    validationSchema: schema(t),
+    validationSchema: validationCreator(t),
     onSubmit,
   });
 
