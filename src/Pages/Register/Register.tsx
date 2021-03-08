@@ -2,28 +2,28 @@ import React, { FC, useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import { db, firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
-import { PrimaryButton, PasswordField, TextField, Logo } from "../../atoms";
-import background from "../../assets/images/1-2.png";
 import {
-  Snackbar,
-  Link,
-  Typography,
-  FormControl,
-  NativeSelect,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+  PrimaryButton,
+  PasswordField,
+  TextField,
+  Logo,
+  PrimaryAlert,
+} from "../../atoms";
+import background from "../../assets/images/1-2.png";
 import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { TAlert } from "../../interfaces/main";
-import { ELEMENT, SHACKBAR_SHOW_DURATION } from "../../constants";
+import { ELEMENT } from "../../constants";
+import { TAlert } from "../../interfaces/tAlert";
 import {
   passwordValidation,
   emailValidation,
 } from "../../utils/validationSchemas";
+import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
+import { FormControl, Link, NativeSelect, Typography } from "@material-ui/core";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -83,6 +83,7 @@ const FormAuth = withTheme(styled("form")`
     align-items: center;
 
     & > a {
+      margin-top: 30px;
       & > p {
         margin-top: 30px;
       }
@@ -122,8 +123,8 @@ interface IFormValues {
 }
 
 const Register: FC = () => {
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const { t } = useTranslation();
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
@@ -143,24 +144,25 @@ const Register: FC = () => {
       if (!res?.user?.uid) {
         throw new Error(t("Error"));
       }
-      const { uid, email: userEmail } = res.user;
-      db.ref("users").child(uid).push().key;
-      db.ref().update({
+      const { uid } = res.user;
+
+      await db.ref("users").child(uid).push().key;
+      await db.ref().update({
         [`users/${uid}`]: {
           contact: {
-            email: userEmail,
+            email,
           },
           createdAt: new Date(),
-          email: email,
         },
       });
-      setIsOpenAlert(true);
+      onAlertOpen();
       setTimeout(() => {
         history.push(ROUTES.AUTH);
       }, 2000);
     } catch (error) {
       setErrorMessage(error.message);
       setAlertType("error");
+      onAlertOpen();
     }
   };
 
@@ -186,13 +188,6 @@ const Register: FC = () => {
     }),
     onSubmit,
   });
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsOpenAlert(false);
-  };
 
   const handleChange = (e: ChangeEvent<{ value: string }>) => {
     i18next.changeLanguage(e.target.value);
@@ -246,23 +241,17 @@ const Register: FC = () => {
           >
             {t("Register")}
           </PrimaryButton>
-          <Link href={ROUTES.AUTH} color="textPrimary">
-            <Typography variant="body2" color="textPrimary" align="center">
-              {t("Do you already have an account?")}
-            </Typography>
+          <Link href={ROUTES.AUTH} variant="body2" color="textPrimary">
+            {t("Do you already have an account?")}
           </Link>
         </div>
       </FormAuth>
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={SHACKBAR_SHOW_DURATION}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={alertType} onClose={handleClose}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
     </BackGround>
   );
 };
