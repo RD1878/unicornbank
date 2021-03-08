@@ -69,6 +69,11 @@ const overrides = {
       fontWeight: 600,
     },
   },
+  MuiTouchRipple: {
+    root: {
+      color: "grey",
+    },
+  },
   MuiOutlinedInput: {
     root: {
       width: "100%",
