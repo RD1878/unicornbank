@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { withTheme } from "@material-ui/core/styles";
 import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
 import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
+import AccountBalanceRoundedIcon from "@material-ui/icons/AccountBalanceRounded";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import HistoryRoundedIcon from "@material-ui/icons/HistoryRounded";
 import { Link } from "react-router-dom";
@@ -29,10 +30,16 @@ const StyledBottomNavigation = withTheme(styled(({ ...props }) => (
 `);
 
 const StyledBottomNavigationAction = withTheme(styled(({ ...props }) => (
-  <BottomNavigationAction classes={{ selected: "selected" }} {...props} />
+  <BottomNavigationAction
+    classes={{ selected: "selected", root: "root" }}
+    {...props}
+  />
 ))`
   &.selected {
     color: ${(props) => props.theme.palette.secondary.main};
+  }
+  &.root {
+    min-width: auto;
   }
 `);
 
@@ -52,15 +59,28 @@ const SimpleBottomNavigation: FC = () => {
         icon={<PaymentRoundedIcon />}
       />
       <StyledBottomNavigationAction
+        component={Link}
+        to={ROUTES.HISTORY}
         label="История"
         icon={<HistoryRoundedIcon />}
       />
-      <StyledBottomNavigationAction label="Чат" icon={<ChatRoundedIcon />} />
+      <StyledBottomNavigationAction
+        label="Чат"
+        component={Link}
+        to={ROUTES.CHAT}
+        icon={<ChatRoundedIcon />}
+      />
       <StyledBottomNavigationAction
         component={Link}
         to={ROUTES.SETTINGS}
         label="Настройки"
         icon={<SettingsRoundedIcon />}
+      />
+      <StyledBottomNavigationAction
+        component={Link}
+        to={ROUTES.OFFICES}
+        label="Офисы"
+        icon={<AccountBalanceRoundedIcon />}
       />
     </StyledBottomNavigation>
   );

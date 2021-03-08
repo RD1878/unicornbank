@@ -1,26 +1,23 @@
-import React, { FC, useState, SyntheticEvent } from "react";
-import { Container, Typography, Snackbar } from "@material-ui/core";
+import React, { FC, useState } from "react";
+import { Typography } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
-import { PrimaryButton, PasswordField } from "../../atoms";
+import { PrimaryButton, PasswordField, PrimaryAlert } from "../../atoms";
 import { firebaseAuth } from "../../firebase/firebase";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { Alert } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { TAlert } from "../../interfaces/main";
+import { TAlert } from "../../interfaces/tAlert";
 import { passwordValidation } from "../../utils/validationSchemas";
-import { ELEMENT, SHACKBAR_SHOW_DURATION } from "../../constants";
-import { ROUTES } from "../../routes";
-import { Link } from "react-router-dom";
-import PrimaryLink from "../../atoms/PrimaryLink";
+import { ELEMENT } from "../../constants";
+import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 
 const StyledColumn = styled("form")`
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
+  margin-top: 20px;
   max-width: 496px;
 
   & > div {
@@ -42,8 +39,15 @@ const StyledBox = styled(Box)`
     margin-bottom: 60px;
   }
   max-width: 496px;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledPrimaryButton = styled(PrimaryButton)`
+  width: fit-content;
+  align-self: center;
 `;
 
 interface IFormValues {
@@ -53,12 +57,14 @@ interface IFormValues {
 }
 
 const Settings: FC = () => {
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const { t } = useTranslation();
+  const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");
   const [alertType, setAlertType] = useState<TAlert>("success");
   const alertMessage =
-    alertType === "success" ? "Пароль успешно изменён!" : errorMessage;
-  const { t } = useTranslation();
+    alertType === "success"
+      ? t("Password changed successfully!")
+      : errorMessage;
 
   const reauthenticate = (password: string) => {
     const user = firebaseAuth.currentUser;
@@ -68,11 +74,6 @@ const Settings: FC = () => {
     );
 
     return user?.reauthenticateWithCredential(cred);
-  };
-
-  const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") return;
-    setIsOpenAlert(false);
   };
 
   const onSubmit = async (formData: IFormValues) => {
@@ -90,7 +91,7 @@ const Settings: FC = () => {
       setAlertType("error");
       setErrorMessage(error.message);
     } finally {
-      setIsOpenAlert(true);
+      onAlertOpen();
     }
   };
 
@@ -120,72 +121,57 @@ const Settings: FC = () => {
   );
 
   return (
-    <Container>
-      <Box mt={5}>
-        <Typography variant="h1" color="textPrimary">
-          {t("Settings")}
-        </Typography>
-        <Typography variant="subtitle1" color="textPrimary">
-          {t("A change of the pin code")}
-        </Typography>
-        <StyledColumn onSubmit={handleSubmit}>
-          <PasswordField
-            data-test-id={ELEMENT.currentPassword}
-            {...getFieldProps("password")}
-            label={t("Enter the current password")}
-            helperText={touched.password && errors.password}
-            error={touched.password && Boolean(errors.password)}
-          />
-          <PasswordField
-            data-test-id={ELEMENT.newPassword}
-            {...getFieldProps("newPassword1")}
-            label={t("Enter a new password")}
-            error={touched.newPassword1 && Boolean(errors.newPassword1)}
-            helperText={touched.newPassword1 && errors.newPassword1}
-          />
-          <PasswordField
-            data-test-id={ELEMENT.repeatNewPassword}
-            {...getFieldProps("newPassword2")}
-            label={t("Repeat new password")}
-            error={touched.newPassword2 && Boolean(errors.newPassword2)}
-            helperText={touched.newPassword2 && errors.newPassword2}
-          />
-          <StyledBox>
-            <Typography variant="body2" color="textSecondary">
-              {t(
-                "If your username has changed or you forgot your password, contact the bank branch. To change other data, you can contact the chat."
-              )}
-            </Typography>
-            <PrimaryButton
-              size="large"
-              type="submit"
-              data-test-id={ELEMENT.saveChangesButton}
-            >
-              {t("Save changes")}
-            </PrimaryButton>
-            <Box mt={5}>
-              <PrimaryButton size="large">
-                <Link to={ROUTES.OFFICES}>
-                  <PrimaryLink component="span">
-                    {t("Offices and ATMs")}
-                  </PrimaryLink>
-                </Link>
-              </PrimaryButton>
-            </Box>
-          </StyledBox>
-        </StyledColumn>
-        <Snackbar
-          open={isOpenAlert}
-          autoHideDuration={SHACKBAR_SHOW_DURATION}
-          onClose={handleCloseAlert}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity={alertType} onClose={handleCloseAlert}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
-      </Box>
-    </Container>
+    <>
+      <Typography variant="h1" color="textPrimary">
+        {t("Settings")}
+      </Typography>
+      <Typography variant="subtitle1" color="textPrimary">
+        {t("A change of the pin code")}
+      </Typography>
+      <StyledColumn onSubmit={handleSubmit}>
+        <PasswordField
+          data-test-id={ELEMENT.currentPassword}
+          {...getFieldProps("password")}
+          label={t("Enter the current password")}
+          helperText={touched.password && errors.password}
+          error={touched.password && Boolean(errors.password)}
+        />
+        <PasswordField
+          data-test-id={ELEMENT.newPassword}
+          {...getFieldProps("newPassword1")}
+          label={t("Enter a new password")}
+          error={touched.newPassword1 && Boolean(errors.newPassword1)}
+          helperText={touched.newPassword1 && errors.newPassword1}
+        />
+        <PasswordField
+          data-test-id={ELEMENT.repeatNewPassword}
+          {...getFieldProps("newPassword2")}
+          label={t("Repeat new password")}
+          error={touched.newPassword2 && Boolean(errors.newPassword2)}
+          helperText={touched.newPassword2 && errors.newPassword2}
+        />
+        <StyledBox>
+          <Typography variant="body2" color="textSecondary">
+            {t(
+              "If you have forgotten your password, contact the bank branch. To change other data, you can contact the chat"
+            )}
+          </Typography>
+          <StyledPrimaryButton
+            size="large"
+            type="submit"
+            data-test-id={ELEMENT.saveChangesButton}
+          >
+            {t("Save")}
+          </StyledPrimaryButton>
+        </StyledBox>
+      </StyledColumn>
+      <PrimaryAlert
+        open={isAlertOpen}
+        onClose={onAlertClose}
+        alertMessage={alertMessage}
+        alertType={alertType}
+      />
+    </>
   );
 };
 

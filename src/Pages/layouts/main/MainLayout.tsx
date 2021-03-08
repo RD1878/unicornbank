@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import { useTheme, withTheme } from "@material-ui/core/styles";
 import { Header, Sidebar, Footer } from "../../../organisms";
@@ -10,10 +10,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 const ContentContainer = withTheme(styled("div")`
   display: flex;
   background-color: ${(props) => props.theme.palette.primary.light};
-  min-height: calc(100vh - 370px);
-
+  min-height: calc(100vh - 235px);
   ${(props) => props.theme.breakpoints.down("md")} {
-    min-height: calc(100vh - 370px);
+    min-height: calc(100vh - 235px);
   }
   ${(props) => props.theme.breakpoints.down("sm")} {
     min-height: calc(100vh - 56px);
@@ -38,13 +37,27 @@ interface IMainLayout {
 const MainLayout: FC<IMainLayout> = ({ children, onToggleTheme }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isOpenMobileDrawer, setOpenMobileDrawer] = useState(false);
+  const toggleMobileDrawer = () => {
+    setOpenMobileDrawer((prev) => !prev);
+  };
+
   return (
     <>
       {!matches && <Header onToggleTheme={onToggleTheme} />}
       <ErrorBoundary>
         <ContentContainer>
-          {matches && <ProminentAppBar />}
-          {!matches && <Sidebar />}
+          {matches && (
+            <ProminentAppBar
+              onToggleTheme={onToggleTheme}
+              onToggleMobileDrawer={toggleMobileDrawer}
+            />
+          )}
+          <Sidebar
+            view={matches ? "mobile" : "desktop"}
+            isOpenDrawer={isOpenMobileDrawer}
+            onToggleMobileDrawer={toggleMobileDrawer}
+          />
           <Container>{children}</Container>
           {matches && <SimpleBottomNavigation />}
         </ContentContainer>

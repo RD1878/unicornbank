@@ -1,5 +1,5 @@
 import { firebaseAuth } from "../firebase/firebase";
-import { IUser } from "../interfaces/redux";
+import { IUser } from "../interfaces/user";
 import { db } from "./../firebase/firebase";
 
 export const fetchUser = async (): Promise<IUser> => {

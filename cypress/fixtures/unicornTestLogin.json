@@ -1,7 +1,11 @@
 {
-  "main_url": "http://localhost:3000",
+  "main_url": "http://localhost:3000/auth",
   "email": "hello@cypress.io",
   "password": "dummy@dummy",
   "shortPassword": "dummy",
-  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов"
+  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов",
+  "incorrectEmail": "111",
+  "incorrectEmailErrorMessage": "Введите почту в правильном формате",
+  "withoutEmailErrorMessage": "Введите почту",
+  "withoutPasswordErrorMessage": "Обязательно для заполнения"
 }

@@ -1,0 +1,12 @@
+{
+  "main_url": "http://localhost:3000/register",
+  "email": "register@cypress.io",
+  "password": "dummy@dummy",
+  "shortPassword": "dummy",
+  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов",
+  "incorrectEmail": "111",
+  "incorrectEmailErrorMessage": "Введите почту в правильном формате",
+  "withoutEmailErrorMessage": "Введите почту",
+  "withoutPasswordErrorMessage": "Придумайте ваш пароль",
+  "repeatPasswordErrorMessage": "Повторите ваш пароль"
+}

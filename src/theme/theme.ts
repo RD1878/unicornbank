@@ -37,21 +37,34 @@ const overrides = {
     },
     h1: {
       fontSize: 32,
+      "@media (max-width: 600px)": {
+        fontSize: 20,
+      },
       fontWeight: 500,
       marginBottom: "0.5rem",
       textShadow: `1px 1px 2px ${BLUE800}BB`,
     },
     h2: {
       fontSize: 22,
+      "@media (max-width: 600px)": {
+        fontSize: 16,
+      },
       fontWeight: 500,
     },
     body1: {
       fontSize: 14,
+      "@media (max-width: 600px)": {
+        fontSize: 12,
+      },
     },
     body2: {
       fontSize: 20,
+      "@media (max-width: 600px)": {
+        fontSize: 14,
+      },
     },
     button: {
+      fontSize: 12,
       letterSpacing: 1.25,
       fontWeight: 600,
     },
@@ -111,7 +124,7 @@ const light = createMuiTheme({
     type: "light",
     primary: {
       light: WHITE200,
-      main: WHITE50,
+      main: WHITE100,
       dark: WHITE100,
     },
     secondary: { main: BLUE500 },
