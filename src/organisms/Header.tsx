@@ -81,7 +81,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
   };
 
   const handleClick = (): void => {
-    history.back();
+    history.goBack();
   };
 
   return (
