@@ -1,5 +1,4 @@
 import * as yup from "yup";
-import { REQUIRED_MESSAGE } from "../constants";
 
 export const passwordValidation = (
   ruleMessage: string,
@@ -13,15 +12,17 @@ export const emailValidation = (
 ): yup.SchemaOf<string> =>
   yup.string().required(requiredMessage).email(ruleMessage);
 
-export const selectValidation = yup
-  .string()
-  .min(11, "Выберите карту")
-  .required(REQUIRED_MESSAGE);
+export const selectValidation = (
+  ruleMessage: string,
+  requiredMessage: string
+): yup.SchemaOf<string> =>
+  yup.string().min(0, ruleMessage).required(requiredMessage);
 
-export const sumValidation = yup
-  .number()
-  .min(0, "Введите cумму")
-  .required(REQUIRED_MESSAGE);
+export const sumValidation = (
+  ruleMessage: string,
+  requiredMessage: string
+): yup.SchemaOf<string> =>
+  yup.string().min(0, ruleMessage).required(requiredMessage);
 
 export const phoneValidation = (
   ruleMessage: string,

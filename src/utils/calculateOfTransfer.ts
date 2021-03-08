@@ -15,9 +15,10 @@ export const findCardId = (
 interface IProps {
   sum: string;
   cardCurrency1: string;
-  cardCurrency2: string;
+  cardCurrency2?: string;
   currency1: ICurrencyChar | undefined;
-  currency2: ICurrencyChar | undefined;
+  currency2?: ICurrencyChar | undefined;
+  card2Currency?: string;
 }
 
 export const calculateOfTransfer = ({
