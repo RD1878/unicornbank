@@ -20,11 +20,11 @@ const StyledColumn = styled("form")`
   max-width: 496px;
 
   & > div {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
     width: 100%;
 
     & > p {
-      margin-bottom: 20px;
+      margin-bottom: -22px;
     }
   }
 
