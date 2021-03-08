@@ -19,6 +19,7 @@ interface IProps {
 const StyledList = styled(List)<IProps>`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   max-height: calc(100vh - 250px);
   overflow-y: auto;
   padding-right: ${(props) => (props.$matches ? "10px" : "0")};
@@ -31,6 +32,7 @@ const StyledForm = withTheme(styled("form")`
   flex-direction: row;
   align-items: flex-start;
   margin-top: 20px;
+  flex-grow: 0;
 `);
 
 const StyledTextField = withTheme(styled(TextField)`
@@ -40,9 +42,11 @@ const StyledTextField = withTheme(styled(TextField)`
 
 interface IDialog {
   chatMessages: IChatMessage[];
+  clientAvatar: string;
+  adminAvatar: string;
 }
 
-const Dialog: FC<IDialog> = ({ chatMessages }) => {
+const Dialog: FC<IDialog> = ({ chatMessages, clientAvatar, adminAvatar }) => {
   const messagesEndRef = useRef<HTMLInputElement>(null);
   const scrollToBottom = () => {
     if (messagesEndRef && messagesEndRef.current) {
@@ -56,7 +60,13 @@ const Dialog: FC<IDialog> = ({ chatMessages }) => {
   return (
     <StyledList $matches={matches}>
       {chatMessages.map((message: IChatMessage) => {
-        return <ChatMessage key={message.id} message={message} />;
+        return (
+          <ChatMessage
+            key={message.id}
+            message={message}
+            avatar={message.type === "user" ? clientAvatar : adminAvatar}
+          />
+        );
       })}
       <div ref={messagesEndRef} />
     </StyledList>

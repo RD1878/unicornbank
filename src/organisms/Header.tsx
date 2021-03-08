@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useTheme, withTheme } from "@material-ui/core/styles";
 import { IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo, PrimaryAlert } from "../atoms";
-import { navigation } from "../routes";
+import { navigation, ROUTES } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
@@ -92,7 +92,9 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
           onClick={handleClick}
         />
       )}
-      <Logo />
+      <Link to={ROUTES.MAIN}>
+        <Logo />
+      </Link>
       {!isAdmin && (
         <LinksContainer>
           {navigation.map((item) => (

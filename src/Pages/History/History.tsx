@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -18,22 +18,37 @@ const History: FC = () => {
   const { userData } = useRecoilValue(userState);
   const cards = Object.entries(userData.products?.cards ?? {});
 
-  const allCardsTransactions = cards.reduce(
-    (
-      acc: { id: string; key: string; operation: IOperation }[],
-      [id, card]: [string, ICard]
-    ) => {
-      const operations = Object.entries(card.operations ?? {});
-      for (const [key, operation] of operations) {
-        acc = [...acc, { id, key, operation }];
-      }
-      return acc;
-    },
-    []
-  );
+  const allCardsTransactions = cards
+    .reduce(
+      (
+        acc: { id: string; key: string; operation: IOperation }[],
+        [id, card]: [string, ICard]
+      ) => {
+        const operations = Object.entries(card.operations ?? {});
+        for (const [key, operation] of operations) {
+          acc = [...acc, { id, key, operation }];
+        }
+        return acc;
+      },
+      []
+    )
+    .sort(
+      (itemA, itemB) =>
+        Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+    );
+
+  const pageBeginRef = useRef<HTMLInputElement>(null);
+  const scrollToTop = () => {
+    if (pageBeginRef && pageBeginRef.current) {
+      pageBeginRef.current.scrollIntoView();
+    }
+  };
+
+  useEffect(scrollToTop, []);
 
   return (
     <StyledWraper>
+      <div ref={pageBeginRef} />
       <Typography variant="h1" color="textPrimary">
         {`${t("Operations History")}`}
       </Typography>

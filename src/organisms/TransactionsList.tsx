@@ -102,14 +102,9 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
         )
       : operations;
     if (resultOperations.length) {
-      return resultOperations
-        .sort(
-          (itemA, itemB) =>
-            Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
-        )
-        .map(({ key, operation }) => (
-          <OperationCard operation={operation} key={key} />
-        ));
+      return resultOperations.map(({ key, operation }) => (
+        <OperationCard operation={operation} key={key} />
+      ));
     } else
       return (
         <Box p={4}>
@@ -243,7 +238,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
           {!isQueryPathHistory && (
             <StyledLink to={ROUTES.HISTORY}>
               <PrimaryButton disabled={!dataCards.length}>
-                {t("More")}
+                {t("Still")}
               </PrimaryButton>
             </StyledLink>
           )}

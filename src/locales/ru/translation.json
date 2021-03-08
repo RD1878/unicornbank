@@ -117,7 +117,7 @@
   "Reissue": "Перевыпустить",
   "Are you sure reissue": "Вы уверены что хотите перевыпустить карту? После подтверждения данная карта будет заблокирована, а у новой карты будут другие реквизиты.",
   "Blocked message with reissue": "Данная карта заблокирована. Сотрудник банка свяжется с Вами в течении 24 часов для уточнения места получения новой карты.",
-  "More": "Подробнее",
+  "Still": "Еще",
   "Incomes": "Поступления",
   "Write off": "Списания",
   "Clothing and shoes": "Одежда и обувь",
@@ -137,5 +137,9 @@
   "Back": "Назад",
   "There is no user record corresponding to this identifier. The user may have been deleted.": "Нет записи пользователя, соответствующей этому идентификатору. Возможно, пользователь был удален.",
   "The password is invalid or the user does not have a password.": "Пароль недействителен или у пользователя нет пароля.",
-  "Password changed successfully!": "Пароль успешно изменён!"
+  "Password changed successfully!": "Пароль успешно изменён!",
+  "Date should not be before minimal date": "Дата не должна быть раньше минимальной даты",
+  "\"Uni Corn Bank\" JSC": "АО \"Юни Корн Банк\"",
+  "Crediting account number": "Номер счёта зачисления",
+  "Debit account number": "Номер счёта пополнения"
 }

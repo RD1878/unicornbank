@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { CircularProgress, ThemeProvider, withTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import appThemes from "./theme/theme";
 import {
   Auth,
@@ -22,18 +22,8 @@ import { useRecoilValue } from "recoil";
 import authState from "./recoilState/recoilAtoms/authAtom";
 import userState from "./recoilState/recoilAtoms/userAtom";
 import clientIdState from "../src/recoilState/recoilAtoms/clientIdAtom";
-import styled from "styled-components";
 import { useAlert } from "./utils/useAlert";
-import { PrimaryAlert } from "./atoms";
-
-const LoadingContainer = withTheme(styled("div")`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: ${(props) => props.theme.palette.primary.light};
-`);
+import { PrimaryAlert, PrimaryLoader } from "./atoms";
 
 const App: FC = () => {
   const [theme, setTheme] = useState(appThemes.dark);
@@ -60,11 +50,7 @@ const App: FC = () => {
         <Route path={ROUTES.AUTH} exact component={Auth} />
         <Route path={ROUTES.REGISTER} exact component={Register} />
         <ProtectedRoute path="*">
-          {isLoading && (
-            <LoadingContainer>
-              <CircularProgress color="secondary" />
-            </LoadingContainer>
-          )}
+          {isLoading && <PrimaryLoader />}
           {!isLoading &&
             (isAdmin ? (
               <MainLayoutBank onToggleTheme={toggleTheme}>

@@ -21,11 +21,11 @@ const StyledColumn = styled("form")`
   max-width: 496px;
 
   & > div {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
     width: 100%;
 
     & > p {
-      margin-bottom: 20px;
+      margin-bottom: -22px;
     }
   }
 
@@ -48,6 +48,7 @@ const StyledBox = styled(Box)`
 const StyledPrimaryButton = styled(PrimaryButton)`
   width: fit-content;
   align-self: center;
+  margin-top: 30px;
 `;
 
 interface IFormValues {

@@ -20,7 +20,7 @@
   "Are you sure reissue": "Картаны кабат җибәрергә телисезме? Расланганнан соң, бу карта блокланачак, һәм яңа картаның төрле детальләре булачак.",
   "Blocked message with reissue": "Бу карта блокланган. Банк хезмәткәре яңа картаны алу урынын ачыклау өчен 24 сәгать эчендә сезнең белән элемтәгә керәчәк.",
   "Last operations": "Соңгы операцияләр",
-  "More": "Җентекле",
+  "Still": "Тагын",
   "Incomes": "Керү",
   "Write off": "Күчерү",
   "Clothing and shoes": "Кием һәм аяк киеме",
@@ -137,5 +137,9 @@
   "Back": "Кире",
   "There is no user record corresponding to this identifier. The user may have been deleted.": "Бу идентификаторга туры килә торган кулланучы язмасы юк. Бәлки, кулланучы удален.",
   "The password is invalid or the user does not have a password.": "Пароль недействителен яки кулланучының пароле юк.",
-  "Password changed successfully!": "Пароль уңышлы үзгәртелде!"
+  "Password changed successfully!": "Пароль уңышлы үзгәртелде!",
+  "Date should not be before minimal date": "Дата минималь датадан иртә булырга тиеш түгел",
+  "\"Uni Corn Bank\" JSC": "АҖ \"Юни Корн Банк\"",
+  "Crediting account number": "Номеры кредит счеты",
+  "Debit account number": "Исәпләү номеры"
 }

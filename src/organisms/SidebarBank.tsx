@@ -1,7 +1,7 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { Button, Input, Typography } from "@material-ui/core";
+import { Badge, Button, Input, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { ChatsBankList } from "../molecules";
 import { ChatsBankItem } from "../atoms";
@@ -10,6 +10,7 @@ import chatsAtomState from "../recoilState/recoilAtoms/chatsAtom";
 import { getLastArrayIndex } from "../utils/getLastArrayIndex";
 import { useTranslation } from "react-i18next";
 import { IChat } from "../interfaces/chats";
+import MailIcon from "@material-ui/icons/Mail";
 
 const StyledContainer = withTheme(styled("div")`
    {
@@ -18,7 +19,7 @@ const StyledContainer = withTheme(styled("div")`
     flex-direction: column;
     align-items: center;
     padding: 40px 20px;
-    width: 400px;
+    min-width: 400px;
     height: auto;
   }
 `);
@@ -49,7 +50,12 @@ const SidebarBank: FC = () => {
   const { chats } = useRecoilValue(chatsAtomState);
   const [searchData, setSearchData] = useState("");
   const { t } = useTranslation();
-  const dataChatsArray = Object.entries(chats);
+  const dataChatsArray = Object.entries(chats).filter(
+    ([, { dialog }]) => dialog
+  );
+
+  const [activeId, setActiveId] = useState("");
+
   const countNotReadChats = dataChatsArray.filter(([, { isRead }]) => !isRead)
     .length;
 
@@ -75,6 +81,10 @@ const SidebarBank: FC = () => {
       return false;
     });
 
+  const handleClick = (id: string): void => {
+    setActiveId(id);
+  };
+
   return (
     <StyledContainer>
       <Typography variant="h2" color="textPrimary">
@@ -95,21 +105,9 @@ const SidebarBank: FC = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body2" color="secondary">
-              {countNotReadChats}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container spacing={1}>
-          <Grid item xs={10}>
-            <Typography variant="body2" color="textPrimary">
-              {`${t("Total chats")}:`}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="body2" color="secondary">
-              {dataChatsArray.length}
-            </Typography>
+            <Badge color="secondary" badgeContent={countNotReadChats}>
+              <MailIcon />
+            </Badge>
           </Grid>
         </Grid>
       </StyledGrid>
@@ -123,6 +121,8 @@ const SidebarBank: FC = () => {
                 clientId={id}
                 clientData={clientData}
                 isRead={isRead}
+                isActive={id === activeId ? true : false}
+                onClick={handleClick}
               />
             </StyledButton>
           )
