@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -32,8 +32,18 @@ const History: FC = () => {
     []
   );
 
+  const pageBeginRef = useRef<HTMLInputElement>(null);
+  const scrollToTop = () => {
+    if (pageBeginRef && pageBeginRef.current) {
+      pageBeginRef.current.scrollIntoView();
+    }
+  };
+
+  useEffect(scrollToTop, []);
+
   return (
     <StyledWraper>
+      <div ref={pageBeginRef} />
       <Typography variant="h1" color="textPrimary">
         {`${t("Operations History")}`}
       </Typography>
