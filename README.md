@@ -11,7 +11,7 @@
 
 <img  src="./src/assets/readme_images//tablet_view-min.png" width="70%">
 <img  src="./src/assets/readme_images/mibile_view-min.png" width="20%">
----
+
 ## **Инструкция по развертыванию проекта**
 
 1. Склонировать репозиторий в локальную директорию
