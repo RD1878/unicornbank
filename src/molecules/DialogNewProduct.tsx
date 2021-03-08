@@ -35,6 +35,8 @@ const StyledPrimaryButton = withTheme(styled(({ ...props }) => (
 ))`
   width: fit-content;
   align-self: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
   & > span > span {
     margin-right: ${(props) => (props.matches ? "0" : "8px")};
   }
