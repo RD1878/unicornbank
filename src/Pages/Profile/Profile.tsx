@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import userState from "../../recoilState/recoilAtoms/userAtom";
 import { fetchUser } from "../../api";
 
-const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
+export const PATTERN = /^\D*([0-9])(\d{0,3})\D*(\d{0,3})\D*(\d{0,2})\D*(\d{0,2})/;
 export const NOT_NUMBER_REGEX = /\D/g;
 
 const cleanPhone = (phone: string): string =>
