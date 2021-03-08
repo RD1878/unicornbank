@@ -14,6 +14,7 @@ import { ROUTES } from "../../routes";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { ELEMENT } from "../../constants";
 import { TAlert } from "../../interfaces/tAlert";
 import {
   passwordValidation,
@@ -235,9 +236,9 @@ const Register: FC = () => {
             label={t("Confirm password")}
           />
           <PrimaryButton
+            data-test-id={ELEMENT.registerButton}
             type="submit"
             size="large"
-            data-test-id={ELEMENT.registerButton}
           >
             {t("Register")}
           </PrimaryButton>
