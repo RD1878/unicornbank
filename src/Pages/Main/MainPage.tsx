@@ -24,7 +24,11 @@ const MainPage: FC = () => {
       },
       []
     )
-    .slice(-5);
+    .sort(
+      (itemA, itemB) =>
+        Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+    )
+    .slice(0, 5);
 
   return (
     <>

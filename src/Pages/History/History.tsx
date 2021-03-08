@@ -18,19 +18,24 @@ const History: FC = () => {
   const { userData } = useRecoilValue(userState);
   const cards = Object.entries(userData.products?.cards ?? {});
 
-  const allCardsTransactions = cards.reduce(
-    (
-      acc: { id: string; key: string; operation: IOperation }[],
-      [id, card]: [string, ICard]
-    ) => {
-      const operations = Object.entries(card.operations ?? {});
-      for (const [key, operation] of operations) {
-        acc = [...acc, { id, key, operation }];
-      }
-      return acc;
-    },
-    []
-  );
+  const allCardsTransactions = cards
+    .reduce(
+      (
+        acc: { id: string; key: string; operation: IOperation }[],
+        [id, card]: [string, ICard]
+      ) => {
+        const operations = Object.entries(card.operations ?? {});
+        for (const [key, operation] of operations) {
+          acc = [...acc, { id, key, operation }];
+        }
+        return acc;
+      },
+      []
+    )
+    .sort(
+      (itemA, itemB) =>
+        Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+    );
 
   const pageBeginRef = useRef<HTMLInputElement>(null);
   const scrollToTop = () => {
