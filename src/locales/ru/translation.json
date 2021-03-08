@@ -139,5 +139,7 @@
   "The password is invalid or the user does not have a password.": "Пароль недействителен или у пользователя нет пароля.",
   "Password changed successfully!": "Пароль успешно изменён!",
   "Date should not be before minimal date": "Дата не должна быть раньше минимальной даты",
-  "\"Uni Corn Bank\" JSC": "АО \"Юни Корн Банк\""
+  "\"Uni Corn Bank\" JSC": "АО \"Юни Корн Банк\"",
+  "Crediting account number": "Номер счёта зачисления",
+  "Debit account number": "Номер счёта пополнения"
 }
