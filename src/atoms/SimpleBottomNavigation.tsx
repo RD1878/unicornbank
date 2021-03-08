@@ -1,4 +1,4 @@
-import React, { FC, useState, SetStateAction } from "react";
+import React, { FC, useState, SetStateAction, useEffect } from "react";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import styled from "styled-components";
@@ -8,8 +8,8 @@ import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
 import AccountBalanceRoundedIcon from "@material-ui/icons/AccountBalanceRounded";
 import PaymentRoundedIcon from "@material-ui/icons/PaymentRounded";
 import HistoryRoundedIcon from "@material-ui/icons/HistoryRounded";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../routes";
+import { Link, useLocation } from "react-router-dom";
+import { navigation, ROUTES } from "../routes";
 
 const StyledBottomNavigation = withTheme(styled(({ ...props }) => (
   <BottomNavigation classes={{ root: "root" }} {...props} />
@@ -49,6 +49,12 @@ const SimpleBottomNavigation: FC = () => {
   const onTabClick = (event: Event, newValue: SetStateAction<number>) => {
     setActiveTab(newValue);
   };
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const tab = navigation.findIndex((item) => item.path === pathname);
+    setActiveTab(tab);
+  }, [pathname]);
 
   return (
     <StyledBottomNavigation value={activeTab} onChange={onTabClick} showLabels>
