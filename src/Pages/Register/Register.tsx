@@ -23,6 +23,7 @@ import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import { FormControl, Link, NativeSelect, Typography } from "@material-ui/core";
+import { ELEMENT } from "../../constants";
 
 const BackGround = styled.div`
   background-image: url(${background});
@@ -210,6 +211,7 @@ const Register: FC = () => {
             {t("Registration")}
           </Typography>
           <StyledTextField
+            data-test-id={ELEMENT.registerEmail}
             fullWidth
             {...getFieldProps("email")}
             error={touched.email && Boolean(errors.email)}
@@ -217,6 +219,7 @@ const Register: FC = () => {
             helperText={touched.email && errors.email}
           />
           <StyledPasswordField
+            data-test-id={ELEMENT.password1}
             fullWidth
             error={touched.password1 && Boolean(errors.password1)}
             {...getFieldProps("password1")}
@@ -224,13 +227,18 @@ const Register: FC = () => {
             label={t("Enter the current password")}
           />
           <StyledPasswordField
+            data-test-id={ELEMENT.password2}
             fullWidth
             error={touched.password2 && Boolean(errors.password2)}
             {...getFieldProps("password2")}
             helperText={touched.password2 && errors.password2}
             label={t("Confirm password")}
           />
-          <PrimaryButton type="submit" size="large">
+          <PrimaryButton
+            data-test-id={ELEMENT.registerButton}
+            type="submit"
+            size="large"
+          >
             {t("Register")}
           </PrimaryButton>
           <Link href={ROUTES.AUTH} variant="body2" color="textPrimary">
