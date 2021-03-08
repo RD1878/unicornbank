@@ -26,6 +26,10 @@ export enum ELEMENT {
   loginEmail = "login-email",
   password = "password",
   loginButton = "login-button",
+  registerEmail = "register-email",
+  password1 = "password1",
+  password2 = "password2",
+  registerButton = "register-button",
 }
 
 export const CATEGORIES: ICategories[] = [
