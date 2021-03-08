@@ -5,13 +5,12 @@ import { IconButton } from "@material-ui/core";
 import { PrimaryButton, Logo, PrimaryAlert } from "../atoms";
 import { navigation, ROUTES } from "../routes";
 import PrimaryLink from "./../atoms/PrimaryLink";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { useTranslation } from "react-i18next";
 import { LanguageSelect } from "../molecules";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
-import { createBrowserHistory } from "history";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { useAlert } from "../utils/useAlert";
 import { useRecoilValue } from "recoil";
@@ -21,6 +20,7 @@ interface IContainer {
   isAdmin: boolean;
 }
 
+// eslint-disable-next-line prettier/prettier
 const Container = withTheme(styled("div")<IContainer>`
   display: flex;
   justify-content: space-between;
@@ -66,7 +66,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
   const { pathname } = useLocation();
   const theme = useTheme();
   const { t } = useTranslation();
-  const history = createBrowserHistory();
+  const history = useHistory();
 
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const { userData } = useRecoilValue(userState);
