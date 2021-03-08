@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { TAlert } from "../../interfaces/tAlert";
 import { passwordValidation } from "../../utils/validationSchemas";
+import { ELEMENT } from "../../constants";
 import { useAlert } from "../../utils/useAlert";
 import { useTranslation } from "react-i18next";
 
@@ -129,18 +130,21 @@ const Settings: FC = () => {
       </Typography>
       <StyledColumn onSubmit={handleSubmit}>
         <PasswordField
+          data-test-id={ELEMENT.currentPassword}
           {...getFieldProps("password")}
           label={t("Enter the current password")}
           helperText={touched.password && errors.password}
           error={touched.password && Boolean(errors.password)}
         />
         <PasswordField
+          data-test-id={ELEMENT.newPassword}
           {...getFieldProps("newPassword1")}
           label={t("Enter a new password")}
           error={touched.newPassword1 && Boolean(errors.newPassword1)}
           helperText={touched.newPassword1 && errors.newPassword1}
         />
         <PasswordField
+          data-test-id={ELEMENT.repeatNewPassword}
           {...getFieldProps("newPassword2")}
           label={t("Repeat new password")}
           error={touched.newPassword2 && Boolean(errors.newPassword2)}
@@ -152,7 +156,11 @@ const Settings: FC = () => {
               "If you have forgotten your password, contact the bank branch. To change other data, you can contact the chat"
             )}
           </Typography>
-          <StyledPrimaryButton size="large" type="submit">
+          <StyledPrimaryButton
+            size="large"
+            type="submit"
+            data-test-id={ELEMENT.saveChangesButton}
+          >
             {t("Save")}
           </StyledPrimaryButton>
         </StyledBox>
