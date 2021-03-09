@@ -20,7 +20,6 @@ interface IContainer {
   isAdmin: boolean;
 }
 
-// eslint-disable-next-line prettier/prettier
 const Container = withTheme(styled("div")<IContainer>`
   display: flex;
   justify-content: space-between;
@@ -81,7 +80,7 @@ const Header: FC<IHeader> = ({ onToggleTheme }) => {
   };
 
   const handleClick = (): void => {
-    history.back();
+    history.goBack();
   };
 
   return (

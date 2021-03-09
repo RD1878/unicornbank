@@ -12,8 +12,8 @@ import { Alert } from "@material-ui/lab";
 import { SHACKBAR_SHOW_DURATION } from ".././constants";
 import Brightness4RoundedIcon from "@material-ui/icons/Brightness4Rounded";
 import Brightness7RoundedIcon from "@material-ui/icons/Brightness7Rounded";
-import { createBrowserHistory } from "history";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { useHistory } from "react-router";
 
 const StyledToolbar = withTheme(styled(({ ...props }) => (
   <Toolbar classes={{ regular: "regular" }} {...props} />
@@ -35,7 +35,7 @@ const ProminentAppBar: FC<IHeader> = ({
 }) => {
   const [error, setError] = useState(false);
   const theme = useTheme();
-  const history = createBrowserHistory();
+  const history = useHistory();
 
   const handleCloseAlert = (event?: SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") return;
@@ -51,7 +51,7 @@ const ProminentAppBar: FC<IHeader> = ({
   };
 
   const handleClick = (): void => {
-    history.back();
+    history.goBack();
   };
 
   return (

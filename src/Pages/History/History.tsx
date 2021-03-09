@@ -1,6 +1,7 @@
 import { Typography } from "@material-ui/core";
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { ICard } from "../../interfaces/card";
@@ -17,6 +18,7 @@ const History: FC = () => {
   const { t } = useTranslation();
   const { userData } = useRecoilValue(userState);
   const cards = Object.entries(userData.products?.cards ?? {});
+  const { pathname } = useLocation();
 
   const allCardsTransactions = cards
     .reduce(
@@ -37,18 +39,12 @@ const History: FC = () => {
         Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
     );
 
-  const pageBeginRef = useRef<HTMLInputElement>(null);
-  const scrollToTop = () => {
-    if (pageBeginRef && pageBeginRef.current) {
-      pageBeginRef.current.scrollIntoView();
-    }
-  };
-
-  useEffect(scrollToTop, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <StyledWraper>
-      <div ref={pageBeginRef} />
       <Typography variant="h1" color="textPrimary">
         {`${t("Operations History")}`}
       </Typography>

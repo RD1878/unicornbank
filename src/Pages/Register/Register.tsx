@@ -234,7 +234,7 @@ const Register: FC = () => {
             error={touched.password1 && Boolean(errors.password1)}
             {...getFieldProps("password1")}
             helperText={touched.password1 && errors.password1}
-            label={t("Enter the current password")}
+            label={t("Pick a password")}
           />
           <StyledPasswordField
             data-test-id={ELEMENT.password2}
