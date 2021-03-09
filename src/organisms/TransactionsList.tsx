@@ -212,8 +212,7 @@ const TransactionsList: FC<IProps> = ({ cardsTransactions }) => {
             onChange={handleChangeTab}
             indicatorColor="secondary"
             textColor="secondary"
-            variant="fullWidth"
-            scrollButtons="on"
+            variant="scrollable"
           >
             {CATEGORIES.map((item) => (
               <StyledTab label={t(item.name)} key={item.type} />
