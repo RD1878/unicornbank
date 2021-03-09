@@ -1,0 +1,13 @@
+{
+  "main_url": "http://localhost:3000/settings",
+  "password": "dummy@dummy",
+  "newPassword": "qwerty@qwerty",
+  "shortCurrentPasswordErrorMessage": "Введите текущий пароль",
+  "shortPassword": "dummy",
+  "withoutPasswordErrorMessage": "Придумайте ваш пароль",
+  "repeatPasswordErrorMessage": "Повторите ваш пароль",
+  "shortPasswordErrorMessage": "Пароль должен содержать в себе миниму 8 символов",
+  "textCurrentPasswordField": "Введите текущий пароль",
+  "textNewPasswordField": "Введите новый пароль",
+  "textRepeatPasswordField": "Повторите новый пароль"
+}

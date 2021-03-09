@@ -36,8 +36,8 @@ const StyledWraper = styled("div")`
 const CardInfo: FC = () => {
   const { id } = useParams<IParams>();
   const { t } = useTranslation();
-  const { userData } = useRecoilValue(userState);
-  const { isLoading, products } = userData;
+  const { userData, isLoading } = useRecoilValue(userState);
+  const { products } = userData;
 
   const currentCard = products.cards[id];
 

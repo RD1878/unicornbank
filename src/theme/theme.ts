@@ -68,9 +68,10 @@ const overrides = {
       letterSpacing: 1.25,
       fontWeight: 600,
     },
-    button2: {
-      fontSize: 10,
-      fontWeight: 600,
+  },
+  MuiTouchRipple: {
+    root: {
+      color: "grey",
     },
   },
   MuiOutlinedInput: {
@@ -128,7 +129,7 @@ const light = createMuiTheme({
     type: "light",
     primary: {
       light: WHITE200,
-      main: WHITE50,
+      main: WHITE100,
       dark: WHITE100,
     },
     secondary: { main: BLUE500 },

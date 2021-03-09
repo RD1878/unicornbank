@@ -7,20 +7,38 @@ import {
   withTheme,
 } from "@material-ui/core";
 import React, { FC } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import userState from "../recoilState/recoilAtoms/userAtom";
+import { formatDate } from "../utils/formatDate";
 
-const StyledListItem = withTheme(styled(({ ...props }) => (
-  <ListItem {...props} />
-))`
+interface IProps {
+  $isAdmin: boolean;
+  type: string;
+}
+
+const StyledListItem = withTheme(styled(ListItem)<IProps>`
   width: fit-content;
   max-width: 50%;
-  background-color: ${(props) =>
-    props.type === "admin"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.secondary.main};
+  background-color: ${(props) => {
+    if (props.$isAdmin) {
+      return props.type === "admin"
+        ? props.theme.palette.secondary.main
+        : props.theme.palette.primary.dark;
+    } else {
+      return props.type === "admin"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.secondary.main;
+    }
+  }};
   border-radius: 20px;
-  align-self: ${(props) =>
-    props.type === "admin" ? "flex-start" : "flex-end"};
+  align-self: ${(props) => {
+    if (props.$isAdmin) {
+      return props.type === "admin" ? "flex-end" : "flex-start";
+    } else {
+      return props.type === "admin" ? "flex-start" : "flex-end";
+    }
+  }};
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -40,15 +58,20 @@ const StyledWraper = styled("div")`
   flex-direction: column;
 `;
 
-const StyledTypography = withTheme(styled(({ ...props }) => (
-  <Typography {...props} />
-))`
+const StyledTypography = withTheme(styled(Typography)<IProps>`
   align-self: flex-end;
   overflow-wrap: anywhere;
-  color: ${(props) =>
-    props.type === "admin"
-      ? props.theme.palette.textPrimary.main
-      : props.theme.palette.primary.dark};
+  color: ${(props) => {
+    if (props.$isAdmin) {
+      return props.type === "admin"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.textPrimary.main;
+    } else {
+      return props.type === "admin"
+        ? props.theme.palette.textPrimary.main
+        : props.theme.palette.primary.dark;
+    }
+  }};
 `);
 
 interface IMessage {
@@ -57,33 +80,31 @@ interface IMessage {
     type: string;
     value: string;
   };
+  avatar: string;
 }
 
-const ChatMessage: FC<IMessage> = ({ message }) => {
+const ChatMessage: FC<IMessage> = ({ message, avatar }) => {
   const { date, type, value } = message;
-  const formatDate = (date: number): string => {
-    const obj = new Date(date);
-    return obj.toLocaleDateString(undefined, {
-      day: "numeric",
-      month: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    });
-  };
+  const { userData } = useRecoilValue(userState);
+  const { isAdmin } = userData;
 
   return (
-    <StyledListItem type={type}>
+    <StyledListItem type={type} $isAdmin={isAdmin}>
       <StyledListItemAvatar>
-        <Avatar alt={type} src="#" />
+        <Avatar alt={type} src={avatar} />
       </StyledListItemAvatar>
       <StyledWraper>
         <ListItemText>
-          <StyledTypography type={type} component="span" variant="body1">
+          <StyledTypography
+            type={type}
+            $isAdmin={isAdmin}
+            component="span"
+            variant="body1"
+          >
             {value}
           </StyledTypography>
         </ListItemText>
-        <StyledTypography type={type} variant="overline">
+        <StyledTypography type={type} $isAdmin={isAdmin} variant="overline">
           {formatDate(date)}
         </StyledTypography>
       </StyledWraper>

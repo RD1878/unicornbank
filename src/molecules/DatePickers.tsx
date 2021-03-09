@@ -35,6 +35,7 @@ const DatePickers: FC<IProps> = ({
         <StyledKeyboardDatePicker
           variant="inline"
           autoOk
+          disableFuture
           format="dd/MM/yyyy"
           margin="normal"
           id="date-picker-dialog1"
@@ -47,12 +48,15 @@ const DatePickers: FC<IProps> = ({
         />
         <StyledKeyboardDatePicker
           variant="inline"
+          disableFuture
           autoOk
           margin="normal"
           id="date-picker-dialog2"
           label={t("Period to")}
           format="dd/MM/yyyy"
           value={selectedDateTo}
+          minDate={selectedDateFrom}
+          minDateMessage={t("Date should not be before minimal date")}
           onChange={handleDateChangeTo}
           KeyboardButtonProps={{
             "aria-label": "change date",

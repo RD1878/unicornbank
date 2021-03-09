@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { firebaseAuth } from "../../firebase/firebase";
 import { withTheme } from "@material-ui/core/styles";
 import { FormControl, Link, NativeSelect, Typography } from "@material-ui/core";
-import background from "../../assets/images/1-2.png";
+import background from "../../assets/images/1-2-min.jpg";
 import {
   TextField,
   PrimaryButton,
@@ -117,14 +117,16 @@ const Auth: FC = () => {
       setUserState({
         userData: data,
         errorMessage: "",
+        isLoading: false,
       });
 
       onAlertOpen();
-
+      setAlertType("success");
       history.push(ROUTES.MAIN);
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(t(error.message));
       setAlertType("error");
+      onAlertOpen();
     }
   };
 

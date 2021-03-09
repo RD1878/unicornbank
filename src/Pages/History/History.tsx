@@ -1,6 +1,7 @@
 import { Typography } from "@material-ui/core";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { ICard } from "../../interfaces/card";
@@ -16,22 +17,31 @@ const StyledWraper = styled("div")`
 const History: FC = () => {
   const { t } = useTranslation();
   const { userData } = useRecoilValue(userState);
-  const { products } = userData;
-  const cards = Object.entries(products.cards);
+  const cards = Object.entries(userData.products?.cards ?? {});
+  const { pathname } = useLocation();
 
-  const allCardsTransactions = cards.reduce(
-    (
-      acc: { id: string; key: string; operation: IOperation }[],
-      [id, card]: [string, ICard]
-    ) => {
-      const operations = Object.entries(card.operations);
-      for (const [key, operation] of operations) {
-        acc = [...acc, { id, key, operation }];
-      }
-      return acc;
-    },
-    []
-  );
+  const allCardsTransactions = cards
+    .reduce(
+      (
+        acc: { id: string; key: string; operation: IOperation }[],
+        [id, card]: [string, ICard]
+      ) => {
+        const operations = Object.entries(card.operations ?? {});
+        for (const [key, operation] of operations) {
+          acc = [...acc, { id, key, operation }];
+        }
+        return acc;
+      },
+      []
+    )
+    .sort(
+      (itemA, itemB) =>
+        Date.parse(itemB.operation.date) - Date.parse(itemA.operation.date)
+    );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <StyledWraper>

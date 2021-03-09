@@ -1,46 +1,118 @@
-# Getting Started with Create React App
+<h1 align="center">Проект "Банковское приложение"</h1>
+<h2 align="center">Команда UniCorn</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### В проекте реализовано банковское приложение [Uni Corn Bank](https://unicorn-bank.web.app/) для мобильных и десктопных устройств
 
-## Available Scripts
+## Десктоп
 
-In the project directory, you can run:
+<img  src="./src/assets/readme_images/desktop.jpg" width="100%">
 
-### `yarn start`
+## Мобильные девайсы
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<img  src="./src/assets/readme_images//tablet_view-min.png" width="70%">
+<img  src="./src/assets/readme_images/mibile_view-min.png" width="20%">
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## **Инструкция по развертыванию проекта**
 
-### `yarn test`
+1. Склонировать репозиторий в локальную директорию
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+$ git clone https://github.com/zlldnv/unicorn.git
+```
 
-### `yarn build`
+2. Установить node modules
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+$ yarn
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Запустить с помощью локального сервера
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+$ yarn start
+```
 
-### `yarn eject`
+## **О проекте**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### **Основные технологии и инструменты**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Material UI](https://material-ui.com/)
+- [Firebase](https://firebase.google.com/)
+- [Recoil](https://recoiljs.org/)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### **Глобальные опции приложения**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Интернационализация на трех языках
+  - Русский
+  - Английский
+  - Татарский
+- Возможность изменения темы
+  - темная
+  - светлая
 
-## Learn More
+### **Функционал для пользователя**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### _Страница авторизации/регистрации_
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+На странице авторизации пользователь может авторизоваться. В случае входа неавторизованного пользователя необходимо пройти сначала регистрацию на странице регистрации.
+
+#### _Навигация_
+
+- Навигация по страницам:
+  - на десктопе в хэдере
+  - на планшете в хэдере/нижнем баре
+  - на телефоне в нижнем баре
+- В левой боковой панели:
+  - фото с данными пользователя
+  - навигация по продуктам пользователя
+  - кнопка открытия нового продукта
+
+#### _Главная_
+
+- блок с быстрыми услугами (перевод денежных средств)
+- блок с последними пятью операциями пользователя по всем картам
+- блок курсов ЦБ РФ основных валют
+
+#### _Карты_
+
+- блок данных карты (баланс, статус, срок действия)
+- блок с доступными действиями по карте (Блокировка, первыпуск, просмотр реквизитов)
+- блок последних операций по текущей карте
+
+#### _Профиль_
+
+- блок контактных данных пользователя
+- блок документов пользователя
+
+#### _Настройки_
+
+- блок изменения пароля пользователя
+
+#### _История_
+
+- блок фильтрации карт
+- блок последних операций по всем картам пользователя
+
+#### _Оффисы и банкоматы_
+
+- блок с картой расположения офисов и банкоматов банка
+
+#### _Чат_
+
+- блок с чатом с представителем банка
+
+### **Функционал для представителя банка**
+
+#### _Чат_
+
+- боковая панель с чатами с клиентами банка
+- блок с чатом с выбранным клиентом банка
+
+### **Планы по расширению функционала**
+
+- улучшить показатели PWA
+- добавить продукт кредитная карта с калькулятором
+- добавить продукт вклад с калькулятором
+- поиск по приложению

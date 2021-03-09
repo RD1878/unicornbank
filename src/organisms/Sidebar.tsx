@@ -21,8 +21,8 @@ export interface IProps {
 
 const Sidebar: FC<IProps> = ({ view, isOpenDrawer, onToggleMobileDrawer }) => {
   const [user, setUser] = useRecoilState(userState);
-  const { userData } = user;
-  const { firstName, lastName, patronymic, isLoading, avatarUrl } = userData;
+  const { userData, isLoading } = user;
+  const { firstName, lastName, patronymic, avatarUrl } = userData;
   const { currentUser } = useRecoilValue(authState);
   const { isAlertOpen, onAlertOpen, onAlertClose } = useAlert();
   const [errorMessage, setErrorMessage] = useState("");

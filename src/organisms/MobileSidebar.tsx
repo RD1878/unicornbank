@@ -6,7 +6,7 @@ import {
   StyledIcon,
 } from "./SidebarComponents";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { CardsList, LanguageSelect } from "../molecules";
+import { CardsList, DialogNewProduct, LanguageSelect } from "../molecules";
 import { Link } from "react-router-dom";
 import { AddAvatar, CardIconItem, UserAvatar } from "../atoms";
 import {
@@ -85,6 +85,7 @@ const MobileSidebar: FC<IProps> = ({
           />
         </Collapse>
       </StyledList>
+      <DialogNewProduct />
     </StyledDrawer>
   );
 };

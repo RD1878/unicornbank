@@ -7,6 +7,7 @@ interface ILogo {
   width?: string;
 }
 const LogoContainer = withTheme(styled("div")`
+  margin-right: 10px;
   & svg path.changeable {
     fill: ${(props) => props.theme.palette.textPrimary.main};
   }

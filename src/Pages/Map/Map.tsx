@@ -1,5 +1,5 @@
 import React, { FC, useState, ChangeEvent, useEffect } from "react";
-import { Container, Typography, Box, Tabs, Tab } from "@material-ui/core";
+import { Container, Typography, Tabs, Tab } from "@material-ui/core";
 import styled from "styled-components";
 import { Map as YMap, Placemark, YMaps, ZoomControl } from "react-yandex-maps";
 import { db } from "../../firebase/firebase";
@@ -56,6 +56,7 @@ const StyledTab = styled(({ ...props }) => (
 const StyledWrap = withTheme(styled("div")`
   margin-left: -40px;
   margin-right: -40px;
+  margin-bottom: -40px;
   display: flex;
   flex-direction: column;
 
@@ -68,14 +69,17 @@ const StyleMapContainer = withTheme(styled("div")`
   width: 100%;
   height: 100%;
   position: relative;
-  min-height: calc(100vh - 370px);
+  min-height: calc(100vh - 330px);
   overflow: hidden;
 
   ${(props) => props.theme.breakpoints.down("lg")} {
-    min-height: calc(100vh - 367px);
+    min-height: calc(100vh - 327px);
   }
   ${(props) => props.theme.breakpoints.down("sm")} {
-    min-height: calc(100vh - 253px);
+    min-height: calc(100vh - 213px);
+  }
+  ${(props) => props.theme.breakpoints.down("xs")} {
+    min-height: calc(100vh - 200px);
   }
 `);
 
@@ -123,23 +127,21 @@ const Map: FC = () => {
   return (
     <>
       <StyledContainer>
-        <Box mt={2}>
-          <Typography variant="h1" color="textPrimary">
-            {t("Offices and ATMs")}
-          </Typography>
-          <Tabs
-            value={tab}
-            onChange={tabHandleChange}
-            indicatorColor="secondary"
-            textColor="secondary"
-            variant="fullWidth"
-            scrollButtons="on"
-          >
-            {CATEGORIES.map(({ name, type }) => (
-              <StyledTab label={t(name)} key={type} />
-            ))}
-          </Tabs>
-        </Box>
+        <Typography variant="h1" color="textPrimary">
+          {t("Offices and ATMs")}
+        </Typography>
+        <Tabs
+          value={tab}
+          onChange={tabHandleChange}
+          indicatorColor="secondary"
+          textColor="secondary"
+          variant="fullWidth"
+          scrollButtons="on"
+        >
+          {CATEGORIES.map(({ name, type }) => (
+            <StyledTab label={t(name)} key={type} />
+          ))}
+        </Tabs>
       </StyledContainer>
       <StyledWrap>
         <StyleMapContainer>

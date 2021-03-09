@@ -8,6 +8,13 @@ export interface IUserProducts {
   cards: IUserCards;
 }
 
+export interface IHeadUserData {
+  firstName: string;
+  lastName: string;
+  patronymic: string;
+  avatarUrl: string;
+}
+
 export interface IUser {
   firstName: string;
   lastName: string;
@@ -19,6 +26,6 @@ export interface IUser {
     phone: string;
     email: string;
   };
-  isLoading: boolean;
   products: IUserProducts;
+  isAdmin: boolean;
 }
