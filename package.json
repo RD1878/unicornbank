@@ -1,6 +1,6 @@
 {
-  "name": "inno",
-  "version": "0.1.0",
+  "name": "unicorn-bank",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "1.x",
