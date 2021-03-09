@@ -96,7 +96,7 @@ const DialogTransaction: FC = () => {
       <Dialog open={isOpenDialog} onClose={handleCloseDialog}>
         <StyledDialogTitle>{t("Transaction")}</StyledDialogTitle>
         <StyledTabContext value={tab}>
-          <StyledTabList onChange={handleChange}>
+          <StyledTabList onChange={handleChange} variant="scrollable">
             <StyledTab label={t("Between your accounts")} value="0" />
             <StyledTab label={t("To another bank user")} value="1" />
           </StyledTabList>
