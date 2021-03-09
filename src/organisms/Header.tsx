@@ -57,7 +57,7 @@ const StyledPrimaryButton = styled(PrimaryButton)`
   }
 `;
 
-interface IHeader {
+export interface IHeader {
   onToggleTheme: () => void;
 }
 
