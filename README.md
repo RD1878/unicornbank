@@ -1,40 +1,40 @@
-<h1 align="center">Проект "Банковское приложение"</h1>
-<h2 align="center">Команда UniCorn</h1>
+<h1 align="center">Project "Banking Application"</h1>
+<h2 align="center">UniCorn Team</h1>
 
-### В проекте реализовано банковское приложение [Uni Corn Bank](https://unicorn-bank.web.app/) для мобильных и десктопных устройств
+### Bank application [Uni Corn Bank](https://unicorn-bank.web.app/) for mobile and desktop devices implemented in the project
 
-## Десктоп
+## Desktop
 
 <img  src="./src/assets/readme_images/desktop.jpg" width="100%">
 
-## Мобильные девайсы
+## Mobile devices
 
 <img  src="./src/assets/readme_images//tablet_view-min.png" width="70%">
 <img  src="./src/assets/readme_images/mibile_view-min.png" width="20%">
 
-## **Инструкция по развертыванию проекта**
+## **Project deployment instruction**
 
-1. Склонировать репозиторий в локальную директорию
+1. Clone repository to local directory
 
 ```
 $ git clone https://github.com/zlldnv/unicorn.git
 ```
 
-2. Установить node modules
+2. Install node modules
 
 ```
 $ yarn
 ```
 
-3. Запустить с помощью локального сервера
+3. Run with local server
 
 ```
 $ yarn start
 ```
 
-## **О проекте**
+## **About project**
 
-### **Основные технологии и инструменты**
+### **Basic technologies and tools**
 
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
@@ -42,77 +42,70 @@ $ yarn start
 - [Firebase](https://firebase.google.com/)
 - [Recoil](https://recoiljs.org/)
 
-### **Глобальные опции приложения**
+### **Global application options**
 
-- Интернационализация на трех языках
-  - Русский
-  - Английский
-  - Татарский
-- Возможность изменения темы
-  - темная
-  - светлая
+- Internationalization in three languages
+  - Russian
+  - English
+  - Tatar
+- Theme change option
+  - dark
+  - light
 
-### **Функционал для пользователя**
+### **User functionality**
 
-#### _Страница авторизации/регистрации_
+#### _Authorization/Registration page_
 
-На странице авторизации пользователь может авторизоваться. В случае входа неавторизованного пользователя необходимо пройти сначала регистрацию на странице регистрации.
+The user can login to the authorization page. If an unauthorized user logs in, you must first register on the registration page.
 
-#### _Навигация_
+#### _Navigation_
 
-- Навигация по страницам:
-  - на десктопе в хэдере
-  - на планшете в хэдере/нижнем баре
-  - на телефоне в нижнем баре
-- В левой боковой панели:
-  - фото с данными пользователя
-  - навигация по продуктам пользователя
-  - кнопка открытия нового продукта
+- Navigation on the pages:
+  - on desktop in header
+  - on the tablet in header/lower bar
+  - on the phone in the lower bar
+- In the left side panel:
+  - user photo
+  - product navigation
+  - new product open button
 
-#### _Главная_
+#### _Main_
 
-- блок с быстрыми услугами (перевод денежных средств)
-- блок с последними пятью операциями пользователя по всем картам
-- блок курсов ЦБ РФ основных валют
+- quick service block (money transfer)
+- block with the last five user operations on all cards
+- block of CBR rates of major currencies
 
-#### _Карты_
+#### _Cards_
 
-- блок данных карты (баланс, статус, срок действия)
-- блок с доступными действиями по карте (Блокировка, первыпуск, просмотр реквизитов)
-- блок последних операций по текущей карте
+- card data block (balance, status, validity)
+- block with available actions with card (Blocking, Perissue, View details)
+- block of recent operations on current card
+  
+#### _Profile_
 
-#### _Профиль_
+- user contact data block
+- user document block
 
-- блок контактных данных пользователя
-- блок документов пользователя
+#### _Settings_
 
-#### _Настройки_
+- user password change block
 
-- блок изменения пароля пользователя
+#### _History_
 
-#### _История_
+- card filtering block
+- recent operations on all user cards
 
-- блок фильтрации карт
-- блок последних операций по всем картам пользователя
+#### _Offices and ATMs_
 
-#### _Оффисы и банкоматы_
+- block with a map of the bank’s offices and ATMs
 
-- блок с картой расположения офисов и банкоматов банка
+#### _Chat_
 
-#### _Чат_
+- block with chat with bank representative
 
-- блок с чатом с представителем банка
+### **Functionality for the bank representative**
 
-### **Функционал для представителя банка**
+#### _Chat_
 
-#### _Чат_
-
-- боковая панель с чатами с клиентами банка
-- блок с чатом с выбранным клиентом банка
-
-### **Планы по расширению функционала**
-
-- улучшить показатели PWA
-- добавить продукт кредитная карта с калькулятором
-- добавить продукт вклад с калькулятором
-- поиск по приложению
+- side panel with chat with bank customers
+- block with chat with the selected bank customer
